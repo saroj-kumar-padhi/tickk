@@ -79,7 +79,8 @@ class SetUpProduct extends StatelessWidget {
                               height: 160.0.h,
                             ),
                             itemCount: imagePaths.length,
-                            itemBuilder: (BuildContext context, int index,
+                            itemBuilder: (BuildContext context,
+                                int index, //ic_launcher
                                 int realIndex) {
                               final String imagePath = imagePaths[index];
                               return Column(
