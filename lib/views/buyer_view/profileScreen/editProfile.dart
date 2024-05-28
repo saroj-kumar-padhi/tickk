@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/components/heading.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:get/get.dart';
 
 import '../../../utils/components/coustoumTextField.dart';
 import '../../../utils/components/dialog_boxs/otp_dialog.dart';
+import '../../../utils/components/dialog_boxs/pick_diallo.dart';
 import '../../../utils/components/textstyle.dart';
 
 class EditProfile extends StatelessWidget {
@@ -16,6 +19,7 @@ class EditProfile extends StatelessWidget {
     TextEditingController nameController = TextEditingController();
     TextEditingController emailController = TextEditingController();
     TextEditingController phoneController = TextEditingController();
+    RxString imagePath = ''.obs;
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -50,21 +54,56 @@ class EditProfile extends StatelessWidget {
           SizedBox(
             height: 15.h,
           ),
-          Align(
-              alignment: Alignment.center,
-              child: Image.asset("assest/profileImage.png")),
+          Obx(() {
+            return imagePath.value.isEmpty
+                ? Align(
+                    alignment: Alignment.center,
+                    child: Image.asset("assest/profileImage.png"),
+                  )
+                : Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: 80.h,
+                      width: 80.w,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors
+                            .transparent, // Add a transparent background color
+                      ),
+                      child: ClipOval(
+                        child: Image.file(
+                          File(imagePath.value),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  );
+          }),
           SizedBox(
             height: 10.h,
           ),
-          Align(
-              alignment: Alignment.center,
-              child: Text(
-                "Edit profile image",
-                style: TextStyles.openSans(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xffFC8019)),
-              )),
+          InkWell(
+            onTap: () async {
+              final result = await showDialog<String>(
+                context: context,
+                builder: (BuildContext context) {
+                  return const PickImageDialog();
+                },
+              );
+              if (result != null) {
+                imagePath.value = result;
+              }
+            },
+            child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  "Edit profile image",
+                  style: TextStyles.openSans(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xffFC8019)),
+                )),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
             child: const SmallHeading(headingText: "Name"),

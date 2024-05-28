@@ -17,7 +17,6 @@ class BasicDetailsController extends GetxController {
     String emailAddress = emailAddressController.text;
     String age = ageController.text;
     bool isFilled = fullName.isNotEmpty &&
-        emailAddress.isNotEmpty &&
         age.isNotEmpty; // Update this condition based on your text fields
 
     updateButtonOpacity(isFilled);

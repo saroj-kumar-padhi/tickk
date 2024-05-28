@@ -4,8 +4,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dekhlo/controllers/productSetupController.dart';
 import 'package:dekhlo/utils/components/coustoumTextField.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
+import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,6 +23,10 @@ class SetUpProduct extends StatelessWidget {
   final MultiSelectController categorySelectController =
       MultiSelectController();
   final MultiSelectController languageSelectController =
+      MultiSelectController();
+  final MultiSelectController subCategorySelectController =
+      MultiSelectController();
+  final MultiSelectController subSubCategorySelectController =
       MultiSelectController();
   final ProductSetUpController productSetUpController =
       Get.put(ProductSetUpController());
@@ -285,11 +289,73 @@ class SetUpProduct extends StatelessWidget {
                       height: 5.h,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(right: 18.w),
-                      child: CustomDropdownFormField(
-                        items: dropdownController.subcategories,
-                        onChanged: (value) {},
-                        onSaved: (value) {},
+                      padding: EdgeInsets.only(right: 20.w),
+                      child: MultiSelectDropDown(
+                        borderColor: Colors.grey,
+                        borderWidth: 1,
+                        borderRadius: 4.r,
+                        selectedOptionTextColor:
+                            const Color(0xffFC8019).withOpacity(0.1),
+                        clearIcon: const Icon(Icons.close_outlined),
+                        controller: subCategorySelectController,
+                        onOptionSelected: (options) {
+                          debugPrint(options.toString());
+                        },
+                        options: const <ValueItem>[
+                          ValueItem(label: 'subCat1', value: '1'),
+                          ValueItem(label: 'subCat2', value: '2'),
+                          ValueItem(label: 'subCat3', value: '3'),
+                          ValueItem(label: 'subCat4', value: '4'),
+                          ValueItem(label: 'subCat5', value: '5'),
+                          ValueItem(label: 'subCat6', value: '6'),
+                        ],
+                        maxItems: 3,
+                        selectionType: SelectionType.multi,
+                        chipConfig: const ChipConfig(
+                            wrapType: WrapType.wrap,
+                            backgroundColor: Color(0xffFC8019)),
+                        dropdownHeight: 200.h,
+                        optionTextStyle: TextStyle(fontSize: 16.sp),
+                        selectedOptionIcon: const Icon(Icons.check_circle),
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    heading(title: 'Sub Sub categories'),
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(right: 20.w),
+                      child: MultiSelectDropDown(
+                        borderColor: Colors.grey,
+                        borderWidth: 1,
+                        borderRadius: 4.r,
+                        selectedOptionTextColor:
+                            const Color(0xffFC8019).withOpacity(0.1),
+                        clearIcon: const Icon(Icons.close_outlined),
+                        controller: subSubCategorySelectController,
+                        onOptionSelected: (options) {
+                          debugPrint(options.toString());
+                        },
+                        options: const <ValueItem>[
+                          ValueItem(label: 'subsubCat1', value: '1'),
+                          ValueItem(label: 'subsubCat2', value: '2'),
+                          ValueItem(label: 'subsubCat3', value: '3'),
+                          ValueItem(label: 'subsubCat4', value: '4'),
+                          ValueItem(label: 'subsubCat5', value: '5'),
+                          ValueItem(label: 'subsubCat6', value: '6'),
+                        ],
+                        maxItems: 3,
+                        selectionType: SelectionType.multi,
+                        chipConfig: const ChipConfig(
+                            wrapType: WrapType.wrap,
+                            backgroundColor: Color(0xffFC8019)),
+                        dropdownHeight: 200.h,
+                        optionTextStyle: TextStyle(fontSize: 16.sp),
+                        selectedOptionIcon: const Icon(Icons.check_circle),
                       ),
                     ),
                     SizedBox(
@@ -380,10 +446,16 @@ class SetUpProduct extends StatelessWidget {
                           debugPrint(options.toString());
                         },
                         options: const <ValueItem>[
-                          ValueItem(label: 'Hindi', value: '1'),
+                          ValueItem(label: 'Bangla', value: '1'),
                           ValueItem(label: 'English', value: '2'),
-                          ValueItem(label: 'Telugu', value: '3'),
-                          ValueItem(label: 'Marathi', value: '4')
+                          ValueItem(label: 'Gujarati', value: '3'),
+                          ValueItem(label: 'Hindi', value: '4'),
+                          ValueItem(label: 'Kannada', value: '5'),
+                          ValueItem(label: 'Marathi', value: '6'),
+                          ValueItem(label: 'Malayalam', value: '7'),
+                          ValueItem(label: 'Punjabi', value: '8'),
+                          ValueItem(label: 'Tamil', value: '9'),
+                          ValueItem(label: 'Telugu', value: '10')
                         ],
                         maxItems: 3,
                         selectionType: SelectionType.multi,
@@ -463,13 +535,17 @@ class SetUpProduct extends StatelessWidget {
 
                     timeEditingBox(
                         controller:
-                            productSetUpController.openTimeEditingController),
+                            productSetUpController.openTimeEditingController,
+                        context: context,
+                        hintText: 'Open Timing'),
                     SizedBox(
                       height: 10.h,
                     ),
                     timeEditingBox(
                         controller:
-                            productSetUpController.closeEditingController),
+                            productSetUpController.closeEditingController,
+                        context: context,
+                        hintText: 'Close Timing'),
 
                     SizedBox(
                       height: 10.h,
@@ -543,11 +619,31 @@ class SetUpProduct extends StatelessWidget {
                     SizedBox(
                       height: 10.h,
                     ),
-                    CustomTextField(
-                        controller: productSetUpController.locationController,
-                        hintText: "e.g Delhi",
-                        height: 48.h,
-                        width: 330.w),
+
+                    Container(
+                      height: 48.h,
+                      width: 330.w,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(width: 1, color: Colors.grey),
+                      ),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextField(
+                          onTap: () {
+                            Get.toNamed(RouteName.changeLocation);
+                          },
+                          controller: productSetUpController.locationController,
+                          decoration: const InputDecoration(
+                            hintText: 'e.g Delhi',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       height: 10.h,
                     ),
@@ -594,24 +690,29 @@ class SetUpProduct extends StatelessWidget {
                     SizedBox(
                       height: 30.h,
                     ),
-                    Center(
-                      child: Text.rich(
-                        TextSpan(
-                          text: 'Already have an account? ', // Default text
-                          style: TextStyles.openSans(
-                              fontSize: 16.sp,
-                              fontWeight:
-                                  FontWeight.w500), // Default text style
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'Login', // Text to be styled differently
-                              style: TextStyles.openSans(
-                                  color: const Color(0xffFC8019),
-                                  fontSize: 16.sp,
-                                  fontWeight:
-                                      FontWeight.w600), // Different text style
-                            ),
-                          ],
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(RouteName.logInphoneScreen);
+                      },
+                      child: Center(
+                        child: Text.rich(
+                          TextSpan(
+                            text: 'Already have an account? ', // Default text
+                            style: TextStyles.openSans(
+                                fontSize: 16.sp,
+                                fontWeight:
+                                    FontWeight.w500), // Default text style
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'Login', // Text to be styled differently
+                                style: TextStyles.openSans(
+                                    color: const Color(0xffFC8019),
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight
+                                        .w600), // Different text style
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     )
@@ -680,7 +781,11 @@ class SetUpProduct extends StatelessWidget {
     );
   }
 
-  Container timeEditingBox({required TextEditingController controller}) {
+  Container timeEditingBox({
+    required TextEditingController controller,
+    required BuildContext context,
+    required String hintText,
+  }) {
     return Container(
       height: 48.h,
       width: 330.w,
@@ -694,14 +799,49 @@ class SetUpProduct extends StatelessWidget {
         child: TextField(
           controller: controller,
           decoration: InputDecoration(
-            suffixIcon: SizedBox(
-              height: 10.h,
-              width: 10.h,
-              child: Image.asset(
-                "assest/calendar_icon.png",
+            suffixIcon: InkWell(
+              onTap: () async {
+                TimeOfDay? selectedTime = await showTimePicker(
+                  helpText: '',
+                  initialEntryMode: TimePickerEntryMode.input,
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                  builder: (BuildContext context, Widget? child) {
+                    return MediaQuery(
+                      data: MediaQuery.of(context).copyWith(
+                        alwaysUse24HourFormat: false,
+                      ),
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          textTheme: Theme.of(context).textTheme.copyWith(
+                                bodySmall: const TextStyle(
+                                  fontSize: 22,
+                                  color: Colors.black,
+                                ),
+                              ),
+                        ),
+                        child: child!,
+                      ),
+                    );
+                  },
+                );
+
+                if (selectedTime != null) {
+                  // Set the selected time to the controller
+                  String formattedTime =
+                      '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}';
+                  controller.text = formattedTime;
+                }
+              },
+              child: SizedBox(
+                height: 10.h,
+                width: 10.h,
+                child: Image.asset(
+                  "assest/calendar_icon.png",
+                ),
               ),
             ),
-            hintText: "paste the link",
+            hintText: hintText,
             border: InputBorder.none,
             hintStyle: const TextStyle(color: Colors.grey),
           ),

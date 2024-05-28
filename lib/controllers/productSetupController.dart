@@ -13,9 +13,13 @@ class ProductSetUpController extends GetxController {
   final TextEditingController discriptionController = TextEditingController();
   final TextEditingController youTubeEditingController =
       TextEditingController();
-  final TextEditingController openTimeEditingController =
-      TextEditingController();
-  final TextEditingController closeEditingController = TextEditingController();
+  final TextEditingController openTimeEditingController = TextEditingController(
+      text:
+          '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}');
+
+  final TextEditingController closeEditingController = TextEditingController(
+      text:
+          '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}');
   final TextEditingController buildingController = TextEditingController();
   final TextEditingController pinCodeController = TextEditingController();
   final TextEditingController colonyController = TextEditingController();

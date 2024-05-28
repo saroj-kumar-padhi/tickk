@@ -12,9 +12,10 @@ import 'package:http/http.dart' as http;
 class ChangeLocation extends StatefulWidget {
   ChangeLocation({super.key});
   DialogBoxController dialogBoxController = Get.put(DialogBoxController());
-  var uuid = Uuid();
-  String _sessionToken = '123456';
+  var uuid = const Uuid();
+  final String _sessionToken = '123456';
   List<dynamic> _placesList = [];
+  final FocusNode locationFocusNode = FocusNode();
 
   @override
   State<ChangeLocation> createState() => _ChangeLocationState();
@@ -26,6 +27,9 @@ class _ChangeLocationState extends State<ChangeLocation> {
     // TODO: implement initState
     widget.dialogBoxController.addListener(() {
       onChange();
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(widget.locationFocusNode);
     });
     super.initState();
   }
@@ -73,6 +77,7 @@ class _ChangeLocationState extends State<ChangeLocation> {
                     ),
                     Expanded(
                       child: TextField(
+                        focusNode: widget.locationFocusNode,
                         controller:
                             widget.dialogBoxController.locacationController,
                         onChanged: (val) {
@@ -85,7 +90,7 @@ class _ChangeLocationState extends State<ChangeLocation> {
                           hintStyle: TextStyles.openSans(
                               fontWeight: FontWeight.w600,
                               fontSize: 12.sp,
-                              color: Color(0xffC4C4C4)),
+                              color: const Color(0xffC4C4C4)),
                         ),
                       ),
                     ),
@@ -113,20 +118,15 @@ class _ChangeLocationState extends State<ChangeLocation> {
   }
 
   void onChange() {
-    if (widget._sessionToken == null) {
-      setState(() {
-        widget._sessionToken = widget.uuid.v4();
-      });
-    }
     getSuggestion(widget.dialogBoxController.locacationController.text);
   }
 
   void getSuggestion(String input) async {
-    String KPLACES_API_KEY = "AIzaSyBaZWnJ0KrnuL_ile3HbJwrtD_zspXj0Lw";
+    String kplacesApiKey = "AIzaSyBaZWnJ0KrnuL_ile3HbJwrtD_zspXj0Lw";
     String baseURL =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json';
     String requrest =
-        '$baseURL?input=$input&key=$KPLACES_API_KEY&sessiontoken=$KPLACES_API_KEY&sessiontoken=${widget._sessionToken}';
+        '$baseURL?input=$input&key=$kplacesApiKey&sessiontoken=$kplacesApiKey&sessiontoken=${widget._sessionToken}';
     var response = await http.get(Uri.parse(requrest));
     Logger().d(response.body.toString());
     if (response.statusCode == 200) {
