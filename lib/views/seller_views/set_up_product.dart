@@ -24,6 +24,10 @@ class SetUpProduct extends StatelessWidget {
       MultiSelectController();
   final MultiSelectController languageSelectController =
       MultiSelectController();
+  final MultiSelectController subCategorySelectController =
+      MultiSelectController();
+  final MultiSelectController subSubCategorySelectController =
+      MultiSelectController();
   final ProductSetUpController productSetUpController =
       Get.put(ProductSetUpController());
 
@@ -284,11 +288,34 @@ class SetUpProduct extends StatelessWidget {
                       height: 5.h,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(right: 18.w),
-                      child: CustomDropdownFormField(
-                        items: dropdownController.subcategories,
-                        onChanged: (value) {},
-                        onSaved: (value) {},
+                      padding: EdgeInsets.only(right: 20.w),
+                      child: MultiSelectDropDown(
+                        borderColor: Colors.grey,
+                        borderWidth: 1,
+                        borderRadius: 4.r,
+                        selectedOptionTextColor:
+                            const Color(0xffFC8019).withOpacity(0.1),
+                        clearIcon: const Icon(Icons.close_outlined),
+                        controller: subCategorySelectController,
+                        onOptionSelected: (options) {
+                          debugPrint(options.toString());
+                        },
+                        options: const <ValueItem>[
+                          ValueItem(label: 'subCat1', value: '1'),
+                          ValueItem(label: 'subCat2', value: '2'),
+                          ValueItem(label: 'subCat3', value: '3'),
+                          ValueItem(label: 'subCat4', value: '4'),
+                          ValueItem(label: 'subCat5', value: '5'),
+                          ValueItem(label: 'subCat6', value: '6'),
+                        ],
+                        maxItems: 3,
+                        selectionType: SelectionType.multi,
+                        chipConfig: const ChipConfig(
+                            wrapType: WrapType.wrap,
+                            backgroundColor: Color(0xffFC8019)),
+                        dropdownHeight: 200.h,
+                        optionTextStyle: TextStyle(fontSize: 16.sp),
+                        selectedOptionIcon: const Icon(Icons.check_circle),
                       ),
                     ),
 
@@ -300,11 +327,34 @@ class SetUpProduct extends StatelessWidget {
                       height: 5.h,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(right: 18.w),
-                      child: CustomDropdownFormField(
-                        items: dropdownController.subcategories,
-                        onChanged: (value) {},
-                        onSaved: (value) {},
+                      padding: EdgeInsets.only(right: 20.w),
+                      child: MultiSelectDropDown(
+                        borderColor: Colors.grey,
+                        borderWidth: 1,
+                        borderRadius: 4.r,
+                        selectedOptionTextColor:
+                            const Color(0xffFC8019).withOpacity(0.1),
+                        clearIcon: const Icon(Icons.close_outlined),
+                        controller: subSubCategorySelectController,
+                        onOptionSelected: (options) {
+                          debugPrint(options.toString());
+                        },
+                        options: const <ValueItem>[
+                          ValueItem(label: 'subsubCat1', value: '1'),
+                          ValueItem(label: 'subsubCat2', value: '2'),
+                          ValueItem(label: 'subsubCat3', value: '3'),
+                          ValueItem(label: 'subsubCat4', value: '4'),
+                          ValueItem(label: 'subsubCat5', value: '5'),
+                          ValueItem(label: 'subsubCat6', value: '6'),
+                        ],
+                        maxItems: 3,
+                        selectionType: SelectionType.multi,
+                        chipConfig: const ChipConfig(
+                            wrapType: WrapType.wrap,
+                            backgroundColor: Color(0xffFC8019)),
+                        dropdownHeight: 200.h,
+                        optionTextStyle: TextStyle(fontSize: 16.sp),
+                        selectedOptionIcon: const Icon(Icons.check_circle),
                       ),
                     ),
                     SizedBox(
@@ -395,10 +445,16 @@ class SetUpProduct extends StatelessWidget {
                           debugPrint(options.toString());
                         },
                         options: const <ValueItem>[
-                          ValueItem(label: 'Hindi', value: '1'),
+                          ValueItem(label: 'Bangla', value: '1'),
                           ValueItem(label: 'English', value: '2'),
-                          ValueItem(label: 'Telugu', value: '3'),
-                          ValueItem(label: 'Marathi', value: '4')
+                          ValueItem(label: 'Gujarati', value: '3'),
+                          ValueItem(label: 'Hindi', value: '4'),
+                          ValueItem(label: 'Kannada', value: '5'),
+                          ValueItem(label: 'Marathi', value: '6'),
+                          ValueItem(label: 'Malayalam', value: '7'),
+                          ValueItem(label: 'Punjabi', value: '8'),
+                          ValueItem(label: 'Tamil', value: '9'),
+                          ValueItem(label: 'Telugu', value: '10')
                         ],
                         maxItems: 3,
                         selectionType: SelectionType.multi,
