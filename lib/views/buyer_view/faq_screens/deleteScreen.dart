@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/components/deleteReasonController.dart';
+import '../../../controllers/deleteReasonController.dart';
 import '../../../utils/components/dialog_boxs/delete_dialog.dart';
 import '../../../utils/components/textstyle.dart';
 import '../../../utils/size/global_size/global_size.dart';
@@ -20,7 +20,7 @@ class DeleteScreen extends StatelessWidget {
   }) {
     return RadioListTile(
       dense: true,
-      fillColor: const MaterialStatePropertyAll(Color(0xffFC8019)),
+      fillColor: const WidgetStatePropertyAll(Color(0xffFC8019)),
       title: Text(
         title,
         style: TextStyles.openSans(

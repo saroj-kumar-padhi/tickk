@@ -17,4 +17,5 @@ class RouteName {
   static const String buyerNotification = '/BuyerNotification';
   static const String basicDetails = '/BasicDetails';
   static const String setUpProduct = '/SetUpProduct';
+  static const String sellerHome = '/SellerHome';
 }

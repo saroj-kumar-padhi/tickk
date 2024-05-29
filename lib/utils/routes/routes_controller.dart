@@ -7,6 +7,7 @@ import 'package:dekhlo/views/buyer_view/locationPages/change_location.dart';
 import 'package:dekhlo/views/login.dart';
 import 'package:dekhlo/views/buyer_view/notificationsScreens/buyer_notification.dart';
 import 'package:dekhlo/views/buyer_view/profileScreen/buyerProfile.dart';
+import 'package:dekhlo/views/seller_views/seller_home_screens/seller_new.dart';
 import 'package:dekhlo/views/seller_views/set_up_product.dart';
 import 'package:dekhlo/views/singUpPages/Signup_otp.dart';
 import 'package:dekhlo/views/singUpPages/Singup_phone.dart';
@@ -40,6 +41,7 @@ class AppPages {
     GetPage(name: RouteName.deleteScreen, page: () => const DeleteScreen()),
     GetPage(name: RouteName.buyerNotification, page: () => BuyerNotification()),
     GetPage(name: RouteName.basicDetails, page: () => const BasicDetails()),
-    GetPage(name: RouteName.setUpProduct, page: () => SetUpProduct())
+    GetPage(name: RouteName.setUpProduct, page: () => SetUpProduct()),
+    GetPage(name: RouteName.sellerHome, page: () => const HomeSeller())
   ];
 }

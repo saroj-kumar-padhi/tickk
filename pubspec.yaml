@@ -56,6 +56,7 @@ dependencies:
   flutter_expanded_tile: ^0.3.7
   multi_dropdown: ^2.1.4
   flutter_carousel_widget: ^2.2.0
+  blur: ^4.0.0
 
 dev_dependencies:
   flutter_test:
