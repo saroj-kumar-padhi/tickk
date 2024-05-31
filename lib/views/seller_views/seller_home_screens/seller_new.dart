@@ -1,15 +1,15 @@
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
-import 'package:dekhlo/views/buyer_view/home_screen_buyer.dart/tabs/rejected_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/components/coustoum_serch_bar.dart';
+import '../../../utils/components/sellerScreenTiles/accepted_tile.dart';
 import '../../../utils/components/textstyle.dart';
-import '../../buyer_view/home_screen_buyer.dart/tabs/deal_done.dart';
-import '../../buyer_view/home_screen_buyer.dart/tabs/inprocess_tab.dart';
 import '../tabs/new_tabs.dart';
+import '../tabs/panding.dart';
+import '../tabs/process_panding.dart';
 
 class HomeSeller extends StatelessWidget {
   const HomeSeller({super.key});
@@ -105,6 +105,15 @@ class HomeSeller extends StatelessWidget {
                     ),
                     Tab(
                       child: Text(
+                        'Pending quotes (02)',
+                        style: TextStyles.openSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    Tab(
+                      child: Text(
                         'In process (02)',
                         style: TextStyles.openSans(
                           fontSize: 14,
@@ -114,16 +123,7 @@ class HomeSeller extends StatelessWidget {
                     ),
                     Tab(
                       child: Text(
-                        'Deal Done',
-                        style: TextStyles.openSans(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Tab(
-                      child: Text(
-                        'Rejected',
+                        'Accepted (03)',
                         style: TextStyles.openSans(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -139,10 +139,10 @@ class HomeSeller extends StatelessWidget {
               const Expanded(
                 child: TabBarView(
                   children: [
-                    NewTabSeller(), // inprocess tab
-                    InProcessTab(), // inprocess tab
-                    DealDoneTab(), //Deal Done
-                    RejectedTab(), // rejected tab
+                    NewTabSeller(),
+                    PandingTabSeller(),
+                    ProcessTabSeller(),
+                    AcceptedSellerCard(),
                   ],
                 ),
               ),

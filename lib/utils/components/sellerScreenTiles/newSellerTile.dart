@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:blur/blur.dart';
+import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/exactController.dart';
+import '../dialog_boxs/accept_dialod_box.dart';
 import '../dialog_boxs/pick_diallo.dart';
 import '../textstyle.dart';
 
@@ -24,7 +26,7 @@ class NewSellerCard extends StatelessWidget {
       return Container(
           width: double.infinity, // Adjust the width as needed
           height: exactController.toShow.value
-              ? 350.h
+              ? 390.h
               : 260.h, // Adjust the height as needed
           decoration: BoxDecoration(
             color: Colors.white,
@@ -265,6 +267,7 @@ class NewSellerCard extends StatelessWidget {
                           groupValue: exactController
                               .seletedOption.value, // access value with .value
                           onChanged: (value) {
+                            exactController.isExact.value = true;
                             exactController.toShow.value = true;
                             exactController.changeSelectedOption(
                                 option: value.toString());
@@ -285,6 +288,7 @@ class NewSellerCard extends StatelessWidget {
                           groupValue: exactController
                               .seletedOption.value, // access value with .value
                           onChanged: (value) {
+                            exactController.isExact.value = false;
                             exactController.toShow.value = true;
                             exactController.changeSelectedOption(
                                 option: value.toString());
@@ -387,14 +391,14 @@ class NewSellerCard extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                          InkWell(
-                                            onTap: () {
-                                              pickedImage
-                                                  .remove(pickedImage[index]);
-                                            },
-                                            child: Positioned(
-                                              top: 10,
-                                              right: 10,
+                                          Positioned(
+                                            top: 10,
+                                            right: 10,
+                                            child: InkWell(
+                                              onTap: () {
+                                                pickedImage
+                                                    .remove(pickedImage[index]);
+                                              },
                                               child: Container(
                                                 decoration: const BoxDecoration(
                                                   shape: BoxShape.circle,
@@ -473,10 +477,92 @@ class NewSellerCard extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                )
+                                ),
                               ],
                             ),
                           )
+                    : const SizedBox();
+              }),
+              SizedBox(
+                height: 10.h,
+              ),
+              Obx(() {
+                return exactController.toShow.isTrue
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              elevation: WidgetStateProperty.all(
+                                  0.0), // Remove elevation
+                              side: WidgetStateProperty.all(const BorderSide(
+                                width: 1.0,
+                                color: Color(0xffC4C4C4),
+                              )),
+                              backgroundColor: WidgetStateProperty.all(
+                                  Colors.transparent), // Transparent background
+                              shape: WidgetStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      1.0), // Adjust radius as needed
+                                ),
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: Text(
+                                "Reject",
+                                style: TextStyles.openSans(
+                                    color: const Color(0xff4A4A4A),
+                                    fontSize: 14.sp),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              elevation: WidgetStateProperty.all(
+                                  0.0), // Remove elevation
+                              shape: WidgetStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      3.0), // Adjust radius as needed
+                                ),
+                              ),
+
+                              backgroundColor: exactController.isExact.isTrue ||
+                                      pickedImage.isNotEmpty
+                                  ? WidgetStateProperty.all(
+                                      const Color(0xffFC8019))
+                                  : WidgetStateProperty.all(
+                                      const Color(0xffFC8019).withOpacity(
+                                          0.3)), // Transparent background
+                            ),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const AcceptDialodBox();
+                                },
+                              );
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: Text(
+                                "Accept",
+                                style: TextStyles.openSans(
+                                    color: Colors.white, fontSize: 14.sp),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10.w,
+                          )
+                        ],
+                      )
                     : const SizedBox();
               })
             ],
