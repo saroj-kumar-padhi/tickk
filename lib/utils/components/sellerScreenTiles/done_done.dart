@@ -1,18 +1,17 @@
 import 'package:blur/blur.dart';
-import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/exactController.dart';
-import '../coustoumTextField.dart';
-import '../dialog_boxs/quote_dialog.dart';
+import '../dialog_boxs/coursal_dialog.dart';
 import '../textstyle.dart';
 
-class PandingSellerCard extends StatelessWidget {
-  const PandingSellerCard({super.key});
+class DoneDoneSellerCard extends StatelessWidget {
+  const DoneDoneSellerCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +23,8 @@ class PandingSellerCard extends StatelessWidget {
       return Container(
           width: double.infinity, // Adjust the width as needed
           height: exactController.toShow.value
-              ? 345.h
-              : 360.h, // Adjust the height as needed
+              ? 300.h
+              : 340.h, // Adjust the height as needed
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(
@@ -248,73 +247,117 @@ class PandingSellerCard extends StatelessWidget {
                       color: const Color(0xff4A4A4A)),
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: Obx(() => RadioListTile(
-                          dense: true,
-                          fillColor:
-                              const WidgetStatePropertyAll(Color(0xffFC8019)),
-                          title: Text(
-                            'Exact',
-                            style: TextStyles.openSans(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: exactController.isExact.isTrue
-                                    ? const Color(0xff313333)
-                                    : const Color(0xff959595)),
+              Flexible(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Obx(() => RadioListTile(
+                            dense: true,
+                            fillColor:
+                                const WidgetStatePropertyAll(Color(0xffFC8019)),
+                            title: Text(
+                              'Exact',
+                              style: TextStyles.openSans(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: exactController.isExact.isTrue
+                                      ? const Color(0xff313333)
+                                      : const Color(0xff959595)),
+                            ),
+                            value: 'Exact',
+                            groupValue: exactController.seletedOption
+                                .value, // access value with .value
+                            onChanged: (value) {},
+                          )),
+                    ),
+                    Flexible(
+                      child: Obx(() => RadioListTile(
+                            dense: true,
+                            fillColor:
+                                const WidgetStatePropertyAll(Color(0xffFC8019)),
+                            title: Text(
+                              'Similar',
+                              style: TextStyles.openSans(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: exactController.isExact.isFalse
+                                      ? const Color(0xff313333)
+                                      : const Color(0xff959595)),
+                            ),
+                            value: 'Similar',
+                            groupValue: exactController.seletedOption
+                                .value, // access value with .value
+                            onChanged: (value) {},
+                          )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                                right:
+                                    GlobalSizes.getDeviceWidth(context) * 0.01),
+                            child: SizedBox(
+                                height: 10.h,
+                                child: Image.asset(
+                                  "assest/image_view.png",
+                                  fit: BoxFit.fitHeight,
+                                )),
                           ),
-                          value: 'Exact',
-                          groupValue: exactController
-                              .seletedOption.value, // access value with .value
-                          onChanged: (value) {},
-                        )),
-                  ),
-                  Flexible(
-                    child: Obx(() => RadioListTile(
-                          dense: true,
-                          fillColor:
-                              const WidgetStatePropertyAll(Color(0xffFC8019)),
-                          title: Text(
-                            'Similar',
-                            style: TextStyles.openSans(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: exactController.isExact.isFalse
-                                    ? const Color(0xff313333)
-                                    : const Color(0xff959595)),
+                          InkWell(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const CarouselDialog();
+                                },
+                              );
+                            },
+                            child: Text("View Image",
+                                style: TextStyles.openSansUnderLine(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xffFC8019))),
                           ),
-                          value: 'Similar',
-                          groupValue: exactController
-                              .seletedOption.value, // access value with .value
-                          onChanged: (value) {},
-                        )),
-                  ),
-                ],
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: CustomTextField(
-                  controller: exactController.quoteEditingController,
-                  hintText: 'Enter your Quote',
-                  height: 44.h,
-                  width: 350.w,
+                // child: CustomTextField(
+                //   controller: exactController.quoteEditingController,
+                //   hintText: 'Enter your Quote',
+                //   height: 44.h,
+                //   width: 350.w,
+                // ),
+                child: Container(
+                  height: 44.0, // Adjust height as needed
+                  width: 350.0, // Adjust width as needed
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    border: Border.all(width: 1, color: Colors.grey),
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      exactController
+                          .quoteEditingController.text, // Add your text here
+                      style: const TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.black), // Adjust text style as needed
+                    ),
+                  ),
                 ),
               ),
-              Buttons.longButton(
-                  color: const Color(0xffFC8019),
-                  context: context,
-                  onPressedCallback: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const QuoteDialog();
-                      },
-                    );
-                  },
-                  buttonText: "Send Quote",
-                  textColor: Colors.white),
+              const SizedBox(
+                height: 10,
+              ),
             ],
           ));
     });

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../utils/components/sellerScreenTiles/accepted_tile.dart';
+import '../../../utils/components/sellerScreenTiles/done_done.dart';
 
-class AcceptedTabSeller extends StatelessWidget {
-  const AcceptedTabSeller({super.key});
+class DealDoneTabSeller extends StatelessWidget {
+  const DealDoneTabSeller({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class AcceptedTabSeller extends StatelessWidget {
           child: ListView.builder(itemBuilder: (context, index) {
             return const Padding(
               padding: EdgeInsets.all(10.0),
-              child: AcceptedSellerCard(),
+              child: DoneDoneSellerCard(),
             );
           }),
         ),

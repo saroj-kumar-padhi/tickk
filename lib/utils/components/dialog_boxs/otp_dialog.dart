@@ -128,7 +128,10 @@ class OtpDialog extends StatelessWidget {
                                 ? showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return const SuccessDialog(); // Use the SuccessDialog here
+                                      return const SuccessDialog(
+                                        tile:
+                                            'Profile Details has been updated Successfully!',
+                                      );
                                     },
                                   )
                                 : showSuccessDeleteDialog(context);

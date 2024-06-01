@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 
 import '../textstyle.dart';
 
-class SuccessDialog extends StatelessWidget {
+class DealDoneSuccessDialog extends StatelessWidget {
   final String tile;
 
-  const SuccessDialog({super.key, required this.tile});
+  const DealDoneSuccessDialog({super.key, required this.tile});
 
   @override
   Widget build(BuildContext context) {
@@ -44,22 +44,29 @@ class SuccessDialog extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.w),
                   child: Text(
-                    "Profile Details has been updated Successfully!",
+                    tile,
                     style: TextStyles.openSans(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
+                Text(
+                  "You have made a deal with {buyer name}",
+                  style: TextStyles.openSans(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 SizedBox(
-                  height: 5.h,
+                  height: 15.h,
                 ),
                 InkWell(
                   onTap: () {
-                    Get.toNamed(RouteName.buyerProfile);
+                    Get.back();
                   },
                   child: Text(
-                    "Close",
+                    "Okey",
                     style: TextStyles.openSans(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,

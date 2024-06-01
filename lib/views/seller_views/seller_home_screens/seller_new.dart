@@ -5,8 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/components/coustoum_serch_bar.dart';
-import '../../../utils/components/sellerScreenTiles/accepted_tile.dart';
 import '../../../utils/components/textstyle.dart';
+import '../tabs/accepted_tab.dart';
+import '../tabs/deal_done.dart';
 import '../tabs/new_tabs.dart';
 import '../tabs/panding.dart';
 import '../tabs/process_panding.dart';
@@ -17,7 +18,7 @@ class HomeSeller extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4, // Number of tabs
+      length: 5, // Number of tabs
       child: Scaffold(
         body: SafeArea(
           child: Column(
@@ -130,6 +131,15 @@ class HomeSeller extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Tab(
+                      child: Text(
+                        'Deal Done (01)',
+                        style: TextStyles.openSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
                   ],
                   isScrollable: true,
                   indicatorColor: const Color(0xffFC8019),
@@ -142,7 +152,8 @@ class HomeSeller extends StatelessWidget {
                     NewTabSeller(),
                     PandingTabSeller(),
                     ProcessTabSeller(),
-                    AcceptedSellerCard(),
+                    AcceptedTabSeller(),
+                    DealDoneTabSeller(),
                   ],
                 ),
               ),

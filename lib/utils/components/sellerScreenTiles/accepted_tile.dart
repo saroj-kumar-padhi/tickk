@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../../controllers/exactController.dart';
 import '../dialog_boxs/coursal_dialog.dart';
+import '../dialog_boxs/deal_doneSuccess.dart';
 import '../textstyle.dart';
 
 class AcceptedSellerCard extends StatelessWidget {
@@ -23,7 +24,7 @@ class AcceptedSellerCard extends StatelessWidget {
           width: double.infinity, // Adjust the width as needed
           height: exactController.toShow.value
               ? 300.h
-              : 260.h, // Adjust the height as needed
+              : 340.h, // Adjust the height as needed
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(
@@ -356,7 +357,7 @@ class AcceptedSellerCard extends StatelessWidget {
                 height: 10,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
                     style: ButtonStyle(
@@ -408,7 +409,16 @@ class AcceptedSellerCard extends StatelessWidget {
                             WidgetStateProperty.all(const Color(0xffFC8019))
                         // Transparent background
                         ),
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const DealDoneSuccessDialog(
+                            tile: 'Deal Done Successfully!',
+                          );
+                        },
+                      );
+                    },
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: Text(
