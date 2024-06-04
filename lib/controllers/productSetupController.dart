@@ -30,6 +30,22 @@ class ProductSetUpController extends GetxController {
   RxList<int> selectedIndices =
       <int>[].obs; // Reactive list for selected indices
 
+  void updateButtonState() {
+    // Check if all required fields are filled
+    bool fieldsFilled = buildingController.text.isNotEmpty &&
+        pinCodeController.text.isNotEmpty &&
+        colonyController.text.isNotEmpty &&
+        landMarkController.text.isNotEmpty &&
+        selectedIndices.isNotEmpty;
+
+    // Update the button state
+    isButtonEnabled.value = fieldsFilled;
+  }
+
+  // Reactive variable to track if fields are filled
+  var isButtonEnabled = false.obs;
+
+  // Toggle selection for a given index in the list
   void toggleSelection(int index) {
     if (selectedIndices.contains(index)) {
       selectedIndices.remove(index);

@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 import '../../../controllers/exactController.dart';
 import '../coustoumTextField.dart';
+import '../dialog_boxs/coursal_dialog.dart';
 import '../dialog_boxs/quote_dialog.dart';
 import '../textstyle.dart';
 
@@ -24,7 +25,7 @@ class PandingSellerCard extends StatelessWidget {
       return Container(
           width: double.infinity, // Adjust the width as needed
           height: exactController.toShow.value
-              ? 345.h
+              ? 363.h
               : 360.h, // Adjust the height as needed
           decoration: BoxDecoration(
             color: Colors.white,
@@ -106,13 +107,13 @@ class PandingSellerCard extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 40.w),
-                              child: Text(
-                                "05 Feb ‘24",
-                                style: TextStyles.openSans(
-                                    fontSize: 12, fontWeight: FontWeight.w600),
-                              ),
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                            Text(
+                              "05 Feb ‘24",
+                              style: TextStyles.openSans(
+                                  fontSize: 12, fontWeight: FontWeight.w600),
                             )
                           ],
                         ),
@@ -254,8 +255,10 @@ class PandingSellerCard extends StatelessWidget {
                   Flexible(
                     child: Obx(() => RadioListTile(
                           dense: true,
-                          fillColor:
-                              const WidgetStatePropertyAll(Color(0xffFC8019)),
+                          fillColor: WidgetStatePropertyAll(
+                              exactController.isExact.isTrue
+                                  ? const Color(0xffFC8019)
+                                  : const Color(0xff959595)),
                           title: Text(
                             'Exact',
                             style: TextStyles.openSans(
@@ -274,8 +277,10 @@ class PandingSellerCard extends StatelessWidget {
                   Flexible(
                     child: Obx(() => RadioListTile(
                           dense: true,
-                          fillColor:
-                              const WidgetStatePropertyAll(Color(0xffFC8019)),
+                          fillColor: WidgetStatePropertyAll(
+                              exactController.isExact.isFalse
+                                  ? const Color(0xffFC8019)
+                                  : const Color(0xff959595)),
                           title: Text(
                             'Similar',
                             style: TextStyles.openSans(
@@ -291,30 +296,72 @@ class PandingSellerCard extends StatelessWidget {
                           onChanged: (value) {},
                         )),
                   ),
+                  InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const CarouselDialog();
+                        },
+                      );
+                    },
+                    child: Text("View Image",
+                        style: TextStyles.openSansUnderLine(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xffFC8019))),
+                  ),
                 ],
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: CustomTextField(
-                  controller: exactController.quoteEditingController,
-                  hintText: 'Enter your Quote',
+                child: Container(
                   height: 44.h,
                   width: 350.w,
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    border: Border.all(width: 1, color: Colors.grey),
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        if (value != "") {
+                          exactController.changeQuteOption(option: true);
+                        } else {
+                          exactController.changeQuteOption(option: false);
+                        }
+                      },
+                      controller: exactController.quoteEditingController,
+                      decoration: const InputDecoration(
+                        hintText: "Enter your Quote",
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Colors.grey),
+                      ),
+                      style: const TextStyle(fontSize: 16.0),
+                    ),
+                  ),
                 ),
               ),
-              Buttons.longButton(
-                  color: const Color(0xffFC8019),
-                  context: context,
-                  onPressedCallback: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const QuoteDialog();
-                      },
-                    );
-                  },
-                  buttonText: "Send Quote",
-                  textColor: Colors.white),
+              Obx(() {
+                return Buttons.longButton(
+                    color: exactController.quteEnable.value
+                        ? const Color(0xffFC8019)
+                        : const Color(0xffFC8019).withOpacity(0.1),
+                    context: context,
+                    onPressedCallback: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const QuoteDialog();
+                        },
+                      );
+                    },
+                    buttonText: "Send Quote",
+                    textColor: Colors.white);
+              })
             ],
           ));
     });

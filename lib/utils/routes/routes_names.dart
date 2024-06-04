@@ -18,4 +18,10 @@ class RouteName {
   static const String basicDetails = '/BasicDetails';
   static const String setUpProduct = '/SetUpProduct';
   static const String sellerHome = '/SellerHome';
+  static const String myStore = '/Mystore';
+  static const String sellerNotification = '/SellerNotification';
+  static const String custoumCategory = '/CustoumCategory';
+  static const String custoumSubCategory = '/CustoumSubCategory';
+  static const String custoumSubSubCategory = '/CustoumSubSubCategory';
+  static const String storeEditScreen = '/StoreEditScreen';
 }

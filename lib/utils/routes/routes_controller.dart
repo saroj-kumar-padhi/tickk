@@ -8,7 +8,10 @@ import 'package:dekhlo/views/login.dart';
 import 'package:dekhlo/views/buyer_view/notificationsScreens/buyer_notification.dart';
 import 'package:dekhlo/views/buyer_view/profileScreen/buyerProfile.dart';
 import 'package:dekhlo/views/seller_views/seller_home_screens/seller_new.dart';
+import 'package:dekhlo/views/seller_views/seller_home_screens/storeEditScreen.dart';
+import 'package:dekhlo/views/seller_views/seller_notification.dart';
 import 'package:dekhlo/views/seller_views/set_up_product.dart';
+import 'package:dekhlo/views/seller_views/store_screens/mystore.dart';
 import 'package:dekhlo/views/singUpPages/Signup_otp.dart';
 import 'package:dekhlo/views/singUpPages/Singup_phone.dart';
 import 'package:get/get.dart';
@@ -19,6 +22,9 @@ import '../../views/buyer_view/loginPages/login_otp.dart';
 import '../../views/buyer_view/loginPages/login_phone.dart';
 import '../../views/buyer_view/postRequements/postRequements.dart';
 import '../../views/buyer_view/profileScreen/editProfile.dart';
+import '../../views/seller_views/custoum_category/coustoum_sub_sub.dart';
+import '../../views/seller_views/custoum_category/custoumSubCategory.dart';
+import '../../views/seller_views/custoum_category/custoum_category.dart';
 
 class AppPages {
   static final List<GetPage> pages = [
@@ -42,6 +48,16 @@ class AppPages {
     GetPage(name: RouteName.buyerNotification, page: () => BuyerNotification()),
     GetPage(name: RouteName.basicDetails, page: () => const BasicDetails()),
     GetPage(name: RouteName.setUpProduct, page: () => SetUpProduct()),
-    GetPage(name: RouteName.sellerHome, page: () => const HomeSeller())
+    GetPage(name: RouteName.sellerHome, page: () => const HomeSeller()),
+    GetPage(name: RouteName.myStore, page: () => MyStore()),
+    GetPage(
+        name: RouteName.sellerNotification, page: () => SellerNotification()),
+    GetPage(name: RouteName.custoumCategory, page: () => CustoumCategory()),
+    GetPage(
+        name: RouteName.custoumSubCategory, page: () => CustoumSubCategory()),
+    GetPage(
+        name: RouteName.custoumSubSubCategory,
+        page: () => CustoumSubSubCategory()),
+    GetPage(name: RouteName.storeEditScreen, page: () => StoreEditScreen()),
   ];
 }

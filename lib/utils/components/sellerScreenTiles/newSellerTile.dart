@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:blur/blur.dart';
-import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,8 +25,8 @@ class NewSellerCard extends StatelessWidget {
       return Container(
           width: double.infinity, // Adjust the width as needed
           height: exactController.toShow.value
-              ? 390.h
-              : 260.h, // Adjust the height as needed
+              ? 415.h
+              : 270.h, // Adjust the height as needed
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(
@@ -108,13 +107,13 @@ class NewSellerCard extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 40.w),
-                              child: Text(
-                                "05 Feb ‘24",
-                                style: TextStyles.openSans(
-                                    fontSize: 12, fontWeight: FontWeight.w600),
-                              ),
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                            Text(
+                              "05 Feb ‘24",
+                              style: TextStyles.openSans(
+                                  fontSize: 12, fontWeight: FontWeight.w600),
                             )
                           ],
                         ),

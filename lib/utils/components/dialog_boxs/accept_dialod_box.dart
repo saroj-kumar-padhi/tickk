@@ -24,11 +24,9 @@ class AcceptDialodBox extends StatelessWidget {
             Positioned(
               top: 10.0,
               right: 3.0,
-              child: GestureDetector(
+              child: InkWell(
                 onTap: () {
-                  Future.delayed(Duration.zero, () {
-                    Get.back();
-                  });
+                  Get.back();
                 },
                 child: const Padding(
                   padding: EdgeInsets.all(8.0),

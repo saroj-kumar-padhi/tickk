@@ -42,7 +42,6 @@ class _ChangeLocationState extends State<ChangeLocation> {
         leading: IconButton(
             onPressed: () {
               Get.back();
-              Get.back();
             },
             icon: const Icon(
               Icons.arrow_back,

@@ -2,6 +2,7 @@ import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/components/coustoum_serch_bar.dart';
@@ -20,6 +21,16 @@ class HomeSeller extends StatelessWidget {
     return DefaultTabController(
       length: 5, // Number of tabs
       child: Scaffold(
+        floatingActionButton: Padding(
+          padding: EdgeInsets.only(bottom: 30.h),
+          child: FloatingActionButton(
+            backgroundColor: const Color(0xffFC8019),
+            onPressed: () {
+              Get.toNamed(RouteName.postRequirements);
+            },
+            child: const Icon(Icons.add),
+          ),
+        ),
         body: SafeArea(
           child: Column(
             children: [
@@ -37,17 +48,19 @@ class HomeSeller extends StatelessWidget {
                       child: SlimSearchBar(),
                     ),
                     SizedBox(
-                      width: GlobalSizes.getDeviceHeight(context) * 0.015,
+                      width: 50.w,
                     ),
                     InkWell(
                       onTap: () {
-                        Get.toNamed(RouteName.buyerNotification);
+                        Get.toNamed(RouteName.sellerNotification);
                       },
                       child: SizedBox(
                           height: GlobalSizes.getDeviceHeight(context) * 0.03,
-                          child: Image.asset(
-                            "assest/bell.png",
-                            fit: BoxFit.fitHeight,
+                          child: SvgPicture.asset(
+                            height: 20.h,
+                            width: 20.w,
+                            "assest/bell_seller.svg",
+                            fit: BoxFit.fill,
                           )),
                     ),
                     SizedBox(
@@ -55,29 +68,13 @@ class HomeSeller extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
-                        Get.toNamed(RouteName.buyerProfile);
+                        Get.toNamed(RouteName.myStore);
                       },
-                      child: SizedBox(
-                        height: GlobalSizes.getDeviceHeight(context) * 0.03,
-                        child: Image.asset(
-                          "assest/user.png",
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: GlobalSizes.getDeviceHeight(context) * 0.015,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Get.toNamed(RouteName.setUpProduct);
-                      },
-                      child: SizedBox(
-                        height: GlobalSizes.getDeviceHeight(context) * 0.036,
-                        child: Image.asset(
-                          "assest/sellerShop.png",
-                          fit: BoxFit.fitHeight,
-                        ),
+                      child: SvgPicture.asset(
+                        height: 20.h,
+                        width: 20.w,
+                        "assest/seller_hut.svg",
+                        fit: BoxFit.fill,
                       ),
                     ),
                     SizedBox(
@@ -162,19 +159,15 @@ class HomeSeller extends StatelessWidget {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      child: Image.asset(
-                        "assest/buying.png",
-                        fit: BoxFit.fitWidth,
-                      ),
-                    ),
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: SvgPicture.asset("assest/selling_orange.svg")),
                     InkWell(
                       onTap: () {
-                        Get.toNamed(RouteName.postRequirements);
+                        Get.toNamed(RouteName.homeBuyerScreen);
                       },
                       child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.5,
-                          child: Image.asset("assest/post.png")),
+                          child: SvgPicture.asset("assest/buying_white.svg")),
                     )
                   ],
                 ),

@@ -104,13 +104,13 @@ class ProcessSellerCard extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 40.w),
-                              child: Text(
-                                "05 Feb ‘24",
-                                style: TextStyles.openSans(
-                                    fontSize: 12, fontWeight: FontWeight.w600),
-                              ),
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                            Text(
+                              "05 Feb ‘24",
+                              style: TextStyles.openSans(
+                                  fontSize: 12, fontWeight: FontWeight.w600),
                             )
                           ],
                         ),
@@ -247,13 +247,14 @@ class ProcessSellerCard extends StatelessWidget {
                 ),
               ),
               Row(
-                mainAxisSize: MainAxisSize.min,
                 children: [
                   Flexible(
                     child: Obx(() => RadioListTile(
                           dense: true,
-                          fillColor:
-                              const WidgetStatePropertyAll(Color(0xffFC8019)),
+                          fillColor: WidgetStatePropertyAll(
+                              exactController.isExact.isTrue
+                                  ? const Color(0xffFC8019)
+                                  : const Color(0xff959595)),
                           title: Text(
                             'Exact',
                             style: TextStyles.openSans(
@@ -269,11 +270,13 @@ class ProcessSellerCard extends StatelessWidget {
                           onChanged: (value) {},
                         )),
                   ),
-                  Flexible(
+                  Expanded(
                     child: Obx(() => RadioListTile(
                           dense: true,
-                          fillColor:
-                              const WidgetStatePropertyAll(Color(0xffFC8019)),
+                          fillColor: WidgetStatePropertyAll(
+                              exactController.isExact.isFalse
+                                  ? const Color(0xffFC8019)
+                                  : const Color(0xff959595)),
                           title: Text(
                             'Similar',
                             style: TextStyles.openSans(
@@ -290,7 +293,7 @@ class ProcessSellerCard extends StatelessWidget {
                         )),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 20),
+                    padding: EdgeInsets.only(right: 3.w),
                     child: Row(
                       children: [
                         Padding(
@@ -326,12 +329,6 @@ class ProcessSellerCard extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
-                // child: CustomTextField(
-                //   controller: exactController.quoteEditingController,
-                //   hintText: 'Enter your Quote',
-                //   height: 44.h,
-                //   width: 350.w,
-                // ),
                 child: Container(
                   height: 44.0, // Adjust height as needed
                   width: 350.0, // Adjust width as needed

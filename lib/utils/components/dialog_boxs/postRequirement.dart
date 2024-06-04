@@ -7,7 +7,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../buttons.dart';
-import '../buyerScreenTiles/new_tiles.dart';
 import '../textstyle.dart';
 
 class PostRequirementsDialog extends StatelessWidget {

@@ -12,15 +12,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 
-import '../../controllers/dropDownController.dart';
-import '../../controllers/exactController.dart';
-import '../../controllers/sortDialogBoxController.dart';
-import '../../utils/components/dialog_boxs/pick_diallo.dart';
-import '../../utils/coustoumDropDown.dart';
-import '../../utils/size/global_size/global_size.dart';
+import '../../../controllers/dropDownController.dart';
+import '../../../controllers/exactController.dart';
+import '../../../controllers/sortDialogBoxController.dart';
+import '../../../utils/components/dialog_boxs/pick_diallo.dart';
+import '../../../utils/coustoumDropDown.dart';
+import '../../../utils/size/global_size/global_size.dart';
 
-class SetUpProduct extends StatelessWidget {
-  SetUpProduct({super.key});
+class StoreEditScreen extends StatelessWidget {
+  StoreEditScreen({super.key});
   final DropdownController dropdownController = Get.put(DropdownController());
   static final MultiSelectController categorySelectController =
       MultiSelectController();
@@ -36,7 +36,11 @@ class SetUpProduct extends StatelessWidget {
 
   final ExactController exactController = Get.put(ExactController());
 
-  final RxList<String> imagePaths = <String>[].obs;
+  final RxList<String> imagePaths = <String>[
+    "assest/book_store.png",
+    "assest/book_store.png",
+    "assest/book_store.png"
+  ].obs;
   RxBool isLiked = false.obs;
   RxInt currentPage = 0.obs;
   @override
@@ -114,8 +118,10 @@ class SetUpProduct extends StatelessWidget {
                                                 horizontal: 5.0),
                                             decoration: const BoxDecoration(
                                                 color: Colors.amber),
-                                            child: Image.file(File(imagePath),
-                                                fit: BoxFit.cover),
+                                            child: Image.asset(
+                                              imagePath,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                       ),

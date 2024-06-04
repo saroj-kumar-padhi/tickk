@@ -105,13 +105,13 @@ class DoneDoneSellerCard extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 40.w),
-                              child: Text(
-                                "05 Feb ‘24",
-                                style: TextStyles.openSans(
-                                    fontSize: 12, fontWeight: FontWeight.w600),
-                              ),
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                            Text(
+                              "05 Feb ‘24",
+                              style: TextStyles.openSans(
+                                  fontSize: 12, fontWeight: FontWeight.w600),
                             )
                           ],
                         ),
@@ -254,8 +254,10 @@ class DoneDoneSellerCard extends StatelessWidget {
                     Flexible(
                       child: Obx(() => RadioListTile(
                             dense: true,
-                            fillColor:
-                                const WidgetStatePropertyAll(Color(0xffFC8019)),
+                            fillColor: WidgetStatePropertyAll(
+                                exactController.isExact.isTrue
+                                    ? const Color(0xffFC8019)
+                                    : const Color(0xff959595)),
                             title: Text(
                               'Exact',
                               style: TextStyles.openSans(
@@ -274,8 +276,10 @@ class DoneDoneSellerCard extends StatelessWidget {
                     Flexible(
                       child: Obx(() => RadioListTile(
                             dense: true,
-                            fillColor:
-                                const WidgetStatePropertyAll(Color(0xffFC8019)),
+                            fillColor: WidgetStatePropertyAll(
+                                exactController.isExact.isFalse
+                                    ? const Color(0xffFC8019)
+                                    : const Color(0xff959595)),
                             title: Text(
                               'Similar',
                               style: TextStyles.openSans(
@@ -291,38 +295,36 @@ class DoneDoneSellerCard extends StatelessWidget {
                             onChanged: (value) {},
                           )),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                                right:
-                                    GlobalSizes.getDeviceWidth(context) * 0.01),
-                            child: SizedBox(
-                                height: 10.h,
-                                child: Image.asset(
-                                  "assest/image_view.png",
-                                  fit: BoxFit.fitHeight,
-                                )),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const CarouselDialog();
-                                },
-                              );
-                            },
-                            child: Text("View Image",
-                                style: TextStyles.openSansUnderLine(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xffFC8019))),
-                          ),
-                        ],
-                      ),
+                    const SizedBox.shrink(),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              right:
+                                  GlobalSizes.getDeviceWidth(context) * 0.01),
+                          child: SizedBox(
+                              height: 10.h,
+                              child: Image.asset(
+                                "assest/image_view.png",
+                                fit: BoxFit.fitHeight,
+                              )),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const CarouselDialog();
+                              },
+                            );
+                          },
+                          child: Text("View Image",
+                              style: TextStyles.openSansUnderLine(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color(0xffFC8019))),
+                        ),
+                      ],
                     ),
                   ],
                 ),
