@@ -497,39 +497,39 @@ class SetUpProduct extends StatelessWidget {
                       height: 10.h,
                     ),
 
-                    timmings(
+                    timings(
                         context,
                         "S",
                         productSetUpController.sundayOpenTimeEditingController,
                         productSetUpController.sundayCloseEditingController),
-                    timmings(
+                    timings(
                         context,
                         "M",
                         productSetUpController.mondayOpenTimeEditingController,
                         productSetUpController.mondayCloseEditingController),
-                    timmings(
+                    timings(
                         context,
                         "T",
                         productSetUpController.tuesdayOpenTimeEditingController,
                         productSetUpController.tuesdayCloseEditingController),
-                    timmings(
+                    timings(
                         context,
                         "W",
                         productSetUpController
                             .wednesdayOpenTimeEditingController,
                         productSetUpController.wednesdayCloseEditingController),
-                    timmings(
+                    timings(
                         context,
                         "T",
                         productSetUpController
                             .thursdayOpenTimeEditingController,
                         productSetUpController.thursdayCloseEditingController),
-                    timmings(
+                    timings(
                         context,
                         "F",
                         productSetUpController.fridayOpenTimeEditingController,
                         productSetUpController.fridayCloseEditingController),
-                    timmings(
+                    timings(
                         context,
                         "S",
                         productSetUpController
@@ -713,8 +713,9 @@ class SetUpProduct extends StatelessWidget {
     );
   }
 
-  Padding timmings(BuildContext context, String day,
+  Padding timings(BuildContext context, String day,
       TextEditingController openTime, TextEditingController closeTime) {
+    final RxBool isChecked = false.obs;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.h),
       child: Row(
@@ -738,18 +739,24 @@ class SetUpProduct extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            width: 10.w,
-          ),
+          SizedBox(width: 10.w),
           timeEditingBox(
               controller: openTime, context: context, hintText: 'Open Timing'),
-          SizedBox(
-            width: 10.w,
-          ),
+          SizedBox(width: 10.w),
           timeEditingBox(
               controller: closeTime,
               context: context,
               hintText: 'Close Timing'),
+          SizedBox(width: 10.w),
+          Obx(() => Flexible(
+                child: Switch(
+                  value: isChecked.value,
+                  onChanged: (value) => isChecked.value = value,
+                  activeColor: const Color(0xffFC8019),
+                  inactiveTrackColor: const Color(0xff939393),
+                  inactiveThumbColor: Colors.white,
+                ),
+              )),
         ],
       ),
     );
@@ -816,8 +823,8 @@ class SetUpProduct extends StatelessWidget {
     required String hintText,
   }) {
     return Container(
-      height: 48.h,
-      width: 130.w,
+      height: 40.h,
+      width: 120.w,
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
