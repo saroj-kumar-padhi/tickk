@@ -7,6 +7,7 @@ import 'package:dekhlo/views/buyer_view/locationPages/change_location.dart';
 import 'package:dekhlo/views/login.dart';
 import 'package:dekhlo/views/buyer_view/notificationsScreens/buyer_notification.dart';
 import 'package:dekhlo/views/buyer_view/profileScreen/buyerProfile.dart';
+import 'package:dekhlo/views/seller_views/sellerProfiles/seller_profile.dart';
 import 'package:dekhlo/views/seller_views/seller_home_screens/seller_new.dart';
 import 'package:dekhlo/views/seller_views/seller_home_screens/storeEditScreen.dart';
 import 'package:dekhlo/views/seller_views/seller_notification.dart';
@@ -59,5 +60,6 @@ class AppPages {
         name: RouteName.custoumSubSubCategory,
         page: () => CustoumSubSubCategory()),
     GetPage(name: RouteName.storeEditScreen, page: () => StoreEditScreen()),
+    GetPage(name: RouteName.sellerProfile, page: () => const SellerProfile()),
   ];
 }

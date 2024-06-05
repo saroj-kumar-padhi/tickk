@@ -28,7 +28,7 @@ class CustoumCategory extends StatelessWidget {
         ),
         leading: IconButton(
           onPressed: () {
-            SetUpProduct.categorySelectController.clearAllSelection();
+            // SetUpProduct.categorySelectController.clearAllSelection();
             Get.back();
           },
           icon: const Icon(

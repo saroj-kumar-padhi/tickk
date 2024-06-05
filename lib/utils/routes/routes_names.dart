@@ -24,4 +24,5 @@ class RouteName {
   static const String custoumSubCategory = '/CustoumSubCategory';
   static const String custoumSubSubCategory = '/CustoumSubSubCategory';
   static const String storeEditScreen = '/StoreEditScreen';
+  static const String sellerProfile = '/SellerProfile';
 }

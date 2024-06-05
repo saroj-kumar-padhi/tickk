@@ -488,7 +488,7 @@ class NewSellerCard extends StatelessWidget {
               Obx(() {
                 return exactController.toShow.isTrue
                     ? Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
                             style: ButtonStyle(

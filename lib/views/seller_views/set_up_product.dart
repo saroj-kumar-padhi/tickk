@@ -496,79 +496,45 @@ class SetUpProduct extends StatelessWidget {
                     SizedBox(
                       height: 10.h,
                     ),
-                    SizedBox(
-                        height: 50.h,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: productSetUpController.dayList.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 2.w),
-                                child: SizedBox(
-                                    height: 10.h,
-                                    width: 50.w,
-                                    child: Obx(
-                                      () => InkWell(
-                                        onTap: () {
-                                          productSetUpController
-                                              .updateButtonState();
-                                          productSetUpController
-                                              .toggleSelection(index);
-                                        },
-                                        child: CircleAvatar(
-                                          backgroundColor:
-                                              productSetUpController
-                                                      .selectedIndices
-                                                      .contains(index)
-                                                  ? const Color(0xffFC8019)
-                                                  : Colors.transparent,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: productSetUpController
-                                                        .selectedIndices
-                                                        .contains(index)
-                                                    ? Colors.transparent
-                                                    : const Color(0xffE0E0E0),
-                                                width: 2.0,
-                                              ),
-                                            ),
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              productSetUpController
-                                                  .dayList[index],
-                                              style: TextStyle(
-                                                color: productSetUpController
-                                                        .selectedIndices
-                                                        .contains(index)
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )),
-                              );
-                            })),
-                    SizedBox(
-                      height: 10.h,
-                    ),
 
-                    timeEditingBox(
-                        controller:
-                            productSetUpController.openTimeEditingController,
-                        context: context,
-                        hintText: 'Open Timing'),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    timeEditingBox(
-                        controller:
-                            productSetUpController.closeEditingController,
-                        context: context,
-                        hintText: 'Close Timing'),
+                    timmings(
+                        context,
+                        "S",
+                        productSetUpController.sundayOpenTimeEditingController,
+                        productSetUpController.sundayCloseEditingController),
+                    timmings(
+                        context,
+                        "M",
+                        productSetUpController.mondayOpenTimeEditingController,
+                        productSetUpController.mondayCloseEditingController),
+                    timmings(
+                        context,
+                        "T",
+                        productSetUpController.tuesdayOpenTimeEditingController,
+                        productSetUpController.tuesdayCloseEditingController),
+                    timmings(
+                        context,
+                        "W",
+                        productSetUpController
+                            .wednesdayOpenTimeEditingController,
+                        productSetUpController.wednesdayCloseEditingController),
+                    timmings(
+                        context,
+                        "T",
+                        productSetUpController
+                            .thursdayOpenTimeEditingController,
+                        productSetUpController.thursdayCloseEditingController),
+                    timmings(
+                        context,
+                        "F",
+                        productSetUpController.fridayOpenTimeEditingController,
+                        productSetUpController.fridayCloseEditingController),
+                    timmings(
+                        context,
+                        "S",
+                        productSetUpController
+                            .saturdayOpenTimeEditingController,
+                        productSetUpController.saturdayCloseEditingController),
 
                     SizedBox(
                       height: 10.h,
@@ -737,37 +703,53 @@ class SetUpProduct extends StatelessWidget {
                     SizedBox(
                       height: 30.h,
                     ),
-                    InkWell(
-                      onTap: () {
-                        Get.toNamed(RouteName.logInphoneScreen);
-                      },
-                      child: Center(
-                        child: Text.rich(
-                          TextSpan(
-                            text: 'Already have an account? ', // Default text
-                            style: TextStyles.openSans(
-                                fontSize: 16.sp,
-                                fontWeight:
-                                    FontWeight.w500), // Default text style
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: 'Login', // Text to be styled differently
-                                style: TextStyles.openSans(
-                                    color: const Color(0xffFC8019),
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight
-                                        .w600), // Different text style
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+
+  Padding timmings(BuildContext context, String day,
+      TextEditingController openTime, TextEditingController closeTime) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 5.h),
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundColor: const Color(0xffFC8019),
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: const Color(0xffE0E0E0),
+                  width: 2.0,
+                ),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                day,
+                style: const TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 10.w,
+          ),
+          timeEditingBox(
+              controller: openTime, context: context, hintText: 'Open Timing'),
+          SizedBox(
+            width: 10.w,
+          ),
+          timeEditingBox(
+              controller: closeTime,
+              context: context,
+              hintText: 'Close Timing'),
         ],
       ),
     );
@@ -835,7 +817,7 @@ class SetUpProduct extends StatelessWidget {
   }) {
     return Container(
       height: 48.h,
-      width: 330.w,
+      width: 130.w,
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),

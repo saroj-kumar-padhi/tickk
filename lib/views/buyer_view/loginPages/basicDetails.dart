@@ -51,7 +51,7 @@ class BasicDetails extends StatelessWidget {
               onChanged: (value) => basicDetailsController.updateButtonState(),
             ),
             SizedBox(
-              height: 20.h,
+              height: 20.h, //ic_launcher
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
