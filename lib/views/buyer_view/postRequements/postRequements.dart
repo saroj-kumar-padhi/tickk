@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -26,6 +25,8 @@ class _PostRequirementsState extends State<PostRequirements> {
   final TextEditingController sizeController = TextEditingController();
   final TextEditingController quntityController = TextEditingController();
   final TextEditingController commentsController = TextEditingController();
+  final TextEditingController unitsController = TextEditingController();
+
   final RxString imagePath = ''.obs;
 
   @override
@@ -66,10 +67,25 @@ class _PostRequirementsState extends State<PostRequirements> {
               SizedBox(
                 height: 5.h,
               ),
-              CustomDropdownFormField(
-                items: dropdownController.subcategories,
-                onChanged: (value) {},
-                onSaved: (value) {},
+              Obx(
+                () => dropdownController.issubSet.value
+                    ? CustomDropdownFormField(
+                        hintText: dropdownController.selectedCategory.value,
+                        items: const [],
+                        onChanged: (value) {},
+                        onSaved: (value) {},
+                        // Removed the value parameter as it doesn't exist
+                      )
+                    : CustomDropdownFormField(
+                        items: dropdownController.categories,
+                        onChanged: (value) {
+                          dropdownController.changeSelectedCategory(value ??
+                              ""); // Update category and reset subcategory
+                          setState(() {});
+                        },
+                        onSaved: (value) {},
+                        // Removed the value parameter as it doesn't exist
+                      ),
               ),
               SizedBox(
                 height: 5.h,
@@ -80,10 +96,31 @@ class _PostRequirementsState extends State<PostRequirements> {
               SizedBox(
                 height: 5.h,
               ),
-              CustomDropdownFormField(
-                items: dropdownController.subcategories,
-                onChanged: (value) {},
-                onSaved: (value) {},
+              Obx(
+                () => dropdownController.issubsubSet.value
+                    ? CustomDropdownFormField(
+                        hintText: dropdownController.selectedSubcategory.value,
+                        items: const [],
+                        onChanged: (value) {},
+                        onSaved: (value) {},
+                        // Removed the value parameter as it doesn't exist
+                      )
+                    : CustomDropdownFormField(
+                        items: dropdownController.subcategories,
+                        onChanged: (value) {
+                          dropdownController
+                              .changeSelectedSubcategory(value ?? "");
+                          dropdownController.selectedSubcategory;
+                          dropdownController.issubSet.value = true;
+                          dropdownController.issubsubSet.value = true;
+                          // Update selected subcategory
+                          setState(() {});
+                        },
+                        onSaved: (value) {
+                          setState(() {});
+                        },
+                        // Removed the value parameter as it doesn't exist
+                      ),
               ),
               SizedBox(
                 height: 5.h,
@@ -95,8 +132,11 @@ class _PostRequirementsState extends State<PostRequirements> {
                 height: 5.h,
               ),
               CustomDropdownFormField(
-                items: dropdownController.subcategories,
-                onChanged: (value) {},
+                items: dropdownController.subSubcategories,
+                onChanged: (value) {
+                  dropdownController.changeSelectedSubSubcategory(value ?? "");
+                  dropdownController.issubsubSet.value = true;
+                },
                 onSaved: (value) {},
               ),
               SizedBox(
@@ -213,8 +253,28 @@ class _PostRequirementsState extends State<PostRequirements> {
                         height: 55.h,
                         width: 100.w,
                         child: CustomDropdownFormField(
-                          items: dropdownController.subcategories,
-                          onChanged: (value) {},
+                          items: const [
+                            'piece',
+                            'kg',
+                            'gm',
+                            'ml',
+                            'liter',
+                            'mm',
+                            'cm',
+                            'ft',
+                            'meter',
+                            'sq.ft',
+                            'sq.meter',
+                            'bundle',
+                            'pair',
+                            'quintal',
+                            'ton',
+                            'inch'
+                          ],
+                          onChanged: (value) {
+                            dropdownController.selectedUnits.value =
+                                value ?? "";
+                          },
                           onSaved: (value) {},
                         ),
                       ),
@@ -346,7 +406,20 @@ class _PostRequirementsState extends State<PostRequirements> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return const PostRequirementsDialog();
+                        return PostRequirementsDialog(
+                          category: dropdownController.selectedCategory.value,
+                          subcategory:
+                              dropdownController.selectedSubcategory.value,
+                          subsubCategory:
+                              dropdownController.selectedSubSubcategory.value,
+                          brands: brandController.text,
+                          modelNo: modelController.text,
+                          size: sizeController.text,
+                          quantity: quntityController.text,
+                          units: dropdownController.selectedUnits.value,
+                          description: commentsController.text,
+                          image: imagePath.value,
+                        );
                       },
                     );
                   },

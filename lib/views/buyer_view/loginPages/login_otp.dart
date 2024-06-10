@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'package:pinput/pinput.dart';
 
@@ -30,97 +31,110 @@ class LogINOTP extends StatelessWidget {
       ),
     );
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1,
-        leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            )),
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: GlobalSizes.getDeviceHeight(context) * 0.03,
-          ),
-          Center(
-            child: Text(
-              "Enter verification code",
-              style: GoogleFonts.openSans(
-                  fontSize: 27, fontWeight: FontWeight.w600),
-            ),
-          ),
-          SizedBox(
-            height: GlobalSizes.getDeviceHeight(context) * 0.02,
-          ),
-          Text(
-            "We send verification code",
-            style:
-                GoogleFonts.openSans(fontSize: 12, fontWeight: FontWeight.w600),
-          ),
-          Text(
-            "to +91 6280644889",
-            style:
-                GoogleFonts.openSans(fontSize: 12, fontWeight: FontWeight.w600),
-          ),
-          SizedBox(
-            height: GlobalSizes.getDeviceHeight(context) * 0.05,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: GlobalSizes.getDeviceWidth(context) * 0.05),
-            child: Pinput(
-              controller: authController.otpController,
-              onChanged: (val) {
-                if (val.length == 6) {
-                  authController.isOtpEmpty.value = false;
-                } else {
-                  authController.isOtpEmpty.value = true;
-                }
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 1,
+          leading: IconButton(
+              onPressed: () {
+                Get.back();
               },
-              length: 6,
-              defaultPinTheme: defaultPinTheme,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: GlobalSizes.getDeviceWidth(context) * 0.05,
-                vertical: 10),
-            child:
-                const Align(alignment: Alignment.centerLeft, child: OTPText()),
-          ),
-          Obx(() {
-            return Buttons.longButton(
-              color: authController.isOtpEmpty.value
-                  ? const Color(0xffFC8019).withOpacity(0.2)
-                  : const Color(0xffFC8019),
-              buttonText: 'Login',
-              textColor: Colors.white,
-              context: context,
-              onPressedCallback: () {
-                authController.otpController.text.length == 6
-                    ? Get.toNamed(RouteName.langScreen)
-                    : () {};
-              },
-            );
-          }),
-          const Spacer(),
-          Padding(
-              padding: const EdgeInsets.only(bottom: 35),
-              child: CoustumRichText(
-                text1: 'Don’t have an account? ',
-                text2: AppStrings.signUpButtonText,
-                callBack: () {
-                  Get.toNamed(RouteName.signPhoneScreen);
-                },
-              ))
-        ],
-      ),
-    );
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+              )),
+        ),
+        body: Obx(() {
+          return authController.isLoading.value
+              ? Scaffold(
+                  backgroundColor: const Color(0xffFC8019),
+                  body: Center(
+                    child: LoadingAnimationWidget.inkDrop(
+                        color: const Color(0xffE4E4E4), size: 200),
+                  ),
+                )
+              : Column(
+                  children: [
+                    SizedBox(
+                      height: GlobalSizes.getDeviceHeight(context) * 0.03,
+                    ),
+                    Center(
+                      child: Text(
+                        "Enter verification code",
+                        style: GoogleFonts.openSans(
+                            fontSize: 27, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    SizedBox(
+                      height: GlobalSizes.getDeviceHeight(context) * 0.02,
+                    ),
+                    Text(
+                      "We send verification code",
+                      style: GoogleFonts.openSans(
+                          fontSize: 12, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      "to +91 6280644889",
+                      style: GoogleFonts.openSans(
+                          fontSize: 12, fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      height: GlobalSizes.getDeviceHeight(context) * 0.05,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal:
+                              GlobalSizes.getDeviceWidth(context) * 0.05),
+                      child: Pinput(
+                        controller: authController.otpController,
+                        onChanged: (val) {
+                          if (val.length == 6) {
+                            authController.isOtpEmpty.value = false;
+                          } else {
+                            authController.isOtpEmpty.value = true;
+                          }
+                        },
+                        length: 6,
+                        defaultPinTheme: defaultPinTheme,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal:
+                              GlobalSizes.getDeviceWidth(context) * 0.05,
+                          vertical: 10),
+                      child: const Align(
+                          alignment: Alignment.centerLeft, child: OTPText()),
+                    ),
+                    Obx(() {
+                      return Buttons.longButton(
+                        color: authController.isOtpEmpty.value
+                            ? const Color(0xffFC8019).withOpacity(0.2)
+                            : const Color(0xffFC8019),
+                        buttonText: 'Login',
+                        textColor: Colors.white,
+                        context: context,
+                        onPressedCallback: () {
+                          if (authController.otpController.text.length == 6) {
+                            authController.signInWithOtp();
+
+                            Get.toNamed(RouteName.langScreen);
+                          } else {}
+                        },
+                      );
+                    }),
+                    const Spacer(),
+                    Padding(
+                        padding: const EdgeInsets.only(bottom: 35),
+                        child: CoustumRichText(
+                          text1: 'Don’t have an account? ',
+                          text2: AppStrings.signUpButtonText,
+                          callBack: () {
+                            Get.toNamed(RouteName.signPhoneScreen);
+                          },
+                        ))
+                  ],
+                );
+        }));
   }
 }
 

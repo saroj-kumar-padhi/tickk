@@ -137,13 +137,13 @@ class HomeBuyer extends StatelessWidget {
                 ),
               ),
               const Divider(),
-              const Expanded(
+              Expanded(
                 child: TabBarView(
                   children: [
                     NewTab(), // inprocess tab
-                    InProcessTab(), // inprocess tab
-                    DealDoneTab(), //Deal Done
-                    RejectedTab(), // rejected tab
+                    const InProcessTab(), // inprocess tab
+                    const DealDoneTab(), //Deal Done
+                    const RejectedTab(), // rejected tab
                   ],
                 ),
               ),

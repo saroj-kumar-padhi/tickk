@@ -57,6 +57,12 @@ dependencies:
   multi_dropdown: ^2.1.4
   flutter_carousel_widget: ^2.2.0
   blur: ^4.0.0
+  retrofit: ^4.1.0
+  dio: ^5.4.3+1
+  loading_animation_widget: ^1.2.1
+  change_app_package_name: ^1.2.0
+  firebase_core: ^3.0.0
+  firebase_auth: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +74,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  retrofit_generator:
+  build_runner:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

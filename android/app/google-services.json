@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "628743657075",
+    "project_id": "tickk-90b57",
+    "storage_bucket": "tickk-90b57.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:628743657075:android:a2211a236aa458ac00fc06",
+        "android_client_info": {
+          "package_name": "com.dekhlo.tickk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAo-1ZTy39hBIH2IrgdDLoBZO8y6nU3qQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

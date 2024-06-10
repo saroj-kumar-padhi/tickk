@@ -8,12 +8,39 @@ import '../dialog_boxs/delete_dialog.dart';
 import '../textstyle.dart';
 
 class NewSquareCard extends StatelessWidget {
-  const NewSquareCard({super.key});
+  final String mobile;
+  final String requirementId;
+  final String storeCategory;
+  final String storeSubCategory;
+  final String storeSubSubCategory;
+  final String brands;
+  final String modelNo;
+  final String size;
+  final String quantity;
+  final String units;
+  final String requirementInDetails;
+  final String date;
+
+  const NewSquareCard(
+      {super.key,
+      required this.mobile,
+      required this.requirementId,
+      required this.storeCategory,
+      required this.storeSubCategory,
+      required this.storeSubSubCategory,
+      required this.brands,
+      required this.modelNo,
+      required this.size,
+      required this.quantity,
+      required this.units,
+      required this.requirementInDetails,
+      required this.date});
 
   @override
   Widget build(BuildContext context) {
-    String text =
-        "Hi, I want a keyboard which is wireless. Looking for Need 5 of them. Please get back as soon as possible if it available in your store";
+    String text = requirementInDetails;
+    DateTime dateTime = DateTime.parse(date);
+    String dateOnly = dateTime.toIso8601String().split('T').first;
     return Container(
         width: double.infinity, // Adjust the width as needed
         height: 240.h, // Adjust the height as needed
@@ -39,7 +66,7 @@ class NewSquareCard extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 17.w),
               child: Text(
-                "Requirement ID #16526545",
+                "Requirement ID #$requirementId",
                 style: TextStyles.openSans(
                     fontSize: 14, fontWeight: FontWeight.w600),
               ),
@@ -57,7 +84,7 @@ class NewSquareCard extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          "Electronics ",
+                          storeCategory,
                           style: TextStyles.openSans(
                               fontSize: 12, fontWeight: FontWeight.w400),
                         ),
@@ -65,14 +92,14 @@ class NewSquareCard extends StatelessWidget {
                             style: TextStyles.openSans(
                                 fontSize: 12, fontWeight: FontWeight.w400)),
                         Text(
-                          "Table lamp",
+                          storeSubCategory,
                           style: TextStyles.openSans(
                               fontSize: 12, fontWeight: FontWeight.w400),
                         ),
                         Text(" | ",
                             style: TextStyles.openSans(
                                 fontSize: 10, fontWeight: FontWeight.w400)),
-                        Text("Phillips",
+                        Text(brands,
                             style: TextStyles.openSans(
                                 fontSize: 12, fontWeight: FontWeight.w400))
                       ],
@@ -81,7 +108,7 @@ class NewSquareCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(right: 12),
                     child: Text(
-                      "05 Feb ‘24",
+                      dateOnly,
                       style: TextStyles.openSans(
                           fontSize: 12, fontWeight: FontWeight.w600),
                     ),
@@ -105,7 +132,7 @@ class NewSquareCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "#12638",
+                      modelNo,
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w600, fontSize: 12),
                     ),
@@ -123,7 +150,7 @@ class NewSquareCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "02",
+                      quantity,
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w600, fontSize: 12),
                     ),
@@ -141,12 +168,12 @@ class NewSquareCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "{value}",
+                      size,
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w600, fontSize: 12),
                     ),
                     Text(
-                      "10",
+                      "size",
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w400, fontSize: 12),
                     ),
@@ -159,7 +186,7 @@ class NewSquareCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "{value}",
+                      units,
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w600, fontSize: 12),
                     ),
