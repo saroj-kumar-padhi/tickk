@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../utils/routes/routes_names.dart';
+
 class AuthController extends GetxController {
   RxBool isLogin = false.obs;
   RxBool isPhoneNumberEmpty = true.obs;
@@ -47,7 +49,7 @@ class AuthController extends GetxController {
     isLoading.value = false;
   }
 
-  void signInWithOtp() async {
+  Future<void> signInWithOtp() async {
     isLoading.value = true;
     final otp = otpController.text.trim();
     if (otp.isEmpty) {
@@ -62,9 +64,10 @@ class AuthController extends GetxController {
 
     try {
       await _auth.signInWithCredential(credential);
-      isLogin.value = true;
+      // isLogin.value = true;
+      Get.toNamed(RouteName.langScreen);
     } catch (e) {
-      errorMessagePhoneNumber.value = "Invalid OTP";
+      Fluttertoast.showToast(msg: "invalid otp");
     }
     isLoading.value = false;
   }

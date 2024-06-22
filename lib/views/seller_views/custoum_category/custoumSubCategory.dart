@@ -1,6 +1,6 @@
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/components/heading.dart';
-import 'package:dekhlo/views/seller_views/set_up_product.dart';
+import 'package:dekhlo/views/seller_views/set_up_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';

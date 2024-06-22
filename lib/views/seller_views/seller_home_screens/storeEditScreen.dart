@@ -228,6 +228,7 @@ class StoreEditScreen extends StatelessWidget {
                       height: 5.h,
                     ),
                     CustomTextField(
+                        isenable: true,
                         controller:
                             productSetUpController.nameEditingController,
                         hintText: "Enter your shop name",
@@ -241,6 +242,7 @@ class StoreEditScreen extends StatelessWidget {
                       height: 5.h,
                     ),
                     CustomTextField(
+                        isenable: true,
                         controller:
                             productSetUpController.nameEditingController,
                         hintText: "Enter your contact number",
@@ -274,15 +276,21 @@ class StoreEditScreen extends StatelessWidget {
                           }
                         },
                         options: const <ValueItem>[
-                          ValueItem(label: 'Clothes', value: '1'),
-                          ValueItem(label: 'Shoes', value: '2'),
-                          ValueItem(label: 'Cosmetics', value: '3'),
+                          ValueItem(label: 'Electronics', value: '1'),
+                          ValueItem(label: 'Fashion', value: '2'),
+                          ValueItem(label: 'Sports', value: '3'),
+                          ValueItem(label: 'Electricals', value: '4'),
+                          ValueItem(label: 'Pet stores', value: '5'),
+                          ValueItem(label: 'Medical', value: '6'),
+                          ValueItem(label: 'Construction', value: '7'),
+                          ValueItem(label: 'Gifts', value: '7'),
+
                           ValueItem(
                             label: 'Custom Category',
-                            value: 4,
+                            value: 8,
                           ), // Custom Category option
                         ],
-                        maxItems: 3,
+                        maxItems: 7,
                         selectionType: SelectionType.multi,
                         chipConfig: const ChipConfig(
                           deleteIcon: Icon(Icons.close_outlined),
@@ -321,12 +329,60 @@ class StoreEditScreen extends StatelessWidget {
                           }
                         },
                         options: const <ValueItem>[
-                          ValueItem(label: 'subCat1', value: '1'),
-                          ValueItem(label: 'subCat2', value: '2'),
-                          ValueItem(label: 'subCat3', value: '3'),
-                          ValueItem(label: 'Custom sub category', value: '4'),
+                          ValueItem(
+                              label: 'Mobile phones and accessories',
+                              value: '1'),
+                          ValueItem(
+                              label: 'Laptops, computers, and accessories',
+                              value: '2'),
+                          ValueItem(label: 'Home appliances', value: '3'),
+                          ValueItem(label: 'Kitchen appliances', value: '4'),
+                          ValueItem(label: "Head phones", value: '5'),
+                          ValueItem(label: "Smart watches", value: '6'),
+                          ValueItem(label: "Video games", value: '7'),
+                          ValueItem(label: "Tablets", value: '8'),
+                          ValueItem(label: "Home audio", value: '9'),
+                          ValueItem(label: "Grooming appliances", value: '10'),
+                          ValueItem(label: "Women's clothing", value: '11'),
+                          //Faction
+                          ValueItem(label: "Women's clothing", value: '12'),
+                          ValueItem(label: "Men's clothing", value: '13'),
+                          ValueItem(label: "Kids fashion", value: '14'),
+                          ValueItem(label: "Beauty and makeup", value: '15'),
+                          ValueItem(label: "Shoes and footwear", value: '16'),
+                          ValueItem(
+                              label: "Bags, wallets and luggage", value: '17'),
+                          ValueItem(label: "Watches", value: '18'),
+                          ValueItem(label: "Jewellery", value: '19'),
+                          ValueItem(
+                              label: "Women's lingerie and sleepwear",
+                              value: '20'),
+                          ValueItem(label: "Men's boutique", value: '21'),
+                          ValueItem(label: "Women's clothing", value: '22'),
+                          ValueItem(label: "Unisex boutique", value: '23'),
+                          //Electricals
+                          ValueItem(label: "Fancy lights", value: '24'),
+                          ValueItem(label: "Fans", value: '25'),
+                          ValueItem(label: "Lighting", value: '26'),
+                          ValueItem(label: "Wiring", value: '27'),
+                          ValueItem(label: "Switches", value: '28'),
+                          //Pet stores
+                          ValueItem(label: "Dogs", value: '29'),
+                          ValueItem(label: "Cats", value: '30'),
+                          ValueItem(label: "Fish & Aquatics", value: '31'),
+                          ValueItem(label: "Birds", value: '32'),
+                          ValueItem(label: "Cattle", value: '33'),
+                          ValueItem(label: "Other pets", value: '34'),
+                          //Medical
+                          ValueItem(label: "Pharmacy", value: '35'),
+                          ValueItem(
+                              label: "Surgically & equipment", value: '36'),
+                          //Gifts
+                          ValueItem(label: "Books & Stationery", value: '37'),
+                          ValueItem(label: "Toys", value: '38'),
+                          ValueItem(label: "Home Decor", value: '39'),
                         ],
-                        maxItems: 3,
+                        maxItems: 40,
                         selectionType: SelectionType.multi,
                         chipConfig: const ChipConfig(
                             wrapType: WrapType.wrap,
@@ -363,11 +419,38 @@ class StoreEditScreen extends StatelessWidget {
                           }
                         },
                         options: const <ValueItem>[
-                          ValueItem(label: 'subsubCat1', value: '1'),
-                          ValueItem(label: 'subsubCat2', value: '2'),
-                          ValueItem(label: 'subsubCat3', value: '3'),
+                          ValueItem(label: 'Adult geared cycles', value: '1'),
                           ValueItem(
-                              label: 'Custom sub sub category', value: '4'),
+                              label: 'Adult non geared cycles', value: '2'),
+                          ValueItem(label: 'Kids cycles', value: '3'),
+                          ValueItem(label: 'Electric cycles', value: '4'),
+                          ValueItem(
+                              label: 'Cycling kits & accessories', value: '5'),
+
+                          //Strength training
+                          ValueItem(label: 'Dumbbells', value: '6'),
+                          ValueItem(label: 'Home gym sets', value: '7'),
+                          ValueItem(label: 'Benches', value: '8'),
+                          ValueItem(
+                              label: 'Wearable weights & accessories',
+                              value: '9'),
+                          ValueItem(
+                              label: 'Multi gym functional trainers',
+                              value: '10'),
+                          ValueItem(label: 'Plates & barbells', value: '11'),
+                          ValueItem(label: 'Kettle bells', value: '12'),
+//Cardio
+                          ValueItem(label: 'Treadmills', value: '13'),
+                          ValueItem(label: 'Fitness bikes', value: '14'),
+                          ValueItem(label: 'Ellipticals', value: '15'),
+                          ValueItem(label: 'Rowers', value: '16'),
+                          //Badminton
+                          ValueItem(label: 'Racquets', value: '13'),
+                          ValueItem(label: 'Shuttle cocks', value: '14'),
+                          ValueItem(label: 'Badminton sets', value: '15'),
+                          ValueItem(label: 'Badminton shoes', value: '16'),
+                          ValueItem(label: 'Kit bags', value: '17'),
+                          ValueItem(label: 'Accessories', value: '18'),
                         ],
                         maxItems: 3,
                         selectionType: SelectionType.multi,
@@ -547,6 +630,7 @@ class StoreEditScreen extends StatelessWidget {
                           children: [
                             heading(title: 'Building No.'),
                             CustomTextField(
+                              isenable: true,
                               onChanged: (Value) {
                                 productSetUpController.updateButtonState();
                               },
@@ -565,6 +649,7 @@ class StoreEditScreen extends StatelessWidget {
                             children: [
                               heading(title: 'Pincode'),
                               CustomTextField(
+                                isenable: true,
                                 onChanged: (Value) {
                                   productSetUpController.updateButtonState();
                                 },
@@ -588,6 +673,7 @@ class StoreEditScreen extends StatelessWidget {
                       height: 5.h,
                     ),
                     CustomTextField(
+                        isenable: true,
                         onChanged: (Value) {
                           productSetUpController.updateButtonState();
                         },
@@ -604,6 +690,7 @@ class StoreEditScreen extends StatelessWidget {
                       height: 5.h,
                     ),
                     CustomTextField(
+                        isenable: true,
                         onChanged: (Value) {
                           productSetUpController.updateButtonState();
                         },

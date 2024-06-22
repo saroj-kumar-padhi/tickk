@@ -101,9 +101,11 @@ class OTP extends StatelessWidget {
               buttonText: 'Login',
               textColor: Colors.white,
               context: context,
-              onPressedCallback: () {
+              onPressedCallback: () async {
                 authController.otpController.text.length == 6
-                    ? Get.toNamed(RouteName.langScreen)
+                    ? {
+                        await authController.signInWithOtp(),
+                      }
                     : () {};
               },
             );

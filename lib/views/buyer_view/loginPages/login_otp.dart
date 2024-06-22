@@ -116,8 +116,6 @@ class LogINOTP extends StatelessWidget {
                         onPressedCallback: () {
                           if (authController.otpController.text.length == 6) {
                             authController.signInWithOtp();
-
-                            Get.toNamed(RouteName.langScreen);
                           } else {}
                         },
                       );

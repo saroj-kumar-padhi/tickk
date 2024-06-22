@@ -1,7 +1,11 @@
+import 'package:dekhlo/services/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/web.dart';
 
 class ProductSetUpController extends GetxController {
+  RxBool isLoading = false.obs;
+
   final TextEditingController nameEditingController = TextEditingController();
   final TextEditingController contactEditingController =
       TextEditingController();
@@ -12,6 +16,7 @@ class ProductSetUpController extends GetxController {
   final TextEditingController discriptionController = TextEditingController();
   final TextEditingController youTubeEditingController =
       TextEditingController();
+  final TextEditingController instagram = TextEditingController();
   //day controllers
   final TextEditingController sundayOpenTimeEditingController =
       TextEditingController();
@@ -98,5 +103,68 @@ class ProductSetUpController extends GetxController {
 
   void setDayTiming(String day, String openTime, String closeTime) {
     dayTimings[day] = [openTime, closeTime];
+  }
+
+  Future<void> setupStrore(
+      List<String> imagePath,
+      List<dynamic> category,
+      List<dynamic> subcategories,
+      List<dynamic> subSubCategory,
+      List<String> brands) async {
+    final data = {
+      "mobile": contactEditingController.text,
+      "StoreName": nameEditingController.text,
+      "storeCategory": category,
+      "storeSubCategory": subcategories,
+      "storeSubSubCategory": subSubCategory,
+      "Brands": brands,
+      "About_the_store": discriptionController.text,
+      "timings": {
+        "Sunday": {
+          "open": sundayOpenTimeEditingController.text,
+          "close": sundayCloseEditingController.text
+        },
+        "Monday": {
+          "open": mondayOpenTimeEditingController.text,
+          "close": mondayCloseEditingController.text
+        },
+        "Tuesday": {
+          "open": tuesdayOpenTimeEditingController.text,
+          "close": tuesdayCloseEditingController.text
+        },
+        "Wednesday": {
+          "open": wednesdayOpenTimeEditingController.text,
+          "close": wednesdayCloseEditingController.text
+        },
+        "Thursday": {
+          "open": thursdayOpenTimeEditingController.text,
+          "close": thursdayCloseEditingController.text
+        },
+        "Friday": {
+          "open": fridayOpenTimeEditingController.text,
+          "close": fridayCloseEditingController.text
+        },
+        "Saturday": {
+          "open": saturdayOpenTimeEditingController.text,
+          "close": saturdayCloseEditingController.text
+        }
+      },
+      "youtubelink": youTubeEditingController.text,
+      "instagarmlink": instagram.text,
+      "languages": "english",
+      "BuildingNo": int.parse(buildingController.text),
+      "Pincode": int.parse(pinCodeController.text),
+      "ColonyName": colonyController.text,
+      "Location": "Sample City, Sample State, Sample Country",
+      "AddImage": imagePath,
+      "Landmark": landMarkController.text,
+      "stared": 3
+    };
+
+    try {
+      await restClient.setupStrore(data);
+    } catch (e) {
+      Logger().d(e);
+    }
   }
 }

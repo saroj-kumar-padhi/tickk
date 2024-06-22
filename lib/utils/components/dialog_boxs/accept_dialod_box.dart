@@ -1,14 +1,25 @@
+import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:logger/web.dart';
 
 import '../../size/global_size/global_size.dart';
 import '../buttons.dart';
 
 class AcceptDialodBox extends StatelessWidget {
-  const AcceptDialodBox({super.key});
+  final bool isExact;
+  final List<dynamic> imageList;
+
+  final String requiremetId;
+
+  const AcceptDialodBox(
+      {super.key,
+      required this.isExact,
+      required this.imageList,
+      required this.requiremetId});
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +91,20 @@ class AcceptDialodBox extends StatelessWidget {
                       Buttons.shortButton(
                         color: const Color(0xffFC8019),
                         context: context,
-                        onPressedCallback: () {
-                          Fluttertoast.showToast(msg: "Accepted");
-                          Get.back();
+                        onPressedCallback: () async {
+                          final data = {
+                            "RequirementID": requiremetId,
+                            "ExactSimilarImage": imageList,
+                            if (isExact) "Exact": true else "Similar": true,
+                          };
+
+                          try {
+                            await restClient.exactOrSimilar(data);
+                            Fluttertoast.showToast(msg: "Accepted");
+                            Get.back();
+                          } catch (e) {
+                            Logger().d(e);
+                          }
                         },
                         buttonText: "Accept",
                         textColor: Colors.white,

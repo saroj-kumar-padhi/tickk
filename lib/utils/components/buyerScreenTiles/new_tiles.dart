@@ -1,8 +1,11 @@
+import 'package:dekhlo/controllers/newTabController.dart';
+import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:logger/web.dart';
 
 import '../dialog_boxs/delete_dialog.dart';
 import '../textstyle.dart';
@@ -38,6 +41,7 @@ class NewSquareCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    NewTabController newTabController = Get.put(NewTabController());
     String text = requirementInDetails;
     DateTime dateTime = DateTime.parse(date);
     String dateOnly = dateTime.toIso8601String().split('T').first;
@@ -265,7 +269,14 @@ class NewSquareCard extends StatelessWidget {
                               return DeleteItemDialog(
                                 title:
                                     'Do you really want to delete this Requirement ?',
-                                onDelete: () {
+                                onDelete: () async {
+                                  try {
+                                    await restClient.deleteNewBuyerRequirement(
+                                        int.parse(mobile), requirementId);
+                                    newTabController.fetchRequirements();
+                                  } catch (e) {
+                                    Logger().d(e);
+                                  }
                                   Fluttertoast.showToast(
                                       msg:
                                           'Your requirement is deleted successfully');

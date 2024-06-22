@@ -1,21 +1,28 @@
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/components/dialog_boxs/succsess_dialog.dart';
-import 'package:dekhlo/views/buyer_view/faq_screens/deleteScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
+import '../../../controllers/basicControllerEdit.dart';
 import '../../size/global_size/global_size.dart';
 import '../textstyle.dart';
 
 class OtpDialog extends StatelessWidget {
   final String nametoNavigate;
-
-  const OtpDialog({super.key, required this.nametoNavigate});
+  final String? phone; // Optional parameter
+  final Map<String, dynamic>? body; // Optional parameter
+  const OtpDialog({
+    super.key,
+    required this.nametoNavigate,
+    this.phone,
+    this.body,
+  });
 
   @override
   Widget build(BuildContext context) {
     TextEditingController textEditingController = TextEditingController();
+    BasiccontrollerEdit basiccontrollerEdit = BasiccontrollerEdit();
     final defaultPinTheme = PinTheme(
       width: 60.w,
       height: 30.h,
@@ -63,7 +70,7 @@ class OtpDialog extends StatelessWidget {
                     padding: EdgeInsets.only(
                         bottom: GlobalSizes.getDeviceHeight(context) * 0.01),
                     child: Text(
-                      "We send verification code to +9378478328",
+                      "We send verification code to $phone",
                       style: TextStyles.openSans(
                           fontSize: 18, fontWeight: FontWeight.w600),
                     ),
@@ -114,11 +121,15 @@ class OtpDialog extends StatelessWidget {
                     ),
                   )),
                   SizedBox(
-                    height: 60.h,
+                    height: 65.h,
                     child: Buttons.longButton(
                         color: const Color(0xffFC8019),
                         context: context,
                         onPressedCallback: () {
+                          try {
+                            basiccontrollerEdit.updateProfileData(
+                                phone ?? "", body ?? {});
+                          } catch (e) {}
                           Future.delayed(Duration.zero, () {
                             Get.back();
                           });

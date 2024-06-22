@@ -1,14 +1,23 @@
+import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 import '../../size/global_size/global_size.dart';
 import '../buttons.dart';
 
 class QuoteDialog extends StatelessWidget {
-  const QuoteDialog({super.key});
+  final String quote;
+  final String storeId;
+  final String requirementId;
+  const QuoteDialog(
+      {super.key,
+      required this.quote,
+      required this.storeId,
+      required this.requirementId});
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +82,17 @@ class QuoteDialog extends StatelessWidget {
                       Buttons.shortButton(
                         color: const Color(0xffFC8019),
                         context: context,
-                        onPressedCallback: () {
-                          Fluttertoast.showToast(msg: "Sent");
+                        onPressedCallback: () async {
+                          try {
+                            await restClient.sendQuote(storeId, {
+                              "RequirementID": requirementId,
+                              "Quote": quote
+                            });
+                            Fluttertoast.showToast(msg: "Sent");
+                          } catch (e) {
+                            Logger().d(e);
+                          }
+
                           Get.back();
                         },
                         buttonText: "Send",

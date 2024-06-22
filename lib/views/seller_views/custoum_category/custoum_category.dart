@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/components/textstyle.dart';
-import '../set_up_product.dart';
+import '../set_up_store.dart';
 
 class CustoumCategory extends StatelessWidget {
   CustoumCategory({super.key});

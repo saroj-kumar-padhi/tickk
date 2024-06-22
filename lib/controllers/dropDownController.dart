@@ -1,10 +1,7 @@
-import 'package:dekhlo/models/postRequirementModel.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:logger/web.dart';
 
 import '../utils/routes/routes_names.dart';
@@ -224,7 +221,7 @@ class DropdownController extends GetxController {
       String formattedPhoneNumber = PhoneNumber.substring(3);
       final test = {
         "mobile": formattedPhoneNumber,
-        "your_name": "dheklo",
+        "your_name": "Saroj",
         "storeCategory": category,
         "storeSubCategory": subcategory,
         "storeSubSubCategory": subSub,
@@ -237,14 +234,15 @@ class DropdownController extends GetxController {
         "Requirement_in_details": details,
         "AddImage": image,
         "Location": "New York",
-        "Status": "accept",
-        "deletebutton": "",
-        "Accept": "",
-        "Reject": ""
+        "Status": "Neutral",
+        "deletebutton": "Neutral",
+        "Accept": "Neutral",
+        "Reject": "Neutral"
       };
 
       await restClient.postRequirements(test).then((value) {
-        Fluttertoast.showToast(msg: "Thanks Yor requrements send sccessfully");
+        Fluttertoast.showToast(
+            msg: "Thanks Yor requrements send su vccessfully");
         Get.toNamed(RouteName.homeBuyerScreen);
       });
     } catch (e) {

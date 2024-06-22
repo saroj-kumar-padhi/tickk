@@ -1,8 +1,13 @@
+import 'package:dekhlo/controllers/newTabController.dart';
+import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/buyerScreenTiles/send_tile.dart';
+import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
+import 'package:logger/logger.dart';
 
 import '../../../controllers/dropDownController.dart';
 import '../buttons.dart';
@@ -36,6 +41,8 @@ class PostRequirementsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DropdownController dropdownController = DropdownController();
+    NewTabController newTabController = Get.put(NewTabController());
+    String subFormatted = subsubCategory == '' ? "N/A" : subsubCategory;
     return AlertDialog(
       contentPadding: EdgeInsets.zero, // Remove content padding
       titlePadding: const EdgeInsets.symmetric(
@@ -90,14 +97,21 @@ class PostRequirementsDialog extends StatelessWidget {
                 brand: brands,
                 modelNo: modelNo,
                 quote: 5600,
-                size: 9,
-                quantity: 8,
+                size: int.parse(size),
+                quantity: int.parse(quantity),
                 details: description,
                 image: image,
                 category: category,
                 subcategory: subcategory,
-                subsubCategory: subsubCategory,
+                subsubCategory: subFormatted,
                 units: units);
+            try {
+              restClient.putRequirementInSellerTab(category, subcategory);
+            } catch (e) {
+              Logger().d(e);
+            }
+            newTabController.fetchRequirements();
+            Get.toNamed(RouteName.homeBuyerScreen);
           },
           buttonText: "Send",
           textColor: Colors.white,

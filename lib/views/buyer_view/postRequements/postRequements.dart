@@ -169,6 +169,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                 height: 5.h,
               ),
               CustomTextField(
+                isenable: true,
                 controller: brandController,
                 hintText: '',
                 height: 55.h,
@@ -204,6 +205,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                 height: 5.h,
               ),
               CustomTextField(
+                isenable: true,
                 controller: modelController,
                 hintText: '',
                 height: 55.h,
@@ -222,6 +224,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                         headingText: 'Size',
                       ),
                       CustomTextField(
+                        isenable: true,
                         controller: sizeController,
                         hintText: '',
                         height: 55.h,
@@ -236,6 +239,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                         headingText: 'Qty',
                       ),
                       CustomTextField(
+                        isenable: true,
                         hintText: '',
                         height: 55.h,
                         width: 100.w,
@@ -295,6 +299,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                 hintText: '',
                 height: 100.h,
                 width: double.infinity,
+                isenable: true,
               ),
               SizedBox(
                 height: 10.h,

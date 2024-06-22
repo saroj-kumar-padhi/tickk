@@ -8,10 +8,10 @@ import 'package:dekhlo/views/login.dart';
 import 'package:dekhlo/views/buyer_view/notificationsScreens/buyer_notification.dart';
 import 'package:dekhlo/views/buyer_view/profileScreen/buyerProfile.dart';
 import 'package:dekhlo/views/seller_views/sellerProfiles/seller_profile.dart';
-import 'package:dekhlo/views/seller_views/seller_home_screens/seller_new.dart';
+import 'package:dekhlo/views/seller_views/seller_home_screens/seller_home.dart';
 import 'package:dekhlo/views/seller_views/seller_home_screens/storeEditScreen.dart';
 import 'package:dekhlo/views/seller_views/seller_notification.dart';
-import 'package:dekhlo/views/seller_views/set_up_product.dart';
+import 'package:dekhlo/views/seller_views/set_up_store.dart';
 import 'package:dekhlo/views/seller_views/store_screens/mystore.dart';
 import 'package:dekhlo/views/singUpPages/Signup_otp.dart';
 import 'package:dekhlo/views/singUpPages/Singup_phone.dart';
@@ -49,7 +49,6 @@ class AppPages {
     GetPage(name: RouteName.buyerNotification, page: () => BuyerNotification()),
     GetPage(name: RouteName.basicDetails, page: () => const BasicDetails()),
     GetPage(name: RouteName.setUpProduct, page: () => SetUpProduct()),
-    GetPage(name: RouteName.sellerHome, page: () => const HomeSeller()),
     GetPage(name: RouteName.myStore, page: () => MyStore()),
     GetPage(
         name: RouteName.sellerNotification, page: () => SellerNotification()),

@@ -13,13 +13,34 @@ import '../dialog_boxs/pick_diallo.dart';
 import '../textstyle.dart';
 
 class NewSellerCard extends StatelessWidget {
-  const NewSellerCard({super.key});
+  final String storeCategory;
+  final String requirementId;
+  final String storeSubCategory;
+  final String brands;
+  final String date;
+  final String modelNo;
+  final String Qty;
+  final String size;
+  final String units;
+  final String Requirement_in_details;
+
+  const NewSellerCard(
+      {super.key,
+      required this.storeCategory,
+      required this.storeSubCategory,
+      required this.brands,
+      required this.date,
+      required this.modelNo,
+      required this.Qty,
+      required this.size,
+      required this.units,
+      required this.Requirement_in_details,
+      required this.requirementId});
 
   @override
   Widget build(BuildContext context) {
     ExactController exactController = Get.put(ExactController());
-    String text =
-        "Hi, I want a keyboard which is wireless. Looking for Need 5 of them. Please get back as soon as possible if it available in your store";
+    String text = Requirement_in_details;
     RxList pickedImage = [].obs;
     return Obx(() {
       return Container(
@@ -81,7 +102,7 @@ class NewSellerCard extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Text(
-                                    "Electronics ",
+                                    storeCategory,
                                     style: TextStyles.openSans(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
@@ -91,7 +112,7 @@ class NewSellerCard extends StatelessWidget {
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400)),
                                   Text(
-                                    "Table lamp",
+                                    storeSubCategory,
                                     style: TextStyles.openSans(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
@@ -100,7 +121,7 @@ class NewSellerCard extends StatelessWidget {
                                       style: TextStyles.openSans(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w400)),
-                                  Text("Phillips",
+                                  Text(brands,
                                       style: TextStyles.openSans(
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400))
@@ -111,7 +132,7 @@ class NewSellerCard extends StatelessWidget {
                               width: 20.w,
                             ),
                             Text(
-                              "05 Feb ‘24",
+                              date,
                               style: TextStyles.openSans(
                                   fontSize: 12, fontWeight: FontWeight.w600),
                             )
@@ -139,7 +160,7 @@ class NewSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "#12638",
+                        modelNo,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -157,7 +178,7 @@ class NewSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "02",
+                        Qty,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -175,12 +196,12 @@ class NewSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "{value}",
+                        size,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
                       Text(
-                        "10",
+                        "size",
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w400, fontSize: 12),
                       ),
@@ -193,7 +214,7 @@ class NewSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "{value}",
+                        units,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -544,7 +565,13 @@ class NewSellerCard extends StatelessWidget {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return const AcceptDialodBox();
+                                  final List<String> dataImage =
+                                      pickedImage.cast<String>();
+                                  return AcceptDialodBox(
+                                    isExact: exactController.isExact.value,
+                                    imageList: dataImage,
+                                    requiremetId: requirementId,
+                                  );
                                 },
                               );
                             },

@@ -7,19 +7,44 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/exactController.dart';
-import '../coustoumTextField.dart';
+import 'package:intl/intl.dart';
 import '../dialog_boxs/coursal_dialog.dart';
 import '../dialog_boxs/quote_dialog.dart';
 import '../textstyle.dart';
 
 class PandingSellerCard extends StatelessWidget {
-  const PandingSellerCard({super.key});
+  final String yourName;
+  final String category;
+  final String subCategories;
+  final String brands;
+  final DateTime date;
+  final String modelNo;
+  final String qty;
+  final String size;
+  final String units;
+  final String des;
+  final String storeId;
+  final String requirementId;
+  const PandingSellerCard(
+      {super.key,
+      required this.category,
+      required this.subCategories,
+      required this.brands,
+      required this.date,
+      required this.modelNo,
+      required this.qty,
+      required this.size,
+      required this.units,
+      required this.yourName,
+      required this.des,
+      required this.storeId,
+      required this.requirementId});
 
   @override
   Widget build(BuildContext context) {
     ExactController exactController = Get.put(ExactController());
-    String text =
-        "Hi, I want a keyboard which is wireless. Looking for Need 5 of them. Please get back as soon as possible if it available in your store";
+    String text = des;
+    String formattedDate = DateFormat('yyyy-MM-dd').format(date);
 
     return Obx(() {
       return Container(
@@ -64,9 +89,23 @@ class PandingSellerCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 17.w),
-                        child: SvgPicture.asset("assest/name.svg"),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 17.w),
+                            child: Text(
+                              yourName,
+                              style: TextStyles.openSans(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color(0xff4A4A4A)),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10.w),
+                            child: Image.asset("assest/verfified.png"),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: GlobalSizes.getDeviceHeight(context) * 0.003,
@@ -81,7 +120,7 @@ class PandingSellerCard extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Text(
-                                    "Electronics ",
+                                    category,
                                     style: TextStyles.openSans(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
@@ -91,7 +130,7 @@ class PandingSellerCard extends StatelessWidget {
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400)),
                                   Text(
-                                    "Table lamp",
+                                    subCategories,
                                     style: TextStyles.openSans(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
@@ -100,7 +139,7 @@ class PandingSellerCard extends StatelessWidget {
                                       style: TextStyles.openSans(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w400)),
-                                  Text("Phillips",
+                                  Text(brands,
                                       style: TextStyles.openSans(
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400))
@@ -111,7 +150,7 @@ class PandingSellerCard extends StatelessWidget {
                               width: 20.w,
                             ),
                             Text(
-                              "05 Feb ‘24",
+                              formattedDate,
                               style: TextStyles.openSans(
                                   fontSize: 12, fontWeight: FontWeight.w600),
                             )
@@ -139,7 +178,7 @@ class PandingSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "#12638",
+                        modelNo,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -157,7 +196,7 @@ class PandingSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "02",
+                        qty,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -175,12 +214,12 @@ class PandingSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "{value}",
+                        size,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
                       Text(
-                        "10",
+                        "size",
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w400, fontSize: 12),
                       ),
@@ -193,7 +232,7 @@ class PandingSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "{value}",
+                        units,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -355,7 +394,11 @@ class PandingSellerCard extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return const QuoteDialog();
+                          return QuoteDialog(
+                            quote: exactController.quoteEditingController.text,
+                            storeId: storeId,
+                            requirementId: requirementId,
+                          );
                         },
                       );
                     },

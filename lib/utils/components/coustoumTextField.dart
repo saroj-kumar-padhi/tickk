@@ -1,4 +1,3 @@
-import 'package:dekhlo/controllers/productSetupController.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -7,6 +6,7 @@ class CustomTextField extends StatelessWidget {
   final double height;
   final double width;
   final ValueChanged<String>? onChanged;
+  final bool isenable;
 
   const CustomTextField({
     super.key,
@@ -15,6 +15,7 @@ class CustomTextField extends StatelessWidget {
     required this.height,
     required this.width,
     this.onChanged,
+    required this.isenable,
   });
 
   @override

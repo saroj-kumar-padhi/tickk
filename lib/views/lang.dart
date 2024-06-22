@@ -1,5 +1,6 @@
 import 'package:dekhlo/controllers/languageController.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -117,8 +118,9 @@ class Lag extends StatelessWidget {
                   color: const Color(0xffFC8019),
                   textColor: Colors.white,
                   context: context,
-                  onPressedCallback: () {
+                  onPressedCallback: () async {
                     // Get.toNamed(RouteName.homeBuyerScreen);
+
                     Get.toNamed(RouteName.basicDetails);
                     // to be continued
                   },

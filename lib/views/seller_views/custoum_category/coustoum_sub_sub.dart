@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 
 import '../../../utils/components/textstyle.dart';
-import '../set_up_product.dart';
+import '../set_up_store.dart';
 
 class CustoumSubSubCategory extends StatelessWidget {
   CustoumSubSubCategory({super.key});
