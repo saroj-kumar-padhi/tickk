@@ -37,7 +37,7 @@ Material locationSerchBar(
           ),
           Expanded(
             child: TextField(
-              controller: dialogBoxController.locacationController,
+              controller: dialogBoxController.locacationController.value,
               onTap: () {
                 // When the TextField is tapped, navigate if it's on a short page
                 if (isShortPage) {

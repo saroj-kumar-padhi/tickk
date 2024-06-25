@@ -1,11 +1,11 @@
-class SellerPandingResponseModel {
+class SellerInprocessResponseModel {
   final bool success;
   final List<Data> data;
 
-  SellerPandingResponseModel({required this.success, required this.data});
+  SellerInprocessResponseModel({required this.success, required this.data});
 
-  factory SellerPandingResponseModel.fromJson(Map<String, dynamic> json) {
-    return SellerPandingResponseModel(
+  factory SellerInprocessResponseModel.fromJson(Map<String, dynamic> json) {
+    return SellerInprocessResponseModel(
       success: json['success'],
       data: List<Data>.from(json['data'].map((item) => Data.fromJson(item))),
     );
@@ -13,15 +13,14 @@ class SellerPandingResponseModel {
 }
 
 class Data {
-  final bool exact;
+  final List<String> storeSubSubCategory;
+  final bool dealdone;
   final String id;
   final String requirementID;
   final String storeID;
-  final DateTime date;
+  final String date;
   final String yourName;
   final List<String> storeCategory;
-  final List<String> storeSubCategory;
-  final List<String> storeSubSubCategory;
   final String brands;
   final String modelNo;
   final int size;
@@ -32,20 +31,20 @@ class Data {
   final String location;
   final String status;
   final int quote;
-  final bool extract;
   final bool similar;
   final int v;
+  final List<String> storeSubCategory;
+  final bool exact;
 
   Data({
-    required this.exact,
+    required this.storeSubSubCategory,
+    required this.dealdone,
     required this.id,
     required this.requirementID,
     required this.storeID,
     required this.date,
     required this.yourName,
     required this.storeCategory,
-    required this.storeSubCategory,
-    required this.storeSubSubCategory,
     required this.brands,
     required this.modelNo,
     required this.size,
@@ -56,22 +55,22 @@ class Data {
     required this.location,
     required this.status,
     required this.quote,
-    required this.extract,
     required this.similar,
     required this.v,
+    required this.storeSubCategory,
+    required this.exact,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
-      exact: json['Exact'],
+      storeSubSubCategory: List<String>.from(json['storeSubSubCategory']),
+      dealdone: json['dealdone'],
       id: json['_id'],
       requirementID: json['RequirementID'],
       storeID: json['StoreID'],
-      date: DateTime.parse(json['Date']),
+      date: json['Date'], // Use the formatted date
       yourName: json['your_name'],
       storeCategory: List<String>.from(json['storeCategory']),
-      storeSubCategory: List<String>.from(json['storeSubCategory']),
-      storeSubSubCategory: List<String>.from(json['storeSubSubCategory']),
       brands: json['Brands'],
       modelNo: json['ModelNo'],
       size: json['size'],
@@ -82,9 +81,10 @@ class Data {
       location: json['Location'],
       status: json['Status'],
       quote: json['Quote'],
-      extract: json['Exact'],
       similar: json['Similar'],
       v: json['__v'],
+      storeSubCategory: List<String>.from(json['storeSubCategory']),
+      exact: json['Exact'],
     );
   }
 }

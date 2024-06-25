@@ -1,6 +1,7 @@
 import 'package:dekhlo/controllers/inprocessController.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -518,7 +519,11 @@ class InprocessTile extends StatelessWidget {
                                                                     buttonText:
                                                                         'Call',
                                                                     onPressed:
-                                                                        () {})
+                                                                        () {
+                                                                      FlutterPhoneDirectCaller
+                                                                          .callNumber(
+                                                                              '+916280644889');
+                                                                    })
                                                             : InkWell(
                                                                 onTap: () {
                                                                   if (inProcessController

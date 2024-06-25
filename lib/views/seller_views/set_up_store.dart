@@ -5,6 +5,7 @@ import 'package:dekhlo/controllers/productSetupController.dart';
 import 'package:dekhlo/utils/components/coustoumTextField.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
+import 'package:dekhlo/views/google_map_page.dart';
 import 'package:dekhlo/views/seller_views/seller_home_screens/seller_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -668,8 +669,8 @@ class SetUpProduct extends StatelessWidget {
                                 hintText: '',
                                 height: 55.h,
                                 width: 100.w,
-                                controller:
-                                    productSetUpController.pinCodeController,
+                                controller: productSetUpController
+                                    .pinCodeController.value,
                               ),
                             ],
                           ),
@@ -689,7 +690,8 @@ class SetUpProduct extends StatelessWidget {
                         onChanged: (Value) {
                           productSetUpController.updateButtonState();
                         },
-                        controller: productSetUpController.colonyController,
+                        controller:
+                            productSetUpController.colonyController.value,
                         hintText: "",
                         height: 48.h,
                         width: 330.w),
@@ -706,7 +708,8 @@ class SetUpProduct extends StatelessWidget {
                         onChanged: (Value) {
                           productSetUpController.updateButtonState();
                         },
-                        controller: productSetUpController.landMarkController,
+                        controller:
+                            productSetUpController.landMarkController.value,
                         hintText: "",
                         height: 48.h,
                         width: 330.w),
@@ -734,7 +737,8 @@ class SetUpProduct extends StatelessWidget {
                           onTap: () {
                             Get.toNamed(RouteName.changeLocation);
                           },
-                          controller: dialogBoxController.locacationController,
+                          controller:
+                              dialogBoxController.locacationController.value,
                           decoration: const InputDecoration(
                             hintText: 'e.g Delhi',
                             border: InputBorder.none,
@@ -748,11 +752,17 @@ class SetUpProduct extends StatelessWidget {
                       height: 10.h,
                     ),
 
-                    Text(
-                      "Use my current location",
-                      style: TextStyles.openSansUnderLine(
-                          color: const Color(0xffFC8019),
-                          fontWeight: FontWeight.normal),
+                    InkWell(
+                      onTap: () {
+                        dialogBoxController.getCurrentLoaction();
+                        Get.to(const GoogleMapPage());
+                      },
+                      child: Text(
+                        "Use my current location",
+                        style: TextStyles.openSansUnderLine(
+                            color: const Color(0xffFC8019),
+                            fontWeight: FontWeight.normal),
+                      ),
                     ),
                     SizedBox(
                       height: 30.h,

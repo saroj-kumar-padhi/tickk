@@ -10,19 +10,42 @@ import '../dialog_boxs/coursal_dialog.dart';
 import '../textstyle.dart';
 
 class ProcessSellerCard extends StatelessWidget {
-  const ProcessSellerCard({super.key});
+  final String name;
+  final String category;
+  final String subCategory;
+  final String brands;
+  final String date;
+  final String modelNo;
+  final String quantity;
+  final String size;
+  final String units;
+  final String des;
+  final String qute;
+
+  const ProcessSellerCard(
+      {super.key,
+      required this.name,
+      required this.category,
+      required this.subCategory,
+      required this.brands,
+      required this.date,
+      required this.modelNo,
+      required this.quantity,
+      required this.size,
+      required this.units,
+      required this.des,
+      required this.qute});
 
   @override
   Widget build(BuildContext context) {
     ExactController exactController = Get.put(ExactController());
-    String text =
-        "Hi, I want a keyboard which is wireless. Looking for Need 5 of them. Please get back as soon as possible if it available in your store";
+    String text = des;
 
     return Obx(() {
       return Container(
           width: double.infinity, // Adjust the width as needed
           height: exactController.toShow.value
-              ? 300.h
+              ? 310.h
               : 290.h, // Adjust the height as needed
           decoration: BoxDecoration(
             color: Colors.white,
@@ -78,7 +101,7 @@ class ProcessSellerCard extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Text(
-                                    "Electronics ",
+                                    name,
                                     style: TextStyles.openSans(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
@@ -88,7 +111,7 @@ class ProcessSellerCard extends StatelessWidget {
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400)),
                                   Text(
-                                    "Table lamp",
+                                    subCategory,
                                     style: TextStyles.openSans(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
@@ -97,7 +120,7 @@ class ProcessSellerCard extends StatelessWidget {
                                       style: TextStyles.openSans(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w400)),
-                                  Text("Phillips",
+                                  Text(brands,
                                       style: TextStyles.openSans(
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400))
@@ -108,7 +131,7 @@ class ProcessSellerCard extends StatelessWidget {
                               width: 20.w,
                             ),
                             Text(
-                              "05 Feb ‘24",
+                              date,
                               style: TextStyles.openSans(
                                   fontSize: 12, fontWeight: FontWeight.w600),
                             )
@@ -136,7 +159,7 @@ class ProcessSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "#12638",
+                        modelNo,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -154,7 +177,7 @@ class ProcessSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "02",
+                        quantity,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -172,12 +195,12 @@ class ProcessSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "{value}",
+                        size,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
                       Text(
-                        "10",
+                        "size",
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w400, fontSize: 12),
                       ),
@@ -190,12 +213,12 @@ class ProcessSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "{value}",
+                        "units",
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
                       Text(
-                        "Units",
+                        units,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w400, fontSize: 12),
                       ),
@@ -340,8 +363,7 @@ class ProcessSellerCard extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      exactController
-                          .quoteEditingController.text, // Add your text here
+                      qute, // Add your text here
                       style: const TextStyle(
                           fontSize: 16.0,
                           color: Colors.black), // Adjust text style as needed

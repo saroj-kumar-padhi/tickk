@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import '../../../utils/components/coustoum_serch_bar.dart';
 import '../../../utils/components/textstyle.dart';
 import '../../buyer_view/home_screen_buyer.dart/tabs/deal_done.dart';
+import '../../buyer_view/home_screen_buyer.dart/tabs/inprocess_tab.dart';
 import '../../buyer_view/home_screen_buyer.dart/tabs/new_tab.dart';
 import '../../buyer_view/home_screen_buyer.dart/tabs/rejected_tab.dart';
 import '../sellerProfiles/seller_profile.dart';
@@ -164,9 +165,7 @@ class HomeSeller extends StatelessWidget {
                       child: TabBarView(
                         children: [
                           NewTab(), // inprocess tab
-                          PandingTabSeller(
-                            storeId: storeId,
-                          ), // inprocess tab
+                          const InProcessTab(),
                           const DealDoneTab(), //Deal Done
                           const RejectedTab(), // rejected tab
                         ],
@@ -349,7 +348,9 @@ class HomeSeller extends StatelessWidget {
                           PandingTabSeller(
                             storeId: storeId,
                           ),
-                          const ProcessTabSeller(),
+                          ProcessTabSeller(
+                            storeId: storeId,
+                          ),
                           const AcceptedTabSeller(),
                           const DealDoneTabSeller(),
                         ],

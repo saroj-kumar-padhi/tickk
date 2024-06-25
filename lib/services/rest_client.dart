@@ -1,3 +1,5 @@
+import 'package:dekhlo/models/buyerInprocess.dart';
+import 'package:dekhlo/models/sellerInprocess.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
@@ -71,6 +73,16 @@ abstract class RestClient {
   Future<void> updateProfileData(
     @Path('mobileNo') int mobileNo,
     @Body() Map<String, dynamic> data,
+  );
+
+  @GET('/Inprocess/InprocessTabData/{storeID}')
+  Future<SellerInprocessResponseModel> sellerInProcess(
+    @Path('storeID') String storeID,
+  );
+
+  @GET('/buyerInProcess/BuyerInprocessTabData/{storeID}')
+  Future<BuyerInprocessResponseModel> buyerInProcess(
+    @Path('storeID') String storeID,
   );
 
   @POST('/Inprocess/InProcessBuyerSeller/{storeId}')

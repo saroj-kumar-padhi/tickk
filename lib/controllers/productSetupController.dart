@@ -49,9 +49,9 @@ class ProductSetUpController extends GetxController {
 
   //location controller
   final TextEditingController buildingController = TextEditingController();
-  final TextEditingController pinCodeController = TextEditingController();
-  final TextEditingController colonyController = TextEditingController();
-  final TextEditingController landMarkController = TextEditingController();
+  var pinCodeController = TextEditingController().obs;
+  var colonyController = TextEditingController().obs;
+  var landMarkController = TextEditingController().obs;
   final TextEditingController locationController = TextEditingController();
 
   List<String> dayList = ["S", "M", "T", "W", "T", "F", "S"];
@@ -70,9 +70,9 @@ class ProductSetUpController extends GetxController {
 
   void updateButtonState() {
     bool fieldsFilled = buildingController.text.isNotEmpty &&
-        pinCodeController.text.isNotEmpty &&
-        colonyController.text.isNotEmpty &&
-        landMarkController.text.isNotEmpty &&
+        pinCodeController.value.text.isNotEmpty &&
+        colonyController.value.text.isNotEmpty &&
+        landMarkController.value.text.isNotEmpty &&
         sundayOpenTimeEditingController.text.isNotEmpty &&
         sundayCloseEditingController.text.isNotEmpty &&
         mondayOpenTimeEditingController.text.isNotEmpty &&
@@ -153,11 +153,11 @@ class ProductSetUpController extends GetxController {
       "instagarmlink": instagram.text,
       "languages": "english",
       "BuildingNo": int.parse(buildingController.text),
-      "Pincode": int.parse(pinCodeController.text),
-      "ColonyName": colonyController.text,
+      "Pincode": int.parse(pinCodeController.value.text),
+      "ColonyName": colonyController.value.text,
       "Location": "Sample City, Sample State, Sample Country",
       "AddImage": imagePath,
-      "Landmark": landMarkController.text,
+      "Landmark": landMarkController.value.text,
       "stared": 3
     };
 

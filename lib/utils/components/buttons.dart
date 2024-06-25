@@ -130,13 +130,13 @@ class Buttons {
         width: width.w,
         child: TextButton(
           style: ButtonStyle(
-            shape: MaterialStateProperty.all(
+            shape: WidgetStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(borderRadius.r),
               ),
             ),
-            side: MaterialStateProperty.all(BorderSide(color: borderColor)),
-            foregroundColor: MaterialStateProperty.all(foregroundColor),
+            side: WidgetStateProperty.all(BorderSide(color: borderColor)),
+            foregroundColor: WidgetStateProperty.all(foregroundColor),
           ),
           onPressed: onPressed,
           child: Text(
@@ -159,17 +159,16 @@ class Buttons {
       width: 35.w,
       child: TextButton(
           style: ButtonStyle(
-              shape: MaterialStateProperty.all(
+              shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius.circular(4.0.r), // Adjust radius as needed
                 ),
               ),
-              side: MaterialStateProperty.all(
+              side: WidgetStateProperty.all(
                   const BorderSide(color: Color(0xffFC8019))),
-              backgroundColor:
-                  const MaterialStatePropertyAll(Color(0xffFC8019)),
-              foregroundColor: const MaterialStatePropertyAll(Colors.white)),
+              backgroundColor: const WidgetStatePropertyAll(Color(0xffFC8019)),
+              foregroundColor: const WidgetStatePropertyAll(Colors.white)),
           onPressed: () {},
           child: Text(
             "DD",

@@ -656,8 +656,8 @@ class StoreEditScreen extends StatelessWidget {
                                 hintText: '',
                                 height: 55.h,
                                 width: 100.w,
-                                controller:
-                                    productSetUpController.pinCodeController,
+                                controller: productSetUpController
+                                    .pinCodeController.value,
                               ),
                             ],
                           ),
@@ -677,7 +677,8 @@ class StoreEditScreen extends StatelessWidget {
                         onChanged: (Value) {
                           productSetUpController.updateButtonState();
                         },
-                        controller: productSetUpController.colonyController,
+                        controller:
+                            productSetUpController.colonyController.value,
                         hintText: "",
                         height: 48.h,
                         width: 330.w),
@@ -694,7 +695,8 @@ class StoreEditScreen extends StatelessWidget {
                         onChanged: (Value) {
                           productSetUpController.updateButtonState();
                         },
-                        controller: productSetUpController.landMarkController,
+                        controller:
+                            productSetUpController.landMarkController.value,
                         hintText: "",
                         height: 48.h,
                         width: 330.w),
@@ -722,7 +724,8 @@ class StoreEditScreen extends StatelessWidget {
                           onTap: () {
                             Get.toNamed(RouteName.changeLocation);
                           },
-                          controller: dialogBoxController.locacationController,
+                          controller:
+                              dialogBoxController.locacationController.value,
                           decoration: const InputDecoration(
                             hintText: 'e.g Delhi',
                             border: InputBorder.none,

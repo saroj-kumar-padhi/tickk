@@ -341,6 +341,60 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<SellerInprocessResponseModel> sellerInProcess(String storeID) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<SellerInprocessResponseModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/Inprocess/InprocessTabData/${storeID}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = SellerInprocessResponseModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<BuyerInprocessResponseModel> buyerInProcess(String storeID) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<BuyerInprocessResponseModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/buyerInProcess/BuyerInprocessTabData/${storeID}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = BuyerInprocessResponseModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<void> sendQuote(
     String storeId,
     Map<String, dynamic> data,

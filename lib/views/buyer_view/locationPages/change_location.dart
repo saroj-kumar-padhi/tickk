@@ -5,6 +5,8 @@ import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_places_flutter/google_places_flutter.dart';
+import 'package:google_places_flutter/model/prediction.dart';
 import 'package:logger/web.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
@@ -60,42 +62,57 @@ class _ChangeLocationState extends State<ChangeLocation> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Material(
-              elevation: 3,
-              child: Container(
-                height: 40.h,
-                width: 400.h,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w),
-                      child: const Icon(Icons.search, color: Colors.grey),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        focusNode: widget.locationFocusNode,
-                        controller:
-                            widget.dialogBoxController.locacationController,
-                        onChanged: (val) {
-                          onChange();
-                        },
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText:
-                              'Search by area, landmark, street address... ',
-                          hintStyle: TextStyles.openSans(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12.sp,
-                              color: const Color(0xffC4C4C4)),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+            child: Container(
+              height: 40.h,
+              width: 400.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
               ),
+              child: Expanded(
+                  child: GooglePlaceAutoCompleteTextField(
+                textEditingController:
+                    widget.dialogBoxController.locacationController.value,
+                googleAPIKey: "AIzaSyBlaQ_2bifPPGaAv3W34veUOfCREfvO2IU",
+                inputDecoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.search_rounded)),
+                debounceTime: 800, // default 600 ms,
+                countries: const ["in"], // optional by default null is set
+                isLatLngRequired:
+                    true, // if you required coordinates from place detail
+                getPlaceDetailWithLatLng: (Prediction prediction) {
+                  // this method will return latlng with place detail
+                  print("placeDetails${prediction.lng}");
+                }, // this callback is called when isLatLngRequired is true
+                itemClick: (Prediction prediction) {
+                  widget.dialogBoxController.locacationController.value.text =
+                      prediction.description ?? "";
+                  widget.dialogBoxController.locacationController.value
+                          .selection =
+                      TextSelection.fromPosition(
+                          TextPosition(offset: prediction.description!.length));
+                },
+                // if we want to make custom list item builder
+                itemBuilder: (context, index, Prediction prediction) {
+                  return Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.location_on),
+                        const SizedBox(
+                          width: 7,
+                        ),
+                        Expanded(child: Text(prediction.description ?? ""))
+                      ],
+                    ),
+                  );
+                },
+                // if you want to add seperator between list items
+                seperatedBuilder: const Divider(),
+                // want to show close icon
+                isCrossBtnShown: true,
+                // optional container padding
+                containerHorizontalPadding: 10,
+              )),
             ),
           ),
           Padding(
@@ -117,7 +134,7 @@ class _ChangeLocationState extends State<ChangeLocation> {
   }
 
   void onChange() {
-    getSuggestion(widget.dialogBoxController.locacationController.text);
+    getSuggestion(widget.dialogBoxController.locacationController.value.text);
   }
 
   void getSuggestion(String input) async {
