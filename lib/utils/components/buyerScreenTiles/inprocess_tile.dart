@@ -1,19 +1,46 @@
 import 'package:dekhlo/controllers/inprocessController.dart';
+import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
 import '../../../controllers/expandController.dart';
 import '../../../controllers/sortDialogBoxController.dart';
+import '../../../views/buyer_view/home_screen_buyer.dart/tabs/rejected_tab.dart';
 import '../../size/global_size/global_size.dart';
 import '../bottomSheets/sort.dart';
 import '../dialog_boxs/coursal_dialog.dart';
 import '../textstyle.dart';
 
 class InprocessTile extends StatelessWidget {
-  const InprocessTile({super.key});
+  final String requirementId;
+  final String catagory;
+  final String subCategory;
+  final String brands;
+  final String modelNo;
+  final String oty;
+  final String size;
+  final String units;
+  final String des;
+  final String date;
+  final List stores;
+  const InprocessTile(
+      {super.key,
+      required this.requirementId,
+      required this.catagory,
+      required this.subCategory,
+      required this.brands,
+      required this.modelNo,
+      required this.oty,
+      required this.size,
+      required this.units,
+      required this.des,
+      required this.date,
+      required this.stores});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +49,7 @@ class InprocessTile extends StatelessWidget {
         Get.put(InProcessController());
     final DialogBoxController dialogBoxController =
         Get.put(DialogBoxController());
-    String text =
-        "Hi, I want a keyboard which is wireless. Looking for Need 5 of them. Please get back as soon as possible if it available in your store";
+    String text = des;
     return SizedBox(child: Obx(() {
       return Container(
           width: double.infinity, // Adjust the width as needed
@@ -52,7 +78,7 @@ class InprocessTile extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 18.w),
                 child: Text(
-                  "Requirement ID #16526545",
+                  "Requirement ID #$requirementId",
                   style: TextStyles.openSans(
                       fontSize: 14.sp, fontWeight: FontWeight.w600),
                 ),
@@ -68,7 +94,7 @@ class InprocessTile extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          "Electronics ",
+                          "$catagory ",
                           style: TextStyles.openSans(
                               fontSize: 12.sp, fontWeight: FontWeight.w400),
                         ),
@@ -76,14 +102,14 @@ class InprocessTile extends StatelessWidget {
                             style: TextStyles.openSans(
                                 fontSize: 12.sp, fontWeight: FontWeight.w400)),
                         Text(
-                          "Table lamp",
+                          subCategory,
                           style: TextStyles.openSans(
                               fontSize: 12.sp, fontWeight: FontWeight.w400),
                         ),
                         Text(" | ",
                             style: TextStyles.openSans(
                                 fontSize: 12.sp, fontWeight: FontWeight.w400)),
-                        Text("Phillips",
+                        Text(brands,
                             style: TextStyles.openSans(
                                 fontSize: 12.sp, fontWeight: FontWeight.w400))
                       ],
@@ -113,7 +139,7 @@ class InprocessTile extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          "#12638",
+                          "#$modelNo",
                           style: TextStyles.openSans(
                               fontWeight: FontWeight.w600, fontSize: 12.sp),
                         ),
@@ -131,7 +157,7 @@ class InprocessTile extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          "02",
+                          oty,
                           style: TextStyles.openSans(
                               fontWeight: FontWeight.w600, fontSize: 12.sp),
                         ),
@@ -149,12 +175,12 @@ class InprocessTile extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          "{value}",
+                          size,
                           style: TextStyles.openSans(
                               fontWeight: FontWeight.w600, fontSize: 12.sp),
                         ),
                         Text(
-                          "10",
+                          "size",
                           style: TextStyles.openSans(
                               fontWeight: FontWeight.w400, fontSize: 12.sp),
                         ),
@@ -167,7 +193,7 @@ class InprocessTile extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          "{value}",
+                          units,
                           style: TextStyles.openSans(
                               fontWeight: FontWeight.w600, fontSize: 12.sp),
                         ),
@@ -312,295 +338,324 @@ class InprocessTile extends StatelessWidget {
                               ),
                               Expanded(
                                 child: ListView.builder(
+                                    itemCount: stores.length,
                                     itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                        10.w, 0.h, 8.w, 5.h),
-                                    child: Container(
-                                      height: 55.h,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xffFFFFFF),
-                                        borderRadius: BorderRadius.circular(4.0
-                                            .r), // Adjust the value as needed
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                      return Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            10.w, 0.h, 8.w, 5.h),
+                                        child: Container(
+                                          height: 55.h,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xffFFFFFF),
+                                            borderRadius: BorderRadius.circular(
+                                                4.0.r), // Adjust the value as needed
+                                          ),
+                                          child: Row(
                                             children: [
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 3.w,
-                                                    vertical: 2.h),
-                                                child: Row(
-                                                  children: [
-                                                    Image.asset(
-                                                        "assest/bookImage.png"),
-                                                    Text(
-                                                      "The Big Bookstore",
-                                                      style:
-                                                          TextStyles.openSans(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              fontSize: 12),
-                                                    ),
-                                                    SizedBox(
-                                                      width: GlobalSizes
-                                                              .getDeviceWidth(
-                                                                  context) *
-                                                          0.03,
-                                                    ),
-                                                    Text(
-                                                      "4.7 (5)",
-                                                      style:
-                                                          TextStyles.openSans(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              fontSize: 12),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 6.w,
-                                                    ),
-                                                    Image.asset(
-                                                        "assest/google_map_icon.png"),
-                                                    SizedBox(
-                                                      width: 1.w,
-                                                    ),
-                                                    Text(
-                                                      "5 KM away",
-                                                      style:
-                                                          GoogleFonts.openSans(
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 12,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .underline,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 2.w),
-                                                child: Row(
-                                                  children: [
-                                                    Column(
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 3.w,
+                                                            vertical: 2.h),
+                                                    child: Row(
                                                       children: [
-                                                        Text("₹ 1200",
-                                                            style: TextStyles.openSans(
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color: const Color(
-                                                                    0xffFC8019))),
-                                                        Text("Quotation",
-                                                            style: TextStyles.openSans(
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                color: const Color(
-                                                                    0xfff4a4a4a))),
+                                                        Image.asset(
+                                                            "assest/bookImage.png"),
+                                                        Text(
+                                                          stores[index]
+                                                              .storeName,
+                                                          style: TextStyles
+                                                              .openSans(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize: 12),
+                                                        ),
+                                                        SizedBox(
+                                                          width: GlobalSizes
+                                                                  .getDeviceWidth(
+                                                                      context) *
+                                                              0.03,
+                                                        ),
+                                                        Text(
+                                                          "4.7 (5)",
+                                                          style: TextStyles
+                                                              .openSans(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  fontSize: 12),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 6.w,
+                                                        ),
+                                                        Image.asset(
+                                                            "assest/google_map_icon.png"),
+                                                        SizedBox(
+                                                          width: 1.w,
+                                                        ),
+                                                        Text(
+                                                          "5 KM away",
+                                                          style: GoogleFonts
+                                                              .openSans(
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontSize: 12,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline,
+                                                          ),
+                                                        ),
                                                       ],
                                                     ),
-                                                    Image.asset(
-                                                      "assest/bigLine.png",
-                                                      height: GlobalSizes
-                                                              .getDeviceHeight(
-                                                                  context) *
-                                                          0.02,
-                                                      width: GlobalSizes
-                                                              .getDeviceWidth(
-                                                                  context) *
-                                                          0.03,
-                                                    ),
-                                                    Column(
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 2.w),
+                                                    child: Row(
                                                       children: [
-                                                        Text("Similar",
-                                                            style: TextStyles.openSans(
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color: const Color(
-                                                                    0xffFC8019))),
-                                                        Text("Product Type",
-                                                            style: TextStyles.openSans(
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                color: const Color(
-                                                                    0xfff4a4a4a))),
-                                                      ],
-                                                    ),
-                                                    Image.asset(
-                                                      "assest/bigLine.png",
-                                                      height: GlobalSizes
-                                                              .getDeviceHeight(
-                                                                  context) *
-                                                          0.02,
-                                                      width: GlobalSizes
-                                                              .getDeviceWidth(
-                                                                  context) *
-                                                          0.03,
-                                                    ),
-                                                    Column(
-                                                      children: [
-                                                        Row(
+                                                        Column(
                                                           children: [
-                                                            Padding(
-                                                              padding: EdgeInsets.only(
-                                                                  right: GlobalSizes
-                                                                          .getDeviceWidth(
-                                                                              context) *
-                                                                      0.01),
-                                                              child: SizedBox(
-                                                                  height: 10.h,
-                                                                  child: Image
-                                                                      .asset(
-                                                                    "assest/image_view.png",
-                                                                    fit: BoxFit
-                                                                        .fitHeight,
-                                                                  )),
-                                                            ),
-                                                            InkWell(
-                                                              onTap: () {
-                                                                showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (BuildContext
-                                                                          context) {
-                                                                    return const CarouselDialog();
-                                                                  },
-                                                                );
-                                                              },
-                                                              child: Text(
-                                                                  "View",
-                                                                  style: TextStyles.openSans(
-                                                                      fontSize:
-                                                                          12,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      color: const Color(
-                                                                          0xffFC8019))),
-                                                            ),
+                                                            Text(
+                                                                "₹ ${stores[index].quote}",
+                                                                style: TextStyles.openSans(
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: const Color(
+                                                                        0xffFC8019))),
+                                                            Text("Quotation",
+                                                                style: TextStyles.openSans(
+                                                                    fontSize:
+                                                                        10,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    color: const Color(
+                                                                        0xfff4a4a4a))),
                                                           ],
                                                         ),
-                                                        Text("Product Image",
-                                                            style: TextStyles.openSans(
-                                                                fontSize: 10.sp,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                color: const Color(
-                                                                    0xfff4a4a4a))),
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                      width: 6.w,
-                                                    ),
-                                                    Obx(() {
-                                                      return InkWell(
-                                                        child: inProcessController
-                                                                .index
-                                                                .contains(index)
-                                                            ? Buttons
-                                                                .smallCallButton(
-                                                                    buttonText:
-                                                                        'Call',
-                                                                    onPressed:
-                                                                        () {
-                                                                      FlutterPhoneDirectCaller
-                                                                          .callNumber(
+                                                        Image.asset(
+                                                          "assest/bigLine.png",
+                                                          height: GlobalSizes
+                                                                  .getDeviceHeight(
+                                                                      context) *
+                                                              0.02,
+                                                          width: GlobalSizes
+                                                                  .getDeviceWidth(
+                                                                      context) *
+                                                              0.03,
+                                                        ),
+                                                        Column(
+                                                          children: [
+                                                            Text(
+                                                                stores[index].similar ==
+                                                                        true
+                                                                    ? "Similar"
+                                                                    : "Exact",
+                                                                style: TextStyles.openSans(
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: const Color(
+                                                                        0xffFC8019))),
+                                                            Text("Product Type",
+                                                                style: TextStyles.openSans(
+                                                                    fontSize:
+                                                                        10,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    color: const Color(
+                                                                        0xfff4a4a4a))),
+                                                          ],
+                                                        ),
+                                                        Image.asset(
+                                                          "assest/bigLine.png",
+                                                          height: GlobalSizes
+                                                                  .getDeviceHeight(
+                                                                      context) *
+                                                              0.02,
+                                                          width: GlobalSizes
+                                                                  .getDeviceWidth(
+                                                                      context) *
+                                                              0.03,
+                                                        ),
+                                                        Column(
+                                                          children: [
+                                                            Row(
+                                                              children: [
+                                                                Padding(
+                                                                  padding: EdgeInsets.only(
+                                                                      right: GlobalSizes.getDeviceWidth(
+                                                                              context) *
+                                                                          0.01),
+                                                                  child: SizedBox(
+                                                                      height: 10.h,
+                                                                      child: Image.asset(
+                                                                        "assest/image_view.png",
+                                                                        fit: BoxFit
+                                                                            .fitHeight,
+                                                                      )),
+                                                                ),
+                                                                InkWell(
+                                                                  onTap: () {
+                                                                    showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (BuildContext
+                                                                              context) {
+                                                                        return const CarouselDialog();
+                                                                      },
+                                                                    );
+                                                                  },
+                                                                  child: Text(
+                                                                      "View",
+                                                                      style: TextStyles.openSans(
+                                                                          fontSize:
+                                                                              12,
+                                                                          fontWeight: FontWeight
+                                                                              .w600,
+                                                                          color:
+                                                                              const Color(0xffFC8019))),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Text(
+                                                                "Product Image",
+                                                                style: TextStyles.openSans(
+                                                                    fontSize:
+                                                                        10.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    color: const Color(
+                                                                        0xfff4a4a4a))),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          width: 6.w,
+                                                        ),
+                                                        Obx(() {
+                                                          return InkWell(
+                                                            child: inProcessController
+                                                                    .index
+                                                                    .contains(
+                                                                        index)
+                                                                ? Buttons
+                                                                    .smallCallButton(
+                                                                        buttonText:
+                                                                            'Call',
+                                                                        onPressed:
+                                                                            () {
+                                                                          FlutterPhoneDirectCaller.callNumber(
                                                                               '+916280644889');
-                                                                    })
-                                                            : InkWell(
-                                                                onTap: () {
-                                                                  if (inProcessController
-                                                                      .index
-                                                                      .contains(
-                                                                          index)) {
-                                                                    inProcessController
-                                                                        .index
-                                                                        .remove(
-                                                                            index);
-                                                                  } else {
-                                                                    inProcessController
-                                                                        .index
-                                                                        .add(
-                                                                            index);
-                                                                  }
-                                                                },
-                                                                child: Row(
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding: EdgeInsets.fromLTRB(
-                                                                          20.w,
-                                                                          0.h,
-                                                                          10.h,
-                                                                          0.h),
-                                                                      child:
-                                                                          Container(
-                                                                        decoration: const BoxDecoration(
-                                                                            shape:
-                                                                                BoxShape.circle,
-                                                                            color: Color(0xffCEEDE3)),
-                                                                        child:
-                                                                            Icon(
-                                                                          Icons
-                                                                              .check,
-                                                                          size:
-                                                                              15.sp,
+                                                                        })
+                                                                : InkWell(
+                                                                    onTap: () {
+                                                                      if (inProcessController
+                                                                          .index
+                                                                          .contains(
+                                                                              index)) {
+                                                                        inProcessController
+                                                                            .index
+                                                                            .remove(index);
+                                                                      } else {
+                                                                        inProcessController
+                                                                            .index
+                                                                            .add(index);
+                                                                      }
+                                                                    },
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Padding(
+                                                                          padding: EdgeInsets.fromLTRB(
+                                                                              6.w,
+                                                                              0.h,
+                                                                              10.h,
+                                                                              0.h),
+                                                                          child:
+                                                                              Container(
+                                                                            decoration:
+                                                                                const BoxDecoration(shape: BoxShape.circle, color: Color(0xffCEEDE3)),
+                                                                            child:
+                                                                                Icon(
+                                                                              Icons.check,
+                                                                              size: 15.sp,
+                                                                            ),
+                                                                          ),
                                                                         ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                          );
+                                                        }),
+                                                        Obx(() {
+                                                          return inProcessController
+                                                                  .index
+                                                                  .contains(
+                                                                      index)
+                                                              ? Buttons
+                                                                  .smallDealDoneButton()
+                                                              : Center(
+                                                                  child:
+                                                                      Container(
+                                                                    decoration: const BoxDecoration(
+                                                                        shape: BoxShape
+                                                                            .circle,
+                                                                        color: Color(
+                                                                            0xffFFEAEC)),
+                                                                    child:
+                                                                        InkWell(
+                                                                      onTap:
+                                                                          () async {
+                                                                        try {
+                                                                          await restClient.rejectQuote(
+                                                                              stores[index].storeID,
+                                                                              requirementId,
+                                                                              {
+                                                                                "Reject": true
+                                                                              });
+                                                                          Get.to(
+                                                                              const RejectedTab());
+                                                                        } catch (e) {
+                                                                          Logger()
+                                                                              .d(e);
+                                                                        }
+                                                                      },
+                                                                      child:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .close,
+                                                                        size: 15
+                                                                            .sp,
+                                                                        color: const Color(
+                                                                            0xffBC0000),
                                                                       ),
                                                                     ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                      );
-                                                    }),
-                                                    Obx(() {
-                                                      return inProcessController
-                                                              .index
-                                                              .contains(index)
-                                                          ? Buttons
-                                                              .smallDealDoneButton()
-                                                          : Center(
-                                                              child: Container(
-                                                                decoration: const BoxDecoration(
-                                                                    shape: BoxShape
-                                                                        .circle,
-                                                                    color: Color(
-                                                                        0xffFFEAEC)),
-                                                                child: Icon(
-                                                                  Icons.close,
-                                                                  size: 15.sp,
-                                                                  color: const Color(
-                                                                      0xffBC0000),
-                                                                ),
-                                                              ),
-                                                            );
-                                                    })
-                                                  ],
-                                                ),
-                                              )
+                                                                  ),
+                                                                );
+                                                        })
+                                                      ],
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }),
+                                        ),
+                                      );
+                                    }),
                               )
                             ],
                           )

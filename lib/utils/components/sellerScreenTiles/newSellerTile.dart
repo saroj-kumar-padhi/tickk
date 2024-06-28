@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:blur/blur.dart';
+import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:logger/web.dart';
 
 import '../../../controllers/exactController.dart';
 import '../dialog_boxs/accept_dialod_box.dart';
@@ -528,7 +530,16 @@ class NewSellerCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () async {
+                              try {
+                                await restClient.rejectBySeller("TS156235HP", {
+                                  "Reject": 'true',
+                                  "RequirementID": "DR1A265"
+                                });
+                              } catch (e) {
+                                Logger().d(e.toString());
+                              }
+                            },
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20.w),
                               child: Text(

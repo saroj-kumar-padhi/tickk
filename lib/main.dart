@@ -40,7 +40,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         // home: const AuthWrapper(),
-        home: SetUpProduct(),
+        home: const HomeSeller(
+          storeId: 'TS156235HP',
+        ),
+
+        // home: const HomeBuyer(),
         getPages: AppPages.pages,
       ),
     );

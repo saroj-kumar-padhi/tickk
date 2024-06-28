@@ -13,7 +13,7 @@ class _RestClient implements RestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://3.214.24.150:3000';
+    baseUrl ??= 'http://3.214.24.150:3002';
   }
 
   final Dio _dio;
@@ -204,6 +204,38 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<BuyerResponse> postLoacation(
+    String RequirementID,
+    String StoreID,
+    Map<String, double> data,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<BuyerResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/buyerInProcess/buyerLocationnnn/${RequirementID}/${StoreID}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = BuyerResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<SellerResponseModel> fetchNewSeller(String storeID) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -368,20 +400,20 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<BuyerInprocessResponseModel> buyerInProcess(String storeID) async {
+  Future<BuyerInprossModel> buyerInProcess(String mobileNo) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<BuyerInprocessResponseModel>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<BuyerInprossModel>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/buyerInProcess/BuyerInprocessTabData/${storeID}',
+              '/buyerInProcess/BuyerInprocessTabData/${mobileNo}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -390,7 +422,34 @@ class _RestClient implements RestClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = BuyerInprocessResponseModel.fromJson(_result.data!);
+    final value = BuyerInprossModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<BuyerDealDoneResponse> buyerDealDone(String mobileNo) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<BuyerDealDoneResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/Dealdonebuyer/DDmobilewiseData/${mobileNo}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = BuyerDealDoneResponse.fromJson(_result.data!);
     return value;
   }
 
@@ -412,6 +471,35 @@ class _RestClient implements RestClient {
         .compose(
           _dio.options,
           '/Inprocess/InProcessBuyerSeller/${storeId}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<void> rejectQuote(
+    String storeId,
+    String requestId,
+    Map<String, dynamic> data,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/buyerInProcess/buyerRejectingSeller/{storeID}/${requestId}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -445,6 +533,61 @@ class _RestClient implements RestClient {
           _dio.options.baseUrl,
           baseUrl,
         ))));
+  }
+
+  @override
+  Future<void> rejectBySeller(
+    String storeId,
+    Map<String, dynamic> data,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/rejected/rejectedByStore/${storeId}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<RejectedItemsResponse> rejectedBySeller(String storeId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<RejectedItemsResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/rejected/rejectedTabData/${storeId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = RejectedItemsResponse.fromJson(_result.data!);
+    return value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

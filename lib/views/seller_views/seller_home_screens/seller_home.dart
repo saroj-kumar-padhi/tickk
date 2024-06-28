@@ -18,6 +18,7 @@ import '../tabs/deal_done.dart';
 import '../tabs/new_tabs.dart';
 import '../tabs/panding.dart';
 import '../tabs/process_panding.dart';
+import '../tabs/rejectedTabSeller.dart';
 
 class HomeSeller extends StatelessWidget {
   final String storeId;
@@ -202,7 +203,7 @@ class HomeSeller extends StatelessWidget {
           )
         : DefaultTabController(
             // selling TabController
-            length: 5, // Number of tabs
+            length: 6, // Number of tabs
             child: Scaffold(
               floatingActionButton: Obx(() {
                 return Visibility(
@@ -333,6 +334,15 @@ class HomeSeller extends StatelessWidget {
                               ),
                             ),
                           ),
+                          Tab(
+                            child: Text(
+                              'Rejected',
+                              style: TextStyles.openSans(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
                         ],
                         isScrollable: true,
                         indicatorColor: const Color(0xffFC8019),
@@ -353,6 +363,9 @@ class HomeSeller extends StatelessWidget {
                           ),
                           const AcceptedTabSeller(),
                           const DealDoneTabSeller(),
+                          const RejectedTabSeller(
+                            storeId: "TS156235HP",
+                          ),
                         ],
                       ),
                     ),

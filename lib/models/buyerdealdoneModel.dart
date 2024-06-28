@@ -1,14 +1,14 @@
-class BuyerInprossModel {
+class BuyerDealDoneResponse {
   final bool success;
   final List<RequirementData> data;
 
-  BuyerInprossModel({
+  BuyerDealDoneResponse({
     required this.success,
     required this.data,
   });
 
-  factory BuyerInprossModel.fromJson(Map<String, dynamic> json) {
-    return BuyerInprossModel(
+  factory BuyerDealDoneResponse.fromJson(Map<String, dynamic> json) {
+    return BuyerDealDoneResponse(
       success: json['success'],
       data: (json['data'] as List)
           .map((item) => RequirementData.fromJson(item))
@@ -20,11 +20,11 @@ class BuyerInprossModel {
 class RequirementData {
   final String requirementID;
   final String storeCategory;
-  final String storeSubCategory;
-  final String storeSubSubCategory;
   final String addImage;
+  final DateTime date;
   final String modelNo;
   final int quantity;
+  final String brands;
   final int size;
   final String units;
   final String requirementInDetails;
@@ -33,11 +33,11 @@ class RequirementData {
   RequirementData({
     required this.requirementID,
     required this.storeCategory,
-    required this.storeSubCategory,
-    required this.storeSubSubCategory,
     required this.addImage,
+    required this.date,
     required this.modelNo,
     required this.quantity,
+    required this.brands,
     required this.size,
     required this.units,
     required this.requirementInDetails,
@@ -48,11 +48,11 @@ class RequirementData {
     return RequirementData(
       requirementID: json['RequirementID'],
       storeCategory: json['storeCategory'],
-      storeSubCategory: json['storeSubCategory'],
-      storeSubSubCategory: json['storeSubSubCategory'],
       addImage: json['AddImage'],
+      date: DateTime.parse(json['Date']),
       modelNo: json['ModelNo'],
       quantity: json['Quantity'],
+      brands: json['Brands'],
       size: json['size'],
       units: json['Units'],
       requirementInDetails: json['Requirement_in_details'],
@@ -65,28 +65,25 @@ class RequirementData {
 class Store {
   final String storeName;
   final String storeID;
+  final String mobile;
   final String addImage;
-  final int quote;
-  final bool similar;
-  final bool exact;
+  final String location;
 
   Store({
     required this.storeName,
     required this.storeID,
+    required this.mobile,
     required this.addImage,
-    required this.quote,
-    required this.similar,
-    required this.exact,
+    required this.location,
   });
 
   factory Store.fromJson(Map<String, dynamic> json) {
     return Store(
       storeName: json['StoreName'],
       storeID: json['StoreID'],
+      mobile: json['mobile'],
       addImage: json['AddImage'],
-      quote: json['Quote'],
-      similar: json['Similar'],
-      exact: json['Exact'],
+      location: json['Location'],
     );
   }
 }

@@ -1,15 +1,16 @@
-import 'package:dekhlo/models/buyerInprocess.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:get/get.dart';
 import 'package:logger/web.dart';
 
-class Buyerinprocesscontroller extends GetxController {
+import '../models/buyerdealdoneModel.dart';
+
+class BuyerDealDonecontroller extends GetxController {
   // Observable list to store the requirements
   var requirementsList = <RequirementData>[].obs;
   RxBool isLoading = false.obs;
   final String mobileNo;
 
-  Buyerinprocesscontroller({required this.mobileNo});
+  BuyerDealDonecontroller({required this.mobileNo});
 
   @override
   Future<void> onInit() async {
@@ -22,8 +23,8 @@ class Buyerinprocesscontroller extends GetxController {
     isLoading.value = true;
     try {
       // Fetch the requirements from the API
-      final BuyerInprossModel requirementList =
-          await restClient.buyerInProcess(mobileNo);
+      final BuyerDealDoneResponse requirementList =
+          await restClient.buyerDealDone(mobileNo);
 
       // Update the observable list with the fetched requirements
       requirementsList.assignAll(requirementList.data);

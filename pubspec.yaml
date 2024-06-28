@@ -65,6 +65,7 @@ dependencies:
   firebase_auth: ^5.0.0
   flutter_phone_direct_caller: ^2.1.1
   google_places_flutter: ^2.0.8
+  firebase_messaging: ^15.0.2
   
 
 dev_dependencies:

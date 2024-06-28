@@ -1,19 +1,54 @@
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:intl/intl.dart';
+import '../../../controllers/expandController.dart';
+import '../../../controllers/inprocessController.dart';
+import '../../../controllers/sortDialogBoxController.dart';
+import '../../../models/buyerdealdoneModel.dart';
 import '../dialog_boxs/coursal_dialog.dart';
 import '../dialog_boxs/rate_now.dart';
 import '../textstyle.dart';
 
 class DealDoneCard extends StatelessWidget {
-  const DealDoneCard({super.key});
+  final String requirementId;
+  final String category;
+  final String subCategory;
+  final String brands;
+  final String modelNo;
+  final String qty;
+  final String size;
+  final String units;
+  final String des;
+  final DateTime date;
+  final List<Store> stores;
+  const DealDoneCard(
+      {super.key,
+      required this.requirementId,
+      required this.category,
+      required this.subCategory,
+      required this.brands,
+      required this.modelNo,
+      required this.qty,
+      required this.size,
+      required this.units,
+      required this.des,
+      required this.date,
+      required this.stores});
 
   @override
   Widget build(BuildContext context) {
-    String text =
-        "Hi, I want a keyboard which is wireless. Looking for Need 5 of them. Please get back as soon as possible if it available in your store";
+    String text = des;
+    String formattedDate = DateFormat('yyyy-MM-dd').format(date);
+    final DialogBoxController dialogBoxController =
+        Get.put(DialogBoxController());
+    final ExpandController expandController = Get.put(ExpandController());
+    final InProcessController inProcessController =
+        Get.put(InProcessController());
     return Container(
         width: double.infinity, // Adjust the width as needed
         height: GlobalSizes.getDeviceHeight(context) *
@@ -41,7 +76,7 @@ class DealDoneCard extends StatelessWidget {
               padding: EdgeInsets.only(
                   left: GlobalSizes.getDeviceWidth(context) * 0.048),
               child: Text(
-                "Requirement ID #16526545",
+                "Requirement ID #$requirementId",
                 style: TextStyles.openSans(
                     fontSize: 12, fontWeight: FontWeight.w600),
               ),
@@ -59,7 +94,7 @@ class DealDoneCard extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          "Electronics ",
+                          "$category ",
                           style: TextStyles.openSans(
                               fontSize: 12, fontWeight: FontWeight.w400),
                         ),
@@ -67,14 +102,14 @@ class DealDoneCard extends StatelessWidget {
                             style: TextStyles.openSans(
                                 fontSize: 12, fontWeight: FontWeight.w400)),
                         Text(
-                          "Table lamp",
+                          subCategory,
                           style: TextStyles.openSans(
                               fontSize: 12, fontWeight: FontWeight.w400),
                         ),
                         Text(" | ",
                             style: TextStyles.openSans(
                                 fontSize: 12, fontWeight: FontWeight.w400)),
-                        Text("Phillips",
+                        Text(brands,
                             style: TextStyles.openSans(
                                 fontSize: 12, fontWeight: FontWeight.w400))
                       ],
@@ -83,7 +118,7 @@ class DealDoneCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(right: 12),
                     child: Text(
-                      "05 Feb ‘24",
+                      formattedDate,
                       style: TextStyles.openSans(
                           fontSize: 12, fontWeight: FontWeight.w600),
                     ),
@@ -104,7 +139,7 @@ class DealDoneCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "#12638",
+                      "#$modelNo",
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w600, fontSize: 12),
                     ),
@@ -122,7 +157,7 @@ class DealDoneCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "02",
+                      qty,
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w600, fontSize: 10),
                     ),
@@ -140,12 +175,12 @@ class DealDoneCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "{value}",
+                      size,
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w600, fontSize: 10),
                     ),
                     Text(
-                      "10",
+                      "Size",
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w400, fontSize: 10),
                     ),
@@ -158,7 +193,7 @@ class DealDoneCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "{value}",
+                      units,
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w600, fontSize: 10),
                     ),
@@ -204,222 +239,385 @@ class DealDoneCard extends StatelessWidget {
             SizedBox(
               height: GlobalSizes.getDeviceHeight(context) * 0.01,
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                  GlobalSizes.getDeviceWidth(context) * 0.06,
-                  GlobalSizes.getDeviceHeight(context) * 0.01,
-                 0,
-                  GlobalSizes.getDeviceHeight(context) * 0.01),
-              child: Container(
-                height: GlobalSizes.getDeviceHeight(context) * 0.08,
-                width: GlobalSizes.getDeviceWidth(context) * 0.87,
-                decoration: BoxDecoration(
-                  color: const Color(0xffFFF5ED),
-                  borderRadius:
-                      BorderRadius.circular(4.0), // Adjust the value as needed
-                  border: Border.all(
-                    color: const Color(0xffFC8019),
-                    width: 0.5, // Adjust the width as needed
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  GlobalSizes.getDeviceWidth(context) * 0.02,
-                              vertical:
-                                  GlobalSizes.getDeviceHeight(context) * 0.006),
-                          child: Row(
-                            children: [
-                              Image.asset("assest/bookImage.png"),
-                              Text(
-                                "The Big Bookstore",
-                                style: TextStyles.openSans(
-                                    fontWeight: FontWeight.w600, fontSize: 10),
-                              ),
-                              SizedBox(
-                                width:
-                                    GlobalSizes.getDeviceWidth(context) * 0.03,
-                              ),
-                              Text(
-                                "4.7 (5)",
-                                style: TextStyles.openSans(
-                                    fontWeight: FontWeight.w400, fontSize: 9),
-                              ),
-                              SizedBox(
-                                width:
-                                    GlobalSizes.getDeviceWidth(context) * 0.02,
-                              ),
-                              Image.asset("assest/google_map_icon.png"),
-                              SizedBox(
-                                width:
-                                    GlobalSizes.getDeviceWidth(context) * 0.01,
-                              ),
-                              Text(
-                                "5 KM away",
-                                style: GoogleFonts.openSans(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 10,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: GlobalSizes.getDeviceWidth(context) * 0.02),
-                          child: Row(
-                            children: [
-                              Column(
-                                children: [
-                                  Text("₹ 1200",
-                                      style: TextStyles.openSans(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                          color: const Color(0xffFC8019))),
-                                  Text("Quotation",
-                                      style: TextStyles.openSans(
-                                          fontSize: 8,
-                                          fontWeight: FontWeight.w400,
-                                          color: const Color(0xfff4a4a4a))),
-                                ],
-                              ),
-                              SizedBox(
-                                width:
-                                    GlobalSizes.getDeviceWidth(context) * 0.01,
-                              ),
-                              Image.asset(
-                                "assest/bigLine.png",
-                                height:
-                                    GlobalSizes.getDeviceHeight(context) * 0.02,
-                                width:
-                                    GlobalSizes.getDeviceWidth(context) * 0.03,
-                              ),
-                              Column(
-                                children: [
-                                  Text("Similar",
-                                      style: TextStyles.openSans(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                          color: const Color(0xffFC8019))),
-                                  Text("Product Type",
-                                      style: TextStyles.openSans(
-                                          fontSize: 8,
-                                          fontWeight: FontWeight.w400,
-                                          color: const Color(0xfff4a4a4a))),
-                                ],
-                              ),
-                              SizedBox(
-                                width:
-                                    GlobalSizes.getDeviceWidth(context) * 0.01,
-                              ),
-                              Image.asset(
-                                "assest/bigLine.png",
-                                height:
-                                    GlobalSizes.getDeviceHeight(context) * 0.02,
-                                width:
-                                    GlobalSizes.getDeviceWidth(context) * 0.03,
-                              ),
-                              Column(
+            Obx(() {
+              return Padding(
+                padding: EdgeInsets.fromLTRB(20.w, 6.h, 14.w, 6.h),
+                child: Container(
+                  height: expandController.isExpanded.value ? 150.h : 33.h,
+                  width: 309.h,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: const Color(0xffFFC18E)),
+                      borderRadius: BorderRadius.all(Radius.circular(8.r)),
+                      color: const Color(0xffFFF5ED)),
+                  child: expandController.isExpanded.value
+                      ? Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 10.h, 0, 5.h),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.only(
-                                            right: GlobalSizes.getDeviceWidth(
-                                                    context) *
-                                                0.01),
-                                        child: SizedBox(
-                                            height: GlobalSizes.getDeviceHeight(
-                                                    context) *
-                                                0.015,
-                                            child: Image.asset(
-                                              "assest/image_view.png",
-                                              fit: BoxFit.fitHeight,
-                                            )),
+                                        padding: EdgeInsets.only(left: 11.w),
+                                        child: Text(
+                                          "Requests (03)",
+                                          style: TextStyles.openSans(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 11.5.sp,
+                                          ),
+                                        ),
                                       ),
-                                      InkWell(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return CarouselDialog();
-                                            },
-                                          );
-                                        },
-                                        child: Text("View",
-                                            style: TextStyles.openSans(
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w600,
-                                                color:
-                                                    const Color(0xffFC8019))),
-                                      ),
+                                      expandController.isExpanded.value
+                                          ? InkWell(
+                                              onTap: () {
+                                                expandController
+                                                        .isExpanded.value =
+                                                    !expandController
+                                                        .isExpanded.value;
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 4.w),
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 4.sp),
+                                                  child: Container(
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                              color: Color(
+                                                                  0xffFC8019)),
+                                                      child: Icon(
+                                                        Icons.expand_more,
+                                                        size: 15.sp,
+                                                        color: Colors.white,
+                                                      )),
+                                                ),
+                                              ),
+                                            )
+                                          : const SizedBox(),
                                     ],
                                   ),
-                                  Text("Product Image",
-                                      style: TextStyles.openSans(
-                                          fontSize: 8,
-                                          fontWeight: FontWeight.w400,
-                                          color: const Color(0xfff4a4a4a))),
                                 ],
                               ),
-                              Image.asset(
-                                "assest/bigLine.png",
-                                height:
-                                    GlobalSizes.getDeviceHeight(context) * 0.02,
-                                width:
-                                    GlobalSizes.getDeviceHeight(context) * 0.01,
-                              ),
-                              Column(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return const RateNowCustomDialog();
-                                        },
-                                      );
-                                    },
-                                    child: Text("Rate now",
-                                        style: TextStyles.openSans(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w600,
-                                            color: const Color(0xffFC8019))),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child: Text("Give your Feedback",
-                                        style: TextStyles.openSans(
-                                            fontSize: 8,
-                                            fontWeight: FontWeight.w400,
-                                            color: const Color(0xfff4a4a4a))),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                            ),
+                            Flexible(
+                              child: ListView.builder(
+                                  itemCount: stores.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: EdgeInsets.fromLTRB(
+                                          10.w, 0.h, 8.w, 5.h),
+                                      child: Container(
+                                        height: 70.h,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xffFFFFFF),
+                                          borderRadius: BorderRadius.circular(4.0
+                                              .r), // Adjust the value as needed
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 3.w,
+                                                      vertical: 2.h),
+                                                  child: Row(
+                                                    children: [
+                                                      Image.asset(
+                                                          "assest/bookImage.png"),
+                                                      Text(
+                                                        stores[index].storeName,
+                                                        style:
+                                                            TextStyles.openSans(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontSize: 12),
+                                                      ),
+                                                      SizedBox(
+                                                        width: GlobalSizes
+                                                                .getDeviceWidth(
+                                                                    context) *
+                                                            0.03,
+                                                      ),
+                                                      Text(
+                                                        "4.7 (5)",
+                                                        style:
+                                                            TextStyles.openSans(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                fontSize: 12),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 6.w,
+                                                      ),
+                                                      Image.asset(
+                                                          "assest/google_map_icon.png"),
+                                                      SizedBox(
+                                                        width: 1.w,
+                                                      ),
+                                                      Text(
+                                                        "5 KM away",
+                                                        style: GoogleFonts
+                                                            .openSans(
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.w),
+                                                  child: Row(
+                                                    children: [
+                                                      Column(
+                                                        children: [
+                                                          Text("₹ 2000",
+                                                              style: TextStyles.openSans(
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: const Color(
+                                                                      0xffFC8019))),
+                                                          Text("Quotation",
+                                                              style: TextStyles.openSans(
+                                                                  fontSize: 10,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  color: const Color(
+                                                                      0xfff4a4a4a))),
+                                                        ],
+                                                      ),
+                                                      Image.asset(
+                                                        "assest/bigLine.png",
+                                                        height: GlobalSizes
+                                                                .getDeviceHeight(
+                                                                    context) *
+                                                            0.01,
+                                                        width: GlobalSizes
+                                                                .getDeviceWidth(
+                                                                    context) *
+                                                            0.03,
+                                                      ),
+                                                      Column(
+                                                        children: [
+                                                          Text("Similar",
+                                                              style: TextStyles.openSans(
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: const Color(
+                                                                      0xffFC8019))),
+                                                          Text("Product Type",
+                                                              style: TextStyles.openSans(
+                                                                  fontSize: 10,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  color: const Color(
+                                                                      0xfff4a4a4a))),
+                                                        ],
+                                                      ),
+                                                      Image.asset(
+                                                        "assest/bigLine.png",
+                                                        height: GlobalSizes
+                                                                .getDeviceHeight(
+                                                                    context) *
+                                                            0.01,
+                                                        width: GlobalSizes
+                                                                .getDeviceWidth(
+                                                                    context) *
+                                                            0.03,
+                                                      ),
+                                                      Column(
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              Padding(
+                                                                padding: EdgeInsets.only(
+                                                                    right: GlobalSizes.getDeviceWidth(
+                                                                            context) *
+                                                                        0.01),
+                                                                child: SizedBox(
+                                                                    height:
+                                                                        10.h,
+                                                                    child: Image
+                                                                        .asset(
+                                                                      "assest/image_view.png",
+                                                                      fit: BoxFit
+                                                                          .fitHeight,
+                                                                    )),
+                                                              ),
+                                                              InkWell(
+                                                                onTap: () {
+                                                                  showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (BuildContext
+                                                                            context) {
+                                                                      return const CarouselDialog();
+                                                                    },
+                                                                  );
+                                                                },
+                                                                child: Text(
+                                                                    "View",
+                                                                    style: TextStyles.openSans(
+                                                                        fontSize:
+                                                                            12,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w600,
+                                                                        color: const Color(
+                                                                            0xffFC8019))),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Text("Product Image",
+                                                              style: TextStyles.openSans(
+                                                                  fontSize:
+                                                                      10.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  color: const Color(
+                                                                      0xfff4a4a4a))),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        width: 6.w,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Expanded(
+                                                child: Buttons.smallCallButton(
+                                                    width: 10.w,
+                                                    buttonText: "Call",
+                                                    onPressed: () {
+                                                      FlutterPhoneDirectCaller
+                                                          .callNumber(
+                                                              '+916280644889');
+                                                    }))
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                            )
+                          ],
                         )
-                      
-                      ],
-                      
-                    ),
-                   Padding(
-                     padding:  EdgeInsets.only(left: GlobalSizes.getDeviceWidth(context) * 0.0),
-                     child: Buttons.veryShortButton(color: Color(0xffFC8019), context: context, onPressedCallback: (){}, buttonText: 'Call', textColor: Colors.white),
-                   )
-                    
-                    
-                  ],
-                  
+                      : Row(
+                          children: [
+                            Row(
+                              children: [
+                                expandController.isExpanded.value
+                                    ? Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              expandController
+                                                      .isExpanded.value =
+                                                  !expandController
+                                                      .isExpanded.value;
+                                              inProcessController.index.clear();
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 6.w),
+                                              child: Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 4.sp),
+                                                child: Container(
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            color: Color(
+                                                                0xffFC8019)),
+                                                    child: Icon(
+                                                      Icons.expand_less,
+                                                      size: 15.sp,
+                                                      color: Colors.white,
+                                                    )),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : InkWell(
+                                        onTap: () {
+                                          expandController.isExpanded.value =
+                                              !expandController
+                                                  .isExpanded.value;
+                                          inProcessController.index.clear();
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 11.w),
+                                              child: Text(
+                                                "Requests (03)",
+                                                style: TextStyles.openSans(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 12.sp,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 6.w),
+                                              child: Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 4.sp),
+                                                child: Container(
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            color: Color(
+                                                                0xffFC8019)),
+                                                    child: Icon(
+                                                      Icons.expand_less,
+                                                      size: 15.sp,
+                                                      color: Colors.white,
+                                                    )),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                              ],
+                            ),
+                          ],
+                        ),
                 ),
-              ),
-            )
+              );
+            })
           ],
         ));
   }

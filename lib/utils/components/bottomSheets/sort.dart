@@ -1,7 +1,10 @@
+import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
+import 'package:logger/web.dart';
 
 import '../../../controllers/sortDialogBoxController.dart';
 import '../buttons.dart';
@@ -16,7 +19,7 @@ sortDialogBox({required context}) {
     DefaultTabController(
       length: 2, // Number of tabs
       child: Container(
-        height: 240.h,
+        height: 250.h,
         width: 290.w,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -70,7 +73,7 @@ sortDialogBox({required context}) {
                   // Sort by Price Tab
                   _buildSortByPriceTab(context, dialogBoxController),
                   // Sort by Distance Tab
-                  _buildSortByDistanceTab(context),
+                  _buildSortByDistanceTab(context, dialogBoxController),
                 ],
               ),
             ),
@@ -103,7 +106,7 @@ Widget _buildSortByPriceTab(
                     fontSize: 16),
               ),
               leading: Radio(
-                fillColor: MaterialStateProperty.all(const Color(0xffFC8019)),
+                fillColor: WidgetStateProperty.all(const Color(0xffFC8019)),
                 value: 1,
                 groupValue: dialogBoxController.selectedValue.value,
                 onChanged: (value) {
@@ -120,7 +123,7 @@ Widget _buildSortByPriceTab(
                     fontSize: 16),
               ),
               leading: Radio(
-                fillColor: MaterialStateProperty.all(const Color(0xffFC8019)),
+                fillColor: WidgetStateProperty.all(const Color(0xffFC8019)),
                 value: 2,
                 groupValue: dialogBoxController.selectedValue.value,
                 onChanged: (value) {
@@ -148,7 +151,8 @@ Widget _buildSortByPriceTab(
   );
 }
 
-Widget _buildSortByDistanceTab(context) {
+Widget _buildSortByDistanceTab(
+    context, DialogBoxController dialogBoxController) {
   return Column(
     children: [
       const Divider(
@@ -193,7 +197,14 @@ Widget _buildSortByDistanceTab(context) {
             Get.back();
           }),
           Buttons.shortButton(
-              onPressedCallback: () {
+              onPressedCallback: () async {
+                try {
+                  Map<String, double> data =
+                      await convertAddressToLatLong(dialogBoxController);
+                  await restClient.postLoacation("TR1A2639", "TS15625HP", data);
+                } catch (e) {
+                  Logger().d(e);
+                }
                 Get.back();
               },
               context: context,
@@ -204,4 +215,30 @@ Widget _buildSortByDistanceTab(context) {
       )
     ],
   );
+}
+
+Future<Map<String, double>> convertAddressToLatLong(
+    DialogBoxController dialogBoxController) async {
+  String address = dialogBoxController.locacationController.value.text;
+
+  try {
+    List<Location> locations = await locationFromAddress(address);
+
+    if (locations.isNotEmpty) {
+      Location location = locations.first;
+      double latitude = location.latitude;
+      double longitude = location.longitude;
+
+      print('Latitude: $latitude, Longitude: $longitude');
+      return {"latitude": latitude, "longitude": longitude};
+      // You can now use these latitude and longitude values as needed
+      // For example, you might want to store them in variables or send them to an API
+    } else {
+      print('No coordinates found for the given address.');
+      return {"latitude": 0, "longitude": 0};
+    }
+  } catch (e) {
+    print('Error occurred while converting address to coordinates: $e');
+    return {"latitude": 0, "longitude": 0};
+  }
 }

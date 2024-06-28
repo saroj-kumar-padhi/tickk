@@ -1,7 +1,10 @@
+import 'package:dekhlo/controllers/sortDialogBoxController.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/web.dart';
+
+import '../utils/components/bottomSheets/sort.dart';
 
 class ProductSetUpController extends GetxController {
   RxBool isLoading = false.obs;
@@ -111,6 +114,11 @@ class ProductSetUpController extends GetxController {
       List<dynamic> subcategories,
       List<dynamic> subSubCategory,
       List<String> brands) async {
+    final DialogBoxController dialogBoxController =
+        Get.put(DialogBoxController());
+    String address = dialogBoxController.locacationController.value.text;
+    Map<String, double> convertedAddressToLatLong =
+        await convertAddressToLatLong(dialogBoxController);
     final data = {
       "mobile": contactEditingController.text,
       "StoreName": nameEditingController.text,
@@ -155,10 +163,12 @@ class ProductSetUpController extends GetxController {
       "BuildingNo": int.parse(buildingController.text),
       "Pincode": int.parse(pinCodeController.value.text),
       "ColonyName": colonyController.value.text,
-      "Location": "Sample City, Sample State, Sample Country",
+      // "Location": "Sample City, Sample State, Sample Country",
+      "sellerLocation": convertedAddressToLatLong,
       "AddImage": imagePath,
       "Landmark": landMarkController.value.text,
-      "stared": 3
+      "stared": 3,
+      "staredImage": imagePath[0]
     };
 
     try {
