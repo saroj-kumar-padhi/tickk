@@ -218,7 +218,6 @@ class DropdownController extends GetxController {
     try {
       isLoading.value = true;
       String subSub = subsubCategory == "" ? "Not available" : subsubCategory;
-      String? fcmToken = await FirebaseMessaging.instance.getToken();
 
       final test = {
         "mobile": "1234567890",
@@ -239,7 +238,6 @@ class DropdownController extends GetxController {
         "deletebutton": "Neutral",
         "Accept": "Neutral",
         "Reject": "Neutral",
-        "FCM": fcmToken ?? "",
       };
 
       await restClient.postRequirements(test).then((value) {

@@ -234,6 +234,7 @@ class EditProfile extends StatelessWidget {
                                       basiccontrollerEdit.nameController.text,
                               },
                               nametoNavigate: 'success',
+                              reason: '',
                             );
                           },
                         );

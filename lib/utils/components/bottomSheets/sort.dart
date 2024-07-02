@@ -1,17 +1,21 @@
 import 'package:dekhlo/services/injection.dart';
-import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:logger/web.dart';
 
+import '../../../controllers/buyerInprocessController.dart';
 import '../../../controllers/sortDialogBoxController.dart';
 import '../buttons.dart';
 import '../searchBar/location_serch_ba.dart';
 import '../textstyle.dart';
 
-sortDialogBox({required context}) {
+sortDialogBox({
+  required context,
+  required mobileNumber,
+  required requiestId,
+}) {
   final DialogBoxController dialogBoxController =
       Get.put(DialogBoxController());
 
@@ -71,9 +75,14 @@ sortDialogBox({required context}) {
               child: TabBarView(
                 children: [
                   // Sort by Price Tab
-                  _buildSortByPriceTab(context, dialogBoxController),
+                  _buildSortByPriceTab(
+                      context, dialogBoxController, '9', "TR1A2639"),
                   // Sort by Distance Tab
-                  _buildSortByDistanceTab(context, dialogBoxController),
+                  _buildSortByDistanceTab(
+                    context,
+                    dialogBoxController,
+                    "TR1A2639",
+                  ),
                 ],
               ),
             ),
@@ -85,8 +94,9 @@ sortDialogBox({required context}) {
   );
 }
 
-Widget _buildSortByPriceTab(
-    BuildContext context, DialogBoxController dialogBoxController) {
+Widget _buildSortByPriceTab(BuildContext context,
+    DialogBoxController dialogBoxController, mobileNo, requestId) {
+  Buyerinprocesscontroller buyerinprocesscontroller = Get.find();
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 16.w),
     child: Column(
@@ -138,6 +148,10 @@ Widget _buildSortByPriceTab(
             Buttons.coustoumTextButton(onPressedCallback: () {}),
             Buttons.shortButton(
                 onPressedCallback: () {
+                  buyerinprocesscontroller.fetchStoredList(
+                    mobileNo: mobileNo,
+                    requirementId: requestId,
+                  );
                   Get.back();
                 },
                 context: context,
@@ -152,7 +166,11 @@ Widget _buildSortByPriceTab(
 }
 
 Widget _buildSortByDistanceTab(
-    context, DialogBoxController dialogBoxController) {
+  context,
+  DialogBoxController dialogBoxController,
+  requirementID,
+) {
+  Buyerinprocesscontroller buyerinprocesscontroller = Get.find();
   return Column(
     children: [
       const Divider(
@@ -201,7 +219,9 @@ Widget _buildSortByDistanceTab(
                 try {
                   Map<String, double> data =
                       await convertAddressToLatLong(dialogBoxController);
-                  await restClient.postLoacation("TR1A2639", "TS15625HP", data);
+                  await restClient.postLoacation(requirementID, data);
+                  await buyerinprocesscontroller.fetchStoredListByDistance(
+                      requirementId: requirementID);
                 } catch (e) {
                   Logger().d(e);
                 }

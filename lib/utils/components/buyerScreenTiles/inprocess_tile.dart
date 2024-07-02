@@ -1,6 +1,8 @@
 import 'package:dekhlo/controllers/inprocessController.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
+import 'package:dekhlo/utils/routes/routes_names.dart';
+import 'package:dekhlo/views/seller_views/store_screens/mystore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -9,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import '../../../controllers/expandController.dart';
+import '../../../controllers/myStoreAccountController.dart';
 import '../../../controllers/sortDialogBoxController.dart';
 import '../../../views/buyer_view/home_screen_buyer.dart/tabs/rejected_tab.dart';
 import '../../size/global_size/global_size.dart';
@@ -45,6 +48,8 @@ class InprocessTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ExpandController expandController = Get.put(ExpandController());
+    final Mystoreaccountcontroller mystoreaccountcontroller =
+        Get.put(Mystoreaccountcontroller());
     final InProcessController inProcessController =
         Get.put(InProcessController());
     final DialogBoxController dialogBoxController =
@@ -261,7 +266,11 @@ class InprocessTile extends StatelessWidget {
                                           onTap: () {
                                             dialogBoxController
                                                 .selectedTab.value = 0;
-                                            sortDialogBox(context: context);
+                                            sortDialogBox(
+                                              context: context,
+                                              mobileNumber: '9',
+                                              requiestId: requirementId,
+                                            );
                                           },
                                           child: Padding(
                                             padding:
@@ -366,15 +375,27 @@ class InprocessTile extends StatelessWidget {
                                                       children: [
                                                         Image.asset(
                                                             "assest/bookImage.png"),
-                                                        Text(
-                                                          stores[index]
-                                                              .storeName,
-                                                          style: TextStyles
-                                                              .openSans(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                  fontSize: 12),
+                                                        InkWell(
+                                                          onTap: () async {
+                                                            await mystoreaccountcontroller
+                                                                .fetchStoreDetails(
+                                                                    stores[index]
+                                                                        .storeID);
+                                                            Get.toNamed(
+                                                                RouteName
+                                                                    .myStore);
+                                                          },
+                                                          child: Text(
+                                                            stores[index]
+                                                                .storeName,
+                                                            style: TextStyles
+                                                                .openSansUnderLine(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontSize:
+                                                                        12),
+                                                          ),
                                                         ),
                                                         SizedBox(
                                                           width: GlobalSizes
@@ -399,18 +420,21 @@ class InprocessTile extends StatelessWidget {
                                                         SizedBox(
                                                           width: 1.w,
                                                         ),
-                                                        Text(
-                                                          "5 KM away",
-                                                          style: GoogleFonts
-                                                              .openSans(
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            fontSize: 12,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline,
-                                                          ),
-                                                        ),
+                                                        stores[index]
+                                                                    .totalDiatance ==
+                                                                '0'
+                                                            ? const SizedBox()
+                                                            : Text(
+                                                                stores[index]
+                                                                    .totalDiatance,
+                                                                style: GoogleFonts
+                                                                    .openSans(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  fontSize: 12,
+                                                                ),
+                                                              ),
                                                       ],
                                                     ),
                                                   ),
@@ -714,7 +738,10 @@ class InprocessTile extends StatelessWidget {
                                                   dialogBoxController
                                                       .selectedTab.value = 0;
                                                   sortDialogBox(
-                                                      context: context);
+                                                    context: context,
+                                                    mobileNumber: '1234567890',
+                                                    requiestId: requirementId,
+                                                  );
                                                 },
                                                 child: Padding(
                                                   padding: EdgeInsets.only(

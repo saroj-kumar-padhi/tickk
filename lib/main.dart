@@ -1,10 +1,13 @@
 import 'package:dekhlo/firebase_options.dart';
 import 'package:dekhlo/services/injection.dart';
+import 'package:dekhlo/services/notificationServices.dart';
+import 'package:dekhlo/views/buyer_view/faq_screens/deleteScreen.dart';
 import 'package:dekhlo/views/buyer_view/home_screen_buyer.dart/home_screenBuyer.dart';
 import 'package:dekhlo/views/login.dart';
 import 'package:dekhlo/views/seller_views/set_up_store.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -17,7 +20,24 @@ import 'views/seller_views/seller_home_screens/seller_home.dart'; // Ensure this
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  String? fcmToken = await FirebaseMessaging.instance.getToken();
+  PushNotificationServices notificationServices = PushNotificationServices();
+  notificationServices.requestNotificationPermission();
+  notificationServices.firebaseInit();
+
+  try {
+    Logger().d(fcmToken);
+    await restClient.fcmCreation("1234554321", {"FCM": fcmToken});
+  } catch (e) {
+    Logger().d(e);
+  }
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingHandler);
   runApp(const MyApp());
+}
+
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
 }
 
 class MyApp extends StatelessWidget {
@@ -40,11 +60,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         // home: const AuthWrapper(),
-        home: const HomeSeller(
-          storeId: 'TS156235HP',
-        ),
+        // home: const HomeSeller(
+        //   storeId: 'TS156235HP',
+        // ),
 
-        // home: const HomeBuyer(),
+        home: const DeleteScreen(),
         getPages: AppPages.pages,
       ),
     );

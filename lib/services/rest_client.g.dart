@@ -204,9 +204,8 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<BuyerResponse> postLoacation(
+  Future<void> postLoacation(
     String RequirementID,
-    String StoreID,
     Map<String, double> data,
   ) async {
     final _extra = <String, dynamic>{};
@@ -214,25 +213,22 @@ class _RestClient implements RestClient {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(data);
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<BuyerResponse>(Options(
+    await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/buyerInProcess/buyerLocationnnn/${RequirementID}/${StoreID}',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = BuyerResponse.fromJson(_result.data!);
-    return value;
+        .compose(
+          _dio.options,
+          '/buyerInProcess/buyerLocationnnn/${RequirementID}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override
@@ -427,6 +423,63 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<BuyerInprossModel> sortByPrice(
+    String mobileNo,
+    String requirementId,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<BuyerInprossModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/buyerInProcess/BuyerInprocessLowQuoteData/${mobileNo}/${requirementId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = BuyerInprossModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<BuyerInprossModel> sortByDiatance(String requirementID) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<BuyerInprossModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/buyerInProcess/distanceBetween2locations/${requirementID}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = BuyerInprossModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<BuyerDealDoneResponse> buyerDealDone(String mobileNo) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -564,6 +617,34 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<void> fcmCreation(
+    String mobileNo,
+    Map<String, dynamic> data,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/buyer/FCMCreation/${mobileNo}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
   Future<RejectedItemsResponse> rejectedBySeller(String storeId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -588,6 +669,118 @@ class _RestClient implements RestClient {
             ))));
     final value = RejectedItemsResponse.fromJson(_result.data!);
     return value;
+  }
+
+  @override
+  Future<StoreDetails> fetchStoreDetailsByStoreID(String storeId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<StoreDetails>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/selling/sellerDataByStoreID/{storeID}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = StoreDetails.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<UserFcmToken> fetchUserFcmbyreqId(String reqId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<UserFcmToken>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/postrequirement/FCMByRequirementId/${reqId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = UserFcmToken.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<MatchingStoresResponse> fechingMachingStores(
+    String category,
+    String subcategory,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<MatchingStoresResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/postrequirement/FCMtoken/${category}/${subcategory}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = MatchingStoresResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<void> deleteAccount(
+    String mobileNo,
+    Map<String, dynamic> data,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/DelAccount/ReasonForDelAcc/${mobileNo}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

@@ -1,15 +1,18 @@
 import 'package:dekhlo/models/buyerInprocess.dart';
 import 'package:dekhlo/models/buyerdealdoneModel.dart';
 import 'package:dekhlo/models/sellerInprocess.dart';
+import 'package:dekhlo/models/userFcmModel.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 import '../models/basicDetailsEdit.dart';
 import '../models/isBuyer.dart';
+import '../models/myStoreAcoount.dart';
 import '../models/newRequrements.dart';
 import '../models/rejectedBySeller.dart';
 import '../models/sellerNewModel.dart';
 import '../models/sellerPandingQueta.dart';
+import '../models/stores_fcm.dart';
 
 part 'rest_client.g.dart';
 
@@ -51,10 +54,8 @@ abstract class RestClient {
     @Path('mobileNumber') int mobileNumber,
   );
 
-  @POST('/buyerInProcess/buyerLocationnnn/{RequirementID}/{StoreID}')
-  Future<BuyerResponse> postLoacation(
-      @Path('RequirementID') String RequirementID,
-      @Path('StoreID') String StoreID,
+  @POST('/buyerInProcess/buyerLocationnnn/{RequirementID}')
+  Future<void> postLoacation(@Path('RequirementID') String RequirementID,
       @Body() Map<String, double> data);
 
   @GET('/sellerNewTab/SellerNewTabData/{storeID}')
@@ -93,6 +94,15 @@ abstract class RestClient {
     @Path('mobileNo') String mobileNo,
   );
 
+  @GET('/buyerInProcess/BuyerInprocessLowQuoteData/{mobileNo}/{requirementId}')
+  Future<BuyerInprossModel> sortByPrice(@Path('mobileNo') String mobileNo,
+      @Path('requirementId') String requirementId);
+
+  @GET('/buyerInProcess/distanceBetween2locations/{requirementID}')
+  Future<BuyerInprossModel> sortByDiatance(
+    @Path('requirementID') String requirementID,
+  );
+
   @GET('/Dealdonebuyer/DDmobilewiseData/{mobileNo}')
   Future<BuyerDealDoneResponse> buyerDealDone(
     @Path('mobileNo') String mobileNo,
@@ -122,8 +132,35 @@ abstract class RestClient {
     @Body() Map<String, dynamic> data,
   );
 
+  @POST('/buyer/FCMCreation/{mobileNo}')
+  Future<void> fcmCreation(
+    @Path('mobileNo') String mobileNo,
+    @Body() Map<String, dynamic> data,
+  );
+
   @GET('/rejected/rejectedTabData/{storeId}')
   Future<RejectedItemsResponse> rejectedBySeller(
     @Path('storeId') String storeId,
+  );
+  @GET('/selling/sellerDataByStoreID/{storeID}')
+  Future<StoreDetails> fetchStoreDetailsByStoreID(
+    @Path('storeId') String storeId,
+  );
+
+  @GET('/postrequirement/FCMByRequirementId/{reqId}')
+  Future<UserFcmToken> fetchUserFcmbyreqId(
+    @Path('reqId') String reqId,
+  );
+
+  @GET('/postrequirement/FCMtoken/{category}/{subcategory}')
+  Future<MatchingStoresResponse> fechingMachingStores(
+    @Path('category') String category,
+    @Path('subcategory') String subcategory,
+  );
+
+  @POST('/DelAccount/ReasonForDelAcc/{mobileNo}')
+  Future<void> deleteAccount(
+    @Path('mobileNo') String mobileNo,
+    @Body() Map<String, dynamic> data,
   );
 }

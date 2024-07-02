@@ -1,5 +1,6 @@
 import 'package:dekhlo/controllers/authController.dart';
 import 'package:dekhlo/models/basicDetailsModel.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -33,16 +34,20 @@ class BasicDetailsController extends GetxController {
 
   Future<void> postToApi() async {
     try {
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
       isLoading.value = true;
-      final createBuyerRequest = CreateBuyerRequest(
-        mobile: authController.phoneAuthController.text,
-        email: emailAddressController.text,
-        yourName: fullNameController.text,
-        age: int.parse(ageController.text),
-        gender: gender.value,
-      );
+      final createBuyerRequest = {
+        "mobile": "1234554321",
+        "your_name": fullNameController.text,
+        "email": emailAddressController.text,
+        "gender": gender.value,
+        "age": int.parse(ageController.text),
+        "otp": 123456,
+        "verified": false,
+        "FCM": fcmToken
+      };
 
-      await restClient.postBuyer(createBuyerRequest.toJson()).then((value) {
+      await restClient.postBuyer(createBuyerRequest).then((value) {
         isLoading.value = false;
         isSuccessRegister.value = true;
       }).catchError((error) {

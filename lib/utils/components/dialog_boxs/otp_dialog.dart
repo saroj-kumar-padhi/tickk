@@ -1,8 +1,10 @@
+import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/components/dialog_boxs/succsess_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:pinput/pinput.dart';
 import '../../../controllers/basicControllerEdit.dart';
 import '../../size/global_size/global_size.dart';
@@ -12,11 +14,13 @@ class OtpDialog extends StatelessWidget {
   final String nametoNavigate;
   final String? phone; // Optional parameter
   final Map<String, dynamic>? body; // Optional parameter
+  final String reason;
   const OtpDialog({
     super.key,
     required this.nametoNavigate,
     this.phone,
     this.body,
+    required this.reason,
   });
 
   @override
@@ -125,11 +129,16 @@ class OtpDialog extends StatelessWidget {
                     child: Buttons.longButton(
                         color: const Color(0xffFC8019),
                         context: context,
-                        onPressedCallback: () {
+                        onPressedCallback: () async {
                           try {
                             basiccontrollerEdit.updateProfileData(
                                 phone ?? "", body ?? {});
-                          } catch (e) {}
+
+                            await restClient.deleteAccount(
+                                "1234554321", {"deleteAccountReason": reason});
+                          } catch (e) {
+                            Logger().d(e);
+                          }
                           Future.delayed(Duration.zero, () {
                             Get.back();
                           });
@@ -148,7 +157,7 @@ class OtpDialog extends StatelessWidget {
                                 : showSuccessDeleteDialog(context);
                           });
                         },
-                        buttonText: 'Signup',
+                        buttonText: 'Delete',
                         textColor: Colors.white),
                   )
                 ],

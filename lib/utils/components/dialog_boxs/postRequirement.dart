@@ -10,6 +10,7 @@ import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 
 import '../../../controllers/dropDownController.dart';
+import '../../../services/notificationServices.dart';
 import '../buttons.dart';
 import '../textstyle.dart';
 
@@ -24,6 +25,7 @@ class PostRequirementsDialog extends StatelessWidget {
   final String units;
   final String description;
   final String image;
+  final List fcm;
 
   const PostRequirementsDialog(
       {super.key,
@@ -36,7 +38,8 @@ class PostRequirementsDialog extends StatelessWidget {
       required this.quantity,
       required this.units,
       required this.description,
-      required this.image});
+      required this.image,
+      required this.fcm});
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +110,8 @@ class PostRequirementsDialog extends StatelessWidget {
                 units: units);
             try {
               restClient.putRequirementInSellerTab(category, subcategory);
+              PushNotificationServices.sendNotification(fcm, context,
+                  "A new requirement has been Posted of requirement id $category please check it out");
             } catch (e) {
               Logger().d(e);
             }

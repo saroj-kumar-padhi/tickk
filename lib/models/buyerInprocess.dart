@@ -69,15 +69,16 @@ class Store {
   final int quote;
   final bool similar;
   final bool exact;
+  final String? totalDiatance;
 
-  Store({
-    required this.storeName,
-    required this.storeID,
-    required this.addImage,
-    required this.quote,
-    required this.similar,
-    required this.exact,
-  });
+  Store(
+      {required this.storeName,
+      required this.storeID,
+      required this.addImage,
+      required this.quote,
+      required this.similar,
+      required this.exact,
+      this.totalDiatance});
 
   factory Store.fromJson(Map<String, dynamic> json) {
     return Store(
@@ -87,6 +88,9 @@ class Store {
       quote: json['Quote'],
       similar: json['Similar'],
       exact: json['Exact'],
+      totalDiatance: json['TotalDistance'] != null
+          ? json['TotalDistance'].toString()
+          : "0",
     );
   }
 }

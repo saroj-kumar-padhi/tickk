@@ -36,4 +36,45 @@ class Buyerinprocesscontroller extends GetxController {
     }
     isLoading.value = false;
   }
+
+  Future<void> fetchStoredList(
+      {required String mobileNo, required String requirementId}) async {
+    isLoading.value = true;
+    try {
+      // Fetch the requirements from the API
+      final BuyerInprossModel requirementList =
+          await restClient.sortByPrice(mobileNo, "TR1A2639");
+
+      // Update the observable list with the fetched requirements
+      requirementsList.assignAll(requirementList.data);
+
+      // Log the result (optional)
+      Logger().d(requirementList);
+    } catch (e) {
+      // Log any errors (optional)
+      Logger().e('Error fetching requirements: $e');
+    }
+    isLoading.value = false;
+  }
+
+  Future<void> fetchStoredListByDistance({
+    required String requirementId,
+  }) async {
+    isLoading.value = true;
+    try {
+      // Fetch the requirements from the API
+      final BuyerInprossModel requirementList =
+          await restClient.sortByDiatance("TR1A2639");
+
+      // Update the observable list with the fetched requirements
+      requirementsList.assignAll(requirementList.data);
+
+      // Log the result (optional)
+      Logger().d(requirementList);
+    } catch (e) {
+      // Log any errors (optional)
+      Logger().e('Error fetching requirements: $e');
+    }
+    isLoading.value = false;
+  }
 }

@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'package:dekhlo/services/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:logger/web.dart';
 import '../../../controllers/dropDownController.dart';
+import '../../../models/stores_fcm.dart';
 import '../../../utils/components/coustoumTextField.dart';
 import '../../../utils/components/dialog_boxs/pick_diallo.dart';
 import '../../../utils/components/dialog_boxs/postRequirement.dart';
@@ -407,7 +410,21 @@ class _PostRequirementsState extends State<PostRequirements> {
                 width: double.infinity,
                 height: 40.h,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    List<String> dataToGo = [];
+                    try {
+                      final MatchingStoresResponse data =
+                          await restClient.fechingMachingStores(
+                              dropdownController.selectedCategory.value,
+                              dropdownController.selectedSubcategory.value);
+                      List<String> fcmTokens = data.matchingStores
+                          .map((store) => store.fcm)
+                          .toList();
+                      dataToGo = fcmTokens;
+                      Logger().d(data.matchingStores.first.fcm);
+                    } catch (e) {
+                      Logger().d(e);
+                    }
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -424,6 +441,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                           units: dropdownController.selectedUnits.value,
                           description: commentsController.text,
                           image: imagePath.value,
+                          fcm: dataToGo,
                         );
                       },
                     );
