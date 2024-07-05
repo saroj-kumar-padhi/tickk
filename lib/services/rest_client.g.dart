@@ -13,7 +13,7 @@ class _RestClient implements RestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://3.214.24.150:3002';
+    baseUrl ??= 'http://192.168.1.21:3002';
   }
 
   final Dio _dio;
@@ -59,7 +59,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/postrequirement/requirement',
+          '/requirement',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -685,7 +685,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/selling/sellerDataByStoreID/{storeID}',
+              '/selling/sellerDataByStoreID/${storeId}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -753,6 +753,88 @@ class _RestClient implements RestClient {
             ))));
     final value = MatchingStoresResponse.fromJson(_result.data!);
     return value;
+  }
+
+  @override
+  Future<AcceptSeller> acceptedSellerSide(String storeId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<AcceptSeller>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/SellerAccepted/AcceptedDataBySeller/${storeId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = AcceptSeller.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<DealDone> dealDoneSellerSide(String storeId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch<Map<String, dynamic>>(_setStreamType<DealDone>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/SellerDealDone/sellerDealDoneData/${storeId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = DealDone.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<void> postReviews(
+    String requestId,
+    Map<String, dynamic> data,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/Dealdonebuyer/RequirementReviewRating/${requestId}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override

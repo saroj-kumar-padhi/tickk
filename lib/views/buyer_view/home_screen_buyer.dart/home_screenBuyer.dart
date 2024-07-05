@@ -1,3 +1,4 @@
+import 'package:dekhlo/utils/components/dialog_boxs/rate_now.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:dekhlo/views/buyer_view/home_screen_buyer.dart/tabs/new_tab.dart';
@@ -41,7 +42,13 @@ class HomeBuyer extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
-                        Get.toNamed(RouteName.buyerNotification);
+                        // Get.toNamed(RouteName.buyerNotification);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const RateNowCustomDialog();
+                          },
+                        );
                       },
                       child: SizedBox(
                           height: GlobalSizes.getDeviceHeight(context) * 0.03,

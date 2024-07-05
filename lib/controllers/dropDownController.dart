@@ -1,6 +1,4 @@
 import 'package:dekhlo/services/injection.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:logger/web.dart';
@@ -220,7 +218,7 @@ class DropdownController extends GetxController {
       String subSub = subsubCategory == "" ? "Not available" : subsubCategory;
 
       final test = {
-        "mobile": "1234567890",
+        "mobile": "123456789",
         "your_name": "Saroj",
         "storeCategory": category,
         "storeSubCategory": subcategory,
@@ -236,8 +234,9 @@ class DropdownController extends GetxController {
         "Location": "New York",
         "Status": "Neutral",
         "deletebutton": "Neutral",
-        "Accept": "Neutral",
-        "Reject": "Neutral",
+        "FCM": "dfuegfdeygfd"
+        // "Accept": "Neutral",
+        // "Reject": "Neutral",
       };
 
       await restClient.postRequirements(test).then((value) {

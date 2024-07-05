@@ -1,8 +1,8 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-
 import '../utils/routes/routes_names.dart';
 
 class AuthController extends GetxController {
@@ -15,38 +15,45 @@ class AuthController extends GetxController {
   RxBool isLoading = false.obs;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
   RxString verificationId = ''.obs;
   RxBool isCodeSent = false.obs;
 
-  void verifyPhoneNumber() async {
+  Future<bool> checkPhoneNumber() async {
     isLoading.value = true;
     final phoneNumber = "+91${phoneAuthController.text.trim()}";
 
     if (phoneNumber.isEmpty) {
       errorMessagePhoneNumber.value = "Phone number cannot be empty";
-      return;
+      isLoading.value = false;
+      return false;
     }
+
+    final completer = Completer<bool>();
 
     await _auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       verificationCompleted: (PhoneAuthCredential credential) async {
         await _auth.signInWithCredential(credential);
         isLogin.value = true;
+        completer.complete(true);
       },
       verificationFailed: (FirebaseAuthException e) {
         errorMessagePhoneNumber.value = e.message ?? "Verification failed";
         Fluttertoast.showToast(msg: "$e");
+        completer.complete(false);
       },
       codeSent: (String verificationId, int? resendToken) {
         this.verificationId.value = verificationId;
         isCodeSent.value = true;
+        completer.complete(true);
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         this.verificationId.value = verificationId;
       },
     );
+
     isLoading.value = false;
+    return await completer.future;
   }
 
   Future<void> signInWithOtp() async {
@@ -54,20 +61,27 @@ class AuthController extends GetxController {
     final otp = otpController.text.trim();
     if (otp.isEmpty) {
       isOtpEmpty.value = true;
+      isLoading.value = false;
       return;
     }
 
-    final credential = PhoneAuthProvider.credential(
-      verificationId: verificationId.value,
-      smsCode: otp,
-    );
+    if (verificationId.value.isEmpty) {
+      Fluttertoast.showToast(msg: "Verification ID is not set");
+      isLoading.value = false;
+      return;
+    }
 
     try {
+      final credential = PhoneAuthProvider.credential(
+        verificationId: verificationId.value,
+        smsCode: otp,
+      );
+
       await _auth.signInWithCredential(credential);
-      // isLogin.value = true;
+      isLogin.value = true;
       Get.toNamed(RouteName.langScreen);
     } catch (e) {
-      Fluttertoast.showToast(msg: "invalid otp");
+      Fluttertoast.showToast(msg: "Invalid OTP");
     }
     isLoading.value = false;
   }

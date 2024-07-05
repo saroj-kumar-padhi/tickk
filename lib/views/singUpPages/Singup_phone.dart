@@ -92,13 +92,14 @@ class Phone extends StatelessWidget {
                   buttonText: 'Next',
                   textColor: Colors.white,
                   context: context,
-                  onPressedCallback: () {
+                  onPressedCallback: () async {
                     authController.isPhoneNumberEmpty.value
                         ? () {}
                         : authController.phoneAuthController.text.length != 10
                             ? authController.errorMessagePhoneNumber.value =
                                 'The number you entered is not Registered.'
-                            : Get.toNamed(RouteName.signOtpScreen);
+                            : await authController.checkPhoneNumber();
+                    Get.toNamed(RouteName.signOtpScreen);
                   });
             }),
             const Spacer(),

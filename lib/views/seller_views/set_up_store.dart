@@ -534,14 +534,23 @@ class SetUpProduct extends StatelessWidget {
                     socialLinkBox(
                         controller:
                             productSetUpController.youTubeEditingController,
-                        imagePath: 'assest/you_tube.png'),
+                        imagePath: 'assest/you_tube.png',
+                        platform: 'youtube'),
 
                     SizedBox(
                       height: 10.h,
                     ),
                     socialLinkBox(
                         controller: productSetUpController.instagram,
-                        imagePath: 'assest/instagram.png'),
+                        imagePath: 'assest/instagram.png',
+                        platform: 'instagram'),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    socialLinkBox(
+                        controller: productSetUpController.website,
+                        imagePath: 'assest/instagram.png',
+                        platform: 'Website'),
                     SizedBox(
                       height: 10.h,
                     ),
@@ -635,45 +644,19 @@ class SetUpProduct extends StatelessWidget {
                     SizedBox(
                       height: 10.h,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            heading(title: 'Building No.'),
-                            CustomTextField(
-                              isenable: true,
-                              onChanged: (Value) {
-                                productSetUpController.updateButtonState();
-                              },
-                              hintText: '',
-                              height: 55.h,
-                              width: 100.w,
-                              controller:
-                                  productSetUpController.buildingController,
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 20.h),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              heading(title: 'Pincode'),
-                              CustomTextField(
-                                isenable: true,
-                                onChanged: (Value) {
-                                  productSetUpController.updateButtonState();
-                                },
-                                hintText: '',
-                                height: 55.h,
-                                width: 100.w,
-                                controller: productSetUpController
-                                    .pinCodeController.value,
-                              ),
-                            ],
-                          ),
+                        heading(title: 'House No, Building Name *'),
+                        CustomTextField(
+                          isenable: true,
+                          onChanged: (Value) {
+                            productSetUpController.updateButtonState();
+                          },
+                          hintText: '',
+                          height: 55.h,
+                          width: 330.w,
+                          controller: productSetUpController.buildingController,
                         ),
                       ],
                     ),
@@ -681,7 +664,7 @@ class SetUpProduct extends StatelessWidget {
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: 'Area/Colony Name'),
+                    heading(title: 'Street Name, Area*'),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -699,26 +682,202 @@ class SetUpProduct extends StatelessWidget {
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: 'Landmark'),
-                    SizedBox(
-                      height: 5.h,
+                    // heading(title: 'Landmark'),
+                    // SizedBox(
+                    //   height: 5.h,
+                    // ),
+                    // CustomTextField(
+                    //     isenable: true,
+                    //     onChanged: (Value) {
+                    //       productSetUpController.updateButtonState();
+                    //     },
+                    //     controller:
+                    //         productSetUpController.landMarkController.value,
+                    //     hintText: "",
+                    //     height: 48.h,
+                    //     width: 330.w),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            heading(title: 'Country *'),
+                            SizedBox(
+                              height: 5.h,
+                            ),
+                            Container(
+                              height: 48.h,
+                              width: 160.w,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.0),
+                                border:
+                                    Border.all(width: 1, color: Colors.grey),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: 'India',
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16.0),
+                                  onChanged: (String? newValue) {
+                                    // Since there's only one option, this won't actually change anything
+                                    // But you can add logic here if needed in the future
+                                  },
+                                  items: <String>['India']
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 10.h),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              heading(title: 'Pincode *'),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Container(
+                                height: 48.h,
+                                width: 160.w,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  border:
+                                      Border.all(width: 1, color: Colors.grey),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: TextField(
+                                    onTap: () {
+                                      Get.toNamed(RouteName.changeLocation);
+                                    },
+                                    controller: productSetUpController
+                                        .pinCodeController.value,
+                                    decoration: const InputDecoration(
+                                      hintText: '500081',
+                                      border: InputBorder.none,
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                    ),
+                                    style: const TextStyle(fontSize: 16.0),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
                     ),
-                    CustomTextField(
-                        isenable: true,
-                        onChanged: (Value) {
-                          productSetUpController.updateButtonState();
-                        },
-                        controller:
-                            productSetUpController.landMarkController.value,
-                        hintText: "",
-                        height: 48.h,
-                        width: 330.w),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            heading(title: 'State *'),
+                            SizedBox(
+                              height: 5.h,
+                            ),
+                            Container(
+                              height: 48.h,
+                              width: 160.w,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.0),
+                                border:
+                                    Border.all(width: 1, color: Colors.grey),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: 'Telangana',
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16.0),
+                                  onChanged: (String? newValue) {
+                                    // Since there's only one option, this won't actually change anything
+                                    // But you can add logic here if needed in the future
+                                  },
+                                  items: <String>['Telangana']
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 10.h),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              heading(title: 'City / District *'),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Container(
+                                height: 48.h,
+                                width: 160.w,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  border:
+                                      Border.all(width: 1, color: Colors.grey),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: TextField(
+                                    onTap: () {
+                                      Get.toNamed(RouteName.changeLocation);
+                                    },
+                                    controller: productSetUpController
+                                        .cityController.value,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Hyderabad',
+                                      border: InputBorder.none,
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                    ),
+                                    style: const TextStyle(fontSize: 16.0),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
 
                     SizedBox(
                       height: 10.h,
                     ),
 
-                    heading(title: 'Your Store Location'),
+                    heading(title: 'Your Store Location *'),
                     SizedBox(
                       height: 10.h,
                     ),
@@ -846,50 +1005,63 @@ class SetUpProduct extends StatelessWidget {
 
   Padding timings(BuildContext context, String day,
       TextEditingController openTime, TextEditingController closeTime) {
-    final RxBool isChecked = false.obs;
+    final RxBool isOpen = true.obs;
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.h),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor: const Color(0xffFC8019),
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: const Color(0xffE0E0E0),
-                  width: 2.0,
+      child: Obx(() => Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: const Color(0xffFC8019),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: const Color(0xffE0E0E0),
+                      width: 2.0,
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    day,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ),
-              alignment: Alignment.center,
-              child: Text(
-                day,
-                style: const TextStyle(
-                  color: Colors.black,
-                ),
+              SizedBox(width: 10.w),
+              timeEditingBox(
+                controller: openTime,
+                context: context,
+                hintText: 'Open Timing',
+                enabled: isOpen.value,
               ),
-            ),
-          ),
-          SizedBox(width: 10.w),
-          timeEditingBox(
-              controller: openTime, context: context, hintText: 'Open Timing'),
-          SizedBox(width: 10.w),
-          timeEditingBox(
-              controller: closeTime,
-              context: context,
-              hintText: 'Close Timing'),
-          SizedBox(width: 10.w),
-          Obx(() => Flexible(
+              SizedBox(width: 10.w),
+              timeEditingBox(
+                controller: closeTime,
+                context: context,
+                hintText: 'Close Timing',
+                enabled: isOpen.value,
+              ),
+              SizedBox(width: 10.w),
+              Flexible(
                 child: Switch(
-                  value: isChecked.value,
-                  onChanged: (value) => isChecked.value = value,
+                  value: isOpen.value,
+                  onChanged: (value) {
+                    isOpen.value = value;
+                    if (!value) {
+                      openTime.clear();
+                      closeTime.clear();
+                    }
+                  },
                   activeColor: const Color(0xffFC8019),
                   inactiveTrackColor: const Color(0xff939393),
                   inactiveThumbColor: Colors.white,
                 ),
-              )),
-        ],
-      ),
+              ),
+            ],
+          )),
     );
   }
 
@@ -952,6 +1124,7 @@ class SetUpProduct extends StatelessWidget {
     required TextEditingController controller,
     required BuildContext context,
     required String hintText,
+    required bool enabled,
   }) {
     return Container(
       height: 40.h,
@@ -959,67 +1132,76 @@ class SetUpProduct extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
-        border: Border.all(width: 1, color: Colors.grey),
+        border: Border.all(
+            width: 1, color: enabled ? Colors.grey : Colors.grey.shade300),
       ),
       child: Align(
         alignment: Alignment.centerLeft,
         child: TextField(
           controller: controller,
+          enabled: enabled,
           decoration: InputDecoration(
             suffixIcon: InkWell(
-              onTap: () async {
-                TimeOfDay? selectedTime = await showTimePicker(
-                  helpText: '',
-                  initialEntryMode: TimePickerEntryMode.input,
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                  builder: (BuildContext context, Widget? child) {
-                    return MediaQuery(
-                      data: MediaQuery.of(context).copyWith(
-                        alwaysUse24HourFormat: false,
-                      ),
-                      child: Theme(
-                        data: Theme.of(context).copyWith(
-                          textTheme: Theme.of(context).textTheme.copyWith(
-                                bodySmall: const TextStyle(
-                                  fontSize: 22,
-                                  color: Colors.black,
-                                ),
+              onTap: enabled
+                  ? () async {
+                      TimeOfDay? selectedTime = await showTimePicker(
+                        helpText: '',
+                        initialEntryMode: TimePickerEntryMode.input,
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                        builder: (BuildContext context, Widget? child) {
+                          return MediaQuery(
+                            data: MediaQuery.of(context).copyWith(
+                              alwaysUse24HourFormat: false,
+                            ),
+                            child: Theme(
+                              data: Theme.of(context).copyWith(
+                                textTheme: Theme.of(context).textTheme.copyWith(
+                                      bodySmall: const TextStyle(
+                                        fontSize: 22,
+                                        color: Colors.black,
+                                      ),
+                                    ),
                               ),
-                        ),
-                        child: child!,
-                      ),
-                    );
-                  },
-                );
+                              child: child!,
+                            ),
+                          );
+                        },
+                      );
 
-                if (selectedTime != null) {
-                  // Set the selected time to the controller
-                  String formattedTime =
-                      '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}';
-                  controller.text = formattedTime;
-                }
-              },
+                      if (selectedTime != null) {
+                        String formattedTime =
+                            '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}';
+                        controller.text = formattedTime;
+                      }
+                    }
+                  : null,
               child: SizedBox(
                 height: 10.h,
                 width: 10.h,
                 child: Image.asset(
                   "assest/calendar_icon.png",
+                  color: enabled ? null : Colors.grey.shade300,
                 ),
               ),
             ),
             hintText: hintText,
             border: InputBorder.none,
-            hintStyle: const TextStyle(color: Colors.grey),
+            hintStyle:
+                TextStyle(color: enabled ? Colors.grey : Colors.grey.shade300),
           ),
-          style: const TextStyle(fontSize: 16.0),
+          style: TextStyle(
+              fontSize: 16.0,
+              color: enabled ? Colors.black : Colors.grey.shade300),
         ),
       ),
     );
   }
 
   Container socialLinkBox(
-      {required TextEditingController controller, required String imagePath}) {
+      {required TextEditingController controller,
+      required String imagePath,
+      required String platform}) {
     return Container(
       height: 50.h,
       width: 330.w,
@@ -1040,7 +1222,7 @@ class SetUpProduct extends StatelessWidget {
                 imagePath,
               ),
             ),
-            hintText: "paste the link",
+            hintText: "paste the $platform link",
             border: InputBorder.none,
             hintStyle: const TextStyle(color: Colors.grey),
           ),

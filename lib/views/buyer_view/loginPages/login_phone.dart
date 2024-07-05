@@ -111,7 +111,8 @@ class LogInPhone extends StatelessWidget {
                               authController.errorMessagePhoneNumber.value =
                                   'The number you entered is not valid.';
                             } else {
-                              authController.verifyPhoneNumber();
+                              await authController.checkPhoneNumber();
+
                               Get.toNamed(RouteName.logInotpScreen);
                             }
                           }

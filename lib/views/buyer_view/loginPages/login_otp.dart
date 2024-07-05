@@ -4,6 +4,8 @@ import 'package:dekhlo/utils/components/Coustum_RichText.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
+import 'package:dekhlo/views/buyer_view/loginPages/otptimerController.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,7 +19,8 @@ class LogINOTP extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthController authController = Get.put(AuthController());
+    OTPTimmerController authController = Get.put(OTPTimmerController());
+    AuthController authController1 = Get.put(AuthController());
     final defaultPinTheme = PinTheme(
       width: GlobalSizes.getDeviceWidth(context) * 0.4,
       height: GlobalSizes.getDeviceHeight(context) * 0.06,
@@ -30,6 +33,7 @@ class LogINOTP extends StatelessWidget {
         border: Border.all(color: const Color(0xffE4E4E4)),
       ),
     );
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -68,7 +72,7 @@ class LogINOTP extends StatelessWidget {
                       height: GlobalSizes.getDeviceHeight(context) * 0.02,
                     ),
                     Text(
-                      "We send verification code",
+                      "We sent a verification code",
                       style: GoogleFonts.openSans(
                           fontSize: 12, fontWeight: FontWeight.w600),
                     ),
@@ -107,7 +111,7 @@ class LogINOTP extends StatelessWidget {
                     ),
                     Obx(() {
                       return Buttons.longButton(
-                        color: authController.isOtpEmpty.value
+                        color: authController1.isOtpEmpty.value
                             ? const Color(0xffFC8019).withOpacity(0.2)
                             : const Color(0xffFC8019),
                         buttonText: 'Login',
@@ -115,7 +119,7 @@ class LogINOTP extends StatelessWidget {
                         context: context,
                         onPressedCallback: () {
                           if (authController.otpController.text.length == 6) {
-                            authController.signInWithOtp();
+                            authController1.signInWithOtp();
                           } else {}
                         },
                       );
@@ -141,26 +145,36 @@ class OTPText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        RichText(
-          text: const TextSpan(
-            children: [
-              TextSpan(
-                text: 'Didn’t you get OTP? ',
-                style: TextStyle(
-                  color: Colors.black,
+    OTPTimmerController authController = Get.find();
+    return Obx(() {
+      return Column(
+        children: [
+          RichText(
+            text: TextSpan(
+              children: [
+                const TextSpan(
+                  text: 'Didn’t you get OTP? ',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
                 ),
-              ),
-              TextSpan(text: ' & ', style: TextStyle(color: Colors.black)),
-              TextSpan(
-                text: ' Resend OTP',
-                style: TextStyle(color: Color(0xffFC8019)),
-              ),
-            ],
+                if (!authController.canResendOtp.value)
+                  TextSpan(
+                    text: 'Retry in ${authController.resendOtpTimer.value}s',
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                if (authController.canResendOtp.value)
+                  TextSpan(
+                    text: 'Resend OTP',
+                    style: const TextStyle(color: Color(0xffFC8019)),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = authController.resendOtp,
+                  ),
+              ],
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }

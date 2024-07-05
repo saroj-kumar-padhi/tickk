@@ -9,4 +9,10 @@ final dio = Dio(
   ),
 );
 
+final post = Dio(
+  BaseOptions(
+    headers: {'Content-Type': 'mimeType'},
+  ),
+);
 final restClient = RestClient(dio);
+final postdio = RestClient(post);

@@ -1,7 +1,7 @@
 import 'package:blur/blur.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -11,14 +11,36 @@ import '../dialog_boxs/coursal_dialog.dart';
 import '../textstyle.dart';
 
 class DoneDoneSellerCard extends StatelessWidget {
-  const DoneDoneSellerCard({super.key});
+  final String yourName;
+  final String category;
+  final String subCategories;
+  final String brands;
+  final DateTime date;
+  final String modelNo;
+  final String oty;
+  final String size;
+  final String units;
+  final String des;
+  final String quote;
+  const DoneDoneSellerCard(
+      {super.key,
+      required this.yourName,
+      required this.category,
+      required this.subCategories,
+      required this.brands,
+      required this.date,
+      required this.modelNo,
+      required this.oty,
+      required this.size,
+      required this.units,
+      required this.des,
+      required this.quote});
 
   @override
   Widget build(BuildContext context) {
     ExactController exactController = Get.put(ExactController());
-    String text =
-        "Hi, I want a keyboard which is wireless. Looking for Need 5 of them. Please get back as soon as possible if it available in your store";
-
+    String text = des;
+    String formattedDate = DateFormat('yyyy-MM-dd').format(date);
     return Obx(() {
       return Container(
           width: double.infinity, // Adjust the width as needed
@@ -79,7 +101,7 @@ class DoneDoneSellerCard extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Text(
-                                    "Electronics ",
+                                    category,
                                     style: TextStyles.openSans(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
@@ -89,7 +111,7 @@ class DoneDoneSellerCard extends StatelessWidget {
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400)),
                                   Text(
-                                    "Table lamp",
+                                    subCategories,
                                     style: TextStyles.openSans(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
@@ -98,7 +120,7 @@ class DoneDoneSellerCard extends StatelessWidget {
                                       style: TextStyles.openSans(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w400)),
-                                  Text("Phillips",
+                                  Text(brands,
                                       style: TextStyles.openSans(
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400))
@@ -109,7 +131,7 @@ class DoneDoneSellerCard extends StatelessWidget {
                               width: 20.w,
                             ),
                             Text(
-                              "05 Feb ‘24",
+                              formattedDate,
                               style: TextStyles.openSans(
                                   fontSize: 12, fontWeight: FontWeight.w600),
                             )
@@ -137,7 +159,7 @@ class DoneDoneSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "#12638",
+                        "#$modelNo",
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -155,7 +177,7 @@ class DoneDoneSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "02",
+                        oty,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -173,12 +195,12 @@ class DoneDoneSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "{value}",
+                        size,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
                       Text(
-                        "10",
+                        "size",
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w400, fontSize: 12),
                       ),
@@ -191,7 +213,7 @@ class DoneDoneSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "{value}",
+                        units,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -348,8 +370,7 @@ class DoneDoneSellerCard extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      exactController
-                          .quoteEditingController.text, // Add your text here
+                      quote, // Add your text here
                       style: const TextStyle(
                           fontSize: 16.0,
                           color: Colors.black), // Adjust text style as needed

@@ -362,7 +362,7 @@ class HomeSeller extends StatelessWidget {
                             storeId: storeId,
                           ),
                           const AcceptedTabSeller(),
-                          const DealDoneTabSeller(),
+                          DealDoneTabSeller(),
                           const RejectedTabSeller(
                             storeId: "TS156235HP",
                           ),

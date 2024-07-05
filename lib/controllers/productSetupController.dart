@@ -20,6 +20,7 @@ class ProductSetUpController extends GetxController {
   final TextEditingController youTubeEditingController =
       TextEditingController();
   final TextEditingController instagram = TextEditingController();
+  final TextEditingController website = TextEditingController();
   //day controllers
   final TextEditingController sundayOpenTimeEditingController =
       TextEditingController();
@@ -55,6 +56,7 @@ class ProductSetUpController extends GetxController {
   var pinCodeController = TextEditingController().obs;
   var colonyController = TextEditingController().obs;
   var landMarkController = TextEditingController().obs;
+  var cityController = TextEditingController().obs;
   final TextEditingController locationController = TextEditingController();
 
   List<String> dayList = ["S", "M", "T", "W", "T", "F", "S"];

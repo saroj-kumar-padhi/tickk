@@ -1,9 +1,11 @@
+import 'package:dekhlo/services/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 import '../buttons.dart';
 
@@ -12,6 +14,10 @@ class RateNowCustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var selectedOption = 'InStorepick'.obs;
+    var ratingStar = 0.0.obs;
+    TextEditingController textEditingController =
+        Get.put(TextEditingController());
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -53,7 +59,7 @@ class RateNowCustomDialog extends StatelessWidget {
                   RatingBar(
                     initialRating: 1,
                     direction: Axis.horizontal,
-                    allowHalfRating: true,
+                    allowHalfRating: false,
                     itemCount: 5,
                     ratingWidget: RatingWidget(
                       full: Image.asset('assest/filledStar.png'),
@@ -62,7 +68,8 @@ class RateNowCustomDialog extends StatelessWidget {
                     ),
                     itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
                     onRatingUpdate: (rating) {
-                      print(rating);
+                      ratingStar.value = rating;
+                      print(ratingStar.value);
                     },
                   ),
                   Padding(
@@ -90,6 +97,7 @@ class RateNowCustomDialog extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                     child: TextField(
+                      controller: textEditingController,
                       maxLines: 5, // Set the number of lines for the TextField
                       decoration: InputDecoration(
                         hintText: 'Describe your experience (optional)',
@@ -107,6 +115,24 @@ class RateNowCustomDialog extends StatelessWidget {
                   SizedBox(
                     height: GlobalSizes.getDeviceHeight(context) * 0.01,
                   ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Dropdown
+                        DropdownButton<String>(
+                          value: selectedOption.value,
+                          onChanged: (String? newValue) {
+                            selectedOption.value = newValue!;
+                          },
+                          items: <String>['InStorepick', 'Delivery']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ]),
                   Padding(
                     padding: EdgeInsets.only(
                         left: GlobalSizes.getDeviceWidth(context) * 0.25),
@@ -133,9 +159,21 @@ class RateNowCustomDialog extends StatelessWidget {
                         Buttons.shortButton(
                             color: const Color(0xffFC8019),
                             context: context,
-                            onPressedCallback: () {
-                              Fluttertoast.showToast(
-                                  msg: 'Thank You For Your valuable feedback');
+                            onPressedCallback: () async {
+                              try {
+                                await restClient.postReviews("DR1A264", {
+                                  "Rating": ratingStar.value,
+                                  "how_did_you_get_this": selectedOption.value,
+                                  "description": textEditingController.text
+                                });
+
+                                Fluttertoast.showToast(
+                                    msg:
+                                        'Thank You For Your valuable feedback');
+                              } catch (e) {
+                                Logger().d(e);
+                              }
+
                               Get.back();
                             },
                             buttonText: "Submit",

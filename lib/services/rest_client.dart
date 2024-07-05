@@ -1,6 +1,7 @@
 import 'package:dekhlo/models/buyerInprocess.dart';
 import 'package:dekhlo/models/buyerdealdoneModel.dart';
 import 'package:dekhlo/models/sellerInprocess.dart';
+import 'package:dekhlo/models/selleracceptedTabModel.dart';
 import 'package:dekhlo/models/userFcmModel.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
@@ -10,13 +11,15 @@ import '../models/isBuyer.dart';
 import '../models/myStoreAcoount.dart';
 import '../models/newRequrements.dart';
 import '../models/rejectedBySeller.dart';
+import '../models/sellerDealDone.dart';
 import '../models/sellerNewModel.dart';
 import '../models/sellerPandingQueta.dart';
 import '../models/stores_fcm.dart';
 
 part 'rest_client.g.dart';
 
-@RestApi(baseUrl: 'http://3.214.24.150:3002')
+// @RestApi(baseUrl: 'http://3.214.24.150:3002')
+@RestApi(baseUrl: 'http://192.168.1.21:3002')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
@@ -25,7 +28,7 @@ abstract class RestClient {
     @Body() Map<String, dynamic> createBuyerRequest,
   );
 
-  @POST('/postrequirement/requirement')
+  @POST('/requirement')
   Future<void> postRequirements(
     @Body() Map<String, dynamic> createPostRequest,
   );
@@ -142,7 +145,7 @@ abstract class RestClient {
   Future<RejectedItemsResponse> rejectedBySeller(
     @Path('storeId') String storeId,
   );
-  @GET('/selling/sellerDataByStoreID/{storeID}')
+  @GET('/selling/sellerDataByStoreID/{storeId}')
   Future<StoreDetails> fetchStoreDetailsByStoreID(
     @Path('storeId') String storeId,
   );
@@ -156,6 +159,22 @@ abstract class RestClient {
   Future<MatchingStoresResponse> fechingMachingStores(
     @Path('category') String category,
     @Path('subcategory') String subcategory,
+  );
+
+  @GET('/SellerAccepted/AcceptedDataBySeller/{storeId}')
+  Future<AcceptSeller> acceptedSellerSide(
+    @Path('storeId') String storeId,
+  );
+
+  @GET('/SellerDealDone/sellerDealDoneData/{storeId}')
+  Future<DealDone> dealDoneSellerSide(
+    @Path('storeId') String storeId,
+  );
+
+  @POST('/Dealdonebuyer/RequirementReviewRating/{requestId}')
+  Future<void> postReviews(
+    @Path('requestId') String requestId,
+    @Body() Map<String, dynamic> data,
   );
 
   @POST('/DelAccount/ReasonForDelAcc/{mobileNo}')

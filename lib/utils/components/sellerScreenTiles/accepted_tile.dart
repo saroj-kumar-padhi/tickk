@@ -9,16 +9,40 @@ import '../../../controllers/exactController.dart';
 import '../dialog_boxs/coursal_dialog.dart';
 import '../dialog_boxs/deal_doneSuccess.dart';
 import '../textstyle.dart';
+import 'package:intl/intl.dart';
 
 class AcceptedSellerCard extends StatelessWidget {
-  const AcceptedSellerCard({super.key});
+  final String yourName;
+  final String category;
+  final String subCategories;
+  final String brands;
+  final DateTime date;
+  final String modelNo;
+  final String oty;
+  final String size;
+  final String units;
+  final String des;
+  final String quote;
+
+  const AcceptedSellerCard(
+      {super.key,
+      required this.yourName,
+      required this.category,
+      required this.subCategories,
+      required this.brands,
+      required this.date,
+      required this.modelNo,
+      required this.oty,
+      required this.size,
+      required this.units,
+      required this.des,
+      required this.quote});
 
   @override
   Widget build(BuildContext context) {
     ExactController exactController = Get.put(ExactController());
-    String text =
-        "Hi, I want a keyboard which is wireless. Looking for Need 5 of them. Please get back as soon as possible if it available in your store";
-
+    String formattedDate = DateFormat('yyyy-MM-dd').format(date);
+    String text = des;
     return Obx(() {
       return Container(
           width: double.infinity, // Adjust the width as needed
@@ -79,7 +103,7 @@ class AcceptedSellerCard extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Text(
-                                    "Electronics ",
+                                    category,
                                     style: TextStyles.openSans(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
@@ -89,7 +113,7 @@ class AcceptedSellerCard extends StatelessWidget {
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400)),
                                   Text(
-                                    "Table lamp",
+                                    subCategories,
                                     style: TextStyles.openSans(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
@@ -98,7 +122,7 @@ class AcceptedSellerCard extends StatelessWidget {
                                       style: TextStyles.openSans(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w400)),
-                                  Text("Phillips",
+                                  Text(brands,
                                       style: TextStyles.openSans(
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400))
@@ -137,7 +161,7 @@ class AcceptedSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "#12638",
+                        "#$modelNo",
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -155,7 +179,7 @@ class AcceptedSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "02",
+                        oty,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -173,12 +197,12 @@ class AcceptedSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "{value}",
+                        size,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
                       Text(
-                        "10",
+                        "size",
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w400, fontSize: 12),
                       ),
@@ -191,7 +215,7 @@ class AcceptedSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        "{value}",
+                        units,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -335,8 +359,8 @@ class AcceptedSellerCard extends StatelessWidget {
                 //   width: 350.w,
                 // ),
                 child: Container(
-                  height: 44.0, // Adjust height as needed
-                  width: 350.0, // Adjust width as needed
+                  height: 50.0, // Adjust height as needed
+                  width: 360.0, // Adjust width as needed
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5.0),
@@ -345,8 +369,7 @@ class AcceptedSellerCard extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      exactController
-                          .quoteEditingController.text, // Add your text here
+                      quote, // Add your text here
                       style: const TextStyle(
                           fontSize: 16.0,
                           color: Colors.black), // Adjust text style as needed

@@ -3,8 +3,11 @@ import 'package:dekhlo/utils/Strings/strings.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'buyer_view/profileScreen/FAQ_webview.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -93,6 +96,12 @@ class TermsAndPolicyText extends StatelessWidget {
             children: [
               TextSpan(
                 text: AppStrings.terms,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Get.to(() => const WebViewScreen(
+                          url: 'https://www.tickk.in/terms-and-conditions',
+                        ));
+                  },
                 style: const TextStyle(
                   color: Color(0xffFC8019),
                 ),
@@ -102,6 +111,12 @@ class TermsAndPolicyText extends StatelessWidget {
               TextSpan(
                 text: AppStrings.privacyPoilcy,
                 style: const TextStyle(color: Color(0xffFC8019)),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Get.to(() => const WebViewScreen(
+                          url: 'https://www.tickk.in/privacy-policy',
+                        ));
+                  },
               ),
             ],
           ),

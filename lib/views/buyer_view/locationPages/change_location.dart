@@ -72,7 +72,7 @@ class _ChangeLocationState extends State<ChangeLocation> {
                   child: GooglePlaceAutoCompleteTextField(
                 textEditingController:
                     widget.dialogBoxController.locacationController.value,
-                googleAPIKey: "AIzaSyBlaQ_2bifPPGaAv3W34veUOfCREfvO2IU",
+                googleAPIKey: "AIzaSyBneuGjYhCSkfB3K4gULsLoq2XMwY2bu94",
                 inputDecoration: const InputDecoration(
                     prefixIcon: Icon(Icons.search_rounded)),
                 debounceTime: 800, // default 600 ms,

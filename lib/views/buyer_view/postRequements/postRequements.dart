@@ -223,8 +223,20 @@ class _PostRequirementsState extends State<PostRequirements> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SmallHeading(
-                        headingText: 'Size',
+                      Row(
+                        children: [
+                          const SmallHeading(
+                            headingText: 'Size',
+                          ),
+                          Text(
+                            "(optional)",
+                            style: TextStyles.openSans(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xffA9A7A7),
+                            ),
+                          ),
+                        ],
                       ),
                       CustomTextField(
                         isenable: true,
@@ -261,7 +273,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                         width: 100.w,
                         child: CustomDropdownFormField(
                           items: const [
-                            'piece',
+                            'units',
                             'kg',
                             'gm',
                             'ml',
@@ -309,25 +321,13 @@ class _PostRequirementsState extends State<PostRequirements> {
               ),
               Align(
                 alignment: Alignment.centerLeft,
-                child: Row(
-                  children: [
-                    Text(
-                      "Add your image",
-                      style: TextStyles.openSans(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xff4A4A4A),
-                      ),
-                    ),
-                    Text(
-                      "(optional)",
-                      style: TextStyles.openSans(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xffA9A7A7),
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  "Add your image",
+                  style: TextStyles.openSans(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xff4A4A4A),
+                  ),
                 ),
               ),
               SizedBox(
@@ -396,7 +396,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                 height: 5.h,
               ),
               CustomDropdownFormField(
-                items: dropdownController.subcategories,
+                items: const ["Hyderabad", "Other cites are coming soon"],
                 onChanged: (value) {},
                 onSaved: (value) {},
               ),

@@ -415,8 +415,6 @@ class InprocessTile extends StatelessWidget {
                                                         SizedBox(
                                                           width: 6.w,
                                                         ),
-                                                        Image.asset(
-                                                            "assest/google_map_icon.png"),
                                                         SizedBox(
                                                           width: 1.w,
                                                         ),

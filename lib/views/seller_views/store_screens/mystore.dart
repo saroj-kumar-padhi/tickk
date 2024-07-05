@@ -161,14 +161,15 @@ class MyStore extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "The Big Bookstore",
+                                        mystoreaccountcontroller.storeName,
                                         style: TextStyles.openSans(
                                             color: const Color(0xff4A4A4A),
                                             fontSize: 16.sp,
                                             fontWeight: FontWeight.w600),
                                       ),
                                       Text(
-                                        "Book store",
+                                        mystoreaccountcontroller.storeCategories
+                                            .toString(),
                                         style: TextStyles.openSans(
                                             color: const Color(0xff4A4A4A),
                                             fontSize: 12.sp,
@@ -239,75 +240,7 @@ class MyStore extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 60.w),
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  elevation: WidgetStateProperty.all(
-                                      0.0), // Remove elevation
-                                  side:
-                                      WidgetStateProperty.all(const BorderSide(
-                                    width: 1.0,
-                                    color: Color(0xffC4C4C4),
-                                  )),
-                                  backgroundColor: WidgetStateProperty.all(Colors
-                                      .transparent), // Transparent background
-                                  shape: WidgetStateProperty.all(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          1.0), // Adjust radius as needed
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Get.toNamed(RouteName.storeEditScreen);
-                                },
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 20.w),
-                                  child: Text(
-                                    "Manage Account",
-                                    style: TextStyles.openSans(
-                                        color: const Color(0xff4A4A4A),
-                                        fontSize: 14.sp),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
                             const Divider(),
-                            Padding(
-                              padding: EdgeInsets.only(left: 20.w),
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    "assest/bus_tracking.png",
-                                  ),
-                                  SizedBox(
-                                    width: 10.w,
-                                  ),
-                                  Text("Home delivery Available",
-                                      style: TextStyles.openSans(
-                                          color: const Color(0xff4A4A4A),
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w400)),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 50.w),
-                              child: Text(
-                                  "Approximate delivery time : 1-3 days",
-                                  style: TextStyles.openSans(
-                                      color: const Color(0xff4A4A4A),
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w400)),
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
                             Padding(
                               padding: EdgeInsets.only(left: 10.w),
                               child: Column(
@@ -355,7 +288,7 @@ class MyStore extends StatelessWidget {
                                                       width: 30.w,
                                                     ),
                                                     Text(
-                                                      "7:00am - 9:30pm",
+                                                      "${mystoreaccountcontroller.mondayOpen} - ${mystoreaccountcontroller.mondayClose}",
                                                       style: TextStyles.openSans(
                                                           color: const Color(
                                                               0xff4A4A4A),
@@ -366,8 +299,20 @@ class MyStore extends StatelessWidget {
                                                   ],
                                                 ),
                                               ),
-                                              dayTile(title: 'Tue'),
-                                              dayTile(title: 'Thu'),
+                                              dayTile(
+                                                  title: 'Tue',
+                                                  openTime:
+                                                      mystoreaccountcontroller
+                                                          .thursdayOpen,
+                                                  closeTime:
+                                                      mystoreaccountcontroller
+                                                          .tuesdayClose),
+                                              dayTile(
+                                                  title: 'Thu',
+                                                  openTime: "",
+                                                  closeTime:
+                                                      mystoreaccountcontroller
+                                                          .thursdayClose),
                                               Padding(
                                                 padding:
                                                     EdgeInsets.only(left: 60.w),
@@ -412,11 +357,17 @@ class MyStore extends StatelessWidget {
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.w),
-                                                  child: dayTile(title: 'Fri')),
+                                                  child: dayTile(
+                                                      title: 'Fri',
+                                                      openTime: '',
+                                                      closeTime: '')),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.w),
-                                                  child: dayTile(title: 'sat')),
+                                                  child: dayTile(
+                                                      title: 'sat',
+                                                      openTime: '',
+                                                      closeTime: '')),
                                             ],
                                           ),
                                         ),
@@ -433,7 +384,7 @@ class MyStore extends StatelessWidget {
                                         width: 20.w,
                                       ),
                                       Text(
-                                          "M.G.Railway Colony,\n South Street ,11073",
+                                          mystoreaccountcontroller.storeAddress,
                                           style: TextStyles.openSans(
                                               fontSize: 14.sp,
                                               fontWeight: FontWeight.w400)),
@@ -457,7 +408,7 @@ class MyStore extends StatelessWidget {
                                         width: 20.w,
                                       ),
                                       Text(
-                                        "+915346238648",
+                                        mystoreaccountcontroller.mobile,
                                         style: TextStyles.openSans(
                                             fontSize: 14.sp,
                                             fontWeight: FontWeight.w400),
@@ -487,9 +438,7 @@ class MyStore extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20),
                               child: Text(
-                                '''
-                      We have selling books custoners for the past 2 years and have sold v 1 million copies. We have great collection of books which includes all genres..more
-                      ''',
+                                mystoreaccountcontroller.about,
                                 textAlign: TextAlign.justify,
                                 style: TextStyles.openSans(
                                     fontWeight: FontWeight.w600,
@@ -755,7 +704,10 @@ class MyStore extends StatelessWidget {
           );
   }
 
-  Padding dayTile({required String title}) {
+  Padding dayTile(
+      {required String title,
+      required String openTime,
+      required String closeTime}) {
     return Padding(
       padding: EdgeInsets.only(left: 65.w),
       child: Row(

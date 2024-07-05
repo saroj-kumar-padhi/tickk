@@ -1,10 +1,14 @@
 import 'package:dekhlo/utils/routes/routes_names.dart';
+import 'package:dekhlo/views/buyer_view/profileScreen/FAQ_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../utils/components/buttons.dart';
+import '../../../utils/components/dialog_boxs/rate_now.dart';
+import '../../../utils/components/dialog_boxs/support_dialogbox.dart';
 import '../../../utils/components/textstyle.dart';
 
 class BuyerProfile extends StatelessWidget {
@@ -138,18 +142,27 @@ class BuyerProfile extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            textSupport(
-                imagePath: "assest/info_grey.svg", title: "Buyer Support"),
+            InkWell(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const SupportDialogBox();
+                  },
+                );
+              },
+              child: buyerSupport(
+                imagePath: "assest/info_grey.svg",
+                title: "Buyer Support",
+              ),
+            ),
             SizedBox(
               height: 10.h,
             ),
-            InkWell(
-              onTap: () {
-                Get.toNamed(RouteName.faqScreens);
-              },
-              child: textSupport(
-                  imagePath: "assest/question_mark.svg", title: "Buyer FAQs"),
-            ),
+            textSupport(
+                imagePath: "assest/question_mark.svg",
+                title: "Buyer FAQs",
+                url: 'https://www.tickk.in/faqs'),
             SizedBox(
               height: 10.h,
             ),
@@ -159,7 +172,8 @@ class BuyerProfile extends StatelessWidget {
               },
               child: textSupport(
                   imagePath: "assest/doc.svg",
-                  title: "Buyer Terms & Conditions"),
+                  title: "Buyer Terms & Conditions",
+                  url: 'https://www.tickk.in/terms-and-conditions'),
             ),
           ],
         ),
@@ -184,7 +198,36 @@ class BuyerProfile extends StatelessWidget {
     }
   }
 
-  Row textSupport({required String imagePath, required String title}) {
+  textSupport(
+      {required String imagePath, required String title, required String url}) {
+    return InkWell(
+      onTap: () {
+        Get.to(() => WebViewScreen(url: url));
+      },
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            imagePath,
+            height: 23.h,
+            width: 28.w,
+          ),
+          SizedBox(
+            width: 10.w,
+          ),
+          Text(title,
+              style: TextStyles.openSans(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: const Color(0xff4A4A4A)))
+        ],
+      ),
+    );
+  }
+
+  buyerSupport({
+    required String imagePath,
+    required String title,
+  }) {
     return Row(
       children: [
         SvgPicture.asset(

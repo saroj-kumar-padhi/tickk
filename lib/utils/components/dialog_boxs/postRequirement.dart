@@ -109,9 +109,9 @@ class PostRequirementsDialog extends StatelessWidget {
                 subsubCategory: subFormatted,
                 units: units);
             try {
-              restClient.putRequirementInSellerTab(category, subcategory);
-              PushNotificationServices.sendNotification(fcm, context,
-                  "A new requirement has been Posted of requirement id $category please check it out");
+              postdio.putRequirementInSellerTab(category, subcategory);
+              // PushNotificationServices.sendNotification(fcm, context,
+              //     "A new requirement has been Posted of requirement id $category please check it out");
             } catch (e) {
               Logger().d(e);
             }

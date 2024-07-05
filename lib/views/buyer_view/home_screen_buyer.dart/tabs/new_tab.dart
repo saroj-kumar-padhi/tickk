@@ -1,4 +1,6 @@
+import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -20,47 +22,69 @@ class NewTab extends StatelessWidget {
                   color: const Color(0xffE4E4E4), size: 200),
             ),
           )
-        : Column(
-            children: [
-              Expanded(
-                flex: 12,
-                child: ListView.builder(
-                    itemCount: newTabController.requirementsList.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: NewSquareCard(
-                          mobile: newTabController
-                              .requirementsList[index].mobile
-                              .toString(),
-                          requirementId: newTabController
-                              .requirementsList[index].requirementID,
-                          storeCategory: newTabController
-                              .requirementsList[index].storeCategory,
-                          storeSubCategory: newTabController
-                              .requirementsList[index].storeSubCategory,
-                          storeSubSubCategory: newTabController
-                              .requirementsList[index].storeSubSubCategory,
-                          brands:
-                              newTabController.requirementsList[index].brands,
-                          modelNo:
-                              newTabController.requirementsList[index].modelNo,
-                          size: newTabController.requirementsList[index].size
-                              .toString(),
-                          quantity: newTabController
-                              .requirementsList[index].quantity
-                              .toString(),
-                          units: newTabController.requirementsList[index].units
-                              .toString(),
-                          requirementInDetails: newTabController
-                              .requirementsList[index].requirementInDetails,
-                          date: newTabController.requirementsList[index].date
-                              .toString(),
-                        ),
-                      );
-                    }),
-              ),
-            ],
-          ));
+        : newTabController.requirementsList.isEmpty
+            ? Center(
+                child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset('assest/empty.png'),
+                  SizedBox(
+                    height: 10.sp,
+                  ),
+                  Text(
+                    "No Requirement Yet.",
+                    style: TextStyles.openSans(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14.sp,
+                        color: const Color(0xff4A4A4A)),
+                  ),
+                ],
+              ))
+            : Column(
+                children: [
+                  Expanded(
+                    flex: 12,
+                    child: ListView.builder(
+                        itemCount: newTabController.requirementsList.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: NewSquareCard(
+                              mobile: newTabController
+                                  .requirementsList[index].mobile
+                                  .toString(),
+                              requirementId: newTabController
+                                  .requirementsList[index].requirementID,
+                              storeCategory: newTabController
+                                  .requirementsList[index].storeCategory,
+                              storeSubCategory: newTabController
+                                  .requirementsList[index].storeSubCategory,
+                              storeSubSubCategory: newTabController
+                                  .requirementsList[index].storeSubSubCategory,
+                              brands: newTabController
+                                  .requirementsList[index].brands,
+                              modelNo: newTabController
+                                  .requirementsList[index].modelNo,
+                              size: newTabController
+                                  .requirementsList[index].size
+                                  .toString(),
+                              quantity: newTabController
+                                  .requirementsList[index].quantity
+                                  .toString(),
+                              units: newTabController
+                                  .requirementsList[index].units
+                                  .toString(),
+                              requirementInDetails: newTabController
+                                  .requirementsList[index].requirementInDetails,
+                              date: newTabController
+                                  .requirementsList[index].date
+                                  .toString(),
+                            ),
+                          );
+                        }),
+                  ),
+                ],
+              ));
   }
 }

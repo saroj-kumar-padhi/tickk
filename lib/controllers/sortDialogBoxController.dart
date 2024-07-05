@@ -58,6 +58,8 @@ class DialogBoxController extends GetxController {
       logger.d(placemarks.first);
       productSetUpController.pinCodeController.value.text =
           placemarks.first.postalCode ?? "";
+      productSetUpController.cityController.value.text =
+          placemarks.first.locality ?? "";
       productSetUpController.colonyController.value.text =
           placemarks.first.street ?? "";
       productSetUpController.landMarkController.value.text =
