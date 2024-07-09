@@ -2,14 +2,34 @@ import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
 
 import '../textstyle.dart';
+import 'package:intl/intl.dart';
 
 class RejectedSquareCard extends StatelessWidget {
-  const RejectedSquareCard({super.key});
+  const RejectedSquareCard(
+      {super.key,
+      required this.reqId,
+      required this.subCategories,
+      required this.brands,
+      required this.modelNo,
+      required this.qty,
+      required this.size,
+      required this.units,
+      required this.des,
+      required this.date});
+  final String reqId;
+  final String subCategories;
+  final String brands;
+  final String modelNo;
+  final String qty;
+  final String size;
+  final String units;
+  final String des;
+  final DateTime date;
 
   @override
   Widget build(BuildContext context) {
-    String text =
-        "Hi, I want a keyboard which is wireless. Looking for Need 5 of them. Please get back as soon as possible if it available in your store";
+    String text = des;
+    String formattedDate = DateFormat('yyyy-MM-dd').format(date);
     return Container(
         width: double.infinity, // Adjust the width as needed
         height: GlobalSizes.getDeviceHeight(context) *
@@ -37,7 +57,7 @@ class RejectedSquareCard extends StatelessWidget {
               padding: EdgeInsets.only(
                   left: GlobalSizes.getDeviceHeight(context) * 0.023),
               child: Text(
-                "Requirement ID #16526545",
+                "Requirement ID #$reqId",
                 style: TextStyles.openSans(
                     fontSize: 12, fontWeight: FontWeight.w600),
               ),
@@ -55,22 +75,14 @@ class RejectedSquareCard extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          "Electronics ",
-                          style: TextStyles.openSans(
-                              fontSize: 12, fontWeight: FontWeight.w400),
-                        ),
-                        Text(" | ",
-                            style: TextStyles.openSans(
-                                fontSize: 12, fontWeight: FontWeight.w400)),
-                        Text(
-                          "Table lamp",
+                          subCategories,
                           style: TextStyles.openSans(
                               fontSize: 12, fontWeight: FontWeight.w400),
                         ),
                         Text(" | ",
                             style: TextStyles.openSans(
                                 fontSize: 10, fontWeight: FontWeight.w400)),
-                        Text("Phillips",
+                        Text(brands,
                             style: TextStyles.openSans(
                                 fontSize: 12, fontWeight: FontWeight.w400))
                       ],
@@ -79,7 +91,7 @@ class RejectedSquareCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(right: 12),
                     child: Text(
-                      "05 Feb ‘24",
+                      formattedDate,
                       style: TextStyles.openSans(
                           fontSize: 12, fontWeight: FontWeight.w600),
                     ),
@@ -103,7 +115,7 @@ class RejectedSquareCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "#12638",
+                      "#$modelNo",
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w600, fontSize: 12),
                     ),
@@ -121,7 +133,7 @@ class RejectedSquareCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "02",
+                      qty,
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w600, fontSize: 12),
                     ),
@@ -139,12 +151,12 @@ class RejectedSquareCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "{value}",
+                      size,
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w600, fontSize: 12),
                     ),
                     Text(
-                      "10",
+                      "size",
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w400, fontSize: 12),
                     ),
@@ -157,7 +169,7 @@ class RejectedSquareCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "{value}",
+                      units,
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w600, fontSize: 12),
                     ),

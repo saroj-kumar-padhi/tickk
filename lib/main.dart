@@ -12,23 +12,26 @@ import 'package:get/get.dart';
 import 'package:dekhlo/utils/routes/routes_controller.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:logger/logger.dart';
-import 'models/isBuyer.dart';
-import 'views/buyer_view/loginPages/login_otp.dart';
-import 'views/buyer_view/profileScreen/buyerProfile.dart';
 import 'views/seller_views/seller_home_screens/seller_home.dart';
-import 'views/seller_views/set_up_store.dart'; // Ensure this import is correct
+
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   String? fcmToken = await FirebaseMessaging.instance.getToken();
   PushNotificationServices notificationServices = PushNotificationServices();
   notificationServices.requestNotificationPermission();
   notificationServices.firebaseInit();
+  User? user = FirebaseAuth.instance.currentUser;
+  String phoneNumber = user?.phoneNumber ?? "";
+  String formattedPhoneNumber =
+      phoneNumber.isNotEmpty ? phoneNumber.substring(3) : "";
 
   try {
     Logger().d(fcmToken);
-    await restClient.fcmCreation("1234554321", {"FCM": fcmToken});
+    await restClient.fcmCreation(formattedPhoneNumber, {"FCM": fcmToken});
   } catch (e) {
     Logger().d(e);
   }
@@ -73,73 +76,76 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AuthWrapper extends StatelessWidget {
+class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  bool isLoading = true;
+  Widget? destinationWidget;
+
+  @override
+  void initState() {
+    super.initState();
+    checkUserStatus();
+  }
+
+  Future<void> checkUserStatus() async {
     User? user = FirebaseAuth.instance.currentUser;
-    String phoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber ?? "";
+    String phoneNumber = user?.phoneNumber ?? "";
     String formattedPhoneNumber =
         phoneNumber.isNotEmpty ? phoneNumber.substring(3) : "";
 
     if (user != null) {
-      return FutureBuilder<BuyerResponse>(
-        future: restClient.checkBuyerOrSeller(int.parse(formattedPhoneNumber)),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
-              backgroundColor: const Color(0xffFC8019),
-              body: Center(
-                child: LoadingAnimationWidget.inkDrop(
-                    color: const Color(0xffE4E4E4), size: 200),
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('Error occurred'));
-          } else if (snapshot.hasData) {
-            final response = snapshot.data!;
-            if (response.message == 'Mobile registered for buyer') {
-              return const HomeBuyer();
-            } else if (response.message ==
-                'Mobile registered as both buyer and seller') {
-              return FutureBuilder<dynamic>(
-                future:
-                    restClient.checkStoreId(int.parse(formattedPhoneNumber)),
-                builder: (context, storeSnapshot) {
-                  if (storeSnapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return Scaffold(
-                      backgroundColor: const Color(0xffFC8019),
-                      body: Center(
-                        child: LoadingAnimationWidget.inkDrop(
-                            color: const Color(0xffE4E4E4), size: 200),
-                      ),
-                    );
-                  } else if (storeSnapshot.hasError) {
-                    return const Center(child: Text('Error fetching store ID'));
-                  } else if (storeSnapshot.hasData) {
-                    final storeData = storeSnapshot.data!;
-                    final storeId = storeData.StoreID;
-                    Logger().d(storeId);
-                    return HomeSeller(
-                      storeId: storeId.toString(),
-                    );
-                  } else {
-                    return const Login();
-                  }
-                },
-              );
-            } else {
-              return const Login();
-            }
-          } else {
-            return const Login();
+      try {
+        final response = await restClient
+            .checkBuyerOrSeller(int.parse(formattedPhoneNumber));
+
+        if (response.message == 'Mobile registered for buyer') {
+          destinationWidget = const HomeBuyer();
+        } else if (response.message ==
+            'Mobile registered as both buyer and seller') {
+          try {
+            final storeData =
+                await restClient.checkStoreId(int.parse(formattedPhoneNumber));
+            final storeId = storeData.StoreID;
+            Logger().d(storeId);
+            destinationWidget = HomeSeller(storeId: storeId.toString());
+          } catch (e) {
+            print('Error fetching store ID: $e');
+            destinationWidget = const Login();
           }
-        },
+        } else {
+          destinationWidget = const Login();
+        }
+      } catch (e) {
+        print('Error checking buyer or seller: $e');
+        destinationWidget = const Login();
+      }
+    } else {
+      destinationWidget = const Login();
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (isLoading) {
+      return Scaffold(
+        backgroundColor: const Color(0xffFC8019),
+        body: Center(
+          child: LoadingAnimationWidget.inkDrop(
+              color: const Color(0xffE4E4E4), size: 200),
+        ),
       );
     } else {
-      return const Login();
+      return destinationWidget ?? const Login();
     }
   }
 }

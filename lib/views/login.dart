@@ -30,7 +30,7 @@ class Login extends StatelessWidget {
                 ),
               ),
               child: Center(
-                child: Image.asset("assest/logo.png"), // Corrected asset path
+                child: Image.asset("assest/tickk.png"), // Corrected asset path
               ),
             ),
             SizedBox(

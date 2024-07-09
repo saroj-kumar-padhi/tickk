@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,8 +13,12 @@ class DealDoneTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+    String phoneNumber = user?.phoneNumber ?? "";
+    String formattedPhoneNumber =
+        phoneNumber.isNotEmpty ? phoneNumber.substring(3) : "";
     BuyerDealDonecontroller buyerDealDonecontroller =
-        Get.put(BuyerDealDonecontroller(mobileNo: '9'));
+        Get.put(BuyerDealDonecontroller(mobileNo: formattedPhoneNumber));
     return Obx(() => buyerDealDonecontroller.isLoading.value
         ? Scaffold(
             backgroundColor: const Color(0xffFC8019),

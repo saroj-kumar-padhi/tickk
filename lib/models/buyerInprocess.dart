@@ -27,10 +27,12 @@ class RequirementData {
   final int quantity;
   final int size;
   final String units;
+  final String Date;
   final String requirementInDetails;
   final List<Store> stores;
 
   RequirementData({
+    required this.Date,
     required this.requirementID,
     required this.storeCategory,
     required this.storeSubCategory,
@@ -58,6 +60,7 @@ class RequirementData {
       requirementInDetails: json['Requirement_in_details'],
       stores:
           (json['stores'] as List).map((item) => Store.fromJson(item)).toList(),
+      Date: json['Date'],
     );
   }
 }
@@ -65,6 +68,7 @@ class RequirementData {
 class Store {
   final String storeName;
   final String storeID;
+  final String mobile;
   final String addImage;
   final int quote;
   final bool similar;
@@ -74,6 +78,7 @@ class Store {
   Store(
       {required this.storeName,
       required this.storeID,
+      required this.mobile,
       required this.addImage,
       required this.quote,
       required this.similar,
@@ -91,6 +96,7 @@ class Store {
       totalDiatance: json['TotalDistance'] != null
           ? json['TotalDistance'].toString()
           : "0",
+      mobile: json['mobile'],
     );
   }
 }

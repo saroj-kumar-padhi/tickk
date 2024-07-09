@@ -1,4 +1,3 @@
-import 'package:dekhlo/utils/components/dialog_boxs/rate_now.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:dekhlo/views/buyer_view/home_screen_buyer.dart/tabs/new_tab.dart';
@@ -33,22 +32,22 @@ class HomeBuyer extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    SizedBox(
-                      width: GlobalSizes.getDeviceWidth(context) * 0.6,
-                      child: SlimSearchBar(),
-                    ),
-                    SizedBox(
-                      width: GlobalSizes.getDeviceHeight(context) * 0.015,
-                    ),
+                    // SizedBox(
+                    //   width: GlobalSizes.getDeviceWidth(context) * 0.6,
+                    //   child: SlimSearchBar(),
+                    // ),
+                    // SizedBox(
+                    //   width: GlobalSizes.getDeviceHeight(context) * 0.015,
+                    // ),
                     InkWell(
                       onTap: () {
-                        // Get.toNamed(RouteName.buyerNotification);
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return const RateNowCustomDialog();
-                          },
-                        );
+                        Get.toNamed(RouteName.buyerNotification);
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (BuildContext context) {
+                        //     return const RateNowCustomDialog();
+                        //   },
+                        // );
                       },
                       child: SizedBox(
                           height: GlobalSizes.getDeviceHeight(context) * 0.03,
@@ -150,7 +149,7 @@ class HomeBuyer extends StatelessWidget {
                     NewTab(), // inprocess tab
                     const InProcessTab(), // inprocess tab
                     const DealDoneTab(), //Deal Done
-                    const RejectedTab(), // rejected tab
+                    RejectedTab(), // rejected tab
                   ],
                 ),
               ),

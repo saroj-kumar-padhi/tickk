@@ -1,15 +1,20 @@
 import 'package:dekhlo/services/injection.dart';
+import 'package:dekhlo/services/notificationServices.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:logger/web.dart';
 
+import '../../../controllers/exactController.dart';
 import '../../size/global_size/global_size.dart';
 import '../buttons.dart';
+import '../coustoumTextField.dart';
 
 class AcceptDialodBox extends StatelessWidget {
+  final fcm;
   final bool isExact;
   final List<dynamic> imageList;
 
@@ -18,18 +23,20 @@ class AcceptDialodBox extends StatelessWidget {
   const AcceptDialodBox(
       {super.key,
       required this.isExact,
+      required this.fcm,
       required this.imageList,
       required this.requiremetId});
 
   @override
   Widget build(BuildContext context) {
+    ExactController exactController = Get.put(ExactController());
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: SizedBox(
         width: 300.0.w,
-        height: 150.0.h,
+        height: 200.0.h,
         child: Stack(
           children: [
             Positioned(
@@ -54,20 +61,56 @@ class AcceptDialodBox extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Do You want to accept this requirement?",
+                    "Please add quotes",
                     style: TextStyles.openSans(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                         color: const Color(0xff4A4A4A)),
                   ),
                   Text(
-                    "You can add pricing from “Pending Quote” tab.",
+                    "You can add pricing ",
                     style: TextStyles.openSans(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w400,
                         color: const Color(0xff898989)),
                   ),
-                  const Spacer(),
+                  SizedBox(
+                    height: 10.sp,
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      if (value != "") {
+                        exactController.changeQuteOption(option: true);
+                      } else {
+                        exactController.changeQuteOption(option: false);
+                      }
+                    },
+                    controller: exactController.quoteEditingController,
+                    decoration: InputDecoration(
+                      hintText: "Enter your Quote",
+                      hintStyle: const TextStyle(color: Colors.grey),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.blue, width: 2.0),
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                    ),
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -98,8 +141,30 @@ class AcceptDialodBox extends StatelessWidget {
                             if (isExact) "Exact": true else "Similar": true,
                           };
 
+                          PushNotificationServices.sendNotificationtoBuyer(
+                              fcm, context, "Your request has been accepted");
+
                           try {
                             await restClient.exactOrSimilar(data);
+                            User? user = FirebaseAuth.instance.currentUser;
+                            String phoneNumber = user?.phoneNumber ?? "";
+                            String formattedPhoneNumber = phoneNumber.isNotEmpty
+                                ? phoneNumber.substring(3)
+                                : "";
+
+                            final storeData = await restClient
+                                .checkStoreId(int.parse(formattedPhoneNumber));
+                            final storeId = storeData.StoreID;
+                            try {
+                              await restClient.sendQuote(storeId, {
+                                "RequirementID": requiremetId,
+                                "Quote":
+                                    exactController.quoteEditingController.text
+                              });
+                              Fluttertoast.showToast(msg: "Sent");
+                            } catch (e) {
+                              Logger().d(e);
+                            }
                             Fluttertoast.showToast(msg: "Accepted");
                             Get.back();
                           } catch (e) {

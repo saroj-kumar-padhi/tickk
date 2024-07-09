@@ -1,8 +1,12 @@
+import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
+
+import '../../controllers/buyerInprocessController.dart';
 
 class Buttons {
   static Padding longButton(
@@ -153,7 +157,11 @@ class Buttons {
     );
   }
 
-  static SizedBox smallDealDoneButton() {
+  static SizedBox smallDealDoneButton(
+      {required String RequrementId,
+      required String storeId,
+      required Buyerinprocesscontroller buyerinprocesscontroller,
+      required String mobile}) {
     return SizedBox(
       height: 28.h,
       width: 35.w,
@@ -169,7 +177,16 @@ class Buttons {
                   const BorderSide(color: Color(0xffFC8019))),
               backgroundColor: const WidgetStatePropertyAll(Color(0xffFC8019)),
               foregroundColor: const WidgetStatePropertyAll(Colors.white)),
-          onPressed: () {},
+          onPressed: () async {
+            try {
+              await restClient
+                  .moveToDealDone(RequrementId, storeId, {"DealDone": true});
+              buyerinprocesscontroller.fetchProcessBuyerRequirements(
+                  mobileNo: mobile);
+            } catch (e) {
+              Logger().d(e);
+            }
+          },
           child: Text(
             "DD",
             style: TextStyles.openSans(

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:logger/logger.dart';
 import '../../../controllers/basicController.dart';
 import '../../../controllers/dropDownController.dart';
 import '../../../utils/components/buttons.dart';
 import '../../../utils/components/textstyle.dart';
 import '../../../utils/coustoumDropDown.dart';
+import 'package:hive/hive.dart';
 // Import the form controller
 
 class BasicDetails extends StatelessWidget {
@@ -16,8 +18,10 @@ class BasicDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DropdownController dropdownController = Get.put(DropdownController());
+
     BasicDetailsController basicDetailsController =
         Get.put(BasicDetailsController());
+
     return Scaffold(body: Obx(() {
       return basicDetailsController.isLoading.value
           ? Scaffold(
@@ -77,7 +81,11 @@ class BasicDetails extends StatelessWidget {
                               borderColor: const Color(0xFFC4C4C4),
                               hintText: 'Gender',
                               items: dropdownController.GenderList,
-                              onChanged: (value) {
+                              onChanged: (value) async {
+                                final box = await Hive.openBox('myBox');
+                                box.put('Gender', value);
+                                Logger().i(box.get('Gender'));
+
                                 basicDetailsController.gender.value = value!;
                                 basicDetailsController.updateButtonState();
                               },

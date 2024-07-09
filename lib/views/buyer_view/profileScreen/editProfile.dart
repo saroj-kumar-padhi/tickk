@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/components/heading.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -218,26 +220,45 @@ class EditProfile extends StatelessWidget {
                       color: const Color(0xffFC8019),
                       context: context,
                       onPressedCallback: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return OtpDialog(
-                              phone: basiccontrollerEdit.response.value.mobile,
-                              body: {
-                                if (basiccontrollerEdit.emailController.text !=
-                                    "")
-                                  "email":
-                                      basiccontrollerEdit.emailController.text,
-                                if (basiccontrollerEdit.nameController.text !=
-                                    "")
-                                  "your_name":
-                                      basiccontrollerEdit.nameController.text,
-                              },
-                              nametoNavigate: 'success',
-                              reason: '',
-                            );
-                          },
-                        );
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (BuildContext context) {
+                        //     return OtpDialog(
+                        //       phone: basiccontrollerEdit.response.value.mobile,
+                        //       body: {
+                        //         if (basiccontrollerEdit.emailController.text !=
+                        //             "")
+                        //           "email":
+                        //               basiccontrollerEdit.emailController.text,
+                        //         if (basiccontrollerEdit.nameController.text !=
+                        //             "")
+                        //           "your_name":
+                        //               basiccontrollerEdit.nameController.text,
+                        //       },
+                        //       nametoNavigate: 'success',
+                        //       reason: '',
+                        //     );
+                        //   },
+                        // );
+
+                        User? user = FirebaseAuth.instance.currentUser;
+                        String phoneNumber = user?.phoneNumber ?? "";
+                        String formattedPhoneNumber = phoneNumber.isNotEmpty
+                            ? phoneNumber.substring(3)
+                            : "";
+
+                        basiccontrollerEdit
+                            .updateProfileData(formattedPhoneNumber, {
+                          if (basiccontrollerEdit
+                                  .nameController.text.isNotEmpty ??
+                              false)
+                            "your_name":
+                                basiccontrollerEdit.nameController.text,
+                          if (basiccontrollerEdit
+                                  .emailController.text.isNotEmpty ??
+                              false)
+                            "email": basiccontrollerEdit.emailController.text,
+                        });
                       },
                       buttonText: 'Update',
                       textColor: Colors.white),

@@ -25,6 +25,7 @@ class NewSellerCard extends StatelessWidget {
   final String size;
   final String units;
   final String Requirement_in_details;
+  final String FCM;
 
   const NewSellerCard(
       {super.key,
@@ -37,7 +38,8 @@ class NewSellerCard extends StatelessWidget {
       required this.size,
       required this.units,
       required this.Requirement_in_details,
-      required this.requirementId});
+      required this.requirementId,
+      required this.FCM});
 
   @override
   Widget build(BuildContext context) {
@@ -582,6 +584,7 @@ class NewSellerCard extends StatelessWidget {
                                     isExact: exactController.isExact.value,
                                     imageList: dataImage,
                                     requiremetId: requirementId,
+                                    fcm: FCM,
                                   );
                                 },
                               );

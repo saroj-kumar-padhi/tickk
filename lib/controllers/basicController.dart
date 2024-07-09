@@ -37,7 +37,7 @@ class BasicDetailsController extends GetxController {
       String? fcmToken = await FirebaseMessaging.instance.getToken();
       isLoading.value = true;
       final createBuyerRequest = {
-        "mobile": "1234554321",
+        "mobile": authController.phoneAuthController.text,
         "your_name": fullNameController.text,
         "email": emailAddressController.text,
         "gender": gender.value,

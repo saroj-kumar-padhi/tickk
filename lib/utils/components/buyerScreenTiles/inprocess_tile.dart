@@ -2,14 +2,14 @@ import 'package:dekhlo/controllers/inprocessController.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
-import 'package:dekhlo/views/seller_views/store_screens/mystore.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
+import '../../../controllers/buyerInprocessController.dart';
 import '../../../controllers/expandController.dart';
 import '../../../controllers/myStoreAccountController.dart';
 import '../../../controllers/sortDialogBoxController.dart';
@@ -18,8 +18,10 @@ import '../../size/global_size/global_size.dart';
 import '../bottomSheets/sort.dart';
 import '../dialog_boxs/coursal_dialog.dart';
 import '../textstyle.dart';
+import 'package:intl/intl.dart';
 
 class InprocessTile extends StatelessWidget {
+  final String mobile;
   final String requirementId;
   final String catagory;
   final String subCategory;
@@ -43,7 +45,8 @@ class InprocessTile extends StatelessWidget {
       required this.units,
       required this.des,
       required this.date,
-      required this.stores});
+      required this.stores,
+      required this.mobile});
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +57,19 @@ class InprocessTile extends StatelessWidget {
         Get.put(InProcessController());
     final DialogBoxController dialogBoxController =
         Get.put(DialogBoxController());
+    DateTime dateTime = DateTime.parse(date);
+    String dateOnly = DateFormat('yyyy-MM-dd').format(dateTime);
+
     String text = des;
     return SizedBox(child: Obx(() {
       return Container(
           width: double.infinity, // Adjust the width as needed
           height: expandController.isExpanded.value
-              ? 386.h
+              ? stores.length == 1
+                  ? 250
+                  : stores.length == 2
+                      ? 300
+                      : 386.h
               : 225.h, // Adjust the height as needed
           decoration: BoxDecoration(
             color: Colors.white,
@@ -99,14 +109,6 @@ class InprocessTile extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          "$catagory ",
-                          style: TextStyles.openSans(
-                              fontSize: 12.sp, fontWeight: FontWeight.w400),
-                        ),
-                        Text(" | ",
-                            style: TextStyles.openSans(
-                                fontSize: 12.sp, fontWeight: FontWeight.w400)),
-                        Text(
                           subCategory,
                           style: TextStyles.openSans(
                               fontSize: 12.sp, fontWeight: FontWeight.w400),
@@ -122,7 +124,7 @@ class InprocessTile extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(right: 20.h),
                       child: Text(
-                        "05 Feb ‘24",
+                        dateOnly,
                         style: TextStyles.openSans(
                             fontSize: 12.sp, fontWeight: FontWeight.w600),
                       ),
@@ -245,7 +247,13 @@ class InprocessTile extends StatelessWidget {
                 return Padding(
                   padding: EdgeInsets.fromLTRB(20.w, 6.h, 14.w, 6.h),
                   child: Container(
-                    height: expandController.isExpanded.value ? 210.h : 33.h,
+                    height: expandController.isExpanded.value
+                        ? stores.length == 1
+                            ? 100
+                            : stores.length == 2
+                                ? 160
+                                : 210.h
+                        : 33.h,
                     width: 309.h,
                     decoration: BoxDecoration(
                         border: Border.all(color: const Color(0xffFFC18E)),
@@ -303,7 +311,7 @@ class InprocessTile extends StatelessWidget {
                                         Padding(
                                           padding: EdgeInsets.only(left: 11.w),
                                           child: Text(
-                                            "Requests (03)",
+                                            "Requests ( ${stores.length} )",
                                             style: TextStyles.openSans(
                                               fontWeight: FontWeight.w600,
                                               fontSize: 11.5.sp,
@@ -403,14 +411,48 @@ class InprocessTile extends StatelessWidget {
                                                                       context) *
                                                               0.03,
                                                         ),
-                                                        Text(
-                                                          "4.7 (5)",
-                                                          style: TextStyles
-                                                              .openSans(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  fontSize: 12),
+                                                        FutureBuilder<
+                                                            Map<String,
+                                                                dynamic>>(
+                                                          future: inProcessController
+                                                              .fetchStoreRating(
+                                                                  stores[index]
+                                                                      .storeID),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            if (snapshot
+                                                                    .connectionState ==
+                                                                ConnectionState
+                                                                    .waiting) {
+                                                              return const CircularProgressIndicator();
+                                                            } else if (snapshot
+                                                                .hasError) {
+                                                              return Text(
+                                                                  'Error: ${snapshot.error}');
+                                                            } else if (snapshot
+                                                                .hasData) {
+                                                              final rating =
+                                                                  snapshot
+                                                                      .data!;
+                                                              return rating['averageRating'] ==
+                                                                          "0" ||
+                                                                      rating['averageRating'] ==
+                                                                          0
+                                                                  ? const Text(
+                                                                      "_")
+                                                                  : Text(
+                                                                      "${rating['averageRating'].toStringAsFixed(1)} (${rating['ratingCount']})",
+                                                                      style: TextStyles.openSans(
+                                                                          fontWeight: FontWeight
+                                                                              .w400,
+                                                                          fontSize:
+                                                                              12),
+                                                                    );
+                                                            } else {
+                                                              return const Text(
+                                                                  'No data');
+                                                            }
+                                                          },
                                                         ),
                                                         SizedBox(
                                                           width: 6.w,
@@ -580,8 +622,11 @@ class InprocessTile extends StatelessWidget {
                                                                             'Call',
                                                                         onPressed:
                                                                             () {
+                                                                          String
+                                                                              phone =
+                                                                              stores[index].mobile;
                                                                           FlutterPhoneDirectCaller.callNumber(
-                                                                              '+916280644889');
+                                                                              '+91$phone');
                                                                         })
                                                                 : InkWell(
                                                                     onTap: () {
@@ -623,12 +668,23 @@ class InprocessTile extends StatelessWidget {
                                                           );
                                                         }),
                                                         Obx(() {
+                                                          Buyerinprocesscontroller
+                                                              buyerinprocesscontroller =
+                                                              Get.find();
                                                           return inProcessController
                                                                   .index
                                                                   .contains(
                                                                       index)
-                                                              ? Buttons
-                                                                  .smallDealDoneButton()
+                                                              ? Buttons.smallDealDoneButton(
+                                                                  RequrementId:
+                                                                      requirementId,
+                                                                  storeId: stores[
+                                                                          index]
+                                                                      .storeID,
+                                                                  buyerinprocesscontroller:
+                                                                      buyerinprocesscontroller,
+                                                                  mobile:
+                                                                      mobile)
                                                               : Center(
                                                                   child:
                                                                       Container(
@@ -649,7 +705,7 @@ class InprocessTile extends StatelessWidget {
                                                                                 "Reject": true
                                                                               });
                                                                           Get.to(
-                                                                              const RejectedTab());
+                                                                              RejectedTab());
                                                                         } catch (e) {
                                                                           Logger()
                                                                               .d(e);

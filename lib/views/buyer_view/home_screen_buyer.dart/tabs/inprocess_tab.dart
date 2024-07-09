@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,8 +13,13 @@ class InProcessTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+    String phoneNumber = user?.phoneNumber ?? "";
+    String formattedPhoneNumber =
+        phoneNumber.isNotEmpty ? phoneNumber.substring(3) : "";
     Buyerinprocesscontroller buyerinprocesscontroller =
-        Get.put(Buyerinprocesscontroller(mobileNo: '9'));
+        Get.put(Buyerinprocesscontroller(mobileNo: formattedPhoneNumber));
+
     return Obx(() {
       return buyerinprocesscontroller.isLoading.value
           ? Scaffold(
@@ -64,8 +70,9 @@ class InProcessTab extends StatelessWidget {
                                 size: data.size.toString(),
                                 units: data.units.toString(),
                                 des: data.requirementInDetails,
-                                date: "05 feb 24",
+                                date: data.Date,
                                 stores: data.stores,
+                                mobile: formattedPhoneNumber,
                               ),
                             );
                           }),

@@ -68,22 +68,26 @@ class Store {
   final String mobile;
   final String addImage;
   final String location;
+  final bool productType;
+  final int quot;
 
-  Store({
-    required this.storeName,
-    required this.storeID,
-    required this.mobile,
-    required this.addImage,
-    required this.location,
-  });
+  Store(
+      {required this.storeName,
+      required this.storeID,
+      required this.mobile,
+      required this.addImage,
+      required this.location,
+      required this.productType,
+      required this.quot});
 
   factory Store.fromJson(Map<String, dynamic> json) {
     return Store(
-      storeName: json['StoreName'],
-      storeID: json['StoreID'],
-      mobile: json['mobile'],
-      addImage: json['AddImage'],
-      location: json['Location'],
-    );
+        storeName: json['StoreName'],
+        storeID: json['StoreID'],
+        mobile: json['mobile'],
+        addImage: json['AddImage'],
+        location: json['Location'] ?? "",
+        quot: json['Quote'],
+        productType: json['Similar']);
   }
 }

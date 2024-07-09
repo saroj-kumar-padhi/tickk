@@ -160,4 +160,38 @@ class PushNotificationServices {
       }
     }
   }
+
+  static Future<void> sendNotificationtoBuyer(
+      String deviceTokens, BuildContext context, String data) async {
+    final String serverKey = await getAccessToken();
+    String endpointFirebaseCloudMessaging =
+        'https://fcm.googleapis.com/v1/projects/tickk-90b57/messages:send';
+
+    final Map<String, dynamic> message = {
+      'message': {
+        'token': deviceTokens,
+        'notification': {'title': data, 'body': 'Test message'},
+        'data': {
+          'tripID': '123',
+        }
+      }
+    };
+
+    final http.Response response = await http.post(
+      Uri.parse(endpointFirebaseCloudMessaging),
+      headers: <String, String>{
+        "Content-Type": 'application/json',
+        "Authorization": 'Bearer $serverKey'
+      },
+      body: jsonEncode(message),
+    );
+
+    if (response.statusCode == 200) {
+      Logger().d('Notification sent successfully to token: $deviceTokens');
+    } else {
+      Logger().d('Failed to send notification to token: $deviceTokens');
+      Logger().d('Status code: ${response.statusCode}');
+      Logger().d('Response body: ${response.body}');
+    }
+  }
 }

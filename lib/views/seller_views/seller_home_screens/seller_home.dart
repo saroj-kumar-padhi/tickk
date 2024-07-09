@@ -55,13 +55,19 @@ class HomeSeller extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
+                          // SizedBox(
+                          //   width: GlobalSizes.getDeviceWidth(context) * 0.6,
+                          //   child: SlimSearchBar(),
+                          // ),
+
                           SizedBox(
-                            width: GlobalSizes.getDeviceWidth(context) * 0.6,
-                            child: SlimSearchBar(),
+                            width: GlobalSizes.getDeviceWidth(context) * 0.3,
+                            child: Image.asset("assest/small_tick.png"),
                           ),
                           SizedBox(
-                            width: GlobalSizes.getDeviceHeight(context) * 0.015,
+                            width: 120.w,
                           ),
+
                           InkWell(
                             onTap: () {
                               Get.toNamed(RouteName.buyerNotification);
@@ -75,7 +81,7 @@ class HomeSeller extends StatelessWidget {
                                 )),
                           ),
                           SizedBox(
-                            width: GlobalSizes.getDeviceHeight(context) * 0.015,
+                            width: 15.w,
                           ),
                           InkWell(
                             onTap: () {
@@ -91,7 +97,7 @@ class HomeSeller extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            width: GlobalSizes.getDeviceHeight(context) * 0.015,
+                            width: 15.w,
                           ),
                           InkWell(
                             onTap: () {
@@ -165,10 +171,12 @@ class HomeSeller extends StatelessWidget {
                     Expanded(
                       child: TabBarView(
                         children: [
-                          NewTab(), // inprocess tab
+                          NewTabSeller(
+                            storeId: storeId,
+                          ), // inprocess tab
                           const InProcessTab(),
                           const DealDoneTab(), //Deal Done
-                          const RejectedTab(), // rejected tab
+                          RejectedTab(), // rejected tab
                         ],
                       ),
                     ),
@@ -228,12 +236,19 @@ class HomeSeller extends StatelessWidget {
                     ),
                     Row(
                       children: [
+                        // SizedBox(
+                        //   width: GlobalSizes.getDeviceWidth(context) * 0.7,
+                        //   child: SlimSearchBar(),
+                        // ),
+                        // SizedBox(
+                        //   width: 10.w,
+                        // ),
                         SizedBox(
-                          width: GlobalSizes.getDeviceWidth(context) * 0.7,
-                          child: SlimSearchBar(),
+                          width: GlobalSizes.getDeviceWidth(context) * 0.3,
+                          child: Image.asset("assest/small_tick.png"),
                         ),
                         SizedBox(
-                          width: 10.w,
+                          width: 150.w,
                         ),
                         InkWell(
                           onTap: () {
@@ -250,7 +265,7 @@ class HomeSeller extends StatelessWidget {
                               )),
                         ),
                         SizedBox(
-                          width: GlobalSizes.getDeviceHeight(context) * 0.015,
+                          width: 15.w,
                         ),
                         InkWell(
                           onTap: () {
@@ -264,7 +279,7 @@ class HomeSeller extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          width: GlobalSizes.getDeviceHeight(context) * 0.015,
+                          width: 15.w,
                         ),
                         InkWell(
                           onTap: () {
@@ -279,10 +294,53 @@ class HomeSeller extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height:
-                          14, // Adjust spacing between search bar and tab bar
+                          10.h, // Adjust spacing between search bar and tab bar
                     ),
+                    SizedBox(
+                        height: 90.h,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: flavourContoler.categoryData.length,
+                          itemBuilder: (context, index) {
+                            String categoryName = flavourContoler
+                                .categoryData.keys
+                                .elementAt(index);
+                            String imagePath = flavourContoler
+                                .categoryData.values
+                                .elementAt(index);
+
+                            return Padding(
+                              padding: EdgeInsets.all(8.r),
+                              child: Column(
+                                children: [
+                                  Material(
+                                    elevation: 4,
+                                    shadowColor: Colors.grey.withOpacity(0.1),
+                                    shape: const CircleBorder(),
+                                    child: CircleAvatar(
+                                      radius: 25.r,
+                                      backgroundColor: const Color.fromARGB(
+                                              255, 232, 231, 231)
+                                          .withOpacity(0.25),
+                                      child: imagePath.isNotEmpty
+                                          ? SvgPicture.asset(imagePath)
+                                          : const Icon(Icons.category,
+                                              color:
+                                                  Colors.grey), // Fallback icon
+                                    ),
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Text(
+                                    categoryName,
+                                    style: TextStyle(fontSize: 12.sp),
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                        )),
                     SizedBox(
                       height: GlobalSizes.getDeviceHeight(context) * 0.05,
                       child: TabBar(

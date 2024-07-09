@@ -13,8 +13,6 @@ class SellerResponseModel {
 }
 
 class Data {
-  final bool extract;
-  final bool similar;
   final String id;
   final int mobile;
   final String requirementID;
@@ -22,7 +20,6 @@ class Data {
   final String yourName;
   final String storeCategory;
   final String storeSubCategory;
-  final String storeID;
   final String brands;
   final String modelNo;
   final int size;
@@ -36,11 +33,10 @@ class Data {
   final String deleteButton;
   final String accept;
   final String reject;
+  final String FCM;
   final int v;
 
   Data({
-    required this.extract,
-    required this.similar,
     required this.id,
     required this.mobile,
     required this.requirementID,
@@ -48,7 +44,6 @@ class Data {
     required this.yourName,
     required this.storeCategory,
     required this.storeSubCategory,
-    required this.storeID,
     required this.brands,
     required this.modelNo,
     required this.size,
@@ -62,13 +57,12 @@ class Data {
     required this.deleteButton,
     required this.accept,
     required this.reject,
+    required this.FCM,
     required this.v,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
-      extract: json['Exact'],
-      similar: json['Similar'],
       id: json['_id'],
       mobile: json['mobile'],
       requirementID: json['RequirementID'],
@@ -76,7 +70,6 @@ class Data {
       yourName: json['your_name'],
       storeCategory: json['storeCategory'],
       storeSubCategory: json['storeSubCategory'],
-      storeID: json['StoreID'],
       brands: json['Brands'],
       modelNo: json['ModelNo'],
       size: json['size'],
@@ -91,6 +84,7 @@ class Data {
       accept: json['Accept'],
       reject: json['Reject'],
       v: json['__v'],
+      FCM: json['FCM'],
     );
   }
 }

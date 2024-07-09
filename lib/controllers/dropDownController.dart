@@ -1,4 +1,8 @@
+import 'package:dekhlo/controllers/newTabController.dart';
+import 'package:dekhlo/models/genderFetch.dart';
 import 'package:dekhlo/services/injection.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:logger/web.dart';
@@ -12,6 +16,8 @@ class DropdownController extends GetxController {
   var selectedSubSubcategory = ''.obs;
   var selectedUnits = ''.obs;
   RxBool isLoading = false.obs;
+
+  NewTabController newTabController = Get.put(NewTabController());
 
   RxBool issubSet = false.obs;
   RxBool issubsubSet = false.obs;
@@ -216,10 +222,20 @@ class DropdownController extends GetxController {
     try {
       isLoading.value = true;
       String subSub = subsubCategory == "" ? "Not available" : subsubCategory;
+      User? user = FirebaseAuth.instance.currentUser;
+      String phoneNumber = user?.phoneNumber ?? "";
+      String formattedPhoneNumber =
+          phoneNumber.isNotEmpty ? phoneNumber.substring(3) : "";
+
+      PersonName person =
+          await restClient.getNameAndGender(int.parse(formattedPhoneNumber));
+      Map<String, dynamic> personData = person.toJson();
+
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
 
       final test = {
-        "mobile": "123456789",
-        "your_name": "Saroj",
+        "mobile": formattedPhoneNumber,
+        "your_name": person.yourName,
         "storeCategory": category,
         "storeSubCategory": subcategory,
         "storeSubSubCategory": subSub,
@@ -234,13 +250,14 @@ class DropdownController extends GetxController {
         "Location": "New York",
         "Status": "Neutral",
         "deletebutton": "Neutral",
-        "FCM": "dfuegfdeygfd"
+        "FCM": fcmToken
         // "Accept": "Neutral",
         // "Reject": "Neutral",
       };
 
       await restClient.postRequirements(test).then((value) {
         Fluttertoast.showToast(msg: "Thanks Yor requrements send successfully");
+        newTabController.fetchRequirements();
         Get.toNamed(RouteName.homeBuyerScreen);
       });
     } catch (e) {

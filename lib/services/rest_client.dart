@@ -1,5 +1,7 @@
+import 'package:dekhlo/models/sellerProfieModel.dart';
 import 'package:dekhlo/models/buyerInprocess.dart';
 import 'package:dekhlo/models/buyerdealdoneModel.dart';
+import 'package:dekhlo/models/rating_response.dart';
 import 'package:dekhlo/models/sellerInprocess.dart';
 import 'package:dekhlo/models/selleracceptedTabModel.dart';
 import 'package:dekhlo/models/userFcmModel.dart';
@@ -7,10 +9,12 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 import '../models/basicDetailsEdit.dart';
+import '../models/genderFetch.dart';
 import '../models/isBuyer.dart';
 import '../models/myStoreAcoount.dart';
 import '../models/newRequrements.dart';
 import '../models/rejectedBySeller.dart';
+import '../models/rejected_buyer.dart';
 import '../models/sellerDealDone.dart';
 import '../models/sellerNewModel.dart';
 import '../models/sellerPandingQueta.dart';
@@ -19,7 +23,7 @@ import '../models/stores_fcm.dart';
 part 'rest_client.g.dart';
 
 // @RestApi(baseUrl: 'http://3.214.24.150:3002')
-@RestApi(baseUrl: 'http://192.168.1.21:3002')
+@RestApi(baseUrl: 'http://192.168.1.35:3002')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
@@ -46,6 +50,12 @@ abstract class RestClient {
   Future<RequirementList> getRequirements(
       @Path('mobileNumber') int mobileNumber);
 
+  @GET('/buyer/buyerData/{mobileNumber}')
+  Future<User> getProfileDetails(@Path('mobileNumber') int mobileNumber);
+
+  @GET('/buyer/GenderName/{mobileNo}')
+  Future<PersonName> getNameAndGender(@Path('mobileNo') int mobileNo);
+
   @DELETE('/postrequirement/deleteRequirement/{mobile}/{RequirementID}')
   Future<void> deleteNewBuyerRequirement(
     @Path('mobile') int mobile,
@@ -57,11 +67,16 @@ abstract class RestClient {
     @Path('mobileNumber') int mobileNumber,
   );
 
+  @PUT('/buyer/editProfileData/{mobileNo}')
+  Future<void> editProfile(
+    @Path('mobileNo') int mobileNo,
+  );
+
   @POST('/buyerInProcess/buyerLocationnnn/{RequirementID}')
   Future<void> postLoacation(@Path('RequirementID') String RequirementID,
       @Body() Map<String, double> data);
 
-  @GET('/sellerNewTab/SellerNewTabData/{storeID}')
+  @GET('/selling/requirementbyStore/{storeID}')
   Future<SellerResponseModel> fetchNewSeller(
     @Path('storeID') String storeID,
   );
@@ -109,6 +124,16 @@ abstract class RestClient {
   @GET('/Dealdonebuyer/DDmobilewiseData/{mobileNo}')
   Future<BuyerDealDoneResponse> buyerDealDone(
     @Path('mobileNo') String mobileNo,
+  );
+
+  @GET('/buyerRejected/RejectedTabData/{mobileNo}')
+  Future<List<RejectedItemd>> buyerRejected(@Path('mobileNo') String mobileNo);
+
+  @POST('/buyerInProcess/buyersellerDealDone/RequirementID/StoreID')
+  Future<void> moveToDealDone(
+    @Path('RequirementID') String RequirementID,
+    @Path('StoreID') String StoreID,
+    @Body() Map<String, dynamic> data,
   );
 
   @POST('/Inprocess/InProcessBuyerSeller/{storeId}')
@@ -182,4 +207,6 @@ abstract class RestClient {
     @Path('mobileNo') String mobileNo,
     @Body() Map<String, dynamic> data,
   );
+  @GET('/Dealdonebuyer/AverageOfRating/{storeId}')
+  Future<RatingResponse> getStoreRating(@Path('storeId') String storeId);
 }

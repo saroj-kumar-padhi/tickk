@@ -88,14 +88,6 @@ class NewSquareCard extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          storeCategory,
-                          style: TextStyles.openSans(
-                              fontSize: 12, fontWeight: FontWeight.w400),
-                        ),
-                        Text(" | ",
-                            style: TextStyles.openSans(
-                                fontSize: 12, fontWeight: FontWeight.w400)),
-                        Text(
                           storeSubCategory,
                           style: TextStyles.openSans(
                               fontSize: 12, fontWeight: FontWeight.w400),

@@ -8,6 +8,7 @@ import '../utils/components/bottomSheets/sort.dart';
 
 class ProductSetUpController extends GetxController {
   RxBool isLoading = false.obs;
+  final RxList<String> staredImage = <String>[].obs;
 
   final TextEditingController nameEditingController = TextEditingController();
   final TextEditingController contactEditingController =
@@ -58,6 +59,7 @@ class ProductSetUpController extends GetxController {
   var landMarkController = TextEditingController().obs;
   var cityController = TextEditingController().obs;
   final TextEditingController locationController = TextEditingController();
+  final RxList<String> imagePaths = <String>[].obs;
 
   List<String> dayList = ["S", "M", "T", "W", "T", "F", "S"];
   RxList<int> selectedIndices = <int>[].obs;
@@ -169,8 +171,8 @@ class ProductSetUpController extends GetxController {
       "sellerLocation": convertedAddressToLatLong,
       "AddImage": imagePath,
       "Landmark": landMarkController.value.text,
-      "stared": 3,
-      "staredImage": imagePath[0]
+      "stared": staredImage.isEmpty ? 0 : imagePath.indexOf(staredImage.first),
+      // "staredImage": imagePath[0]
     };
 
     try {

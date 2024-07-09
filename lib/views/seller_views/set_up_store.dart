@@ -40,8 +40,6 @@ class SetUpProduct extends StatelessWidget {
 
   final ExactController exactController = Get.put(ExactController());
 
-  final RxList<String> imagePaths = <String>[].obs;
-  RxBool isLiked = false.obs;
   RxInt currentPage = 0.obs;
   @override
   Widget build(BuildContext context) {
@@ -77,7 +75,7 @@ class SetUpProduct extends StatelessWidget {
                 height: 20.h,
               ),
               Obx(() {
-                return imagePaths.value.isEmpty
+                return productSetUpController.imagePaths.value.isEmpty
                     ? addImages(context)
                     : Column(
                         children: [
@@ -91,11 +89,12 @@ class SetUpProduct extends StatelessWidget {
                               viewportFraction: 0.4,
                               height: 160.0.h,
                             ),
-                            itemCount: imagePaths.length,
+                            itemCount: productSetUpController.imagePaths.length,
                             itemBuilder: (BuildContext context,
                                 int index, //ic_launcher
                                 int realIndex) {
-                              final String imagePath = imagePaths[index];
+                              final String imagePath =
+                                  productSetUpController.imagePaths[index];
                               return Column(
                                 children: [
                                   Stack(
@@ -126,34 +125,36 @@ class SetUpProduct extends StatelessWidget {
                                       Obx(() => Positioned(
                                               child: Row(
                                             children: [
-                                              isLiked.value
-                                                  ? InkWell(
-                                                      onTap: () {
-                                                        isLiked.value =
-                                                            !isLiked.value;
-                                                      },
-                                                      child: const Icon(
-                                                        Icons.star,
-                                                        color:
-                                                            Color(0xffFFD361),
-                                                      ),
-                                                    )
-                                                  : InkWell(
-                                                      onTap: () {
-                                                        isLiked.value =
-                                                            !isLiked.value;
-                                                      },
-                                                      child: const Icon(
-                                                        Icons.star_border,
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
+                                              InkWell(
+                                                  onTap: () {
+                                                    if (productSetUpController
+                                                        .staredImage.isEmpty) {
+                                                      productSetUpController
+                                                          .staredImage
+                                                          .add(imagePath);
+                                                    } else {
+                                                      productSetUpController
+                                                          .staredImage
+                                                          .clear();
+                                                    }
+                                                  },
+                                                  child: productSetUpController
+                                                          .staredImage
+                                                          .contains(imagePath)
+                                                      ? const Icon(Icons.star,
+                                                          color:
+                                                              Color(0xffFFD361))
+                                                      : const Icon(
+                                                          Icons.star_border,
+                                                          color: Colors.grey)),
                                               SizedBox(
                                                 width: 80.w,
                                               ),
                                               InkWell(
                                                 onTap: () {
-                                                  imagePaths.remove(imagePath);
+                                                  productSetUpController
+                                                      .imagePaths
+                                                      .remove(imagePath);
                                                 },
                                                 child: const Icon(
                                                   Icons.cancel,
@@ -167,7 +168,9 @@ class SetUpProduct extends StatelessWidget {
                                   SizedBox(
                                     height: 10.h,
                                   ),
-                                  imagePaths.value.length > 1
+                                  productSetUpController
+                                              .imagePaths.value.length >
+                                          1
                                       ? showIndicator()
                                       : const SizedBox(),
                                 ],
@@ -186,7 +189,7 @@ class SetUpProduct extends StatelessWidget {
                                 },
                               );
                               if (result != null) {
-                                imagePaths.add(result);
+                                productSetUpController.imagePaths.add(result);
                               }
                             },
                             child: Container(
@@ -944,7 +947,7 @@ class SetUpProduct extends StatelessWidget {
                                             .where((brand) => brand.isNotEmpty)
                                             .toList();
                                     productSetUpController.setupStrore(
-                                        imagePaths,
+                                        productSetUpController.imagePaths,
                                         categorySelectController.selectedOptions
                                             .map((item) => item.label)
                                             .toList(),
@@ -1075,7 +1078,7 @@ class SetUpProduct extends StatelessWidget {
           },
         );
         if (result != null) {
-          imagePaths.add(result);
+          productSetUpController.imagePaths.add(result);
         }
       },
       child: Center(
@@ -1247,7 +1250,7 @@ class SetUpProduct extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
-        imagePaths.length,
+        productSetUpController.imagePaths.length,
         (index) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
           child: Obx(

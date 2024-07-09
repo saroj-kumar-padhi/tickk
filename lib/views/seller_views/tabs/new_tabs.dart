@@ -81,6 +81,8 @@ class NewTabSeller extends StatelessWidget {
                                     .sellerDataList[index].requirementInDetails,
                                 requirementId: homeSellerController
                                     .sellerDataList[index].requirementID,
+                                FCM: homeSellerController
+                                    .sellerDataList[index].FCM,
                               ),
                             );
                           }),

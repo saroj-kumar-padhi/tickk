@@ -49,10 +49,11 @@ class DealDoneCard extends StatelessWidget {
     final ExpandController expandController = Get.put(ExpandController());
     final InProcessController inProcessController =
         Get.put(InProcessController());
-    return Container(
+    return Obx(() => Container(
         width: double.infinity, // Adjust the width as needed
-        height: GlobalSizes.getDeviceHeight(context) *
-            0.315, // Adjust the height as needed
+        height: expandController.isExpanded.value
+            ? GlobalSizes.getDeviceHeight(context) * 0.44
+            : 200.h, // Adjust the height as needed
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(
@@ -93,14 +94,6 @@ class DealDoneCard extends StatelessWidget {
                   Container(
                     child: Row(
                       children: [
-                        Text(
-                          "$category ",
-                          style: TextStyles.openSans(
-                              fontSize: 12, fontWeight: FontWeight.w400),
-                        ),
-                        Text(" | ",
-                            style: TextStyles.openSans(
-                                fontSize: 12, fontWeight: FontWeight.w400)),
                         Text(
                           subCategory,
                           style: TextStyles.openSans(
@@ -243,7 +236,7 @@ class DealDoneCard extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.fromLTRB(20.w, 6.h, 14.w, 6.h),
                 child: Container(
-                  height: expandController.isExpanded.value ? 150.h : 33.h,
+                  height: expandController.isExpanded.value ? 165.h : 33.h,
                   width: 309.h,
                   decoration: BoxDecoration(
                       border: Border.all(color: const Color(0xffFFC18E)),
@@ -263,7 +256,7 @@ class DealDoneCard extends StatelessWidget {
                                       Padding(
                                         padding: EdgeInsets.only(left: 11.w),
                                         child: Text(
-                                          "Requests (03)",
+                                          "Requests (${stores.length})",
                                           style: TextStyles.openSans(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 11.5.sp,
@@ -349,32 +342,46 @@ class DealDoneCard extends StatelessWidget {
                                                                     context) *
                                                             0.03,
                                                       ),
-                                                      Text(
-                                                        "4.7 (5)",
-                                                        style:
-                                                            TextStyles.openSans(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                fontSize: 12),
+                                                      FutureBuilder<
+                                                          Map<String, dynamic>>(
+                                                        future: inProcessController
+                                                            .fetchStoreRating(
+                                                                stores[index]
+                                                                    .storeID),
+                                                        builder: (context,
+                                                            snapshot) {
+                                                          if (snapshot
+                                                                  .connectionState ==
+                                                              ConnectionState
+                                                                  .waiting) {
+                                                            return const CircularProgressIndicator();
+                                                          } else if (snapshot
+                                                              .hasError) {
+                                                            return Text(
+                                                                'Error: ${snapshot.error}');
+                                                          } else if (snapshot
+                                                              .hasData) {
+                                                            final rating =
+                                                                snapshot.data!;
+                                                            return Text(
+                                                              "${rating['averageRating'].toStringAsFixed(1)} (${rating['ratingCount']})",
+                                                              style: TextStyles.openSans(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  fontSize: 12),
+                                                            );
+                                                          } else {
+                                                            return const Text(
+                                                                'No data');
+                                                          }
+                                                        },
                                                       ),
                                                       SizedBox(
                                                         width: 6.w,
                                                       ),
                                                       SizedBox(
                                                         width: 1.w,
-                                                      ),
-                                                      Text(
-                                                        "5 KM away",
-                                                        style: GoogleFonts
-                                                            .openSans(
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          fontSize: 12,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline,
-                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -386,7 +393,10 @@ class DealDoneCard extends StatelessWidget {
                                                     children: [
                                                       Column(
                                                         children: [
-                                                          Text("₹ 2000",
+                                                          Text(
+                                                              stores[index]
+                                                                  .quot
+                                                                  .toString(),
                                                               style: TextStyles.openSans(
                                                                   fontSize: 12,
                                                                   fontWeight:
@@ -417,7 +427,12 @@ class DealDoneCard extends StatelessWidget {
                                                       ),
                                                       Column(
                                                         children: [
-                                                          Text("Similar",
+                                                          Text(
+                                                              stores[index]
+                                                                          .productType ==
+                                                                      true
+                                                                  ? "Similar"
+                                                                  : "Exact",
                                                               style: TextStyles.openSans(
                                                                   fontSize: 12,
                                                                   fontWeight:
@@ -516,7 +531,7 @@ class DealDoneCard extends StatelessWidget {
                                                     onPressed: () {
                                                       FlutterPhoneDirectCaller
                                                           .callNumber(
-                                                              '+916280644889');
+                                                              '+91${stores[index].mobile}');
                                                     }))
                                           ],
                                         ),
@@ -617,6 +632,6 @@ class DealDoneCard extends StatelessWidget {
               );
             })
           ],
-        ));
+        )));
   }
 }
