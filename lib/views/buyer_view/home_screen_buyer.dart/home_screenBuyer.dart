@@ -4,9 +4,11 @@ import 'package:dekhlo/views/buyer_view/home_screen_buyer.dart/tabs/new_tab.dart
 import 'package:dekhlo/views/buyer_view/home_screen_buyer.dart/tabs/rejected_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/components/coustoum_serch_bar.dart';
+import '../../../controllers/categoriesController.dart';
+import '../../../controllers/flavourController.dart';
 import '../../../utils/components/textstyle.dart';
 
 import 'tabs/deal_done.dart';
@@ -17,6 +19,8 @@ class HomeBuyer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlavourContoler flavourContoler = Get.put(FlavourContoler(storeID: ""));
+    CategoriesController categoriesController = Get.put(CategoriesController());
     return DefaultTabController(
       length: 4, // Number of tabs
       child: Scaffold(
@@ -39,23 +43,31 @@ class HomeBuyer extends StatelessWidget {
                     // SizedBox(
                     //   width: GlobalSizes.getDeviceHeight(context) * 0.015,
                     // ),
-                    InkWell(
-                      onTap: () {
-                        Get.toNamed(RouteName.buyerNotification);
-                        // showDialog(
-                        //   context: context,
-                        //   builder: (BuildContext context) {
-                        //     return const RateNowCustomDialog();
-                        //   },
-                        // );
-                      },
-                      child: SizedBox(
-                          height: GlobalSizes.getDeviceHeight(context) * 0.03,
-                          child: Image.asset(
-                            "assest/bell.png",
-                            fit: BoxFit.fitHeight,
-                          )),
+                    SizedBox(
+                      width: GlobalSizes.getDeviceWidth(context) * 0.3,
+                      child: SvgPicture.asset("assest/small_tick.svg"),
                     ),
+                    SizedBox(
+                      width: 140.w,
+                    ),
+                    // InkWell(
+                    //   onTap: () {
+                    //     Get.toNamed(RouteName.buyerNotification);
+                    //     // showDialog(
+                    //     //   context: context,
+                    //     //   builder: (BuildContext context) {
+                    //     //     return const RateNowCustomDialog();
+                    //     //   },
+                    //     // );
+                    //   },
+                    //   child: SizedBox(
+                    //       height: GlobalSizes.getDeviceHeight(context) * 0.03,
+                    //       child: Image.asset(
+                    //         "assest/bell.png",
+                    //         fit: BoxFit.fitHeight,
+                    //       )),
+                    // ),
+
                     SizedBox(
                       width: GlobalSizes.getDeviceHeight(context) * 0.015,
                     ),
@@ -65,11 +77,16 @@ class HomeBuyer extends StatelessWidget {
                       },
                       child: SizedBox(
                         height: GlobalSizes.getDeviceHeight(context) * 0.03,
-                        child: Image.asset(
-                          "assest/user.png",
+                        child: SvgPicture.asset(
+                          "assest/user (1).svg",
                           fit: BoxFit.fitHeight,
                         ),
                       ),
+
+                      // child: const Icon(
+                      //   Icons.person_2_outlined,
+                      //   color: Color(0xff4A4A4A),
+                      // ),
                     ),
                     SizedBox(
                       width: GlobalSizes.getDeviceHeight(context) * 0.015,
@@ -92,8 +109,63 @@ class HomeBuyer extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 14, // Adjust spacing between search bar and tab bar
+              SizedBox(
+                height: 10.h,
+              ),
+              SizedBox(
+                  height: 90.h,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: flavourContoler.categoryData.length,
+                    itemBuilder: (context, index) {
+                      String categoryName =
+                          flavourContoler.categoryData.keys.elementAt(index);
+                      String imagePath =
+                          flavourContoler.categoryData.values.elementAt(index);
+
+                      return GestureDetector(
+                        onTap: () async {
+                          categoriesController.selectedCategory.value =
+                              categoryName;
+                          await categoriesController.fetchSubcategories(
+                              categoriesController.selectedCategory.value =
+                                  categoryName);
+
+                          Get.toNamed(RouteName.postRequirements);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 12.w, vertical: 10.h),
+                          child: Column(
+                            children: [
+                              Material(
+                                elevation: 4,
+                                shadowColor: Colors.grey.withOpacity(0.1),
+                                shape: const CircleBorder(),
+                                child: CircleAvatar(
+                                  radius: 25.r,
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 232, 231, 231)
+                                          .withOpacity(0.25),
+                                  child: imagePath.isNotEmpty
+                                      ? SvgPicture.asset(imagePath)
+                                      : const Icon(Icons.category,
+                                          color: Colors.grey), // Fallback icon
+                                ),
+                              ),
+                              SizedBox(height: 5.h),
+                              Text(
+                                categoryName,
+                                style: TextStyle(fontSize: 12.sp),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  )),
+              SizedBox(
+                height: 4.h, // Adjust spacing between search bar and tab bar
               ),
               SizedBox(
                 height: GlobalSizes.getDeviceHeight(context) * 0.05,

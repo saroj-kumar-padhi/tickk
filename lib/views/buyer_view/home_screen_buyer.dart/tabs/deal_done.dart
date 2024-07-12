@@ -28,7 +28,13 @@ class DealDoneTab extends StatelessWidget {
             ),
           )
         : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Padding(
+                padding: EdgeInsets.only(left: 10.h),
+                child: Text(
+                    "Total Requirements : ${buyerDealDonecontroller.requirementsList.length} "),
+              ),
               Expanded(
                 flex: 12,
                 child: buyerDealDonecontroller.requirementsList.isEmpty

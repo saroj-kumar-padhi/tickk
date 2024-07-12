@@ -111,7 +111,7 @@ class LogINOTP extends StatelessWidget {
                     ),
                     Obx(() {
                       return Buttons.longButton(
-                        color: authController1.isOtpEmpty.value
+                        color: authController.isOtpEmpty.value
                             ? const Color(0xffFC8019).withOpacity(0.2)
                             : const Color(0xffFC8019),
                         buttonText: 'Login',

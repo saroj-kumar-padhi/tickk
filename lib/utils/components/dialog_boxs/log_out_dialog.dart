@@ -1,4 +1,5 @@
 import 'package:dekhlo/utils/components/textstyle.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -71,7 +72,8 @@ class LogOutDialog extends StatelessWidget {
                       Buttons.shortButton(
                         color: const Color(0xffFC8019),
                         context: context,
-                        onPressedCallback: () {
+                        onPressedCallback: () async {
+                          await FirebaseAuth.instance.signOut();
                           Get.toNamed(RouteName.signPhoneScreen);
                         },
                         buttonText: "LogOut",

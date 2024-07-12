@@ -9,7 +9,9 @@ import '../../../utils/components/textstyle.dart';
 
 class RejectedTabSeller extends StatelessWidget {
   final String storeId;
-  const RejectedTabSeller({super.key, required this.storeId});
+  final String storeName;
+  const RejectedTabSeller(
+      {super.key, required this.storeId, required this.storeName});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class RejectedTabSeller extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
-                        "No Requirement Yet.Tickk is working for ABC Store to get Request",
+                        "No Requirement Yet.Tickk is working for $storeName to get Request",
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600,
                             fontSize: 14.sp,

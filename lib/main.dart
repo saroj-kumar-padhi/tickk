@@ -1,6 +1,9 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dekhlo/firebase_options.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/services/notificationServices.dart';
+import 'package:dekhlo/utils/no_internet.dart';
+import 'package:dekhlo/utils/pagenotfound.dart';
 import 'package:dekhlo/views/buyer_view/home_screen_buyer.dart/home_screenBuyer.dart';
 import 'package:dekhlo/views/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -63,12 +66,13 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        home: const AuthWrapper(),
+        // home: const AuthWrapper(),
         // home: const HomeSeller(
         //   storeId: 'TS156235HP',
         // ),
         // home: const HomeBuyer(),
-        // home: const Login(),
+
+        home: const AuthWrapper(),
 
         getPages: AppPages.pages,
       ),
@@ -98,6 +102,17 @@ class _AuthWrapperState extends State<AuthWrapper> {
     String phoneNumber = user?.phoneNumber ?? "";
     String formattedPhoneNumber =
         phoneNumber.isNotEmpty ? phoneNumber.substring(3) : "";
+    final List<ConnectivityResult> connectivityResult =
+        await (Connectivity().checkConnectivity());
+
+    if (!connectivityResult.contains(ConnectivityResult.mobile) &&
+        !connectivityResult.contains(ConnectivityResult.wifi)) {
+      setState(() {
+        destinationWidget = const NoInternet();
+        isLoading = false;
+      });
+      return;
+    }
 
     if (user != null) {
       try {
@@ -116,14 +131,14 @@ class _AuthWrapperState extends State<AuthWrapper> {
             destinationWidget = HomeSeller(storeId: storeId.toString());
           } catch (e) {
             print('Error fetching store ID: $e');
-            destinationWidget = const Login();
+            destinationWidget = const Pagenotfound();
           }
         } else {
-          destinationWidget = const Login();
+          destinationWidget = const Pagenotfound();
         }
       } catch (e) {
         print('Error checking buyer or seller: $e');
-        destinationWidget = const Login();
+        destinationWidget = const Pagenotfound();
       }
     } else {
       destinationWidget = const Login();
@@ -145,7 +160,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
         ),
       );
     } else {
-      return destinationWidget ?? const Login();
+      return destinationWidget ?? const Pagenotfound();
     }
   }
 }

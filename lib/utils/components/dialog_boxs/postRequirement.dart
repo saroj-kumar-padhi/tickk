@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 
+import '../../../controllers/categoriesController.dart';
 import '../../../controllers/dropDownController.dart';
 import '../../../services/notificationServices.dart';
 import '../buttons.dart';
@@ -45,6 +46,7 @@ class PostRequirementsDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     DropdownController dropdownController = DropdownController();
     NewTabController newTabController = Get.put(NewTabController());
+
     String subFormatted = subsubCategory == '' ? "N/A" : subsubCategory;
     return AlertDialog(
       contentPadding: EdgeInsets.zero, // Remove content padding

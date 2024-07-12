@@ -47,6 +47,11 @@ class RejectedTab extends StatelessWidget {
               ))
             : Column(
                 children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.h),
+                    child: Text(
+                        "Total Requirements : ${buyerRejectedController.rejectedItems.length} "),
+                  ),
                   Expanded(
                     flex: 12,
                     child: ListView.builder(

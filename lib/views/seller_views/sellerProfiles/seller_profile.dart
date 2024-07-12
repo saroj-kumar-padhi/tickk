@@ -9,7 +9,9 @@ import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../utils/components/buttons.dart';
+import '../../../utils/components/dialog_boxs/support_dialogbox.dart';
 import '../../../utils/components/textstyle.dart';
+import '../../buyer_view/profileScreen/FAQ_webview.dart';
 
 class SellerProfile extends StatelessWidget {
   const SellerProfile({super.key});
@@ -165,9 +167,19 @@ class SellerProfile extends StatelessWidget {
                   SizedBox(
                     height: 10.h,
                   ),
-                  textSupport(
-                      imagePath: "assest/info_grey.svg",
-                      title: "Buyer Support"),
+                  InkWell(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const SupportDialogBox();
+                          },
+                        );
+                      },
+                      child: buyerSupport(
+                        imagePath: "assest/info_grey.svg",
+                        title: "Buyer Support",
+                      )),
                   SizedBox(
                     height: 10.h,
                   ),
@@ -177,7 +189,8 @@ class SellerProfile extends StatelessWidget {
                     },
                     child: textSupport(
                         imagePath: "assest/question_mark.svg",
-                        title: "Buyer FAQs"),
+                        title: "Buyer FAQs",
+                        url: 'https://www.tickk.in/faqs'),
                   ),
                   SizedBox(
                     height: 10.h,
@@ -188,37 +201,40 @@ class SellerProfile extends StatelessWidget {
                     },
                     child: textSupport(
                         imagePath: "assest/doc.svg",
-                        title: "Buyer Terms & Conditions"),
+                        title: "Buyer Terms & Conditions",
+                        url: 'https://www.tickk.in/terms-and-conditions'),
                   ),
                   SizedBox(
                     height: 20.h,
                   ),
                   const Divider(),
+                  InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const SupportDialogBox();
+                        },
+                      );
+                    },
+                    child: buyerSupport(
+                        imagePath: "assest/info_grey.svg",
+                        title: "Seller Support"),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
                   textSupport(
-                      imagePath: "assest/info_grey.svg",
-                      title: "Seller Support"),
+                      imagePath: "assest/question_mark.svg",
+                      title: "Seller FAQs",
+                      url: 'https://www.tickk.in/faqs'),
                   SizedBox(
                     height: 10.h,
                   ),
-                  InkWell(
-                    onTap: () {
-                      Get.toNamed(RouteName.faqScreens);
-                    },
-                    child: textSupport(
-                        imagePath: "assest/question_mark.svg",
-                        title: "Seller FAQs"),
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Get.toNamed(RouteName.termsCondition);
-                    },
-                    child: textSupport(
-                        imagePath: "assest/doc.svg",
-                        title: "Seller Terms & Conditions"),
-                  ),
+                  textSupport(
+                      imagePath: "assest/doc.svg",
+                      title: "Seller Terms & Conditions",
+                      url: 'https://www.tickk.in/terms-and-conditions'),
                 ],
               ),
             ),
@@ -242,7 +258,36 @@ class SellerProfile extends StatelessWidget {
     }
   }
 
-  Row textSupport({required String imagePath, required String title}) {
+  textSupport(
+      {required String imagePath, required String title, required String url}) {
+    return InkWell(
+      onTap: () {
+        Get.to(() => WebViewScreen(url: url));
+      },
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            imagePath,
+            height: 23.h,
+            width: 28.w,
+          ),
+          SizedBox(
+            width: 10.w,
+          ),
+          Text(title,
+              style: TextStyles.openSans(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: const Color(0xff4A4A4A)))
+        ],
+      ),
+    );
+  }
+
+  buyerSupport({
+    required String imagePath,
+    required String title,
+  }) {
     return Row(
       children: [
         SvgPicture.asset(

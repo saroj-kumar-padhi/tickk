@@ -12,8 +12,7 @@ class Mystoreaccountcontroller extends GetxController {
     error.value = '';
 
     try {
-      final response =
-          await restClient.fetchStoreDetailsByStoreID("TS156236HP");
+      final response = await restClient.fetchStoreDetailsByStoreID(storeId);
       storeDetails.value = response;
     } catch (e) {
       error.value = 'Failed to fetch store details: ${e.toString()}';

@@ -10,9 +10,10 @@ import 'package:intl/intl.dart';
 import '../../../utils/components/textstyle.dart';
 
 class DealDoneTabSeller extends StatelessWidget {
+  final String storeName;
   Dealdonesellercontroller dealdonesellercontroller =
       Get.put(Dealdonesellercontroller());
-  DealDoneTabSeller({super.key});
+  DealDoneTabSeller({super.key, required this.storeName});
 
   @override
   Widget build(BuildContext context) {

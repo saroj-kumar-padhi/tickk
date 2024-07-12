@@ -73,6 +73,8 @@ dependencies:
   hive:
   hive_flutter:
   build_runner: ^2.4.11
+  lottie: ^3.1.2
+  connectivity_plus: ^6.0.3
   
 
  

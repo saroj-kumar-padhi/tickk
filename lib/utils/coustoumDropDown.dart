@@ -5,7 +5,8 @@ class CustomDropdownFormField extends StatelessWidget {
   final List<String> items;
   final void Function(String?)? onChanged;
   final void Function(String?)? onSaved;
-  final Color? borderColor; // Made borderColor nullable
+  final Color? borderColor;
+  final String? value; // Add this line
 
   const CustomDropdownFormField({
     super.key,
@@ -13,34 +14,32 @@ class CustomDropdownFormField extends StatelessWidget {
     required this.items,
     this.onChanged,
     this.onSaved,
-    this.borderColor, // Made borderColor optional
+    this.borderColor,
+    this.value, // Add this line
   });
 
   @override
   Widget build(BuildContext context) {
     final defaultBorderColor =
         Theme.of(context).colorScheme.onSurface.withOpacity(0.38);
-    final finalBorderColor = borderColor ??
-        defaultBorderColor; // Use defaultBorderColor if borderColor is null
+    final finalBorderColor = borderColor ?? defaultBorderColor;
 
     return DropdownButtonFormField<String>(
+      value: value, // Add this line
       isExpanded: true,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(vertical: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
-          borderSide:
-              BorderSide(color: finalBorderColor), // Use finalBorderColor here
+          borderSide: BorderSide(color: finalBorderColor),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
-          borderSide:
-              BorderSide(color: finalBorderColor), // Use finalBorderColor here
+          borderSide: BorderSide(color: finalBorderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
-          borderSide:
-              BorderSide(color: finalBorderColor), // Use finalBorderColor here
+          borderSide: BorderSide(color: finalBorderColor),
         ),
         hintText: hintText,
       ),

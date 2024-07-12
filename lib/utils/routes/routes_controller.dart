@@ -49,7 +49,11 @@ class AppPages {
     GetPage(name: RouteName.buyerNotification, page: () => BuyerNotification()),
     GetPage(name: RouteName.basicDetails, page: () => const BasicDetails()),
     GetPage(name: RouteName.setUpProduct, page: () => SetUpProduct()),
-    GetPage(name: RouteName.myStore, page: () => MyStore()),
+    GetPage(
+        name: RouteName.myStore,
+        page: () => MyStore(
+              StoreId: null,
+            )),
     GetPage(
         name: RouteName.sellerNotification, page: () => SellerNotification()),
     GetPage(name: RouteName.custoumCategory, page: () => CustoumCategory()),

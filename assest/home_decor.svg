@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 2048 2048" width="1280" height="1280" xmlns="http://www.w3.org/2000/svg">
+<path transform="translate(183,110)" d="m0 0h877v877h-877l-1-18v-818zm75 72-2 1v731h731v-731l-4-1z" fill="#FA8018"/>
+<path transform="translate(988,1061)" d="m0 0h877v876l-1 1h-876l-1-1v-875zm74 72-2 2v730h732v-731l-29-1z" fill="#FA8018"/>
+<path transform="translate(1134,402)" d="m0 0h577l7 1 1 1v582l-1 1h-584l-1-10v-574zm73 73v439l436 1 2-1 1-138v-300l-1-1z" fill="#FA8018"/>
+<path transform="translate(329,1061)" d="m0 0h584l1 1v583l-579 1-6-1zm75 72-2 1v439h438l1-1v-438l-16-1z" fill="#FA8018"/>
+<path transform="translate(1171,1243)" d="m0 0h483l28 1v510l-1 1h-511v-511zm73 73-1 1v365h366v-365l-1-1z" fill="#FA8018"/>
+<path transform="translate(366,293)" d="m0 0h511l1 13v497l-1 1h-511l-1-1v-507zm74 72-1 1v366h362l3-1v-365l-19-1z" fill="#FA8018"/>
+<path transform="translate(1317,585)" d="m0 0h217l2 1v218h-219l-1-1v-216zm73 73-1 2v67l1 4h73v-72l-1-1z" fill="#FA8018"/>
+<path transform="translate(513,1243)" d="m0 0h194l24 1v218l-170 1h-48l-1-1v-218zm73 73-1 1v73h73v-73l-2-1z" fill="#FA8018"/>
+</svg>

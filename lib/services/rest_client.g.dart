@@ -13,7 +13,7 @@ class _RestClient implements RestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.1.35:3002';
+    baseUrl ??= 'http://3.214.24.150:3002';
   }
 
   final Dio _dio;
@@ -59,7 +59,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/requirement',
+          '/upload',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -146,6 +146,35 @@ class _RestClient implements RestClient {
               baseUrl,
             ))));
     final value = RequirementList.fromJson(_result.data!['data']);
+    return value;
+  }
+
+  @override
+  Future<List<StoreCategory>> getAllCategories() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<StoreCategory>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/CatSubCategories/AllCategories',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => StoreCategory.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 
@@ -1025,6 +1054,120 @@ class _RestClient implements RestClient {
               baseUrl,
             ))));
     final value = RatingResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CategoryResponse> getsubcategorieswithCategories(
+      String categoryName) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CategoryResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/CatSubCategories/CatwiseSubCat/${categoryName}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CategoryResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<YogaStore> getsubSubcategorieswithCategories(
+    String cat,
+    String subCat,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<YogaStore>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/CatSubCategories/CatSubCatwiseSubSubCat/${cat}/${subCat}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = YogaStore.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<List<Review>> getPostedReviewByUsers(String storeID) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch<List<dynamic>>(_setStreamType<List<Review>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/Dealdonebuyer/RatingReview/${storeID}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => Review.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<StoreName> getStoreNameById(String storeId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<StoreName>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/selling/StoreNameByStoreID/${storeId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = StoreName.fromJson(_result.data!);
     return value;
   }
 

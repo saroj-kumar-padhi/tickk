@@ -1,14 +1,19 @@
+import 'package:dekhlo/controllers/flavourController.dart';
+import 'package:dekhlo/models/categororiesModel.dart';
+import 'package:dekhlo/models/reviewModel.dart';
 import 'package:dekhlo/models/sellerProfieModel.dart';
 import 'package:dekhlo/models/buyerInprocess.dart';
 import 'package:dekhlo/models/buyerdealdoneModel.dart';
 import 'package:dekhlo/models/rating_response.dart';
 import 'package:dekhlo/models/sellerInprocess.dart';
 import 'package:dekhlo/models/selleracceptedTabModel.dart';
+import 'package:dekhlo/models/subSubCategory.dart';
 import 'package:dekhlo/models/userFcmModel.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 import '../models/basicDetailsEdit.dart';
+import '../models/categoriesBased.dart';
 import '../models/genderFetch.dart';
 import '../models/isBuyer.dart';
 import '../models/myStoreAcoount.dart';
@@ -22,8 +27,8 @@ import '../models/stores_fcm.dart';
 
 part 'rest_client.g.dart';
 
-// @RestApi(baseUrl: 'http://3.214.24.150:3002')
-@RestApi(baseUrl: 'http://192.168.1.35:3002')
+@RestApi(baseUrl: 'http://3.214.24.150:3002')
+// @RestApi(baseUrl: 'http://192.168.1.35:3002')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
@@ -32,7 +37,7 @@ abstract class RestClient {
     @Body() Map<String, dynamic> createBuyerRequest,
   );
 
-  @POST('/requirement')
+  @POST('/upload')
   Future<void> postRequirements(
     @Body() Map<String, dynamic> createPostRequest,
   );
@@ -49,6 +54,9 @@ abstract class RestClient {
   @GET('/postrequirement/mobilenumberPYR/{mobileNumber}')
   Future<RequirementList> getRequirements(
       @Path('mobileNumber') int mobileNumber);
+
+  @GET('/CatSubCategories/AllCategories')
+  Future<List<StoreCategory>> getAllCategories();
 
   @GET('/buyer/buyerData/{mobileNumber}')
   Future<User> getProfileDetails(@Path('mobileNumber') int mobileNumber);
@@ -209,4 +217,18 @@ abstract class RestClient {
   );
   @GET('/Dealdonebuyer/AverageOfRating/{storeId}')
   Future<RatingResponse> getStoreRating(@Path('storeId') String storeId);
+
+  @GET('/CatSubCategories/CatwiseSubCat/{categoryName}')
+  Future<CategoryResponse> getsubcategorieswithCategories(
+      @Path('categoryName') String categoryName);
+
+  @GET('/CatSubCategories/CatSubCatwiseSubSubCat/{cat}/{subCat}')
+  Future<YogaStore> getsubSubcategorieswithCategories(
+      @Path('cat') String cat, @Path('subCat') String subCat);
+
+  @GET('/Dealdonebuyer/RatingReview/{storeID}')
+  Future<List<Review>> getPostedReviewByUsers(@Path('storeID') String storeID);
+
+  @GET('/selling/StoreNameByStoreID/{storeId}')
+  Future<StoreName> getStoreNameById(@Path('storeId') String storeId);
 }

@@ -8,14 +8,16 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../controllers/myStoreAccountController.dart';
 import '../../../controllers/myStoreController.dart';
+import '../../../controllers/reviewsControllers.dart';
 import '../../../utils/components/textstyle.dart';
-import '../../../utils/routes/routes_names.dart';
 
 class MyStore extends StatelessWidget {
-  MyStore({super.key});
+  final StoreId;
+  MyStore({super.key, required this.StoreId});
 
   final MyStoreCarouselController myStoreCarouselController =
       Get.put(MyStoreCarouselController());
+
   final Mystoreaccountcontroller mystoreaccountcontroller =
       Get.put(Mystoreaccountcontroller());
 
@@ -29,6 +31,9 @@ class MyStore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Reviewscontrollers reviewscontrollers =
+        Get.put(Reviewscontrollers(StoreId));
+
     return mystoreaccountcontroller.isLoading.value
         ? Scaffold(
             backgroundColor: const Color(0xffFC8019),
@@ -303,71 +308,69 @@ class MyStore extends StatelessWidget {
                                                   title: 'Tue',
                                                   openTime:
                                                       mystoreaccountcontroller
-                                                          .thursdayOpen,
+                                                          .tuesdayOpen,
                                                   closeTime:
                                                       mystoreaccountcontroller
                                                           .tuesdayClose),
                                               dayTile(
                                                   title: 'Thu',
-                                                  openTime: "",
+                                                  openTime:
+                                                      mystoreaccountcontroller
+                                                          .thursdayOpen,
                                                   closeTime:
                                                       mystoreaccountcontroller
                                                           .thursdayClose),
-                                              Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 60.w),
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      "wed",
-                                                      style: TextStyles.openSans(
-                                                          color: const Color(
-                                                              0xffC11F1F),
-                                                          fontSize: 14.sp,
-                                                          fontWeight:
-                                                              FontWeight.w400),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 35.w,
-                                                    ),
-                                                    Text(
-                                                      "7:00am - 9:30pm",
-                                                      style: TextStyles.openSans(
-                                                          color: const Color(
-                                                              0xffC11F1F),
-                                                          fontSize: 14.sp,
-                                                          fontWeight:
-                                                              FontWeight.w400),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10.w,
-                                                    ),
-                                                    Text(
-                                                      "close",
-                                                      style: TextStyles.openSans(
-                                                          color: const Color(
-                                                              0xffC11F1F),
-                                                          fontSize: 14.sp,
-                                                          fontWeight:
-                                                              FontWeight.w400),
-                                                    ),
-                                                  ],
-                                                ),
+                                              Row(
+                                                children: [
+                                                  dayTile(
+                                                      title: 'Wed',
+                                                      openTime:
+                                                          mystoreaccountcontroller
+                                                              .wednesdayOpen,
+                                                      closeTime:
+                                                          mystoreaccountcontroller
+                                                              .wednesdayClose),
+                                                  SizedBox(
+                                                    width: 35.w,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10.w,
+                                                  ),
+                                                ],
                                               ),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.w),
                                                   child: dayTile(
                                                       title: 'Fri',
-                                                      openTime: '',
-                                                      closeTime: '')),
+                                                      openTime:
+                                                          mystoreaccountcontroller
+                                                              .fridayOpen,
+                                                      closeTime:
+                                                          mystoreaccountcontroller
+                                                              .fridayClose)),
                                               Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 2.w),
                                                   child: dayTile(
                                                       title: 'sat',
-                                                      openTime: '',
-                                                      closeTime: '')),
+                                                      openTime:
+                                                          mystoreaccountcontroller
+                                                              .saturdayOpen,
+                                                      closeTime:
+                                                          mystoreaccountcontroller
+                                                              .saturdayClose)),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 2.w),
+                                                  child: dayTile(
+                                                      title: 'Sun',
+                                                      openTime:
+                                                          mystoreaccountcontroller
+                                                              .sundayOpen,
+                                                      closeTime:
+                                                          mystoreaccountcontroller
+                                                              .sundayOpen)),
                                             ],
                                           ),
                                         ),
@@ -459,245 +462,141 @@ class MyStore extends StatelessWidget {
                             SizedBox(
                               height: 10.h,
                             ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          child: Image.asset(
-                                              "assest/camilo_profile.png"),
-                                        ),
-                                        subtitle: Text(
-                                          "05 Sep 2021",
-                                          style: TextStyles.openSans(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 10.sp,
-                                              color: const Color(0xff4A4A4A)),
-                                        ),
-                                        trailing: const Flexible(
-                                            child: Text("4.7 (5)")),
-                                        title: Text(
-                                          "Camelio",
-                                          style: TextStyles.openSans(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 14.sp,
-                                              color: const Color(0xff4A4A4A)),
-                                        ),
-                                      ),
-                                    ),
-                                    RatingBar(
-                                      itemSize: 12,
-                                      initialRating: 4,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: true,
-                                      itemCount: 5,
-                                      ratingWidget: RatingWidget(
-                                        full: Container(
-                                          constraints: BoxConstraints(
-                                            maxHeight: 4.0
-                                                .h, // Adjust the max height as needed
-                                            maxWidth: 4.0
-                                                .w, // Adjust the max width as needed
-                                          ),
-                                          child: Image.asset(
-                                            'assest/small_star.png',
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                        empty: Container(
-                                          constraints: const BoxConstraints(
-                                            maxHeight:
-                                                4.0, // Adjust the max height as needed
-                                            maxWidth:
-                                                4.0, // Adjust the max width as needed
-                                          ),
-                                          child: Image.asset(
-                                            'assest/emptyStar.png',
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                        half: Container(
-                                          constraints: const BoxConstraints(
-                                            maxHeight:
-                                                4.0, // Adjust the max height as needed
-                                            maxWidth:
-                                                4.0, // Adjust the max width as needed
-                                          ),
-                                          child: Image.asset(
-                                            'assest/small_star.png',
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                      ),
-                                      itemPadding: const EdgeInsets.symmetric(
-                                          horizontal: 4.0),
-                                      onRatingUpdate: (rating) {
-                                        print(rating);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 20.w),
-                                  child: Text(
-                                    '''
-                      I read it 451 over ten years ago in my early teens. At the time, I remember really wanting to read 1984, although I never managed to get my hands on it.
-                      ''',
-                                    textAlign: TextAlign.justify,
-                                    style: TextStyles.openSans(
-                                        color: const Color(
-                                          0xff636363,
-                                        ),
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ),
-
-                                //second review
-
-                                Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: ListTile(
-                                            leading: CircleAvatar(
-                                              child: Image.asset(
-                                                  "assest/kane.png"),
-                                            ),
-                                            subtitle: Text(
-                                              "05 Sep 2021",
-                                              style: TextStyles.openSans(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 10.sp,
-                                                  color:
-                                                      const Color(0xff4A4A4A)),
-                                            ),
-                                            trailing: const Flexible(
-                                                child: Text("4.7 (5)")),
-                                            title: Text(
-                                              "Camelio",
-                                              style: TextStyles.openSans(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 14.sp,
-                                                  color:
-                                                      const Color(0xff4A4A4A)),
-                                            ),
-                                          ),
-                                        ),
-                                        RatingBar(
-                                          itemSize: 12,
-                                          initialRating: 4,
-                                          direction: Axis.horizontal,
-                                          allowHalfRating: true,
-                                          itemCount: 5,
-                                          ratingWidget: RatingWidget(
-                                            full: Container(
-                                              constraints: BoxConstraints(
-                                                maxHeight: 4.0
-                                                    .h, // Adjust the max height as needed
-                                                maxWidth: 4.0
-                                                    .w, // Adjust the max width as needed
+                            Obx(() => reviewscontrollers.reviews.isEmpty
+                                ? const Center(
+                                    child: Text(
+                                        "No reviews available, be first to post review"),
+                                  )
+                                : SizedBox(
+                                    height: 300,
+                                    child: ListView.builder(
+                                        itemCount:
+                                            reviewscontrollers.reviews.length,
+                                        itemBuilder: (context, index) {
+                                          return Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: ListTile(
+                                                      leading: CircleAvatar(
+                                                        child: Image.asset(
+                                                            "assest/camilo_profile.png"),
+                                                      ),
+                                                      subtitle: Text(
+                                                        "05 Sep 2021",
+                                                        style: TextStyles.openSans(
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontSize: 10.sp,
+                                                            color: const Color(
+                                                                0xff4A4A4A)),
+                                                      ),
+                                                      trailing: Flexible(
+                                                          child: Text(
+                                                              reviewscontrollers
+                                                                  .reviews[
+                                                                      index]
+                                                                  .rating)),
+                                                      title: Text(
+                                                        reviewscontrollers
+                                                            .reviews[index]
+                                                            .yourName,
+                                                        style: TextStyles.openSans(
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontSize: 14.sp,
+                                                            color: const Color(
+                                                                0xff4A4A4A)),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  RatingBar(
+                                                    itemSize: 12,
+                                                    initialRating: double.parse(
+                                                        reviewscontrollers
+                                                            .reviews[index]
+                                                            .rating),
+                                                    direction: Axis.horizontal,
+                                                    allowHalfRating: true,
+                                                    itemCount: 5,
+                                                    ratingWidget: RatingWidget(
+                                                      full: Container(
+                                                        constraints:
+                                                            BoxConstraints(
+                                                          maxHeight: 4.0
+                                                              .h, // Adjust the max height as needed
+                                                          maxWidth: 4.0
+                                                              .w, // Adjust the max width as needed
+                                                        ),
+                                                        child: Image.asset(
+                                                          'assest/small_star.png',
+                                                          fit: BoxFit.contain,
+                                                        ),
+                                                      ),
+                                                      empty: Container(
+                                                        constraints:
+                                                            const BoxConstraints(
+                                                          maxHeight:
+                                                              4.0, // Adjust the max height as needed
+                                                          maxWidth:
+                                                              4.0, // Adjust the max width as needed
+                                                        ),
+                                                        child: Image.asset(
+                                                          'assest/emptyStar.png',
+                                                          fit: BoxFit.contain,
+                                                        ),
+                                                      ),
+                                                      half: Container(
+                                                        constraints:
+                                                            const BoxConstraints(
+                                                          maxHeight:
+                                                              4.0, // Adjust the max height as needed
+                                                          maxWidth:
+                                                              4.0, // Adjust the max width as needed
+                                                        ),
+                                                        child: Image.asset(
+                                                          'assest/small_star.png',
+                                                          fit: BoxFit.contain,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    itemPadding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 4.0),
+                                                    onRatingUpdate: (rating) {
+                                                      print(rating);
+                                                    },
+                                                  ),
+                                                ],
                                               ),
-                                              child: Image.asset(
-                                                'assest/small_star.png',
-                                                fit: BoxFit.contain,
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 20.w),
+                                                child: Text(
+                                                  '''
+${reviewscontrollers.reviews[index].description}
+                                                    ''',
+                                                  textAlign: TextAlign.justify,
+                                                  style: TextStyles.openSans(
+                                                      color: const Color(
+                                                        0xff636363,
+                                                      ),
+                                                      fontSize: 12.sp,
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                ),
                                               ),
-                                            ),
-                                            empty: Container(
-                                              constraints: const BoxConstraints(
-                                                maxHeight:
-                                                    4.0, // Adjust the max height as needed
-                                                maxWidth:
-                                                    4.0, // Adjust the max width as needed
-                                              ),
-                                              child: Image.asset(
-                                                'assest/emptyStar.png',
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                            half: Container(
-                                              constraints: const BoxConstraints(
-                                                maxHeight:
-                                                    4.0, // Adjust the max height as needed
-                                                maxWidth:
-                                                    4.0, // Adjust the max width as needed
-                                              ),
-                                              child: Image.asset(
-                                                'assest/small_star.png',
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                          ),
-                                          itemPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 4.0),
-                                          onRatingUpdate: (rating) {
-                                            print(rating);
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 20.w),
-                                      child: Text(
-                                        '''
-                      I read it 451 over ten years ago in my early teens. At the time, I remember really wanting to read 1984, although I never managed to get my hands on it.
-                      ''',
-                                        textAlign: TextAlign.justify,
-                                        style: TextStyles.openSans(
-                                            color: const Color(
-                                              0xff636363,
-                                            ),
-                                            fontSize: 12.sp,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 20),
-                                      child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Text("Show More",
-                                            style: TextStyles.openSans(
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.w700,
-                                                color:
-                                                    const Color(0xffFC8019))),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            )
+                                            ],
+                                          );
+                                        }),
+                                  ))
                           ],
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 50.h,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            child:
-                                SvgPicture.asset("assest/selling_orange.svg")),
-                        InkWell(
-                          onTap: () {
-                            Get.toNamed(RouteName.homeBuyerScreen);
-                          },
-                          child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              child:
-                                  SvgPicture.asset("assest/buying_white.svg")),
-                        )
-                      ],
-                    ),
-                  )
                 ],
               ),
             ),
@@ -723,7 +622,7 @@ class MyStore extends StatelessWidget {
             width: 35.w,
           ),
           Text(
-            "7:00am - 9:30pm",
+            "$openTime - $closeTime",
             style: TextStyles.openSans(
                 color: const Color(0xff4A4A4A),
                 fontSize: 14.sp,

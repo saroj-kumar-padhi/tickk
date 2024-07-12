@@ -2,6 +2,7 @@ import 'package:dekhlo/controllers/inprocessController.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
+import 'package:dekhlo/views/seller_views/store_screens/mystore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -276,7 +277,7 @@ class InprocessTile extends StatelessWidget {
                                                 .selectedTab.value = 0;
                                             sortDialogBox(
                                               context: context,
-                                              mobileNumber: '9',
+                                              mobileNumber: modelNo,
                                               requiestId: requirementId,
                                             );
                                           },
@@ -389,9 +390,10 @@ class InprocessTile extends StatelessWidget {
                                                                 .fetchStoreDetails(
                                                                     stores[index]
                                                                         .storeID);
-                                                            Get.toNamed(
-                                                                RouteName
-                                                                    .myStore);
+                                                            Get.to(MyStore(
+                                                                StoreId: stores[
+                                                                        index]
+                                                                    .storeID));
                                                           },
                                                           child: Text(
                                                             stores[index]

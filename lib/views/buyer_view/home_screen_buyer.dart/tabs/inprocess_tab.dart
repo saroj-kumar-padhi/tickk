@@ -30,7 +30,13 @@ class InProcessTab extends StatelessWidget {
               ),
             )
           : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 10.h),
+                  child: Text(
+                      "Total Requirements : ${buyerinprocesscontroller.requirementsList.length} "),
+                ),
                 Expanded(
                   flex: 12,
                   child: buyerinprocesscontroller.requirementsList.isEmpty

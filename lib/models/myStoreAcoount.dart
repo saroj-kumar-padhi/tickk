@@ -53,7 +53,7 @@ class StoreDetails {
       mobile: json['mobile'],
       storeID: json['StoreID'],
       addImage: List<String>.from(json['AddImage']),
-      staredImage: json['staredImage'],
+      staredImage: json['stared'],
       storeName: json['StoreName'],
       storeCategory: List<String>.from(json['storeCategory']),
       storeSubCategory: List<String>.from(json['storeSubCategory']),
