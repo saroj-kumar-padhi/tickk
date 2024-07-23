@@ -39,7 +39,7 @@ class AppPages {
     GetPage(name: RouteName.changeLocation, page: () => ChangeLocation()),
     GetPage(
         name: RouteName.postRequirements, page: () => const PostRequirements()),
-    GetPage(name: RouteName.buyerProfile, page: () => const BuyerProfile()),
+    GetPage(name: RouteName.buyerProfile, page: () => BuyerProfile()),
     GetPage(name: RouteName.editProfile, page: () => const EditProfile()),
     GetPage(
         name: RouteName.faqScreens, page: () => const ExpansionTileExample()),

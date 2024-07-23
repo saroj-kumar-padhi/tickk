@@ -48,16 +48,16 @@ class RequirementData {
 
   factory RequirementData.fromJson(Map<String, dynamic> json) {
     return RequirementData(
-      requirementID: json['RequirementID'],
-      storeCategory: json['storeCategory'],
-      storeSubCategory: json['storeSubCategory'],
-      storeSubSubCategory: json['storeSubSubCategory'],
-      addImage: json['AddImage'],
-      modelNo: json['ModelNo'],
-      quantity: json['Quantity'],
-      size: json['size'],
-      units: json['Units'],
-      requirementInDetails: json['Requirement_in_details'],
+      requirementID: json['RequirementID'] ?? "",
+      storeCategory: json['storeCategory'] ?? "",
+      storeSubCategory: json['storeSubCategory'] ?? "",
+      storeSubSubCategory: json['storeSubSubCategory'] ?? "",
+      addImage: json['AddImage'] ?? "",
+      modelNo: json['ModelNo'] ?? "",
+      quantity: json['Quantity'] ?? "",
+      size: json['size'] ?? "",
+      units: json['Units'] ?? "",
+      requirementInDetails: json['Requirement_in_details'] ?? "",
       stores:
           (json['stores'] as List).map((item) => Store.fromJson(item)).toList(),
       Date: json['Date'],
@@ -87,16 +87,16 @@ class Store {
 
   factory Store.fromJson(Map<String, dynamic> json) {
     return Store(
-      storeName: json['StoreName'],
-      storeID: json['StoreID'],
-      addImage: json['AddImage'],
-      quote: json['Quote'],
-      similar: json['Similar'],
-      exact: json['Exact'],
+      storeName: json['StoreName'] ?? "",
+      storeID: json['StoreID'] ?? "",
+      addImage: json['stared'] ?? "",
+      quote: json['Quote'] ?? "",
+      similar: json['Similar'] ?? "",
+      exact: json['Exact'] ?? "",
       totalDiatance: json['TotalDistance'] != null
           ? json['TotalDistance'].toString()
           : "0",
-      mobile: json['mobile'],
+      mobile: json['mobile'] ?? "",
     );
   }
 }

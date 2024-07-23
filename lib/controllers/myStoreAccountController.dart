@@ -6,16 +6,28 @@ class Mystoreaccountcontroller extends GetxController {
   Rx<StoreDetails?> storeDetails = Rx<StoreDetails?>(null);
   RxBool isLoading = false.obs;
   RxString error = ''.obs;
+  final String storeId;
+
+  Mystoreaccountcontroller({required this.storeId});
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchStoreDetails(
+        storeId); // Start the timer when the controller is initialized
+  }
 
   Future<void> fetchStoreDetails(String storeId) async {
-    isLoading.value = true;
     error.value = '';
 
     try {
       final response = await restClient.fetchStoreDetailsByStoreID(storeId);
       storeDetails.value = response;
+      isLoading.value = false;
     } catch (e) {
+      isLoading.value = true;
       error.value = 'Failed to fetch store details: ${e.toString()}';
+      isLoading.value = false;
     } finally {
       isLoading.value = false;
     }

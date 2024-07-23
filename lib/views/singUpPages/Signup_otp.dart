@@ -104,7 +104,9 @@ class OTP extends StatelessWidget {
               onPressedCallback: () async {
                 authController.otpController.text.length == 6
                     ? {
-                        await authController.signInWithOtp(),
+                        await authController.validateOTP(
+                            otp: authController.otpController.text,
+                            islogin: false),
                       }
                     : () {};
               },

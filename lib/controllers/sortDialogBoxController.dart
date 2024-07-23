@@ -29,10 +29,10 @@ class DialogBoxController extends GetxController {
           val?.text =
               "${place.name} ${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
         });
-        productSetUpController.pinCodeController.value.text =
-            place.postalCode ?? "";
-        productSetUpController.colonyController.value.text = place.street ?? "";
-        productSetUpController.landMarkController.value.text = place.name ?? "";
+        // productSetUpController.pinCodeController.value.text =
+        //     place.postalCode ?? "";
+        // productSetUpController.colonyController.value.text = place.street ?? "";
+        // productSetUpController.landMarkController.value.text = place.name ?? "";
       }
     } catch (e) {
       logger.e("Error updating location: $e");
@@ -56,14 +56,14 @@ class DialogBoxController extends GetxController {
       List<Placemark> placemarks = await placemarkFromCoordinates(
           currentLocation.latitude, currentLocation.longitude);
       logger.d(placemarks.first);
-      productSetUpController.pinCodeController.value.text =
-          placemarks.first.postalCode ?? "";
-      productSetUpController.cityController.value.text =
-          placemarks.first.locality ?? "";
-      productSetUpController.colonyController.value.text =
-          placemarks.first.street ?? "";
-      productSetUpController.landMarkController.value.text =
-          placemarks.first.name ?? "";
+      // productSetUpController.pinCodeController.value.text =
+      //     placemarks.first.postalCode ?? "";
+      // productSetUpController.cityController.value.text =
+      //     placemarks.first.locality ?? "";
+      // productSetUpController.colonyController.value.text =
+      //     placemarks.first.street ?? "";
+      // productSetUpController.landMarkController.value.text =
+      //     placemarks.first.name ?? "";
       locacationController.value.text =
           "${placemarks.first.name} ${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}";
     }

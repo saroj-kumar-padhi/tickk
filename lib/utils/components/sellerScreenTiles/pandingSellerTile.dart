@@ -339,7 +339,7 @@ class PandingSellerCard extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return const CarouselDialog();
+                          return const SizedBox();
                         },
                       );
                     },

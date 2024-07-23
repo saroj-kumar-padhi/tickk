@@ -7,6 +7,7 @@ import 'package:logger/web.dart';
 
 import '../../../controllers/buyerInprocessController.dart';
 import '../../../controllers/sortDialogBoxController.dart';
+import '../../../views/google_map_page.dart';
 import '../buttons.dart';
 import '../searchBar/location_serch_ba.dart';
 import '../textstyle.dart';
@@ -124,23 +125,6 @@ Widget _buildSortByPriceTab(BuildContext context,
                 },
               ),
             )),
-        Obx(() => ListTile(
-              title: Text(
-                'High to Low',
-                style: TextStyles.openSans(
-                    color: const Color(0xff4A4A4A),
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16),
-              ),
-              leading: Radio(
-                fillColor: WidgetStateProperty.all(const Color(0xffFC8019)),
-                value: 2,
-                groupValue: dialogBoxController.selectedValue.value,
-                onChanged: (value) {
-                  dialogBoxController.setSelectedValue(value!);
-                },
-              ),
-            )),
         const Spacer(),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -194,16 +178,23 @@ Widget _buildSortByDistanceTab(
       SizedBox(
         height: 5.h,
       ),
-      Padding(
-        padding: EdgeInsets.only(left: 14.w),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "Use my current location",
-            style: TextStyles.openSans(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                color: const Color(0xffFC8019)),
+      InkWell(
+        onTap: () async {
+          await dialogBoxController.getCurrentLoaction();
+          Get.to(const GoogleMapPage());
+        },
+        child: Padding(
+          /// do here
+          padding: EdgeInsets.only(left: 14.w),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Use my current location",
+              style: TextStyles.openSans(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                  color: const Color(0xffFC8019)),
+            ),
           ),
         ),
       ),

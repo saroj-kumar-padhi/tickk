@@ -3,11 +3,14 @@ import 'dart:io';
 import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/components/heading.dart';
+import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../controllers/basicControllerEdit.dart';
 import '../../../utils/components/coustoumTextField.dart';
@@ -25,11 +28,7 @@ class EditProfile extends StatelessWidget {
     BasiccontrollerEdit basiccontrollerEdit = Get.put(BasiccontrollerEdit());
     return Obx(() => basiccontrollerEdit.isLoading.value
         ? Scaffold(
-            backgroundColor: const Color(0xffFC8019),
-            body: Center(
-              child: LoadingAnimationWidget.inkDrop(
-                  color: const Color(0xffE4E4E4), size: 200),
-            ),
+            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
           )
         : Scaffold(
             appBar: AppBar(
@@ -42,22 +41,19 @@ class EditProfile extends StatelessWidget {
                     color: const Color(0xff4A4A4A)),
               ),
               actions: [
-                Padding(
-                  padding: EdgeInsets.only(right: 10.w),
-                  child: const Icon(Icons.close,
-                      color: Color(
-                        0xff4A4A4A,
-                      )),
+                InkWell(
+                  onTap: () {
+                    Get.toNamed(RouteName.homeBuyerScreen);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 10.w),
+                    child: const Icon(Icons.close,
+                        color: Color(
+                          0xff4A4A4A,
+                        )),
+                  ),
                 )
               ],
-              leading: IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Color(0xff4A4A4A),
-                  )),
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -69,7 +65,33 @@ class EditProfile extends StatelessWidget {
                   return imagePath.value.isEmpty
                       ? Align(
                           alignment: Alignment.center,
-                          child: Image.asset("assest/profileImage.png"),
+                          child: basiccontrollerEdit
+                                      .response.value.profileImage ==
+                                  ""
+                              ? Image.asset("assest/profileImage.png")
+                              : CircleAvatar(
+                                  radius: 40.r,
+                                  child: ClipOval(
+                                    child: Image.network(
+                                      basiccontrollerEdit
+                                          .response.value.profileImage,
+                                      fit: BoxFit.cover,
+                                      width: 80.r,
+                                      height: 80.r,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Icon(Icons.person, size: 40.r);
+                                      },
+                                      loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        }
+                                        return const CircularProgressIndicator();
+                                      },
+                                    ),
+                                  ),
+                                ),
                         )
                       : Align(
                           alignment: Alignment.center,
@@ -220,32 +242,8 @@ class EditProfile extends StatelessWidget {
                       color: const Color(0xffFC8019),
                       context: context,
                       onPressedCallback: () {
-                        // showDialog(
-                        //   context: context,
-                        //   builder: (BuildContext context) {
-                        //     return OtpDialog(
-                        //       phone: basiccontrollerEdit.response.value.mobile,
-                        //       body: {
-                        //         if (basiccontrollerEdit.emailController.text !=
-                        //             "")
-                        //           "email":
-                        //               basiccontrollerEdit.emailController.text,
-                        //         if (basiccontrollerEdit.nameController.text !=
-                        //             "")
-                        //           "your_name":
-                        //               basiccontrollerEdit.nameController.text,
-                        //       },
-                        //       nametoNavigate: 'success',
-                        //       reason: '',
-                        //     );
-                        //   },
-                        // );
-
-                        User? user = FirebaseAuth.instance.currentUser;
-                        String phoneNumber = user?.phoneNumber ?? "";
-                        String formattedPhoneNumber = phoneNumber.isNotEmpty
-                            ? phoneNumber.substring(3)
-                            : "";
+                        final box = Hive.box('myBox');
+                        final String formattedPhoneNumber = box.get('phone');
 
                         basiccontrollerEdit
                             .updateProfileData(formattedPhoneNumber, {
@@ -258,7 +256,12 @@ class EditProfile extends StatelessWidget {
                                   .emailController.text.isNotEmpty ??
                               false)
                             "email": basiccontrollerEdit.emailController.text,
+                          if (imagePath.isNotEmpty)
+                            "profileImage": imagePath.value
                         });
+                        basiccontrollerEdit.fetchBasicDetailsEdit(
+                            mobile: formattedPhoneNumber);
+                        Get.toNamed(RouteName.homeBuyerScreen);
                       },
                       buttonText: 'Update',
                       textColor: Colors.white),

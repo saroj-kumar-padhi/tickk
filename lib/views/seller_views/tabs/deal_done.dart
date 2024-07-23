@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../controllers/dealDoneSellerController.dart';
 import '../../../utils/components/sellerScreenTiles/done_done.dart';
@@ -11,19 +12,18 @@ import '../../../utils/components/textstyle.dart';
 
 class DealDoneTabSeller extends StatelessWidget {
   final String storeName;
-  Dealdonesellercontroller dealdonesellercontroller =
-      Get.put(Dealdonesellercontroller());
-  DealDoneTabSeller({super.key, required this.storeName});
+  final String storeId;
+
+  const DealDoneTabSeller(
+      {super.key, required this.storeName, required this.storeId});
 
   @override
   Widget build(BuildContext context) {
+    Dealdonesellercontroller dealdonesellercontroller =
+        Get.put(Dealdonesellercontroller(StoreId: storeId));
     return Obx(() => dealdonesellercontroller.isLoading.value
         ? Scaffold(
-            backgroundColor: const Color(0xffFC8019),
-            body: Center(
-              child: LoadingAnimationWidget.inkDrop(
-                  color: const Color(0xffE4E4E4), size: 200),
-            ),
+            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
           )
         : dealdonesellercontroller.processedItems.isEmpty
             ? Center(
@@ -71,6 +71,9 @@ class DealDoneTabSeller extends StatelessWidget {
                               units: data.units,
                               des: data.requirementInDetails,
                               quote: data.quote.toString(),
+                              addImages: data.addImage,
+                              exactImages: data.exactImgages,
+                              exact: data.exact,
                             ),
                           );
                         }),

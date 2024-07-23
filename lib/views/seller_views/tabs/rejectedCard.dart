@@ -15,6 +15,7 @@ class RejectedSellerSquareCard extends StatelessWidget {
   final String size;
   final String units;
   final String des;
+  final String image;
   const RejectedSellerSquareCard(
       {super.key,
       required this.requirementID,
@@ -26,7 +27,8 @@ class RejectedSellerSquareCard extends StatelessWidget {
       required this.qty,
       required this.size,
       required this.units,
-      required this.des});
+      required this.des,
+      required this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +122,7 @@ class RejectedSellerSquareCard extends StatelessWidget {
                   child: SizedBox(
                       width: GlobalSizes.getDeviceWidth(context) * 0.15,
                       height: GlobalSizes.getDeviceHeight(context) * 0.09,
-                      child: Image.asset("assest/sellitems.png")),
+                      child: Image.network(image)),
                 ),
                 Column(
                   children: [

@@ -23,6 +23,7 @@ class DealDoneCard extends StatelessWidget {
   final String qty;
   final String size;
   final String units;
+  final String requiredImage;
   final String des;
   final DateTime date;
   final List<Store> stores;
@@ -38,7 +39,8 @@ class DealDoneCard extends StatelessWidget {
       required this.units,
       required this.des,
       required this.date,
-      required this.stores});
+      required this.stores,
+      required this.requiredImage});
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +129,12 @@ class DealDoneCard extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: GlobalSizes.getDeviceHeight(context) * 0.025),
-                  child: Image.asset("assest/sellitems.png"),
+                  child: Image.network(
+                    height: 60.h,
+                    width: 60.h,
+                    requiredImage,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 Column(
                   children: [
@@ -236,7 +243,11 @@ class DealDoneCard extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.fromLTRB(20.w, 6.h, 14.w, 6.h),
                 child: Container(
-                  height: expandController.isExpanded.value ? 165.h : 33.h,
+                  height: expandController.isExpanded.value
+                      ? stores.length == 1
+                          ? 120.h
+                          : 165.h
+                      : 33.h,
                   width: 309.h,
                   decoration: BoxDecoration(
                       border: Border.all(color: const Color(0xffFFC18E)),
@@ -488,7 +499,7 @@ class DealDoneCard extends StatelessWidget {
                                                                     builder:
                                                                         (BuildContext
                                                                             context) {
-                                                                      return const CarouselDialog();
+                                                                      return const SizedBox();
                                                                     },
                                                                   );
                                                                 },

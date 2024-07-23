@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../utils/components/sellerScreenTiles/pandingSellerTile.dart';
 import '../../../utils/components/textstyle.dart';
@@ -21,11 +22,7 @@ class PandingTabSeller extends StatelessWidget {
         Get.put(Sellerpandingcontroller(storeId: storeId));
     return Obx(() => sellerpandingcontroller.isLoading.value
         ? Scaffold(
-            backgroundColor: const Color(0xffFC8019),
-            body: Center(
-              child: LoadingAnimationWidget.inkDrop(
-                  color: const Color(0xffE4E4E4), size: 200),
-            ),
+            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
           )
         : Column(
             children: [

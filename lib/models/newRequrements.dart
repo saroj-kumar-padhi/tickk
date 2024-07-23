@@ -13,7 +13,7 @@ class Requirement {
   final String units;
   final int quote;
   final String requirementInDetails;
-  final String addImage;
+  final String? addImage;
   final String location;
   final String status;
   final String deleteButton;
@@ -49,23 +49,23 @@ class Requirement {
 
   factory Requirement.fromJson(Map<String, dynamic> json) {
     return Requirement(
-      id: json['_id'],
-      mobile: json['mobile'],
-      requirementID: json['RequirementID'],
-      yourName: json['your_name'],
-      storeCategory: json['storeCategory'],
-      storeSubCategory: json['storeSubCategory'],
-      storeSubSubCategory: json['storeSubSubCategory'],
-      brands: json['Brands'],
-      modelNo: json['ModelNo'],
-      size: json['size'],
-      quantity: json['Quantity'],
-      units: json['Units'],
-      quote: json['Quote'],
-      requirementInDetails: json['Requirement_in_details'],
-      addImage: json['AddImage'],
-      location: json['Location'],
-      status: json['Status'],
+      id: json['_id'] ?? "",
+      mobile: json['mobile'] ?? "",
+      requirementID: json['RequirementID'] ?? "",
+      yourName: json['your_name'] ?? "",
+      storeCategory: json['storeCategory'] ?? "",
+      storeSubCategory: json['storeSubCategory'] ?? "",
+      storeSubSubCategory: json['storeSubSubCategory'] ?? "",
+      brands: json['Brands'] ?? "",
+      modelNo: json['ModelNo'] ?? "",
+      size: json['size'] ?? -1,
+      quantity: json['Quantity'] ?? "",
+      units: json['Units'] ?? "",
+      quote: json['Quote'] ?? -1,
+      requirementInDetails: json['Requirement_in_details'] ?? "",
+      addImage: json['AddImage'] ?? "",
+      location: json['Location'] ?? "",
+      status: json['Status'] ?? "",
       deleteButton: json['deletebutton'],
       accept: json['Accept'],
       reject: json['Reject'],

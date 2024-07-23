@@ -1,6 +1,7 @@
 import 'package:dekhlo/services/injection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:logger/web.dart';
 import '../models/newRequrements.dart';
 
@@ -20,10 +21,8 @@ class NewTabController extends GetxController {
     isLoading.value = true;
     try {
       //Getting phone number
-      User? user = FirebaseAuth.instance.currentUser;
-      String phoneNumber = user?.phoneNumber ?? "";
-      String formattedPhoneNumber =
-          phoneNumber.isNotEmpty ? phoneNumber.substring(3) : "";
+      final box = Hive.box('myBox');
+      final String formattedPhoneNumber = box.get('phone');
       // Fetch the requirements from the API
       final RequirementList requirementList =
           await restClient.getRequirements(int.parse(formattedPhoneNumber));

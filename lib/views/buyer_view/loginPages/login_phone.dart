@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 import '../../../utils/components/Coustum_RichText.dart';
 
 class LogInPhone extends StatelessWidget {
@@ -20,11 +21,8 @@ class LogInPhone extends StatelessWidget {
       body: SafeArea(child: Obx(() {
         return authController.isLoading.value
             ? Scaffold(
-                backgroundColor: const Color(0xffFC8019),
                 body: Center(
-                  child: LoadingAnimationWidget.inkDrop(
-                      color: const Color(0xffE4E4E4), size: 200),
-                ),
+                    child: LottieBuilder.asset("assest/XyglI35BZO.json")),
               )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -111,7 +109,7 @@ class LogInPhone extends StatelessWidget {
                               authController.errorMessagePhoneNumber.value =
                                   'The number you entered is not valid.';
                             } else {
-                              await authController.checkPhoneNumber();
+                              await authController.LoginWithOtp();
 
                               Get.toNamed(RouteName.logInotpScreen);
                             }

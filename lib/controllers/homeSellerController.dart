@@ -19,6 +19,7 @@ class HomeSellerController extends GetxController {
   }
 
   Future<void> fetchSellerData(String storeId) async {
+    sellerDataList.clear();
     try {
       isLoading.value = true;
       dynamic response = await restClient.fetchNewSeller(storeId);

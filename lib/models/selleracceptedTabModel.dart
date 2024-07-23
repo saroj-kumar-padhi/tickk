@@ -39,10 +39,12 @@ class DdItem {
   String addImage;
   String location;
   String status;
+  List<dynamic> exactSimilarImage;
   int v;
 
   DdItem({
     required this.exact,
+    required this.exactSimilarImage,
     required this.similar,
     required this.id,
     required this.requirementId,
@@ -67,6 +69,7 @@ class DdItem {
 
   factory DdItem.fromJson(Map<String, dynamic> json) {
     return DdItem(
+      exactSimilarImage: json['ExactSimilarImage'] ?? [],
       exact: json['Exact'] ?? false,
       similar: json['Similar'] ?? false,
       id: json['_id'] ?? '',

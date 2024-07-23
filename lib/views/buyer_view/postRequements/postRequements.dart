@@ -3,9 +3,11 @@ import 'package:dekhlo/services/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:logger/web.dart';
+import 'package:lottie/lottie.dart';
 import '../../../controllers/categoriesController.dart';
 import '../../../controllers/dropDownController.dart';
 import '../../../models/stores_fcm.dart';
@@ -33,16 +35,14 @@ class _PostRequirementsState extends State<PostRequirements> {
   final TextEditingController unitsController = TextEditingController();
   CategoriesController categoriesController = Get.put(CategoriesController());
   final RxString imagePath = ''.obs;
+  RxBool isFormValid = false.obs;
+  String selectedCity = '';
 
   @override
   Widget build(BuildContext context) {
     return Obx(() => categoriesController.isLoading.value
         ? Scaffold(
-            backgroundColor: const Color(0xffFC8019),
-            body: Center(
-              child: LoadingAnimationWidget.inkDrop(
-                  color: const Color(0xffE4E4E4), size: 200),
-            ),
+            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
           )
         : Scaffold(
             appBar: AppBar(
@@ -74,9 +74,23 @@ class _PostRequirementsState extends State<PostRequirements> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    const SmallHeading(
-                      headingText: 'Category',
-                    ),
+                    categoriesController.categories.isNotEmpty
+                        ? Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text("Category",
+                                style: TextStyles.openSans(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xff4A4A4A))),
+                          )
+                        : Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text("Category",
+                                style: TextStyles.openSans(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xff959595))),
+                          ),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -87,6 +101,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                               ? categoriesController.selectedCategory.value
                               : null,
                       onChanged: (value) {
+                        updateFormValidity();
                         categoriesController.selectedSubCategory.value = '';
                         categoriesController.selectedCategory.value =
                             value ?? "";
@@ -98,9 +113,23 @@ class _PostRequirementsState extends State<PostRequirements> {
                     SizedBox(
                       height: 5.h,
                     ),
-                    const SmallHeading(
-                      headingText: 'Sub Category',
-                    ),
+                    categoriesController.subCategories.isNotEmpty
+                        ? Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text("Sub Category",
+                                style: TextStyles.openSans(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xff4A4A4A))),
+                          )
+                        : Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text("Sub Category",
+                                style: TextStyles.openSans(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xff959595))),
+                          ),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -121,9 +150,23 @@ class _PostRequirementsState extends State<PostRequirements> {
                     SizedBox(
                       height: 5.h,
                     ),
-                    const SmallHeading(
-                      headingText: 'Sub Sub Category',
-                    ),
+                    categoriesController.subSubCategories.isNotEmpty
+                        ? Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text("Sub Sub Category",
+                                style: TextStyles.openSans(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xff4A4A4A))),
+                          )
+                        : Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text("Sub Sub Category",
+                                style: TextStyles.openSans(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xff959595))),
+                          ),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -240,6 +283,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                               hintText: '',
                               height: 55.h,
                               width: 100.w,
+                              keyboardType: TextInputType.number,
                             ),
                           ],
                         ),
@@ -250,11 +294,15 @@ class _PostRequirementsState extends State<PostRequirements> {
                               headingText: 'Qty',
                             ),
                             CustomTextField(
+                              onChanged: (value) {
+                                updateFormValidity();
+                              },
                               isenable: true,
                               hintText: '',
                               height: 55.h,
                               width: 100.w,
                               controller: quntityController,
+                              keyboardType: TextInputType.number,
                             ),
                           ],
                         ),
@@ -287,6 +335,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                                   'inch'
                                 ],
                                 onChanged: (value) {
+                                  updateFormValidity();
                                   dropdownController.selectedUnits.value =
                                       value ?? "";
                                 },
@@ -305,13 +354,38 @@ class _PostRequirementsState extends State<PostRequirements> {
                     SizedBox(
                       height: 5.h,
                     ),
-                    CustomTextField(
-                      controller: commentsController,
-                      hintText: '',
-                      height: 100.h,
-                      width: double.infinity,
-                      isenable: true,
+                    // CustomTextField(
+
+                    //   controller: commentsController,
+                    //   hintText: '',
+                    //   height: 100.h,
+                    //   width: double.infinity,
+                    //   isenable: true,
+                    // ),
+                    Container(
+                      height: 80.h,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(width: 1, color: Colors.grey),
+                      ),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextField(
+                          maxLines:
+                              null, // This allows the field to expand vertically
+                          keyboardType: TextInputType.multiline,
+                          controller: commentsController,
+                          decoration: const InputDecoration(
+                            hintText: '',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
+                      ),
                     ),
+
                     SizedBox(
                       height: 10.h,
                     ),
@@ -345,6 +419,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                                   child: InkWell(
                                     onTap: () {
                                       imagePath.value = "";
+                                      updateFormValidity();
                                     },
                                     child: Center(
                                         child: SvgPicture.asset(
@@ -365,6 +440,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                                 );
                                 if (result != null) {
                                   imagePath.value = result;
+                                  updateFormValidity(); // Call updateFormValidity here
                                 }
                               },
                               child: Row(
@@ -392,9 +468,17 @@ class _PostRequirementsState extends State<PostRequirements> {
                       height: 5.h,
                     ),
                     CustomDropdownFormField(
-                      items: const ["Hyderabad", "Other cites are coming soon"],
-                      onChanged: (value) {},
-                      onSaved: (value) {},
+                      items: const [
+                        "Hyderabad",
+                        "Other cities are coming soon"
+                      ],
+                      onChanged: (value) {
+                        selectedCity = value ?? '';
+                        updateFormValidity();
+                      },
+                      onSaved: (value) {
+                        selectedCity = value ?? '';
+                      },
                     ),
                     SizedBox(
                       height: 5.h,
@@ -407,42 +491,47 @@ class _PostRequirementsState extends State<PostRequirements> {
                       height: 40.h,
                       child: ElevatedButton(
                         onPressed: () async {
-                          List<String> dataToGo = [];
-                          try {
-                            final MatchingStoresResponse data =
-                                await restClient.fechingMachingStores(
-                                    dropdownController.selectedCategory.value,
-                                    dropdownController
-                                        .selectedSubcategory.value);
-                            List<String> fcmTokens = data.matchingStores
-                                .map((store) => store.fcm)
-                                .toList();
-                            dataToGo = fcmTokens;
-                            Logger().d(data.matchingStores.first.fcm);
-                          } catch (e) {
-                            Logger().d(e);
+                          if (isFormValid.value) {
+                            List<String> dataToGo = [];
+                            try {
+                              final MatchingStoresResponse data =
+                                  await restClient.fechingMachingStores(
+                                      dropdownController.selectedCategory.value,
+                                      dropdownController
+                                          .selectedSubcategory.value);
+                              List<String> fcmTokens = data.matchingStores
+                                  .map((store) => store.fcm)
+                                  .toList();
+                              dataToGo = fcmTokens;
+                              Logger().d(data.matchingStores.first.fcm);
+                            } catch (e) {
+                              Logger().d(e);
+                            }
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return PostRequirementsDialog(
+                                  category: categoriesController
+                                      .selectedCategory.value,
+                                  subcategory: categoriesController
+                                      .selectedSubCategory.value,
+                                  subsubCategory: categoriesController
+                                      .selectedSubSubCategory.value,
+                                  brands: brandController.text,
+                                  modelNo: modelController.text,
+                                  size: sizeController.text,
+                                  quantity: quntityController.text,
+                                  units: dropdownController.selectedUnits.value,
+                                  description: commentsController.text,
+                                  image: imagePath.value,
+                                  fcm: dataToGo,
+                                );
+                              },
+                            );
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: "Fill all required fields");
                           }
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return PostRequirementsDialog(
-                                category:
-                                    categoriesController.selectedCategory.value,
-                                subcategory: categoriesController
-                                    .selectedSubCategory.value,
-                                subsubCategory: categoriesController
-                                    .selectedSubSubCategory.value,
-                                brands: brandController.text,
-                                modelNo: modelController.text,
-                                size: sizeController.text,
-                                quantity: quntityController.text,
-                                units: dropdownController.selectedUnits.value,
-                                description: commentsController.text,
-                                image: imagePath.value,
-                                fcm: dataToGo,
-                              );
-                            },
-                          );
                         },
                         style: ElevatedButton.styleFrom(
                           side: const BorderSide(
@@ -452,7 +541,9 @@ class _PostRequirementsState extends State<PostRequirements> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),
-                          backgroundColor: const Color(0xffFC8019),
+                          backgroundColor: isFormValid.value
+                              ? const Color(0xffFC8019)
+                              : const Color(0xffFC8019).withOpacity(0.2),
                         ),
                         child: const Text(
                           "Send",
@@ -471,5 +562,13 @@ class _PostRequirementsState extends State<PostRequirements> {
               ),
             ),
           ));
+  }
+
+  void updateFormValidity() {
+    isFormValid.value =
+        categoriesController.selectedCategory.value.isNotEmpty &&
+            quntityController.text.isNotEmpty &&
+            imagePath.value.isNotEmpty &&
+            selectedCity.isNotEmpty;
   }
 }

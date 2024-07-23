@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../controllers/newTabController.dart';
 import '../../../../utils/components/buyerScreenTiles/new_tiles.dart';
@@ -17,11 +18,7 @@ class NewTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() => newTabController.isLoading.value
         ? Scaffold(
-            backgroundColor: const Color(0xffFC8019),
-            body: Center(
-              child: LoadingAnimationWidget.inkDrop(
-                  color: const Color(0xffE4E4E4), size: 200),
-            ),
+            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
           )
         : newTabController.requirementsList.isEmpty
             ? Column(
@@ -70,6 +67,7 @@ class NewTab extends StatelessWidget {
                 ],
               )
             : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 10.h),
@@ -138,6 +136,9 @@ class NewTab extends StatelessWidget {
                                   date: newTabController
                                       .requirementsList[index].date
                                       .toString(),
+                                  image: newTabController
+                                          .requirementsList[index].addImage ??
+                                      "",
                                 ),
                               );
                             },

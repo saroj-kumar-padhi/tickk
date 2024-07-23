@@ -4,6 +4,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 import '../services/injection.dart';
 
@@ -36,11 +39,16 @@ class BasicDetailsController extends GetxController {
     try {
       String? fcmToken = await FirebaseMessaging.instance.getToken();
       isLoading.value = true;
+
+      // Use the relative path directly
+      String imagePath = 'task/assets/men.png';
+
       final createBuyerRequest = {
         "mobile": authController.phoneAuthController.text,
         "your_name": fullNameController.text,
         "email": emailAddressController.text,
         "gender": gender.value,
+        "profileImage": imagePath, // Use the relative path
         "age": int.parse(ageController.text),
         "otp": 123456,
         "verified": false,
@@ -51,15 +59,13 @@ class BasicDetailsController extends GetxController {
         isLoading.value = false;
         isSuccessRegister.value = true;
       }).catchError((error) {
-        isLoading.value = true;
-        Fluttertoast.showToast(
-            msg: "user either registerd already or invalid details provided");
         isLoading.value = false;
+        Fluttertoast.showToast(
+            msg: "User either registered already or invalid details provided");
       });
     } catch (error) {
-      isLoading.value = true;
-      Fluttertoast.showToast(msg: "$error");
       isLoading.value = false;
+      Fluttertoast.showToast(msg: "$error");
     }
   }
 }

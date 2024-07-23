@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'package:path/path.dart' as path;
+import 'package:dio/dio.dart' as dio;
+import 'package:http_parser/http_parser.dart' show MediaType;
 import 'package:dekhlo/controllers/newTabController.dart';
 import 'package:dekhlo/models/genderFetch.dart';
 import 'package:dekhlo/services/injection.dart';
@@ -5,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:logger/web.dart';
 
 import '../utils/routes/routes_names.dart';
@@ -26,168 +31,6 @@ class DropdownController extends GetxController {
   RxBool isNewImage = false.obs;
   final GenderList = ['Male', 'Female', 'Others'];
 
-  final categories = [
-    "Electronics",
-    "Fashion",
-    "Sports",
-    "Electricals",
-    "Pet stores",
-    "Medical",
-    "Construction",
-    "Gifts"
-  ];
-
-  final Map<String, List<String>> subcategoriesMap = {
-    "Electronics": [
-      "Mobile phones and accessories",
-      "Laptops, computers, and accessories",
-      "Home appliances",
-      "Kitchen appliances",
-      "Head phones",
-      "Smart watches",
-      "Video games",
-      "Tablets",
-      "Home audio",
-      "Grooming appliances"
-    ],
-    "Fashion": [
-      "Women's clothing",
-      "Men's clothing",
-      "Kids fashion",
-      "Beauty and makeup",
-      "Shoes and footwear",
-      "Bags, wallets and luggage",
-      "Watches",
-      "Jewellery",
-      "Women's lingerie and sleepwear",
-      "Men's inner wear",
-      "Men's boutique",
-      "Women's boutique",
-      "Unisex boutique"
-    ],
-    "Electricals": ["Fancy lights", "Fans", "Lighting", "Wiring", "Switches"],
-    "Pet stores": [
-      "Dogs",
-      "Cats",
-      "Fish & Aquatics",
-      "Birds",
-      "Cattle",
-      "Other pets",
-    ],
-    "Medical": [
-      "Pharmacy",
-      "Surgically & equipment",
-    ],
-    "Construction": [
-      "Adhesives & Sealants",
-      "Asphalts, Cement, & Cementious Products",
-      "Construction Chemicals",
-      "Doors & Windows & their fittings",
-      "Cladding & Facade",
-      "Furniture Hardware",
-      "Ceiling",
-      "Engineered Stones, Marbles, Granites & Tiles",
-      "Flooring materials & Tools",
-      "Insulations & Acoustics",
-      "Coatings",
-      "Paints and related materials",
-      "Pipes, Plumbing, and Fittings",
-      "Sanitary & CP Fittings",
-      "Wood Products, Plywood & Laminates",
-      "Glass",
-      "Sand",
-      "Bricks",
-      "Steel",
-    ],
-    "Gifts": [
-      "Books & Stationery",
-      "Toys",
-      "Home Decor",
-    ],
-    "Sports": [
-      "Cycling",
-      "Strength training",
-      "Cardio",
-      "Badminton",
-      "Yoga",
-      "Swimming",
-      "Cricket",
-      "Football",
-      "Skating",
-      "Camping & Outdoors",
-      "Fitness accessories",
-      "Tennis",
-      "Indoor games"
-    ],
-  };
-
-  final Map<String, List<String>> subSubcategoriesMap = {
-    "Cycling": [
-      "Adult geared cycles",
-      "Adult non geared cycles",
-      "Kids cycles",
-      "Electric cycles",
-      "Cycling kits & accessories"
-    ],
-    "Strength training": [
-      "Dumbbells",
-      "Home gym sets",
-      "Benches",
-      "Wearable weights & accessories",
-      "Multi gym functional trainers",
-      "Plates & barbells",
-      "Kettle bells"
-    ],
-    "Cardio": ["Treadmills", "Fitness bikes", "Ellipticals", "Rowers"],
-    "Badminton": [
-      "Racquets",
-      "Shuttle cocks",
-      "Badminton sets",
-      "Badminton shoes",
-      "Kit bags",
-      "Accessories"
-    ],
-    "Yoga": ["Yoga mats", "Yoga sets", "Yoga blocks", "Accessories"],
-    "Swimming": [
-      "Goggles",
-      "Swimming caps",
-      "Costumes",
-      "Training aids",
-      "Accessories"
-    ],
-    "Cricket": [
-      "Bats",
-      "Balls",
-      "Protective gears",
-      "Cricket kits",
-      "Shoes",
-      "Accessories"
-    ],
-    "Football": [
-      "Balls",
-      "Shoes",
-      "Gloves",
-      "Accessories",
-      "Training equipment",
-      "Fanshop"
-    ],
-    "Skating": [
-      "Scaters",
-      "Roller skates",
-      "Online skates",
-      "Skate boards",
-      "Helmets",
-      "Protective gears"
-    ],
-    "Tennis": ["Racquets", "Balls", "Shoes", "Kit bags", "Accessories"],
-  };
-
-  List<String> get subcategories =>
-      subcategoriesMap[selectedCategory.value] ?? [];
-
-  List<String> get subSubcategories =>
-      subSubcategoriesMap[selectedSubcategory.value] ?? [];
-
   void changeSelectedItem(String newValue) {
     selectedItem.value = newValue;
   }
@@ -206,7 +49,8 @@ class DropdownController extends GetxController {
     selectedSubSubcategory.value = newSubSubcategory;
   }
 
-  Future<void> postRequrements({
+  Future<void> postRequirements({
+    required final String name,
     required final String units,
     required final String category,
     required final String subcategory,
@@ -214,55 +58,82 @@ class DropdownController extends GetxController {
     required final String brand,
     required final String modelNo,
     required final int quote,
-    required final int size,
+    required final String size,
     required final int quantity,
     required final String details,
     required final String image,
   }) async {
     try {
       isLoading.value = true;
-      String subSub = subsubCategory == "" ? "Not available" : subsubCategory;
-      User? user = FirebaseAuth.instance.currentUser;
-      String phoneNumber = user?.phoneNumber ?? "";
-      String formattedPhoneNumber =
-          phoneNumber.isNotEmpty ? phoneNumber.substring(3) : "";
-
-      PersonName person =
-          await restClient.getNameAndGender(int.parse(formattedPhoneNumber));
-      Map<String, dynamic> personData = person.toJson();
+      String subSub = subsubCategory.isEmpty ? "Not available" : subsubCategory;
 
       String? fcmToken = await FirebaseMessaging.instance.getToken();
+      final box = Hive.box('myBox');
+      final String formattedPhoneNumber = box.get('phone');
 
-      final test = {
+      var formData = dio.FormData.fromMap({
         "mobile": formattedPhoneNumber,
-        "your_name": person.yourName,
+        "your_name": name,
         "storeCategory": category,
         "storeSubCategory": subcategory,
         "storeSubSubCategory": subSub,
         "Brands": brand,
         "ModelNo": modelNo,
-        "Quote": quote,
-        "size": size,
-        "Quantity": quantity,
+        "Quote": quote.toString(),
+        "size": size.toString(),
+        "Quantity": quantity.toString(),
         "Units": units,
         "Requirement_in_details": details,
-        "AddImage": image,
-        "Location": "New York",
+        "Location": "N/A",
         "Status": "Neutral",
         "deletebutton": "Neutral",
-        "FCM": fcmToken
-        // "Accept": "Neutral",
-        // "Reject": "Neutral",
-      };
-
-      await restClient.postRequirements(test).then((value) {
-        Fluttertoast.showToast(msg: "Thanks Yor requrements send successfully");
-        newTabController.fetchRequirements();
-        Get.toNamed(RouteName.homeBuyerScreen);
+        "FCM": fcmToken ?? ""
       });
+
+      if (image.isNotEmpty) {
+        File file = File(image);
+        String fileName = path.basename(file.path);
+        String? mimeType = getMimeType(fileName);
+
+        formData.files.add(MapEntry(
+          "image",
+          await dio.MultipartFile.fromFile(
+            file.path,
+            filename: fileName,
+            contentType: mimeType != null ? MediaType.parse(mimeType) : null,
+          ),
+        ));
+      }
+
+      await postdio.postRequirements(formData);
+
+      Fluttertoast.showToast(msg: "Thanks Your requirements sent successfully");
+      newTabController.fetchRequirements();
+      Get.toNamed(RouteName.homeBuyerScreen);
     } catch (e) {
       Logger().d(e);
       Fluttertoast.showToast(msg: e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  String? getMimeType(String fileName) {
+    final ext = path.extension(fileName).toLowerCase();
+    switch (ext) {
+      case '.jpg':
+      case '.jpeg':
+        return 'image/jpeg';
+      case '.png':
+        return 'image/png';
+      case '.gif':
+        return 'image/gif';
+      case '.bmp':
+        return 'image/bmp';
+      case '.webp':
+        return 'image/webp';
+      default:
+        return null;
     }
   }
 }

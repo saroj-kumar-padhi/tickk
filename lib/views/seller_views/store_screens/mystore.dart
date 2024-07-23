@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../controllers/myStoreAccountController.dart';
 import '../../../controllers/myStoreController.dart';
@@ -13,13 +14,11 @@ import '../../../utils/components/textstyle.dart';
 
 class MyStore extends StatelessWidget {
   final StoreId;
+
   MyStore({super.key, required this.StoreId});
 
   final MyStoreCarouselController myStoreCarouselController =
       Get.put(MyStoreCarouselController());
-
-  final Mystoreaccountcontroller mystoreaccountcontroller =
-      Get.put(Mystoreaccountcontroller());
 
   final List<String> imgList = [
     "assest/Rectangle 312.png",
@@ -31,16 +30,14 @@ class MyStore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Mystoreaccountcontroller mystoreaccountcontroller =
+        Get.put(Mystoreaccountcontroller(storeId: StoreId));
     final Reviewscontrollers reviewscontrollers =
         Get.put(Reviewscontrollers(StoreId));
 
     return mystoreaccountcontroller.isLoading.value
         ? Scaffold(
-            backgroundColor: const Color(0xffFC8019),
-            body: Center(
-              child: LoadingAnimationWidget.inkDrop(
-                  color: const Color(0xffE4E4E4), size: 200),
-            ),
+            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
           )
         : Scaffold(
             appBar: AppBar(

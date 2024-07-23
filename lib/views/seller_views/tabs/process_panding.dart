@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../controllers/inprocessTabSeller.dart';
 import '../../../utils/components/sellerScreenTiles/process_tile.dart';
@@ -17,11 +18,8 @@ class ProcessTabSeller extends StatelessWidget {
     return Scaffold(
       body: Obx(() {
         if (sellerInprocesscontroller.isLoading.value) {
-          return Center(
-            child: LoadingAnimationWidget.inkDrop(
-              color: const Color(0xffE4E4E4),
-              size: 200,
-            ),
+          return Scaffold(
+            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
           );
         } else {
           if (sellerInprocesscontroller.requirementsList.isEmpty) {
@@ -50,8 +48,8 @@ class ProcessTabSeller extends StatelessWidget {
                         padding: const EdgeInsets.all(10.0),
                         child: ProcessSellerCard(
                           name: requirement.yourName,
-                          category: requirement.storeCategory.first,
-                          subCategory: requirement.storeSubCategory.first,
+                          category: requirement.storeCategory,
+                          subCategory: requirement.storeSubCategory,
                           brands: requirement.brands,
                           date: formattedDate,
                           modelNo: requirement.modelNo,
@@ -60,6 +58,9 @@ class ProcessTabSeller extends StatelessWidget {
                           units: requirement.units.toString(),
                           des: requirement.requirementInDetails,
                           qute: requirement.quote.toString(),
+                          exact: requirement.exact ? true : false,
+                          image: requirement.addImage,
+                          exactSimilarImage: requirement.exactSimilarImage,
                         ),
                       );
                     },

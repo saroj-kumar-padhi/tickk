@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../utils/components/buttons.dart';
 import '../../../utils/components/dialog_boxs/support_dialogbox.dart';
@@ -18,20 +20,14 @@ class SellerProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
-    String phoneNumber = user?.phoneNumber ?? "";
-    String formattedPhoneNumber =
-        phoneNumber.isNotEmpty ? phoneNumber.substring(3) : "";
+    final box = Hive.box('myBox');
+    final String formattedPhoneNumber = box.get('phone') ?? "";
 
     SellerProfileController sellerProfileController =
         Get.put(SellerProfileController(formattedPhoneNumber));
     return Obx(() => sellerProfileController.isLoading.value
         ? Scaffold(
-            backgroundColor: const Color(0xffFC8019),
-            body: Center(
-              child: LoadingAnimationWidget.inkDrop(
-                  color: const Color(0xffE4E4E4), size: 200),
-            ),
+            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
           )
         : Scaffold(
             appBar: AppBar(

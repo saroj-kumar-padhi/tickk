@@ -58,76 +58,85 @@ class _ChangeLocationState extends State<ChangeLocation> {
               color: const Color(0xff313333)),
         ),
       ),
-      body: Column(
+      body: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Container(
-              height: 40.h,
-              width: 400.h,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Expanded(
+          Column(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Container(
+                  height: 40.h,
+                  width: 400.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
                   child: GooglePlaceAutoCompleteTextField(
-                textEditingController:
-                    widget.dialogBoxController.locacationController.value,
-                googleAPIKey: "AIzaSyBneuGjYhCSkfB3K4gULsLoq2XMwY2bu94",
-                inputDecoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.search_rounded)),
-                debounceTime: 800, // default 600 ms,
-                countries: const ["in"], // optional by default null is set
-                isLatLngRequired:
-                    true, // if you required coordinates from place detail
-                getPlaceDetailWithLatLng: (Prediction prediction) {
-                  // this method will return latlng with place detail
-                  print("placeDetails${prediction.lng}");
-                }, // this callback is called when isLatLngRequired is true
-                itemClick: (Prediction prediction) {
-                  widget.dialogBoxController.locacationController.value.text =
-                      prediction.description ?? "";
-                  widget.dialogBoxController.locacationController.value
-                          .selection =
-                      TextSelection.fromPosition(
-                          TextPosition(offset: prediction.description!.length));
-                },
-                // if we want to make custom list item builder
-                itemBuilder: (context, index, Prediction prediction) {
-                  return Container(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.location_on),
-                        const SizedBox(
-                          width: 7,
+                    textEditingController:
+                        widget.dialogBoxController.locacationController.value,
+                    googleAPIKey: "AIzaSyBneuGjYhCSkfB3K4gULsLoq2XMwY2bu94",
+                    inputDecoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.search_rounded)),
+                    debounceTime: 800, // default 600 ms,
+                    countries: const ["in"], // optional by default null is set
+                    isLatLngRequired:
+                        true, // if you required coordinates from place detail
+                    getPlaceDetailWithLatLng: (Prediction prediction) {
+                      // this method will return latlng with place detail
+                      print("placeDetails${prediction.lng}");
+                    }, // this callback is called when isLatLngRequired is true
+                    itemClick: (Prediction prediction) {
+                      widget.dialogBoxController.locacationController.value
+                          .text = prediction.description ?? "";
+                      widget.dialogBoxController.locacationController.value
+                              .selection =
+                          TextSelection.fromPosition(TextPosition(
+                              offset: prediction.description!.length));
+
+                      // Add a slight delay before navigating back
+                      Future.delayed(const Duration(milliseconds: 100), () {
+                        Get.back(); // This will navigate back to the previous screen
+                      });
+                    },
+                    // if we want to make custom list item builder
+                    itemBuilder: (context, index, Prediction prediction) {
+                      return Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.location_on),
+                            const SizedBox(
+                              width: 7,
+                            ),
+                            Expanded(child: Text(prediction.description ?? ""))
+                          ],
                         ),
-                        Expanded(child: Text(prediction.description ?? ""))
-                      ],
-                    ),
-                  );
-                },
-                // if you want to add seperator between list items
-                seperatedBuilder: const Divider(),
-                // want to show close icon
-                isCrossBtnShown: true,
-                // optional container padding
-                containerHorizontalPadding: 10,
-              )),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Align(
-              alignment: Alignment.bottomLeft,
-              child: Text(
-                "Use my current location",
-                style: TextStyles.openSansUnderLine(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    color: const Color(0xffFC8019)),
+                      );
+                    },
+                    // if you want to add seperator between list items
+                    seperatedBuilder: const Divider(),
+                    // want to show close icon
+                    isCrossBtnShown: true,
+                    // optional container padding
+                    containerHorizontalPadding: 10,
+                  ),
+                ),
               ),
-            ),
-          )
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    "Use my current location",
+                    style: TextStyles.openSansUnderLine(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: const Color(0xffFC8019)),
+                  ),
+                ),
+              )
+            ],
+          ),
         ],
       ),
     );

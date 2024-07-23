@@ -46,16 +46,16 @@ class RequirementData {
 
   factory RequirementData.fromJson(Map<String, dynamic> json) {
     return RequirementData(
-      requirementID: json['RequirementID'],
-      storeCategory: json['storeCategory'],
-      addImage: json['AddImage'],
+      requirementID: json['RequirementID'] ?? "",
+      storeCategory: json['storeCategory'] ?? "",
+      addImage: json['AddImage'] ?? "",
       date: DateTime.parse(json['Date']),
-      modelNo: json['ModelNo'],
-      quantity: json['Quantity'],
-      brands: json['Brands'],
-      size: json['size'],
-      units: json['Units'],
-      requirementInDetails: json['Requirement_in_details'],
+      modelNo: json['ModelNo'] ?? "",
+      quantity: json['Quantity'] ?? "",
+      brands: json['Brands'] ?? "",
+      size: json['size'] ?? "",
+      units: json['Units'] ?? "",
+      requirementInDetails: json['Requirement_in_details'] ?? "",
       stores:
           (json['stores'] as List).map((item) => Store.fromJson(item)).toList(),
     );
@@ -82,12 +82,12 @@ class Store {
 
   factory Store.fromJson(Map<String, dynamic> json) {
     return Store(
-        storeName: json['StoreName'],
-        storeID: json['StoreID'],
-        mobile: json['mobile'],
-        addImage: json['AddImage'],
+        storeName: json['StoreName'] ?? "",
+        storeID: json['StoreID'] ?? "",
+        mobile: json['mobile'] ?? "",
+        addImage: json['stared'] ?? "",
         location: json['Location'] ?? "",
-        quot: json['Quote'],
+        quot: json['Quote'] ?? "",
         productType: json['Similar']);
   }
 }

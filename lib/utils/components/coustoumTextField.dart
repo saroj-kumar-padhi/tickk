@@ -7,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final double width;
   final ValueChanged<String>? onChanged;
   final bool isenable;
+  final TextInputType keyboardType;
 
   const CustomTextField({
     super.key,
@@ -16,6 +17,7 @@ class CustomTextField extends StatelessWidget {
     required this.width,
     this.onChanged,
     required this.isenable,
+    this.keyboardType = TextInputType.text,
   });
 
   @override
@@ -31,6 +33,8 @@ class CustomTextField extends StatelessWidget {
       child: Align(
         alignment: Alignment.centerLeft,
         child: TextField(
+          keyboardType: keyboardType,
+          enabled: isenable,
           controller: controller,
           onChanged: onChanged,
           decoration: InputDecoration(

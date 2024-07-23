@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:logger/logger.dart';
+import 'package:lottie/lottie.dart';
+import '../../../controllers/authController.dart';
 import '../../../controllers/basicController.dart';
 import '../../../controllers/dropDownController.dart';
 import '../../../utils/components/buttons.dart';
@@ -21,15 +23,12 @@ class BasicDetails extends StatelessWidget {
 
     BasicDetailsController basicDetailsController =
         Get.put(BasicDetailsController());
-
+    AuthController authController = Get.put(AuthController());
     return Scaffold(body: Obx(() {
       return basicDetailsController.isLoading.value
           ? Scaffold(
-              backgroundColor: const Color(0xffFC8019),
-              body: Center(
-                child: LoadingAnimationWidget.inkDrop(
-                    color: const Color(0xffE4E4E4), size: 200),
-              ),
+              body:
+                  Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
             )
           : SingleChildScrollView(
               child: Column(
@@ -142,9 +141,13 @@ class BasicDetails extends StatelessWidget {
                                 .isButtonEnabled.value
                             ? () async {
                                 await basicDetailsController.postToApi();
-                                basicDetailsController.isSuccessRegister.isTrue
-                                    ? Get.toNamed(RouteName.homeBuyerScreen)
-                                    : const SizedBox();
+                                if (basicDetailsController
+                                    .isSuccessRegister.isTrue) {
+                                  Get.toNamed(RouteName.homeBuyerScreen);
+                                  final box = Hive.box('mybox');
+                                  box.put('phone',
+                                      authController.phoneAuthController.text);
+                                }
                               }
                             : () {},
                         buttonText: 'Sign Up',

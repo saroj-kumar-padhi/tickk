@@ -4,7 +4,9 @@ import 'package:dekhlo/utils/components/dialog_boxs/succsess_dialog.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:logger/logger.dart';
 import 'package:pinput/pinput.dart';
 import '../../../controllers/basicControllerEdit.dart';
@@ -32,23 +34,23 @@ class OtpController extends GetxController {
 
 class OtpDialog extends StatelessWidget {
   final String nametoNavigate;
-  final String? phone;
+  final String phone;
   final Map<String, dynamic>? body;
   final String reason;
 
   OtpDialog({
     super.key,
     required this.nametoNavigate,
-    this.phone,
+    required this.phone,
     this.body,
     required this.reason,
   });
 
   final OtpController otpController = Get.put(OtpController());
+  final TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController textEditingController = TextEditingController();
     BasiccontrollerEdit basiccontrollerEdit = BasiccontrollerEdit();
     final defaultPinTheme = PinTheme(
       width: 60.w,
@@ -91,7 +93,7 @@ class OtpDialog extends StatelessWidget {
                     padding: EdgeInsets.only(
                         bottom: GlobalSizes.getDeviceHeight(context) * 0.01),
                     child: Text(
-                      "We send verification code to $phone",
+                      "We sent a verification code to $phone",
                       style: TextStyles.openSans(
                           fontSize: 18, fontWeight: FontWeight.w600),
                     ),
@@ -104,6 +106,13 @@ class OtpDialog extends StatelessWidget {
                       controller: textEditingController,
                       length: 6,
                       defaultPinTheme: defaultPinTheme,
+                      autofocus: true, // Ensure autofocus is enabled
+                      onChanged: (value) {
+                        // Optionally handle changes to the input
+                      },
+                      onCompleted: (pin) {
+                        // Optionally handle when the pin is completely filled
+                      },
                     ),
                   ),
                   SizedBox(height: 10.h),
@@ -147,10 +156,18 @@ class OtpDialog extends StatelessWidget {
                     context: context,
                     onPressedCallback: () async {
                       try {
-                        basiccontrollerEdit.updateProfileData(
-                            phone ?? "", body ?? {});
-                        await restClient.deleteAccount(
-                            "1234554321", {"deleteAccountReason": reason});
+                        final box = Hive.box('myBox');
+                        final String formattedPhoneNumber =
+                            box.get('phone') ?? "";
+                        try {
+                          await restClient.deleteAccountVerifyOTP(
+                              formattedPhoneNumber, textEditingController.text);
+                        } catch (e) {
+                          Fluttertoast.showToast(msg: e.toString());
+                        }
+
+                        await restClient.deleteAccount(formattedPhoneNumber,
+                            {"deleteAccountReason": reason});
                       } catch (e) {
                         Logger().d(e);
                       }
@@ -162,7 +179,7 @@ class OtpDialog extends StatelessWidget {
                                 builder: (BuildContext context) {
                                   return const SuccessDialog(
                                     tile:
-                                        'Profile Details has been updated Successfully!',
+                                        'Profile Details have been updated Successfully!',
                                   );
                                 },
                               )

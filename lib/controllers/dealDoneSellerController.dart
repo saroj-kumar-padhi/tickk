@@ -7,6 +7,9 @@ class Dealdonesellercontroller extends GetxController {
   RxList<DdItem> dealDoneItems = <DdItem>[].obs;
   RxList<DdItem> processedItems = <DdItem>[].obs;
   RxBool isLoading = true.obs;
+  final String StoreId;
+
+  Dealdonesellercontroller({required this.StoreId});
 
   @override
   void onInit() {
@@ -18,7 +21,7 @@ class Dealdonesellercontroller extends GetxController {
     try {
       isLoading(true);
       final response = await restClient.dealDoneSellerSide(
-          'TS15890HP'); // Assuming this method exists in your restClient
+          StoreId); // Assuming this method exists in your restClient
 
       dealDoneItems.addAll(response.ddItems);
 

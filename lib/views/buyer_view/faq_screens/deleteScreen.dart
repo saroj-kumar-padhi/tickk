@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+import 'package:logger/logger.dart';
 
 import '../../../controllers/deleteReasonController.dart';
+import '../../../services/injection.dart';
 import '../../../utils/components/dialog_boxs/delete_dialog.dart';
 import '../../../utils/components/textstyle.dart';
 import '../../../utils/size/global_size/global_size.dart';
@@ -208,23 +211,35 @@ class DeleteScreen extends StatelessWidget {
                           builder: (BuildContext context) {
                             return DeleteItemDialog(
                               title:
-                                  'Are you sure you want to Delete your account permanently?',
+                                  'Are you sure you want to delete your account permanently?',
                               onDelete: () async {
-                                Future.delayed(Duration.zero, () {
+                                try {
+                                  final box = Hive.box('myBox');
+                                  final String formattedPhoneNumber =
+                                      box.get('phone');
+                                  await restClient.deleteAccoountSemdOtp(
+                                      {"mobile": formattedPhoneNumber});
+                                } catch (e) {
+                                  Logger().d("could not send otp: $e");
+                                } finally {
                                   Get.back();
-                                });
-                                Future.delayed(Duration.zero, () {
-                                  // showSuccessDialog(context);
-                                  showDialog(
+                                  Future.delayed(Duration.zero, () {
+                                    final box = Hive.box('myBox');
+                                    final String formattedPhoneNumber =
+                                        box.get('phone');
+                                    showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return OtpDialog(
                                           nametoNavigate: '',
                                           reason: deleteReasonController
                                               .getSelectedReason(),
+                                          phone: formattedPhoneNumber,
                                         );
-                                      });
-                                });
+                                      },
+                                    );
+                                  });
+                                }
                               },
                             );
                           },

@@ -11,10 +11,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:dekhlo/utils/routes/routes_controller.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:logger/logger.dart';
+import 'package:lottie/lottie.dart';
 import 'views/seller_views/seller_home_screens/seller_home.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
@@ -22,21 +24,22 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  await Hive.openBox('myBox');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   String? fcmToken = await FirebaseMessaging.instance.getToken();
   PushNotificationServices notificationServices = PushNotificationServices();
   notificationServices.requestNotificationPermission();
   notificationServices.firebaseInit();
-  User? user = FirebaseAuth.instance.currentUser;
-  String phoneNumber = user?.phoneNumber ?? "";
-  String formattedPhoneNumber =
-      phoneNumber.isNotEmpty ? phoneNumber.substring(3) : "";
+  final box = Hive.box('myBox');
+  final String formattedPhoneNumber = box.get('phone') ?? "";
 
-  try {
-    Logger().d(fcmToken);
-    await restClient.fcmCreation(formattedPhoneNumber, {"FCM": fcmToken});
-  } catch (e) {
-    Logger().d(e);
+  if (formattedPhoneNumber != "") {
+    try {
+      Logger().d(fcmToken);
+      await restClient.fcmCreation(formattedPhoneNumber, {"FCM": fcmToken});
+    } catch (e) {
+      Logger().d(e);
+    }
   }
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingHandler);
   runApp(const MyApp());
@@ -98,10 +101,9 @@ class _AuthWrapperState extends State<AuthWrapper> {
   }
 
   Future<void> checkUserStatus() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    String phoneNumber = user?.phoneNumber ?? "";
-    String formattedPhoneNumber =
-        phoneNumber.isNotEmpty ? phoneNumber.substring(3) : "";
+    final box = Hive.box('myBox');
+    final String formattedPhoneNumber = box.get('phone') ?? "";
+    Logger().d(formattedPhoneNumber);
     final List<ConnectivityResult> connectivityResult =
         await (Connectivity().checkConnectivity());
 
@@ -114,33 +116,29 @@ class _AuthWrapperState extends State<AuthWrapper> {
       return;
     }
 
-    if (user != null) {
-      try {
-        final response = await restClient
-            .checkBuyerOrSeller(int.parse(formattedPhoneNumber));
+    try {
+      final response =
+          await restClient.checkBuyerOrSeller(int.parse(formattedPhoneNumber));
 
-        if (response.message == 'Mobile registered for buyer') {
-          destinationWidget = const HomeBuyer();
-        } else if (response.message ==
-            'Mobile registered as both buyer and seller') {
-          try {
-            final storeData =
-                await restClient.checkStoreId(int.parse(formattedPhoneNumber));
-            final storeId = storeData.StoreID;
-            Logger().d(storeId);
-            destinationWidget = HomeSeller(storeId: storeId.toString());
-          } catch (e) {
-            print('Error fetching store ID: $e');
-            destinationWidget = const Pagenotfound();
-          }
-        } else {
-          destinationWidget = const Pagenotfound();
+      if (response.message == 'Mobile registered for buyer') {
+        destinationWidget = const HomeBuyer();
+      } else if (response.message ==
+          'Mobile registered as both buyer and seller') {
+        try {
+          final storeData =
+              await restClient.checkStoreId(int.parse(formattedPhoneNumber));
+          final storeId = storeData.StoreID;
+          Logger().d(storeId);
+          destinationWidget = HomeSeller(storeId: storeId.toString());
+        } catch (e) {
+          print('Error fetching store ID: $e');
+          destinationWidget = const Login();
         }
-      } catch (e) {
-        print('Error checking buyer or seller: $e');
-        destinationWidget = const Pagenotfound();
+      } else {
+        destinationWidget = const Login();
       }
-    } else {
+    } catch (e) {
+      print('Error checking buyer or seller: $e');
       destinationWidget = const Login();
     }
 
@@ -153,11 +151,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
   Widget build(BuildContext context) {
     if (isLoading) {
       return Scaffold(
-        backgroundColor: const Color(0xffFC8019),
-        body: Center(
-          child: LoadingAnimationWidget.inkDrop(
-              color: const Color(0xffE4E4E4), size: 200),
-        ),
+        body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
       );
     } else {
       return destinationWidget ?? const Pagenotfound();

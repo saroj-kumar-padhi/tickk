@@ -49,39 +49,40 @@ class DdItem {
   int v;
   String description;
   String howDidYouGetThis;
+  List<dynamic> exactImgages;
 
-  DdItem({
-    required this.exactSimilarImage,
-    required this.id,
-    required this.requirementId,
-    required this.storeId,
-    required this.date,
-    required this.yourName,
-    required this.storeCategory,
-    required this.storeSubCategory,
-    required this.storeSubSubCategory,
-    required this.brands,
-    required this.modelNo,
-    required this.size,
-    required this.quantity,
-    required this.units,
-    required this.requirementInDetails,
-    required this.addImage,
-    required this.location,
-    required this.status,
-    required this.quote,
-    required this.exact,
-    required this.similar,
-    required this.yes,
-    required this.no,
-    required this.accept,
-    required this.reject,
-    required this.dealDone,
-    required this.rating,
-    required this.v,
-    required this.description,
-    required this.howDidYouGetThis,
-  });
+  DdItem(
+      {required this.exactSimilarImage,
+      required this.id,
+      required this.requirementId,
+      required this.storeId,
+      required this.date,
+      required this.yourName,
+      required this.storeCategory,
+      required this.storeSubCategory,
+      required this.storeSubSubCategory,
+      required this.brands,
+      required this.modelNo,
+      required this.size,
+      required this.quantity,
+      required this.units,
+      required this.requirementInDetails,
+      required this.addImage,
+      required this.location,
+      required this.status,
+      required this.quote,
+      required this.exact,
+      required this.similar,
+      required this.yes,
+      required this.no,
+      required this.accept,
+      required this.reject,
+      required this.dealDone,
+      required this.rating,
+      required this.v,
+      required this.description,
+      required this.howDidYouGetThis,
+      required this.exactImgages});
 
   factory DdItem.fromJson(Map<String, dynamic> json) {
     return DdItem(
@@ -115,6 +116,7 @@ class DdItem {
       v: json['__v'] ?? 0,
       description: json['description'] ?? '',
       howDidYouGetThis: json['how_did_you_get_this'] ?? '',
+      exactImgages: json['ExactSimilarImage'] ?? [],
     );
   }
 }

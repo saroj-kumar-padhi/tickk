@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:pinput/pinput.dart';
 
@@ -50,11 +51,8 @@ class LogINOTP extends StatelessWidget {
         body: Obx(() {
           return authController.isLoading.value
               ? Scaffold(
-                  backgroundColor: const Color(0xffFC8019),
                   body: Center(
-                    child: LoadingAnimationWidget.inkDrop(
-                        color: const Color(0xffE4E4E4), size: 200),
-                  ),
+                      child: LottieBuilder.asset("assest/XyglI35BZO.json")),
                 )
               : Column(
                   children: [
@@ -77,7 +75,7 @@ class LogINOTP extends StatelessWidget {
                           fontSize: 12, fontWeight: FontWeight.w600),
                     ),
                     Text(
-                      "to +91 6280644889",
+                      "to +91 ${authController1.phoneAuthController.text}",
                       style: GoogleFonts.openSans(
                           fontSize: 12, fontWeight: FontWeight.w600),
                     ),
@@ -117,23 +115,26 @@ class LogINOTP extends StatelessWidget {
                         buttonText: 'Login',
                         textColor: Colors.white,
                         context: context,
-                        onPressedCallback: () {
+                        onPressedCallback: () async {
                           if (authController.otpController.text.length == 6) {
-                            authController1.signInWithOtp();
+                            // authController1.signInWithOtp();
+                            await authController1.validateOTP(
+                                otp: authController.otpController.text,
+                                islogin: true);
                           } else {}
                         },
                       );
                     }),
                     const Spacer(),
-                    Padding(
-                        padding: const EdgeInsets.only(bottom: 35),
-                        child: CoustumRichText(
-                          text1: 'Don’t have an account? ',
-                          text2: AppStrings.signUpButtonText,
-                          callBack: () {
-                            Get.toNamed(RouteName.signPhoneScreen);
-                          },
-                        ))
+                    // Padding(
+                    //     padding: const EdgeInsets.only(bottom: 35),
+                    //     child: CoustumRichText(
+                    //       text1: 'Don’t have an account? ',
+                    //       text2: AppStrings.signUpButtonText,
+                    //       callBack: () {
+                    //         Get.toNamed(RouteName.signPhoneScreen);
+                    //       },
+                    //     ))
                   ],
                 );
         }));

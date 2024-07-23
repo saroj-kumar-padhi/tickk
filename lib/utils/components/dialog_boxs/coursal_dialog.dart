@@ -5,7 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class CarouselDialog extends StatefulWidget {
-  const CarouselDialog({super.key});
+  List<dynamic> images;
+
+  CarouselDialog({super.key, required this.images});
 
   @override
   _CarouselDialogState createState() => _CarouselDialogState();
@@ -14,17 +16,11 @@ class CarouselDialog extends StatefulWidget {
 class _CarouselDialogState extends State<CarouselDialog> {
   int _currentIndex = 0;
 
-  final List<String> images = [
-    'assest/ImageViewCurasal.png',
-    'assest/ImageViewCurasal.png',
-    'assest/ImageViewCurasal.png',
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Dialog(
       child: SizedBox(
-        width: double.infinity, // Set width to match the parent constraints
+        width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
@@ -46,7 +42,7 @@ class _CarouselDialogState extends State<CarouselDialog> {
                       });
                     },
                   ),
-                  items: images.map((String url) {
+                  items: widget.images.map((dynamic imageUrl) {
                     return Builder(
                       builder: (BuildContext context) {
                         return SizedBox(
@@ -55,9 +51,13 @@ class _CarouselDialogState extends State<CarouselDialog> {
                             padding: EdgeInsets.only(
                                 top: GlobalSizes.getDeviceHeight(context) *
                                     0.007),
-                            child: Image.asset(
-                              url,
+                            child: Image.network(
+                              imageUrl,
                               fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Center(
+                                    child: Text('Image not found'));
+                              },
                             ),
                           ),
                         );
@@ -73,7 +73,6 @@ class _CarouselDialogState extends State<CarouselDialog> {
                       Get.back();
                     },
                     child: Container(
-                      // Adjust height as needed
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
@@ -89,8 +88,7 @@ class _CarouselDialogState extends State<CarouselDialog> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children:
-                  images.asMap().entries.map((MapEntry<int, String> entry) {
+              children: widget.images.asMap().entries.map((entry) {
                 int index = entry.key;
                 return Container(
                   width: GlobalSizes.getDeviceWidth(context) * 0.01,

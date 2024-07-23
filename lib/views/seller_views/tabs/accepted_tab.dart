@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../controllers/acceptedTabSellerCotroller.dart';
 import '../../../utils/components/sellerScreenTiles/accepted_tile.dart';
@@ -9,20 +10,19 @@ import '../../../utils/components/textstyle.dart';
 
 class AcceptedTabSeller extends StatelessWidget {
   final String storeName;
-  const AcceptedTabSeller({super.key, required this.storeName});
+  final String storeId;
+  const AcceptedTabSeller(
+      {super.key, required this.storeName, required this.storeId});
 
   @override
   Widget build(BuildContext context) {
     Acceptedtabsellercotroller acceptedtabsellercotroller =
-        Get.put(Acceptedtabsellercotroller());
+        Get.put(Acceptedtabsellercotroller(storeId));
     return Obx(() {
       return acceptedtabsellercotroller.isLoading.value
           ? Scaffold(
-              backgroundColor: const Color(0xffFC8019),
-              body: Center(
-                child: LoadingAnimationWidget.inkDrop(
-                    color: const Color(0xffE4E4E4), size: 200),
-              ),
+              body:
+                  Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
             )
           : Column(
               children: [
@@ -71,6 +71,9 @@ class AcceptedTabSeller extends StatelessWidget {
                                 units: data.units,
                                 des: data.requirementInDetails,
                                 quote: data.quote,
+                                image: data.addImage,
+                                exactImage: data.exactSimilarImage,
+                                exact: data.exact,
                               ),
                             );
                           }),

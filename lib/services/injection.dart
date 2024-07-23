@@ -11,7 +11,7 @@ final dio = Dio(
 
 final post = Dio(
   BaseOptions(
-    headers: {'Content-Type': 'mimeType'},
+    headers: {'Content-Type': 'multipart/form-data'},
   ),
 );
 final restClient = RestClient(dio);

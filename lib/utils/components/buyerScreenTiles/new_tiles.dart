@@ -14,7 +14,7 @@ class NewSquareCard extends StatelessWidget {
   final String mobile;
   final String requirementId;
   final String storeCategory;
-  final String storeSubCategory;
+  String storeSubCategory;
   final String storeSubSubCategory;
   final String brands;
   final String modelNo;
@@ -23,8 +23,9 @@ class NewSquareCard extends StatelessWidget {
   final String units;
   final String requirementInDetails;
   final String date;
+  final String image;
 
-  const NewSquareCard(
+  NewSquareCard(
       {super.key,
       required this.mobile,
       required this.requirementId,
@@ -37,12 +38,16 @@ class NewSquareCard extends StatelessWidget {
       required this.quantity,
       required this.units,
       required this.requirementInDetails,
-      required this.date});
+      required this.date,
+      required this.image});
 
   @override
   Widget build(BuildContext context) {
     NewTabController newTabController = Get.put(NewTabController());
     String text = requirementInDetails;
+    if (storeSubCategory == "") {
+      storeSubCategory = storeCategory;
+    }
     DateTime dateTime = DateTime.parse(date);
     String dateOnly = dateTime.toIso8601String().split('T').first;
     return Container(
@@ -123,12 +128,15 @@ class NewSquareCard extends StatelessWidget {
                   child: SizedBox(
                       width: GlobalSizes.getDeviceWidth(context) * 0.15,
                       height: GlobalSizes.getDeviceHeight(context) * 0.09,
-                      child: Image.asset("assest/sellitems.png")),
+                      child: Image.network(
+                        image,
+                        fit: BoxFit.cover,
+                      )),
                 ),
                 Column(
                   children: [
                     Text(
-                      modelNo,
+                      modelNo == "" ? "--" : modelNo,
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w600, fontSize: 12),
                     ),
@@ -164,7 +172,7 @@ class NewSquareCard extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      size,
+                      size == "-1" ? "--" : size,
                       style: TextStyles.openSans(
                           fontWeight: FontWeight.w600, fontSize: 12),
                     ),

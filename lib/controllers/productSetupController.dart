@@ -1,10 +1,17 @@
+import 'dart:convert';
+
 import 'package:dekhlo/controllers/sortDialogBoxController.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:logger/web.dart';
-
+import 'package:multi_dropdown/models/value_item.dart';
+import 'package:path/path.dart' as path;
+import 'package:dio/dio.dart' as dio;
+import 'package:http_parser/http_parser.dart' show MediaType;
 import '../utils/components/bottomSheets/sort.dart';
+import '../views/seller_views/seller_home_screens/seller_home.dart';
 
 class ProductSetUpController extends GetxController {
   RxBool isLoading = false.obs;
@@ -78,22 +85,8 @@ class ProductSetUpController extends GetxController {
   void updateButtonState() {
     bool fieldsFilled = buildingController.text.isNotEmpty &&
         pinCodeController.value.text.isNotEmpty &&
-        colonyController.value.text.isNotEmpty &&
-        landMarkController.value.text.isNotEmpty &&
-        sundayOpenTimeEditingController.text.isNotEmpty &&
-        sundayCloseEditingController.text.isNotEmpty &&
-        mondayOpenTimeEditingController.text.isNotEmpty &&
-        mondayCloseEditingController.text.isNotEmpty &&
-        tuesdayOpenTimeEditingController.text.isNotEmpty &&
-        tuesdayCloseEditingController.text.isNotEmpty &&
-        wednesdayOpenTimeEditingController.text.isNotEmpty &&
-        wednesdayCloseEditingController.text.isNotEmpty &&
-        thursdayOpenTimeEditingController.text.isNotEmpty &&
-        thursdayCloseEditingController.text.isNotEmpty &&
-        fridayOpenTimeEditingController.text.isNotEmpty &&
-        fridayCloseEditingController.text.isNotEmpty &&
-        saturdayOpenTimeEditingController.text.isNotEmpty &&
-        saturdayCloseEditingController.text.isNotEmpty;
+        colonyController.value.text.isNotEmpty;
+    // landMarkController.value.text.isNotEmpty;
 
     isButtonEnabled.value = fieldsFilled;
   }
@@ -113,72 +106,137 @@ class ProductSetUpController extends GetxController {
   }
 
   Future<void> setupStrore(
-      List<String> imagePath,
+      List<String> imagePaths,
       List<dynamic> category,
       List<dynamic> subcategories,
       List<dynamic> subSubCategory,
       List<String> brands) async {
-    final DialogBoxController dialogBoxController =
-        Get.put(DialogBoxController());
-    String address = dialogBoxController.locacationController.value.text;
-    Map<String, double> convertedAddressToLatLong =
-        await convertAddressToLatLong(dialogBoxController);
-    final data = {
-      "mobile": contactEditingController.text,
-      "StoreName": nameEditingController.text,
-      "storeCategory": category,
-      "storeSubCategory": subcategories,
-      "storeSubSubCategory": subSubCategory,
-      "Brands": brands,
-      "About_the_store": discriptionController.text,
-      "timings": {
-        "Sunday": {
-          "open": sundayOpenTimeEditingController.text,
-          "close": sundayCloseEditingController.text
-        },
-        "Monday": {
-          "open": mondayOpenTimeEditingController.text,
-          "close": mondayCloseEditingController.text
-        },
-        "Tuesday": {
-          "open": tuesdayOpenTimeEditingController.text,
-          "close": tuesdayCloseEditingController.text
-        },
-        "Wednesday": {
-          "open": wednesdayOpenTimeEditingController.text,
-          "close": wednesdayCloseEditingController.text
-        },
-        "Thursday": {
-          "open": thursdayOpenTimeEditingController.text,
-          "close": thursdayCloseEditingController.text
-        },
-        "Friday": {
-          "open": fridayOpenTimeEditingController.text,
-          "close": fridayCloseEditingController.text
-        },
-        "Saturday": {
-          "open": saturdayOpenTimeEditingController.text,
-          "close": saturdayCloseEditingController.text
-        }
-      },
-      "youtubelink": youTubeEditingController.text,
-      "instagarmlink": instagram.text,
-      "languages": "english",
-      "BuildingNo": int.parse(buildingController.text),
-      "Pincode": int.parse(pinCodeController.value.text),
-      "ColonyName": colonyController.value.text,
-      // "Location": "Sample City, Sample State, Sample Country",
-      "sellerLocation": convertedAddressToLatLong,
-      "AddImage": imagePath,
-      "Landmark": landMarkController.value.text,
-      "stared": staredImage.isEmpty ? 0 : imagePath.indexOf(staredImage.first),
-      // "staredImage": imagePath[0]
-    };
-
     try {
-      await restClient.setupStrore(data);
+      isLoading.value = true;
+
+      final DialogBoxController dialogBoxController =
+          Get.find<DialogBoxController>();
+      String address = dialogBoxController.locacationController.value.text;
+      Map<String, double> convertedAddressToLatLong =
+          await convertAddressToLatLong(dialogBoxController);
+
+      var formData = dio.FormData();
+      final box = Hive.box('myBox');
+      final String formattedPhoneNumber = box.get('phone') ?? "";
+      // Add non-file fields
+      formData.fields.addAll([
+        MapEntry("mobile", formattedPhoneNumber),
+        MapEntry("StoreName", nameEditingController.text),
+        MapEntry("storeCategory", category.join(',')),
+        MapEntry(
+            "storeSubCategory",
+            subcategories
+                .map((item) => item is ValueItem ? item.label : item)
+                .join(',')),
+        MapEntry(
+            "storeSubSubCategory",
+            subSubCategory
+                .map((item) => item is ValueItem ? item.label : item)
+                .join(',')),
+        MapEntry("Brands", brands.join(',')),
+        MapEntry("About_the_store", discriptionController.text),
+        MapEntry("timings", jsonEncode(getTimings())),
+        MapEntry("youtubelink", youTubeEditingController.text),
+        MapEntry("instagarmlink", instagram.text),
+        const MapEntry("languages", "english"),
+        MapEntry("StreetNo_BuildingName", buildingController.text),
+        const MapEntry("Country", "India"),
+        MapEntry("Postcode_ZIP", pinCodeController.value.text),
+        MapEntry("StreetName_Area", colonyController.value.text),
+        // MapEntry("sellerLocation", jsonEncode(convertedAddressToLatLong)),
+        const MapEntry("District_City", "Hydrabad"),
+        MapEntry(
+            "stared",
+            staredImage.isEmpty
+                ? "0"
+                : imagePaths.indexOf(staredImage.first).toString()),
+      ]);
+
+      // Add image files
+      for (int i = 0; i < imagePaths.length; i++) {
+        String imagePath = imagePaths[i];
+        String fileName = path.basename(imagePath);
+        String? mimeType = getMimeType(fileName);
+
+        formData.files.add(MapEntry(
+          "AddImage",
+          await dio.MultipartFile.fromFile(
+            imagePath,
+            filename: fileName,
+            contentType: mimeType != null ? MediaType.parse(mimeType) : null,
+          ),
+        ));
+      }
+
+      // Send the request
+      await postdio.setupStrore(formData);
+      Get.snackbar("Restart Required",
+          "restart required to make some functinalities work");
+      Get.to(const HomeSeller(storeId: ''));
+      // If successful, you might want to show a success message or navigate to a new screen
+      Get.snackbar('Success', 'Store setup completed successfully');
     } catch (e) {
-      Logger().d(e);
+      Logger().e('Error in setupStrore: $e');
+      Get.snackbar('Error', 'Failed to setup store. Please try again.');
+    } finally {
+      isLoading.value = false;
     }
+  }
+
+  String? getMimeType(String fileName) {
+    final ext = path.extension(fileName).toLowerCase();
+    switch (ext) {
+      case '.jpg':
+      case '.jpeg':
+        return 'image/jpeg';
+      case '.png':
+        return 'image/png';
+      case '.gif':
+        return 'image/gif';
+      case '.bmp':
+        return 'image/bmp';
+      case '.webp':
+        return 'image/webp';
+      default:
+        return null;
+    }
+  }
+
+  Map<String, Map<String, String>> getTimings() {
+    return {
+      "Sunday": {
+        "open": sundayOpenTimeEditingController.text,
+        "close": sundayCloseEditingController.text
+      },
+      "Monday": {
+        "open": mondayOpenTimeEditingController.text,
+        "close": mondayCloseEditingController.text
+      },
+      "Tuesday": {
+        "open": tuesdayOpenTimeEditingController.text,
+        "close": tuesdayCloseEditingController.text
+      },
+      "Wednesday": {
+        "open": wednesdayOpenTimeEditingController.text,
+        "close": wednesdayCloseEditingController.text
+      },
+      "Thursday": {
+        "open": thursdayOpenTimeEditingController.text,
+        "close": thursdayCloseEditingController.text
+      },
+      "Friday": {
+        "open": fridayOpenTimeEditingController.text,
+        "close": fridayCloseEditingController.text
+      },
+      "Saturday": {
+        "open": saturdayOpenTimeEditingController.text,
+        "close": saturdayCloseEditingController.text
+      },
+    };
   }
 }

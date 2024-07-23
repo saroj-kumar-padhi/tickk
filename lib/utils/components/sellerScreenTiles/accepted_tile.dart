@@ -23,6 +23,9 @@ class AcceptedSellerCard extends StatelessWidget {
   final String units;
   final String des;
   final String quote;
+  final String image;
+  final List<dynamic> exactImage;
+  final bool exact;
 
   const AcceptedSellerCard(
       {super.key,
@@ -36,7 +39,10 @@ class AcceptedSellerCard extends StatelessWidget {
       required this.size,
       required this.units,
       required this.des,
-      required this.quote});
+      required this.quote,
+      required this.image,
+      required this.exactImage,
+      required this.exact});
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +139,7 @@ class AcceptedSellerCard extends StatelessWidget {
                               width: 20.w,
                             ),
                             Text(
-                              "05 Feb ‘24",
+                              formattedDate,
                               style: TextStyles.openSans(
                                   fontSize: 12, fontWeight: FontWeight.w600),
                             )
@@ -156,7 +162,7 @@ class AcceptedSellerCard extends StatelessWidget {
                     child: SizedBox(
                         width: GlobalSizes.getDeviceWidth(context) * 0.15,
                         height: GlobalSizes.getDeviceHeight(context) * 0.09,
-                        child: Image.asset("assest/sellitems.png")),
+                        child: Image.network(image)),
                   ),
                   Column(
                     children: [
@@ -277,16 +283,15 @@ class AcceptedSellerCard extends StatelessWidget {
                   Flexible(
                     child: Obx(() => RadioListTile(
                           dense: true,
-                          fillColor: WidgetStatePropertyAll(
-                              exactController.isExact.isTrue
-                                  ? const Color(0xffFC8019)
-                                  : const Color(0xff959595)),
+                          fillColor: WidgetStatePropertyAll(exact
+                              ? const Color(0xffFC8019)
+                              : const Color(0xff959595)),
                           title: Text(
                             'Exact',
                             style: TextStyles.openSans(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
-                                color: exactController.isExact.isTrue
+                                color: exact
                                     ? const Color(0xff313333)
                                     : const Color(0xff959595)),
                           ),
@@ -299,16 +304,15 @@ class AcceptedSellerCard extends StatelessWidget {
                   Flexible(
                     child: Obx(() => RadioListTile(
                           dense: true,
-                          fillColor: WidgetStatePropertyAll(
-                              exactController.isExact.isFalse
-                                  ? const Color(0xffFC8019)
-                                  : const Color(0xff959595)),
+                          fillColor: WidgetStatePropertyAll(exact == false
+                              ? const Color(0xffFC8019)
+                              : const Color(0xff959595)),
                           title: Text(
                             'Similar',
                             style: TextStyles.openSans(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
-                                color: exactController.isExact.isFalse
+                                color: exact == false
                                     ? const Color(0xff313333)
                                     : const Color(0xff959595)),
                           ),
@@ -336,7 +340,9 @@ class AcceptedSellerCard extends StatelessWidget {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return const CarouselDialog();
+                              return CarouselDialog(
+                                images: exactImage,
+                              );
                             },
                           );
                         },

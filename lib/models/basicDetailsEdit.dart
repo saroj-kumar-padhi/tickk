@@ -6,6 +6,7 @@ class BasicDataModelEdit {
   String gender;
   int age;
   bool verified;
+  String profileImage;
   int v;
 
   BasicDataModelEdit({
@@ -16,20 +17,22 @@ class BasicDataModelEdit {
     required this.gender,
     required this.age,
     required this.verified,
+    required this.profileImage,
     required this.v,
   });
 
   // Factory constructor to create an instance from JSON
   factory BasicDataModelEdit.fromJson(Map<String, dynamic> json) {
     return BasicDataModelEdit(
-      id: json['_id'],
-      mobile: json['mobile'],
-      yourName: json['your_name'],
-      email: json['email'],
-      gender: json['gender'],
-      age: json['age'],
-      verified: json['verified'],
-      v: json['__v'],
+      id: json['_id'] ?? "",
+      mobile: json['mobile'] ?? "",
+      yourName: json['your_name'] ?? "",
+      email: json['email'] ?? "",
+      gender: json['gender'] ?? "",
+      age: json['age'] ?? 0,
+      verified: json['verified'] ?? false,
+      v: json['__v'] ?? -1,
+      profileImage: json['profileImage'] ?? "",
     );
   }
 

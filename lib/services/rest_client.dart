@@ -12,6 +12,8 @@ import 'package:dekhlo/models/userFcmModel.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
+import '../controllers/authController.dart';
+import '../controllers/categoriesController.dart';
 import '../models/basicDetailsEdit.dart';
 import '../models/categoriesBased.dart';
 import '../models/genderFetch.dart';
@@ -24,26 +26,32 @@ import '../models/sellerDealDone.dart';
 import '../models/sellerNewModel.dart';
 import '../models/sellerPandingQueta.dart';
 import '../models/stores_fcm.dart';
+import '../utils/components/buyerScreenTiles/send_tile.dart';
 
 part 'rest_client.g.dart';
 
-@RestApi(baseUrl: 'http://3.214.24.150:3002')
-// @RestApi(baseUrl: 'http://192.168.1.35:3002')
+// @RestApi(baseUrl: 'http://3.214.24.150:3002')
+@RestApi(baseUrl: 'http://192.168.1.42:3002')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  @POST('/buyer/buyers')
+  @PUT('/buyer/signupAllDetails')
   Future<void> postBuyer(
     @Body() Map<String, dynamic> createBuyerRequest,
   );
 
   @POST('/upload')
   Future<void> postRequirements(
-    @Body() Map<String, dynamic> createPostRequest,
+    @Body() FormData createPostRequest,
   );
 
-  @POST('/selling/store')
-  Future<void> setupStrore(@Body() Map<String, dynamic> setupStrore);
+  @POST('/DeleteAccOTP')
+  Future<void> deleteAccoountSemdOtp(
+    @Body() Map<String, String> data,
+  );
+
+  @POST('/storeSetup')
+  Future<void> setupStrore(@Body() FormData setupStrore);
 
   @POST('/sellerNewTab/SellerNewTab/{categories}/{subCategories}')
   Future<void> putRequirementInSellerTab(
@@ -51,9 +59,15 @@ abstract class RestClient {
     @Path('subCategories') String subCategories,
   );
 
-  @GET('/postrequirement/mobilenumberPYR/{mobileNumber}')
+  @GET('/BuyerNewtabGet/{mobileNumber}')
   Future<RequirementList> getRequirements(
       @Path('mobileNumber') int mobileNumber);
+
+  @GET('/postrequirement/countofStores/{cate}')
+  Future<CountModel> fetchCategoriesCount(@Path('cate') String cate);
+
+  @GET('/postrequirement/countofStores/ /{subCat}')
+  Future<CountModel> fetchSubCategoriesCount(@Path('subCat') String subCat);
 
   @GET('/CatSubCategories/AllCategories')
   Future<List<StoreCategory>> getAllCategories();
@@ -75,7 +89,7 @@ abstract class RestClient {
     @Path('mobileNumber') int mobileNumber,
   );
 
-  @PUT('/buyer/editProfileData/{mobileNo}')
+  @PUT('/buyer/editProfile/{mobileNo}')
   Future<void> editProfile(
     @Path('mobileNo') int mobileNo,
   );
@@ -84,7 +98,7 @@ abstract class RestClient {
   Future<void> postLoacation(@Path('RequirementID') String RequirementID,
       @Body() Map<String, double> data);
 
-  @GET('/selling/requirementbyStore/{storeID}')
+  @GET('/SellerNewTabData/{storeID}')
   Future<SellerResponseModel> fetchNewSeller(
     @Path('storeID') String storeID,
   );
@@ -104,10 +118,10 @@ abstract class RestClient {
     @Path('mobileNo') int mobileNo,
   );
 
-  @PUT('/buyer/editProfileData/{mobileNo}')
+  @PUT('/EditProfile/{mobileNo}')
   Future<void> updateProfileData(
     @Path('mobileNo') int mobileNo,
-    @Body() Map<String, dynamic> data,
+    @Body() FormData data,
   );
 
   @GET('/Inprocess/InprocessTabData/{storeID}')
@@ -115,7 +129,7 @@ abstract class RestClient {
     @Path('storeID') String storeID,
   );
 
-  @GET('/buyerInProcess/BuyerInprocessTabData/{mobileNo}')
+  @GET('/BuyerInprocessTabData/{mobileNo}')
   Future<BuyerInprossModel> buyerInProcess(
     @Path('mobileNo') String mobileNo,
   );
@@ -129,12 +143,12 @@ abstract class RestClient {
     @Path('requirementID') String requirementID,
   );
 
-  @GET('/Dealdonebuyer/DDmobilewiseData/{mobileNo}')
+  @GET('/BuyerDealDoneTabData/{mobileNo}')
   Future<BuyerDealDoneResponse> buyerDealDone(
     @Path('mobileNo') String mobileNo,
   );
 
-  @GET('/buyerRejected/RejectedTabData/{mobileNo}')
+  @GET('/BuyerRejectedTabData/{mobileNo}')
   Future<List<RejectedItemd>> buyerRejected(@Path('mobileNo') String mobileNo);
 
   @POST('/buyerInProcess/buyersellerDealDone/RequirementID/StoreID')
@@ -157,14 +171,25 @@ abstract class RestClient {
     @Body() Map<String, dynamic> data,
   );
 
-  @POST('/sellerNewTab/SellerExactSimilar')
-  Future<void> exactOrSimilar(
+  @POST('/sellerNewTab/InprocesBuyerSeller/{RequirementID}')
+  Future<void> pushtoBuyerInProcessAndSellerInProcess(
+    @Path('RequirementID') String RequirementID,
     @Body() Map<String, dynamic> data,
+  );
+
+  @POST('/SellerExactSimilarImages')
+  Future<void> exactOrSimilar(
+    @Body() FormData data,
   );
 
   @POST('/rejected/rejectedByStore/{storeId}')
   Future<void> rejectBySeller(
     @Path('storeId') String storeId,
+    @Body() Map<String, dynamic> data,
+  );
+
+  @POST('/buyer/UserLOgout')
+  Future<void> Logout(
     @Body() Map<String, dynamic> data,
   );
 
@@ -210,6 +235,12 @@ abstract class RestClient {
     @Body() Map<String, dynamic> data,
   );
 
+  @POST('/DelAccount/deleteAccOTPvalidation/{mobileNo}/{otp}')
+  Future<void> deleteAccountVerifyOTP(
+    @Path('mobileNo') String mobileNo,
+    @Path('otp') String otp,
+  );
+
   @POST('/DelAccount/ReasonForDelAcc/{mobileNo}')
   Future<void> deleteAccount(
     @Path('mobileNo') String mobileNo,
@@ -222,6 +253,14 @@ abstract class RestClient {
   Future<CategoryResponse> getsubcategorieswithCategories(
       @Path('categoryName') String categoryName);
 
+  @GET('/CatSubCategories/multipleSubCategories/{list}')
+  Future<List<CategoryWithSubcategories>> getSetupsubcategorieswithCategories(
+      @Path('list') String list);
+
+  @GET('/CatSubCategories/multipleSubSubCategories/{list}')
+  Future<List<CategoryGroup>> getSetupsubsubcategorieswithCategories(
+      @Path('list') String list);
+
   @GET('/CatSubCategories/CatSubCatwiseSubSubCat/{cat}/{subCat}')
   Future<YogaStore> getsubSubcategorieswithCategories(
       @Path('cat') String cat, @Path('subCat') String subCat);
@@ -231,4 +270,18 @@ abstract class RestClient {
 
   @GET('/selling/StoreNameByStoreID/{storeId}')
   Future<StoreName> getStoreNameById(@Path('storeId') String storeId);
+
+  @POST('/SignupOTP')
+  Future<void> signUpWithOtp(
+    @Body() Map<String, dynamic> data,
+  );
+
+  @POST('/LoginOTP')
+  Future<void> LoginWithOtp(
+    @Body() Map<String, dynamic> data,
+  );
+
+  @GET('/buyer/signupdetails/{mobile}/{otp}')
+  Future<MessageOTP> verifyPhoneNumber(
+      @Path('mobile') String mobile, @Path('otp') int otp);
 }

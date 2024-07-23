@@ -21,6 +21,9 @@ class ProcessSellerCard extends StatelessWidget {
   final String units;
   final String des;
   final String qute;
+  final bool exact;
+  final String image;
+  final List<dynamic> exactSimilarImage;
 
   const ProcessSellerCard(
       {super.key,
@@ -34,7 +37,10 @@ class ProcessSellerCard extends StatelessWidget {
       required this.size,
       required this.units,
       required this.des,
-      required this.qute});
+      required this.qute,
+      required this.exact,
+      required this.image,
+      required this.exactSimilarImage});
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +160,7 @@ class ProcessSellerCard extends StatelessWidget {
                     child: SizedBox(
                         width: GlobalSizes.getDeviceWidth(context) * 0.15,
                         height: GlobalSizes.getDeviceHeight(context) * 0.09,
-                        child: Image.asset("assest/sellitems.png")),
+                        child: Image.network(image)),
                   ),
                   Column(
                     children: [
@@ -274,16 +280,16 @@ class ProcessSellerCard extends StatelessWidget {
                   Flexible(
                     child: Obx(() => RadioListTile(
                           dense: true,
-                          fillColor: WidgetStatePropertyAll(
-                              exactController.isExact.isTrue
-                                  ? const Color(0xffFC8019)
-                                  : const Color(0xff959595)),
+
+                          fillColor: WidgetStatePropertyAll(exact
+                              ? const Color(0xffFC8019)
+                              : const Color(0xff959595)),
                           title: Text(
                             'Exact',
                             style: TextStyles.openSans(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
-                                color: exactController.isExact.isTrue
+                                color: exact
                                     ? const Color(0xff313333)
                                     : const Color(0xff959595)),
                           ),
@@ -296,16 +302,15 @@ class ProcessSellerCard extends StatelessWidget {
                   Expanded(
                     child: Obx(() => RadioListTile(
                           dense: true,
-                          fillColor: WidgetStatePropertyAll(
-                              exactController.isExact.isFalse
-                                  ? const Color(0xffFC8019)
-                                  : const Color(0xff959595)),
+                          fillColor: WidgetStatePropertyAll(exact == false
+                              ? const Color(0xffFC8019)
+                              : const Color(0xff959595)),
                           title: Text(
                             'Similar',
                             style: TextStyles.openSans(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
-                                color: exactController.isExact.isFalse
+                                color: exact == false
                                     ? const Color(0xff313333)
                                     : const Color(0xff959595)),
                           ),
@@ -335,7 +340,9 @@ class ProcessSellerCard extends StatelessWidget {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return const CarouselDialog();
+                                return CarouselDialog(
+                                  images: exactSimilarImage,
+                                );
                               },
                             );
                           },

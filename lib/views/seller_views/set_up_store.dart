@@ -12,37 +12,83 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+import 'package:logger/web.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
+import '../../controllers/categoriesController.dart';
 import '../../controllers/dropDownController.dart';
 import '../../controllers/exactController.dart';
 import '../../controllers/sortDialogBoxController.dart';
 import '../../utils/components/dialog_boxs/pick_diallo.dart';
-import '../../utils/coustoumDropDown.dart';
 import '../../utils/size/global_size/global_size.dart';
 
-class SetUpProduct extends StatelessWidget {
-  SetUpProduct({super.key});
-  final DropdownController dropdownController = Get.put(DropdownController());
+class SetUpProduct extends StatefulWidget {
+  const SetUpProduct({super.key});
   static final MultiSelectController categorySelectController =
-      MultiSelectController();
-  final MultiSelectController languageSelectController =
       MultiSelectController();
   static final MultiSelectController subCategorySelectController =
       MultiSelectController();
   static final MultiSelectController subSubCategorySelectController =
       MultiSelectController();
+
+  @override
+  State<SetUpProduct> createState() => _SetUpProductState();
+}
+
+class _SetUpProductState extends State<SetUpProduct> {
+  List<String> SubCategoryItems = [];
+
+  List<String> SubSubCategoryItems = [];
+
+  List<dynamic> selectedSubCategoryItems = [];
+
+  List<dynamic> selectedSubSubCategoryItems = [];
+
+  final DropdownController dropdownController = Get.put(DropdownController());
+
+  final MultiSelectController languageSelectController =
+      MultiSelectController();
+
   final ProductSetUpController productSetUpController =
       Get.put(ProductSetUpController());
+
   final ProductSetUpController brandsController =
       Get.put(ProductSetUpController());
+
   DialogBoxController dialogBoxController = Get.put(DialogBoxController());
+
+  CategoriesController categoriesController = Get.put(CategoriesController());
+
+  List<ValueItem> convertToValueItems(List<String> items) {
+    return items.asMap().entries.map((entry) {
+      return ValueItem(label: entry.value, value: entry.key.toString());
+    }).toList();
+  }
 
   final ExactController exactController = Get.put(ExactController());
 
   RxInt currentPage = 0.obs;
+
+  RxBool sundayIsOpen = true.obs;
+
+  RxBool mondayIsOpen = true.obs;
+
+  RxBool tuesdayIsOpen = true.obs;
+
+  RxBool wednesdayIsOpen = true.obs;
+
+  RxBool thursdayIsOpen = true.obs;
+
+  RxBool fridayIsOpen = true.obs;
+
+  RxBool saturdayIsOpen = true.obs;
+
   @override
   Widget build(BuildContext context) {
+    final box = Hive.box('myBox');
+    final String formattedPhoneNumber = box.get('phone') ?? "";
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -82,7 +128,6 @@ class SetUpProduct extends StatelessWidget {
                           CarouselSlider.builder(
                             options: CarouselOptions(
                               enableInfiniteScroll: false,
-                              // enlargeCenterPage: true,
                               onPageChanged: (index, reason) {
                                 currentPage.value = index;
                               },
@@ -90,8 +135,7 @@ class SetUpProduct extends StatelessWidget {
                               height: 160.0.h,
                             ),
                             itemCount: productSetUpController.imagePaths.length,
-                            itemBuilder: (BuildContext context,
-                                int index, //ic_launcher
+                            itemBuilder: (BuildContext context, int index,
                                 int realIndex) {
                               final String imagePath =
                                   productSetUpController.imagePaths[index];
@@ -123,63 +167,94 @@ class SetUpProduct extends StatelessWidget {
                                         ),
                                       ),
                                       Obx(() => Positioned(
-                                              child: Row(
-                                            children: [
-                                              InkWell(
+                                            child: Row(
+                                              children: [
+                                                InkWell(
                                                   onTap: () {
                                                     if (productSetUpController
-                                                        .staredImage.isEmpty) {
+                                                        .staredImage
+                                                        .contains(imagePath)) {
+                                                      productSetUpController
+                                                          .staredImage
+                                                          .clear();
+                                                    } else {
+                                                      productSetUpController
+                                                          .staredImage
+                                                          .clear();
                                                       productSetUpController
                                                           .staredImage
                                                           .add(imagePath);
-                                                    } else {
+                                                    }
+                                                  },
+                                                  child: Icon(
+                                                    productSetUpController
+                                                            .staredImage
+                                                            .contains(imagePath)
+                                                        ? Icons.star
+                                                        : Icons.star_border,
+                                                    color:
+                                                        productSetUpController
+                                                                .staredImage
+                                                                .contains(
+                                                                    imagePath)
+                                                            ? const Color(
+                                                                0xffFFD361)
+                                                            : Colors.grey,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 80.w),
+                                                InkWell(
+                                                  onTap: () {
+                                                    productSetUpController
+                                                        .imagePaths
+                                                        .remove(imagePath);
+                                                    if (productSetUpController
+                                                        .staredImage
+                                                        .contains(imagePath)) {
                                                       productSetUpController
                                                           .staredImage
                                                           .clear();
                                                     }
                                                   },
-                                                  child: productSetUpController
-                                                          .staredImage
-                                                          .contains(imagePath)
-                                                      ? const Icon(Icons.star,
-                                                          color:
-                                                              Color(0xffFFD361))
-                                                      : const Icon(
-                                                          Icons.star_border,
-                                                          color: Colors.grey)),
-                                              SizedBox(
-                                                width: 80.w,
-                                              ),
-                                              InkWell(
-                                                onTap: () {
-                                                  productSetUpController
-                                                      .imagePaths
-                                                      .remove(imagePath);
-                                                },
-                                                child: const Icon(
-                                                  Icons.cancel,
-                                                  color: Color(0xff4A4A4A),
-                                                ),
-                                              )
-                                            ],
-                                          )))
+                                                  child: const Icon(
+                                                    Icons.cancel,
+                                                    color: Color(0xff4A4A4A),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ))
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  productSetUpController
-                                              .imagePaths.value.length >
-                                          1
-                                      ? showIndicator()
-                                      : const SizedBox(),
                                 ],
                               );
                             },
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          SizedBox(height: 10.h),
+                          // Separate indicator widget
+                          Obx(() => productSetUpController
+                                      .imagePaths.value.length >
+                                  1
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(
+                                    productSetUpController.imagePaths.length,
+                                    (index) => Container(
+                                      width: 8.0,
+                                      height: 8.0,
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 4.0),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: currentPage.value == index
+                                            ? const Color(0xffFC8019)
+                                            : const Color(0xffD9D9D9),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox()),
+                          SizedBox(height: 10.h),
                           GestureDetector(
                             onTap: () async {
                               final result = await showDialog<String>(
@@ -192,32 +267,36 @@ class SetUpProduct extends StatelessWidget {
                                 productSetUpController.imagePaths.add(result);
                               }
                             },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4.r),
-                                  border: Border.all(
-                                      width: 1,
-                                      color: const Color(0xffFC8019))),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Center(
-                                      child: Icon(
-                                        Icons.add,
-                                        color: Color(0xffFC8019),
+                            child: productSetUpController.imagePaths.length > 3
+                                ? const SizedBox()
+                                : Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(4.r),
+                                        border: Border.all(
+                                            width: 1,
+                                            color: const Color(0xffFC8019))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Center(
+                                            child: Icon(
+                                              Icons.add,
+                                              color: Color(0xffFC8019),
+                                            ),
+                                          ),
+                                          Text("Add images",
+                                              style: TextStyles.openSans(
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.w600,
+                                                  color:
+                                                      const Color(0xffFC8019)))
+                                        ],
                                       ),
                                     ),
-                                    Text("Add images",
-                                        style: TextStyles.openSans(
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.w600,
-                                            color: const Color(0xffFC8019)))
-                                  ],
-                                ),
-                              ),
-                            ),
+                                  ),
                           ),
                         ],
                       );
@@ -249,10 +328,10 @@ class SetUpProduct extends StatelessWidget {
                       height: 5.h,
                     ),
                     CustomTextField(
-                        isenable: true,
+                        isenable: false,
                         controller:
                             productSetUpController.contactEditingController,
-                        hintText: "Enter your contact number",
+                        hintText: formattedPhoneNumber,
                         height: 48.h,
                         width: 330.w),
                     SizedBox(
@@ -265,38 +344,33 @@ class SetUpProduct extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(right: 20.w),
                       child: MultiSelectDropDown(
+                        suffixIcon: const Icon(Icons.arrow_downward),
                         borderColor: Colors.grey,
                         borderWidth: 1,
                         borderRadius: 4.r,
                         selectedOptionTextColor: const Color(0xffFC8019),
                         clearIcon: const Icon(Icons.close_outlined),
-                        controller: categorySelectController,
+                        controller: SetUpProduct.categorySelectController,
                         onOptionSelected: (options) {
                           debugPrint(options.toString());
-                          if (options.contains(
-                            const ValueItem(
-                              label: 'Custom Category',
-                              value: 8,
-                            ),
-                          )) {
-                            Get.toNamed(RouteName.custoumCategory);
-                          }
-                        },
-                        options: const <ValueItem>[
-                          ValueItem(label: 'Electronics', value: '1'),
-                          ValueItem(label: 'Fashion', value: '2'),
-                          ValueItem(label: 'Sports', value: '3'),
-                          ValueItem(label: 'Electricals', value: '4'),
-                          ValueItem(label: 'Pet stores', value: '5'),
-                          ValueItem(label: 'Medical', value: '6'),
-                          ValueItem(label: 'Construction', value: '7'),
-                          ValueItem(label: 'Gifts', value: '7'),
+                          List<String> selectedCategories =
+                              options.map((option) => option.label).toList();
 
-                          ValueItem(
-                            label: 'Custom Category',
-                            value: 8,
-                          ), // Custom Category option
-                        ],
+                          // Call fetchSetupSubcategories with the selected categories
+                          categoriesController
+                              .fetchSetupSubcategories(selectedCategories);
+
+                          // if (options.contains(
+                          //   const ValueItem(
+                          //     label: 'Custom Category',
+                          //     value: 8,
+                          //   ),
+                          // )) {
+                          //   Get.toNamed(RouteName.custoumCategory);
+                          // }
+                        },
+                        options: convertToValueItems(
+                            categoriesController.categories),
                         maxItems: 10,
                         selectionType: SelectionType.multi,
                         chipConfig: const ChipConfig(
@@ -313,162 +387,235 @@ class SetUpProduct extends StatelessWidget {
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: 'Sub categories'),
+                    SubSubCategoryItems.isEmpty
+                        ? Text(
+                            "Sub categories",
+                            style: TextStyles.openSans(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color:
+                                    const Color(0xff313333).withOpacity(0.5)),
+                          )
+                        : heading(title: 'Sub categories'),
                     SizedBox(
                       height: 5.h,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 20.w),
-                      child: MultiSelectDropDown(
-                        borderColor: Colors.grey,
-                        borderWidth: 1,
-                        borderRadius: 4.r,
-                        selectedOptionTextColor: const Color(0xffFC8019),
-                        clearIcon: const Icon(Icons.close_outlined),
-                        controller: subCategorySelectController,
-                        onOptionSelected: (options) {
-                          debugPrint(options.toString());
-                          if (options.contains(
-                            const ValueItem(
-                                label: 'Custom sub category', value: '4'),
-                          )) {
-                            Get.toNamed(RouteName.custoumSubCategory);
-                          }
-                        },
-                        options: const <ValueItem>[
-                          ValueItem(
-                              label: 'Mobile phones and accessories',
-                              value: '1'),
-                          ValueItem(
-                              label: 'Laptops, computers, and accessories',
-                              value: '2'),
-                          ValueItem(label: 'Home appliances', value: '3'),
-                          ValueItem(label: 'Kitchen appliances', value: '4'),
-                          ValueItem(label: "Head phones", value: '5'),
-                          ValueItem(label: "Smart watches", value: '6'),
-                          ValueItem(label: "Video games", value: '7'),
-                          ValueItem(label: "Tablets", value: '8'),
-                          ValueItem(label: "Home audio", value: '9'),
-                          ValueItem(label: "Grooming appliances", value: '10'),
-                          ValueItem(label: "Women's clothing", value: '11'),
-                          //Faction
-                          ValueItem(label: "Women's clothing", value: '12'),
-                          ValueItem(label: "Men's clothing", value: '13'),
-                          ValueItem(label: "Kids fashion", value: '14'),
-                          ValueItem(label: "Beauty and makeup", value: '15'),
-                          ValueItem(label: "Shoes and footwear", value: '16'),
-                          ValueItem(
-                              label: "Bags, wallets and luggage", value: '17'),
-                          ValueItem(label: "Watches", value: '18'),
-                          ValueItem(label: "Jewellery", value: '19'),
-                          ValueItem(
-                              label: "Women's lingerie and sleepwear",
-                              value: '20'),
-                          ValueItem(label: "Men's boutique", value: '21'),
-                          ValueItem(label: "Women's clothing", value: '22'),
-                          ValueItem(label: "Unisex boutique", value: '23'),
-                          //Electricals
-                          ValueItem(label: "Fancy lights", value: '24'),
-                          ValueItem(label: "Fans", value: '25'),
-                          ValueItem(label: "Lighting", value: '26'),
-                          ValueItem(label: "Wiring", value: '27'),
-                          ValueItem(label: "Switches", value: '28'),
-                          //Pet stores
-                          ValueItem(label: "Dogs", value: '29'),
-                          ValueItem(label: "Cats", value: '30'),
-                          ValueItem(label: "Fish & Aquatics", value: '31'),
-                          ValueItem(label: "Birds", value: '32'),
-                          ValueItem(label: "Cattle", value: '33'),
-                          ValueItem(label: "Other pets", value: '34'),
-                          //Medical
-                          ValueItem(label: "Pharmacy", value: '35'),
-                          ValueItem(
-                              label: "Surgically & equipment", value: '36'),
-                          //Gifts
-                          ValueItem(label: "Books & Stationery", value: '37'),
-                          ValueItem(label: "Toys", value: '38'),
-                          ValueItem(label: "Home Decor", value: '39'),
-                        ],
-                        maxItems: 10,
-                        selectionType: SelectionType.multi,
-                        chipConfig: const ChipConfig(
-                            wrapType: WrapType.wrap,
-                            backgroundColor: Color(0xffFC8019)),
-                        dropdownHeight: 200.h,
-                        optionTextStyle: TextStyle(fontSize: 16.sp),
-                        selectedOptionIcon: const Icon(Icons.check_circle),
-                      ),
-                    ),
+                    Obx(() {
+                      SubCategoryItems =
+                          categoriesController.setupsubCategories.value;
+
+                      return categoriesController.isLoading.value
+                          ? const Center(child: CircularProgressIndicator())
+                          : Padding(
+                              padding: EdgeInsets.only(right: 20.w),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(
+                                      color: SubCategoryItems.isEmpty
+                                          ? Colors.grey.shade300
+                                          : Colors.grey),
+                                ),
+                                child: AbsorbPointer(
+                                  absorbing: SubCategoryItems.isEmpty,
+                                  child: Opacity(
+                                    opacity:
+                                        SubCategoryItems.isEmpty ? 0.5 : 1.0,
+                                    child: MultiSelectDialogField<dynamic>(
+                                      items: SubCategoryItems.map((item) =>
+                                          MultiSelectItem<dynamic>(
+                                              item, item)).toList(),
+                                      title:
+                                          const Text("Select Sub Categories"),
+                                      selectedColor: const Color(0xffFC8019),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Colors.white,
+                                      ),
+                                      buttonText:
+                                          const Text("Select Sub Categories"),
+                                      onConfirm: (values) {
+                                        if (SubCategoryItems.isNotEmpty) {
+                                          categoriesController
+                                              .fetchSubSubsetUpCategories(
+                                                  values.cast<String>());
+
+                                          Logger().d(values);
+                                          // Store the selected values in a separate list if needed
+                                          selectedSubCategoryItems.clear();
+                                          selectedSubCategoryItems = values
+                                              .map((value) => ValueItem(
+                                                    label: value.toString(),
+                                                    value: value,
+                                                  ))
+                                              .toList();
+
+                                          // Update the subCategorySelectController
+                                          SetUpProduct
+                                              .subCategorySelectController
+                                              .setSelectedOptions(
+                                            values
+                                                .map((value) => ValueItem(
+                                                      label: value.toString(),
+                                                      value: value,
+                                                    ))
+                                                .toList(),
+                                          );
+                                        }
+                                      },
+                                      chipDisplay: MultiSelectChipDisplay(
+                                        onTap: (item) {
+                                          if (SubCategoryItems.isNotEmpty) {
+                                            List<ValueItem> currentOptions =
+                                                SetUpProduct
+                                                    .subCategorySelectController
+                                                    .selectedOptions;
+                                            currentOptions.removeWhere(
+                                                (option) =>
+                                                    option.value == item);
+                                            SetUpProduct
+                                                .subCategorySelectController
+                                                .setSelectedOptions(
+                                                    currentOptions);
+
+                                            selectedSubCategoryItems =
+                                                currentOptions;
+                                          }
+                                        },
+                                        chipColor: const Color(0xffFC8019),
+                                        textStyle: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                    }),
 
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: 'Sub Sub categories'),
+                    SubSubCategoryItems.isEmpty
+                        ? Text(
+                            "Sub categories",
+                            style: TextStyles.openSans(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color:
+                                    const Color(0xff313333).withOpacity(0.5)),
+                          )
+                        : heading(title: 'Sub Sub categories'),
                     SizedBox(
                       height: 5.h,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 20.w),
-                      child: MultiSelectDropDown(
-                        borderColor: Colors.grey,
-                        borderWidth: 1,
-                        borderRadius: 4.r,
-                        selectedOptionTextColor: const Color(0xffFC8019),
-                        clearIcon: const Icon(Icons.close_outlined),
-                        controller: subSubCategorySelectController,
-                        onOptionSelected: (options) {
-                          debugPrint(options.toString());
-                          if (options.contains(
-                            const ValueItem(
-                                label: 'Custom sub sub category', value: '4'),
-                          )) {
-                            Get.toNamed(RouteName.custoumSubSubCategory);
-                          }
-                        },
-                        options: const <ValueItem>[
-                          ValueItem(label: 'Adult geared cycles', value: '1'),
-                          ValueItem(
-                              label: 'Adult non geared cycles', value: '2'),
-                          ValueItem(label: 'Kids cycles', value: '3'),
-                          ValueItem(label: 'Electric cycles', value: '4'),
-                          ValueItem(
-                              label: 'Cycling kits & accessories', value: '5'),
 
-                          //Strength training
-                          ValueItem(label: 'Dumbbells', value: '6'),
-                          ValueItem(label: 'Home gym sets', value: '7'),
-                          ValueItem(label: 'Benches', value: '8'),
-                          ValueItem(
-                              label: 'Wearable weights & accessories',
-                              value: '9'),
-                          ValueItem(
-                              label: 'Multi gym functional trainers',
-                              value: '10'),
-                          ValueItem(label: 'Plates & barbells', value: '11'),
-                          ValueItem(label: 'Kettle bells', value: '12'),
-//Cardio
-                          ValueItem(label: 'Treadmills', value: '13'),
-                          ValueItem(label: 'Fitness bikes', value: '14'),
-                          ValueItem(label: 'Ellipticals', value: '15'),
-                          ValueItem(label: 'Rowers', value: '16'),
-                          //Badminton
-                          ValueItem(label: 'Racquets', value: '13'),
-                          ValueItem(label: 'Shuttle cocks', value: '14'),
-                          ValueItem(label: 'Badminton sets', value: '15'),
-                          ValueItem(label: 'Badminton shoes', value: '16'),
-                          ValueItem(label: 'Kit bags', value: '17'),
-                          ValueItem(label: 'Accessories', value: '18'),
-                        ],
-                        maxItems: 10,
-                        selectionType: SelectionType.multi,
-                        chipConfig: const ChipConfig(
-                            wrapType: WrapType.wrap,
-                            backgroundColor: Color(0xffFC8019)),
-                        dropdownHeight: 200.h,
-                        optionTextStyle: TextStyle(fontSize: 16.sp),
-                        selectedOptionIcon: const Icon(Icons.check_circle),
-                      ),
-                    ),
+                    Obx(() {
+                      SubSubCategoryItems =
+                          categoriesController.subSubCategoriessetup;
+
+                      return categoriesController.isLoadingSubSub.value
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : Padding(
+                              padding: EdgeInsets.only(right: 20.w),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4.r),
+                                  border: Border.all(
+                                      color: SubSubCategoryItems.isEmpty
+                                          ? Colors.grey.shade300
+                                          : Colors.grey,
+                                      width: 1),
+                                ),
+                                child: AbsorbPointer(
+                                  absorbing: SubSubCategoryItems.isEmpty,
+                                  child: Opacity(
+                                    opacity:
+                                        SubSubCategoryItems.isEmpty ? 0.5 : 1.0,
+                                    child: MultiSelectDialogField<String>(
+                                      items: SubSubCategoryItems.map(
+                                          (subSubCategory) =>
+                                              MultiSelectItem<String>(
+                                                  subSubCategory,
+                                                  subSubCategory)).toList(),
+                                      title: const Text(
+                                          "Select Sub Sub Categories"),
+                                      selectedColor: const Color(0xffFC8019),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(4.r),
+                                        color: Colors.white,
+                                      ),
+                                      buttonText: const Text(
+                                          "Select Sub Sub Categories"),
+                                      onConfirm: (values) {
+                                        selectedSubSubCategoryItems.clear();
+                                        selectedSubSubCategoryItems = values
+                                            .map((value) => ValueItem(
+                                                  label: value.toString(),
+                                                  value: value,
+                                                ))
+                                            .toList();
+                                        if (SubSubCategoryItems.isNotEmpty) {
+                                          debugPrint(values.toString());
+                                          SetUpProduct
+                                              .subSubCategorySelectController
+                                              .setSelectedOptions(
+                                            values
+                                                .map((value) => ValueItem(
+                                                      label: value,
+                                                      value: value,
+                                                    ))
+                                                .toList(),
+                                          );
+                                          if (values
+                                              .contains('Electric cycles')) {
+                                            Get.toNamed(RouteName
+                                                .custoumSubSubCategory);
+                                          }
+                                          categoriesController
+                                              .fetchSubSubsetUpCategories(
+                                                  values);
+                                        }
+                                      },
+                                      chipDisplay: MultiSelectChipDisplay(
+                                        onTap: (value) {
+                                          // Store the selected values in a separate list if needed
+
+                                          if (SubSubCategoryItems.isNotEmpty) {
+                                            List<ValueItem> currentOptions =
+                                                SetUpProduct
+                                                    .subSubCategorySelectController
+                                                    .selectedOptions;
+                                            currentOptions.removeWhere(
+                                                (option) =>
+                                                    option.value == value);
+                                            SetUpProduct
+                                                .subSubCategorySelectController
+                                                .setSelectedOptions(
+                                                    currentOptions);
+                                            categoriesController
+                                                .fetchSubSubsetUpCategories(
+                                                    currentOptions
+                                                        .map((option) => option
+                                                            .value
+                                                            .toString())
+                                                        .toList());
+                                          }
+                                        },
+                                        chipColor: const Color(0xffFC8019),
+                                        textStyle: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                    }),
+
                     SizedBox(
                       height: 10.h,
                     ),
@@ -512,14 +659,16 @@ class SetUpProduct extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: TextField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
                           controller:
                               productSetUpController.discriptionController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(bottom: 60.h),
+                          decoration: const InputDecoration(
+                            // contentPadding: EdgeInsets.only(bottom: 60.h),
                             hintText:
                                 "e.g This store has all the types of books.",
                             border: InputBorder.none,
-                            hintStyle: const TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(color: Colors.grey),
                           ),
                           style: const TextStyle(fontSize: 16.0),
                         ),
@@ -530,9 +679,20 @@ class SetUpProduct extends StatelessWidget {
                     SizedBox(
                       height: 20.h,
                     ),
-                    heading(title: "Link your social media accounts"),
-                    SizedBox(
-                      height: 5.h,
+                    Row(
+                      children: [
+                        heading(title: "Link your social media accounts"),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        Text(
+                          " (optional)",
+                          style: TextStyles.openSans(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey),
+                        ),
+                      ],
                     ),
                     socialLinkBox(
                         controller:
@@ -552,7 +712,7 @@ class SetUpProduct extends StatelessWidget {
                     ),
                     socialLinkBox(
                         controller: productSetUpController.website,
-                        imagePath: 'assest/instagram.png',
+                        imagePath: 'assest/internet.png',
                         platform: 'Website'),
                     SizedBox(
                       height: 10.h,
@@ -609,40 +769,47 @@ class SetUpProduct extends StatelessWidget {
                         context,
                         "S",
                         productSetUpController.sundayOpenTimeEditingController,
-                        productSetUpController.sundayCloseEditingController),
+                        productSetUpController.sundayCloseEditingController,
+                        sundayIsOpen),
                     timings(
                         context,
                         "M",
                         productSetUpController.mondayOpenTimeEditingController,
-                        productSetUpController.mondayCloseEditingController),
+                        productSetUpController.mondayCloseEditingController,
+                        mondayIsOpen),
                     timings(
                         context,
                         "T",
                         productSetUpController.tuesdayOpenTimeEditingController,
-                        productSetUpController.tuesdayCloseEditingController),
+                        productSetUpController.tuesdayCloseEditingController,
+                        tuesdayIsOpen),
                     timings(
                         context,
                         "W",
                         productSetUpController
                             .wednesdayOpenTimeEditingController,
-                        productSetUpController.wednesdayCloseEditingController),
+                        productSetUpController.wednesdayCloseEditingController,
+                        wednesdayIsOpen),
                     timings(
                         context,
                         "T",
                         productSetUpController
                             .thursdayOpenTimeEditingController,
-                        productSetUpController.thursdayCloseEditingController),
+                        productSetUpController.thursdayCloseEditingController,
+                        thursdayIsOpen),
                     timings(
                         context,
                         "F",
                         productSetUpController.fridayOpenTimeEditingController,
-                        productSetUpController.fridayCloseEditingController),
+                        productSetUpController.fridayCloseEditingController,
+                        fridayIsOpen),
                     timings(
                         context,
                         "S",
                         productSetUpController
                             .saturdayOpenTimeEditingController,
-                        productSetUpController.saturdayCloseEditingController),
+                        productSetUpController.saturdayCloseEditingController,
+                        saturdayIsOpen),
 
                     SizedBox(
                       height: 10.h,
@@ -768,12 +935,11 @@ class SetUpProduct extends StatelessWidget {
                                   alignment: Alignment.centerLeft,
                                   child: TextField(
                                     onTap: () {
-                                      Get.toNamed(RouteName.changeLocation);
+                                      // Get.toNamed(RouteName.changeLocation);
                                     },
                                     controller: productSetUpController
                                         .pinCodeController.value,
                                     decoration: const InputDecoration(
-                                      hintText: '500081',
                                       border: InputBorder.none,
                                       hintStyle: TextStyle(color: Colors.grey),
                                     ),
@@ -857,12 +1023,11 @@ class SetUpProduct extends StatelessWidget {
                                   alignment: Alignment.centerLeft,
                                   child: TextField(
                                     onTap: () {
-                                      Get.toNamed(RouteName.changeLocation);
+                                      // Get.toNamed(RouteName.changeLocation);
                                     },
                                     controller: productSetUpController
                                         .cityController.value,
                                     decoration: const InputDecoration(
-                                      hintText: 'Hyderabad',
                                       border: InputBorder.none,
                                       hintStyle: TextStyle(color: Colors.grey),
                                     ),
@@ -902,7 +1067,7 @@ class SetUpProduct extends StatelessWidget {
                           controller:
                               dialogBoxController.locacationController.value,
                           decoration: const InputDecoration(
-                            hintText: 'e.g Delhi',
+                            hintText: 'Point Your location',
                             border: InputBorder.none,
                             hintStyle: TextStyle(color: Colors.grey),
                           ),
@@ -915,8 +1080,8 @@ class SetUpProduct extends StatelessWidget {
                     ),
 
                     InkWell(
-                      onTap: () {
-                        dialogBoxController.getCurrentLoaction();
+                      onTap: () async {
+                        await dialogBoxController.getCurrentLoaction();
                         Get.to(const GoogleMapPage());
                       },
                       child: Text(
@@ -948,20 +1113,19 @@ class SetUpProduct extends StatelessWidget {
                                             .toList();
                                     productSetUpController.setupStrore(
                                         productSetUpController.imagePaths,
-                                        categorySelectController.selectedOptions
-                                            .map((item) => item.label)
-                                            .toList(),
-                                        subCategorySelectController
+                                        SetUpProduct.categorySelectController
                                             .selectedOptions
                                             .map((item) => item.label)
                                             .toList(),
-                                        subSubCategorySelectController
-                                            .selectedOptions
-                                            .map((item) => item.label)
-                                            .toList(),
+                                        // subCategorySelectController
+                                        //     .selectedOptions
+                                        //     .map((item) => item.label)
+                                        //     .toList(),
+                                        selectedSubCategoryItems,
+                                        selectedSubSubCategoryItems,
                                         brandsList);
                                     // Get.toNamed(RouteName.sellerHome);
-                                    Get.to(const HomeSeller(storeId: ''));
+
                                     exactController.isSeller.value = false;
                                   }
                                 : null, // Disable the button if fields are not filled
@@ -1006,10 +1170,12 @@ class SetUpProduct extends StatelessWidget {
     );
   }
 
-  Padding timings(BuildContext context, String day,
-      TextEditingController openTime, TextEditingController closeTime) {
-    final RxBool isOpen = true.obs;
-
+  Padding timings(
+      BuildContext context,
+      String day,
+      TextEditingController openTime,
+      TextEditingController closeTime,
+      RxBool isOpen) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.h),
       child: Obx(() => Row(
@@ -1037,14 +1203,14 @@ class SetUpProduct extends StatelessWidget {
               timeEditingBox(
                 controller: openTime,
                 context: context,
-                hintText: 'Open Timing',
+                hintText: 'Open',
                 enabled: isOpen.value,
               ),
               SizedBox(width: 10.w),
               timeEditingBox(
                 controller: closeTime,
                 context: context,
-                hintText: 'Close Timing',
+                hintText: 'Close ',
                 enabled: isOpen.value,
               ),
               SizedBox(width: 10.w),
@@ -1079,6 +1245,9 @@ class SetUpProduct extends StatelessWidget {
         );
         if (result != null) {
           productSetUpController.imagePaths.add(result);
+          if (productSetUpController.imagePaths.length == 1) {
+            productSetUpController.staredImage.add(result);
+          }
         }
       },
       child: Center(
@@ -1123,81 +1292,46 @@ class SetUpProduct extends StatelessWidget {
     );
   }
 
-  Container timeEditingBox({
+  Widget timeEditingBox({
     required TextEditingController controller,
     required BuildContext context,
     required String hintText,
     required bool enabled,
   }) {
-    return Container(
-      height: 40.h,
-      width: 120.w,
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5.0),
-        border: Border.all(
-            width: 1, color: enabled ? Colors.grey : Colors.grey.shade300),
-      ),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: TextField(
-          controller: controller,
-          enabled: enabled,
-          decoration: InputDecoration(
-            suffixIcon: InkWell(
-              onTap: enabled
-                  ? () async {
-                      TimeOfDay? selectedTime = await showTimePicker(
-                        helpText: '',
-                        initialEntryMode: TimePickerEntryMode.input,
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                        builder: (BuildContext context, Widget? child) {
-                          return MediaQuery(
-                            data: MediaQuery.of(context).copyWith(
-                              alwaysUse24HourFormat: false,
-                            ),
-                            child: Theme(
-                              data: Theme.of(context).copyWith(
-                                textTheme: Theme.of(context).textTheme.copyWith(
-                                      bodySmall: const TextStyle(
-                                        fontSize: 22,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                              ),
-                              child: child!,
-                            ),
-                          );
-                        },
-                      );
-
-                      if (selectedTime != null) {
-                        String formattedTime =
-                            '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}';
-                        controller.text = formattedTime;
-                      }
-                    }
-                  : null,
-              child: SizedBox(
-                height: 10.h,
-                width: 10.h,
-                child: Image.asset(
-                  "assest/calendar_icon.png",
-                  color: enabled ? null : Colors.grey.shade300,
-                ),
+    return ValueListenableBuilder<TextEditingValue>(
+      valueListenable: controller,
+      builder: (context, value, child) {
+        return SizedBox(
+          width: 120.w,
+          child: TextFormField(
+            controller: controller,
+            enabled: enabled,
+            readOnly: true,
+            decoration: InputDecoration(
+              hintText: hintText,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
               ),
             ),
-            hintText: hintText,
-            border: InputBorder.none,
-            hintStyle:
-                TextStyle(color: enabled ? Colors.grey : Colors.grey.shade300),
+            onTap: enabled
+                ? () async {
+                    TimeOfDay? pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    if (pickedTime != null) {
+                      String formattedTime = pickedTime.format(context);
+                      controller.text = formattedTime;
+                      // Force refresh if using GetX
+                      setState(() {});
+                      // Or use setState if in a StatefulWidget
+                      // setState(() {});
+                    }
+                  }
+                : null,
           ),
-          style: TextStyle(
-              fontSize: 16.0,
-              color: enabled ? Colors.black : Colors.grey.shade300),
-        ),
-      ),
+        );
+      },
     );
   }
 

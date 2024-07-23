@@ -13,7 +13,7 @@ class _RestClient implements RestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://3.214.24.150:3002';
+    baseUrl ??= 'http://192.168.1.42:3002';
   }
 
   final Dio _dio;
@@ -28,13 +28,13 @@ class _RestClient implements RestClient {
     final _data = <String, dynamic>{};
     _data.addAll(createBuyerRequest);
     await _dio.fetch<void>(_setStreamType<void>(Options(
-      method: 'POST',
+      method: 'PUT',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/buyer/buyers',
+          '/buyer/signupAllDetails',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -46,12 +46,11 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<void> postRequirements(Map<String, dynamic> createPostRequest) async {
+  Future<void> postRequirements(FormData createPostRequest) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(createPostRequest);
+    final _data = createPostRequest;
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'POST',
       headers: _headers,
@@ -71,12 +70,12 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<void> setupStrore(Map<String, dynamic> setupStrore) async {
+  Future<void> deleteAccoountSemdOtp(Map<String, String> data) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(setupStrore);
+    _data.addAll(data);
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'POST',
       headers: _headers,
@@ -84,7 +83,31 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/selling/store',
+          '/DeleteAccOTP',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<void> setupStrore(FormData setupStrore) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = setupStrore;
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/storeSetup',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -136,7 +159,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/postrequirement/mobilenumberPYR/${mobileNumber}',
+              '/BuyerNewtabGet/${mobileNumber}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -146,6 +169,60 @@ class _RestClient implements RestClient {
               baseUrl,
             ))));
     final value = RequirementList.fromJson(_result.data!['data']);
+    return value;
+  }
+
+  @override
+  Future<CountModel> fetchCategoriesCount(String cate) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CountModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/postrequirement/countofStores/${cate}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CountModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CountModel> fetchSubCategoriesCount(String subCat) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CountModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/postrequirement/countofStores/ /${subCat}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CountModel.fromJson(_result.data!);
     return value;
   }
 
@@ -299,7 +376,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/buyer/editProfileData/${mobileNo}',
+          '/buyer/editProfile/${mobileNo}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -352,7 +429,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/selling/requirementbyStore/${storeID}',
+              '/SellerNewTabData/${storeID}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -450,13 +527,12 @@ class _RestClient implements RestClient {
   @override
   Future<void> updateProfileData(
     int mobileNo,
-    Map<String, dynamic> data,
+    FormData data,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(data);
+    final _data = data;
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'PUT',
       headers: _headers,
@@ -464,7 +540,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/buyer/editProfileData/${mobileNo}',
+          '/EditProfile/${mobileNo}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -516,7 +592,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/buyerInProcess/BuyerInprocessTabData/${mobileNo}',
+              '/BuyerInprocessTabData/${mobileNo}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -600,7 +676,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/Dealdonebuyer/DDmobilewiseData/${mobileNo}',
+              '/BuyerDealDoneTabData/${mobileNo}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -627,7 +703,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/buyerRejected/RejectedTabData/${mobileNo}',
+              '/BuyerRejectedTabData/${mobileNo}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -729,7 +805,10 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<void> exactOrSimilar(Map<String, dynamic> data) async {
+  Future<void> pushtoBuyerInProcessAndSellerInProcess(
+    String RequirementID,
+    Map<String, dynamic> data,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -742,7 +821,31 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/sellerNewTab/SellerExactSimilar',
+          '/sellerNewTab/InprocesBuyerSeller/${RequirementID}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<void> exactOrSimilar(FormData data) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = data;
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/SellerExactSimilarImages',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -771,6 +874,31 @@ class _RestClient implements RestClient {
         .compose(
           _dio.options,
           '/rejected/rejectedByStore/${storeId}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<void> Logout(Map<String, dynamic> data) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/buyer/UserLOgout',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -1003,6 +1131,33 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<void> deleteAccountVerifyOTP(
+    String mobileNo,
+    String otp,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/DelAccount/deleteAccOTPvalidation/${mobileNo}/${otp}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
   Future<void> deleteAccount(
     String mobileNo,
     Map<String, dynamic> data,
@@ -1082,6 +1237,67 @@ class _RestClient implements RestClient {
               baseUrl,
             ))));
     final value = CategoryResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<List<CategoryWithSubcategories>> getSetupsubcategorieswithCategories(
+      String list) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<List<CategoryWithSubcategories>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/CatSubCategories/multipleSubCategories/${list}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) =>
+            CategoryWithSubcategories.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<CategoryGroup>> getSetupsubsubcategorieswithCategories(
+      String list) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<CategoryGroup>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/CatSubCategories/multipleSubSubCategories/${list}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => CategoryGroup.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 
@@ -1168,6 +1384,86 @@ class _RestClient implements RestClient {
               baseUrl,
             ))));
     final value = StoreName.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<void> signUpWithOtp(Map<String, dynamic> data) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/SignupOTP',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<void> LoginWithOtp(Map<String, dynamic> data) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/LoginOTP',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<MessageOTP> verifyPhoneNumber(
+    String mobile,
+    int otp,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<MessageOTP>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/buyer/signupdetails/${mobile}/${otp}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = MessageOTP.fromJson(_result.data!);
     return value;
   }
 

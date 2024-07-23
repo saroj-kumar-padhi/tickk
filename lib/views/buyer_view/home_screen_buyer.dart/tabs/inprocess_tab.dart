@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../controllers/buyerInprocessController.dart';
 import '../../../../utils/components/buyerScreenTiles/inprocess_tile.dart';
@@ -13,21 +15,16 @@ class InProcessTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
-    String phoneNumber = user?.phoneNumber ?? "";
-    String formattedPhoneNumber =
-        phoneNumber.isNotEmpty ? phoneNumber.substring(3) : "";
+    final box = Hive.box('myBox');
+    final String formattedPhoneNumber = box.get('phone');
     Buyerinprocesscontroller buyerinprocesscontroller =
         Get.put(Buyerinprocesscontroller(mobileNo: formattedPhoneNumber));
 
     return Obx(() {
       return buyerinprocesscontroller.isLoading.value
           ? Scaffold(
-              backgroundColor: const Color(0xffFC8019),
-              body: Center(
-                child: LoadingAnimationWidget.inkDrop(
-                    color: const Color(0xffE4E4E4), size: 200),
-              ),
+              body:
+                  Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,6 +76,7 @@ class InProcessTab extends StatelessWidget {
                                 date: data.Date,
                                 stores: data.stores,
                                 mobile: formattedPhoneNumber,
+                                requirementImge: data.addImage,
                               ),
                             );
                           }),

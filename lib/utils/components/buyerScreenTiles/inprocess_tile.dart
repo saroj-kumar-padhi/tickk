@@ -24,6 +24,7 @@ import 'package:intl/intl.dart';
 class InprocessTile extends StatelessWidget {
   final String mobile;
   final String requirementId;
+  final String requirementImge;
   final String catagory;
   final String subCategory;
   final String brands;
@@ -47,13 +48,14 @@ class InprocessTile extends StatelessWidget {
       required this.des,
       required this.date,
       required this.stores,
-      required this.mobile});
+      required this.mobile,
+      required this.requirementImge});
 
   @override
   Widget build(BuildContext context) {
     final ExpandController expandController = Get.put(ExpandController());
     final Mystoreaccountcontroller mystoreaccountcontroller =
-        Get.put(Mystoreaccountcontroller());
+        Get.put(Mystoreaccountcontroller(storeId: ''));
     final InProcessController inProcessController =
         Get.put(InProcessController());
     final DialogBoxController dialogBoxController =
@@ -143,7 +145,10 @@ class InprocessTile extends StatelessWidget {
                     SizedBox(
                         width: 90.w,
                         height: 60.h,
-                        child: Image.asset("assest/sellitems.png")),
+                        child: Image.network(
+                          requirementImge,
+                          fit: BoxFit.cover,
+                        )),
                     Column(
                       children: [
                         Text(
@@ -581,7 +586,7 @@ class InprocessTile extends StatelessWidget {
                                                                       builder:
                                                                           (BuildContext
                                                                               context) {
-                                                                        return const CarouselDialog();
+                                                                        return const SizedBox();
                                                                       },
                                                                     );
                                                                   },
@@ -707,7 +712,7 @@ class InprocessTile extends StatelessWidget {
                                                                                 "Reject": true
                                                                               });
                                                                           Get.to(
-                                                                              RejectedTab());
+                                                                              const RejectedTab());
                                                                         } catch (e) {
                                                                           Logger()
                                                                               .d(e);

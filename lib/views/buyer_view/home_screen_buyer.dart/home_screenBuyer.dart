@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 
+import '../../../controllers/basicControllerEdit.dart';
 import '../../../controllers/categoriesController.dart';
 import '../../../controllers/flavourController.dart';
 import '../../../utils/components/textstyle.dart';
@@ -72,7 +74,14 @@ class HomeBuyer extends StatelessWidget {
                       width: GlobalSizes.getDeviceHeight(context) * 0.015,
                     ),
                     InkWell(
-                      onTap: () {
+                      onTap: () async {
+                        BasiccontrollerEdit basiccontrollerEdit =
+                            Get.put(BasiccontrollerEdit());
+                        final box = Hive.box('myBox');
+                        final String formattedPhoneNumber =
+                            box.get('phone') ?? "";
+                        await basiccontrollerEdit.fetchBasicDetailsEdit(
+                            mobile: formattedPhoneNumber);
                         Get.toNamed(RouteName.buyerProfile);
                       },
                       child: SizedBox(
@@ -89,7 +98,7 @@ class HomeBuyer extends StatelessWidget {
                       // ),
                     ),
                     SizedBox(
-                      width: GlobalSizes.getDeviceHeight(context) * 0.015,
+                      width: 20.w,
                     ),
                     InkWell(
                       onTap: () {
@@ -97,8 +106,9 @@ class HomeBuyer extends StatelessWidget {
                       },
                       child: SizedBox(
                         height: GlobalSizes.getDeviceHeight(context) * 0.036,
-                        child: Image.asset(
-                          "assest/sellerShop.png",
+                        width: 30.w,
+                        child: SvgPicture.asset(
+                          "assest/storeIcon.svg",
                           fit: BoxFit.fitHeight,
                         ),
                       ),
@@ -175,7 +185,7 @@ class HomeBuyer extends StatelessWidget {
                   tabs: [
                     Tab(
                       child: Text(
-                        'New (05)',
+                        'New',
                         style: TextStyles.openSans(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -184,7 +194,7 @@ class HomeBuyer extends StatelessWidget {
                     ),
                     Tab(
                       child: Text(
-                        'In process (02)',
+                        'In process',
                         style: TextStyles.openSans(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -221,7 +231,7 @@ class HomeBuyer extends StatelessWidget {
                     NewTab(), // inprocess tab
                     const InProcessTab(), // inprocess tab
                     const DealDoneTab(), //Deal Done
-                    RejectedTab(), // rejected tab
+                    const RejectedTab(), // rejected tab
                   ],
                 ),
               ),
@@ -231,8 +241,8 @@ class HomeBuyer extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.5,
-                      child: Image.asset(
-                        "assest/buying.png",
+                      child: SvgPicture.asset(
+                        "assest/buying.svg",
                         fit: BoxFit.fitWidth,
                       ),
                     ),
@@ -242,7 +252,8 @@ class HomeBuyer extends StatelessWidget {
                       },
                       child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.5,
-                          child: Image.asset("assest/post.png")),
+                          child:
+                              SvgPicture.asset("assest/postRequirement.svg")),
                     )
                   ],
                 ),

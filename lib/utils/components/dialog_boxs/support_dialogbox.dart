@@ -85,7 +85,7 @@ Future<void> launchEmailSupport() async {
       'subject': 'Support Request for Tickk Request',
       'body': '''
 Hello Tickk Support Team,
-Thank you.
+
 '''
     }),
   );

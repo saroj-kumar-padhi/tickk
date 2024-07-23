@@ -22,6 +22,9 @@ class DoneDoneSellerCard extends StatelessWidget {
   final String units;
   final String des;
   final String quote;
+  final String addImages;
+  final List<dynamic> exactImages;
+  final bool exact;
   const DoneDoneSellerCard(
       {super.key,
       required this.yourName,
@@ -34,7 +37,10 @@ class DoneDoneSellerCard extends StatelessWidget {
       required this.size,
       required this.units,
       required this.des,
-      required this.quote});
+      required this.quote,
+      required this.addImages,
+      required this.exactImages,
+      required this.exact});
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +160,7 @@ class DoneDoneSellerCard extends StatelessWidget {
                     child: SizedBox(
                         width: GlobalSizes.getDeviceWidth(context) * 0.15,
                         height: GlobalSizes.getDeviceHeight(context) * 0.09,
-                        child: Image.asset("assest/sellitems.png")),
+                        child: Image.network(addImages)),
                   ),
                   Column(
                     children: [
@@ -276,16 +282,15 @@ class DoneDoneSellerCard extends StatelessWidget {
                     Flexible(
                       child: Obx(() => RadioListTile(
                             dense: true,
-                            fillColor: WidgetStatePropertyAll(
-                                exactController.isExact.isTrue
-                                    ? const Color(0xffFC8019)
-                                    : const Color(0xff959595)),
+                            fillColor: WidgetStatePropertyAll(exact
+                                ? const Color(0xffFC8019)
+                                : const Color(0xff959595)),
                             title: Text(
                               'Exact',
                               style: TextStyles.openSans(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
-                                  color: exactController.isExact.isTrue
+                                  color: exact
                                       ? const Color(0xff313333)
                                       : const Color(0xff959595)),
                             ),
@@ -298,16 +303,15 @@ class DoneDoneSellerCard extends StatelessWidget {
                     Flexible(
                       child: Obx(() => RadioListTile(
                             dense: true,
-                            fillColor: WidgetStatePropertyAll(
-                                exactController.isExact.isFalse
-                                    ? const Color(0xffFC8019)
-                                    : const Color(0xff959595)),
+                            fillColor: WidgetStatePropertyAll(exact == false
+                                ? const Color(0xffFC8019)
+                                : const Color(0xff959595)),
                             title: Text(
                               'Similar',
                               style: TextStyles.openSans(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
-                                  color: exactController.isExact.isFalse
+                                  color: exact == false
                                       ? const Color(0xff313333)
                                       : const Color(0xff959595)),
                             ),
@@ -336,7 +340,9 @@ class DoneDoneSellerCard extends StatelessWidget {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return const CarouselDialog();
+                                return CarouselDialog(
+                                  images: exactImages,
+                                );
                               },
                             );
                           },

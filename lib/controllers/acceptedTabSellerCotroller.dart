@@ -8,6 +8,9 @@ class Acceptedtabsellercotroller extends GetxController {
   RxList<DdItem> acceptedItems = <DdItem>[].obs;
   RxList<DdItem> sentItems = <DdItem>[].obs;
   RxBool isLoading = true.obs;
+  final String storeId;
+
+  Acceptedtabsellercotroller(this.storeId);
 
   @override
   void onInit() {
@@ -18,7 +21,7 @@ class Acceptedtabsellercotroller extends GetxController {
   Future<void> fetchAcceptedItems() async {
     try {
       isLoading(true);
-      final response = await restClient.acceptedSellerSide('TS15625HP');
+      final response = await restClient.acceptedSellerSide(storeId);
       acceptedItems.addAll(response.ddItems);
 
       // Log detailed information about each item

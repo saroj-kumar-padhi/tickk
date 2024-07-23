@@ -472,7 +472,7 @@ class StoreEditScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(right: 18.w),
                       child: CustomDropdownFormField(
-                        items: dropdownController.subcategories,
+                        items: const [],
                         onChanged: (value) {},
                         onSaved: (value) {},
                       ),

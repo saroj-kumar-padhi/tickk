@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 import '../../../controllers/homeSellerController.dart';
 import '../../../utils/components/sellerScreenTiles/newSellerTile.dart';
 
@@ -25,11 +26,8 @@ class NewTabSeller extends StatelessWidget {
             child: Obx(
               () => homeSellerController.isLoading.value
                   ? Scaffold(
-                      backgroundColor: const Color(0xffFC8019),
                       body: Center(
-                        child: LoadingAnimationWidget.inkDrop(
-                            color: const Color(0xffE4E4E4), size: 200),
-                      ),
+                          child: LottieBuilder.asset("assest/XyglI35BZO.json")),
                     )
                   : homeSellerController.sellerDataList.isEmpty
                       ? Center(

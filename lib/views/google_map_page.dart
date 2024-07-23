@@ -1,6 +1,8 @@
+import 'package:dekhlo/controllers/productSetupController.dart';
 import 'package:dekhlo/controllers/sortDialogBoxController.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
+import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -116,6 +118,7 @@ class GoogleMapPage extends StatelessWidget {
                           ),
                           onPressed: () {
                             // Add functionality for the "change" button if needed
+                            Get.toNamed(RouteName.changeLocation);
                           },
                           child: Text(
                             "change",
@@ -161,6 +164,7 @@ class GoogleMapPage extends StatelessWidget {
                   context: context,
                   onPressedCallback: () {
                     Get.back();
+                    ProductSetUpController().updateButtonState();
                   },
                   buttonText: "Confirm",
                   textColor: Colors.white,

@@ -1,11 +1,13 @@
 import 'package:dekhlo/controllers/flavourController.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
+import 'package:dekhlo/views/seller_views/store_screens/mystore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../utils/components/coustoum_serch_bar.dart';
 import '../../../utils/components/textstyle.dart';
@@ -32,11 +34,7 @@ class HomeSeller extends StatelessWidget {
         Get.put(FlavourContoler(storeID: storeId));
     return Obx(() => flavourContoler.isLoading.value
         ? Scaffold(
-            backgroundColor: const Color(0xffFC8019),
-            body: Center(
-              child: LoadingAnimationWidget.inkDrop(
-                  color: const Color(0xffE4E4E4), size: 200),
-            ),
+            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
           )
         : flavourContoler.isBuying.value
             ? DefaultTabController(
@@ -73,7 +71,7 @@ class HomeSeller extends StatelessWidget {
                               SizedBox(
                                 width:
                                     GlobalSizes.getDeviceWidth(context) * 0.3,
-                                child: Image.asset("assest/small_tick.png"),
+                                child: Image.asset("assest/tickk.png"),
                               ),
                               SizedBox(
                                 width: 120.w,
@@ -97,7 +95,7 @@ class HomeSeller extends StatelessWidget {
                               ),
                               InkWell(
                                 onTap: () {
-                                  Get.toNamed(RouteName.buyerProfile);
+                                  Get.to(() => const SellerProfile());
                                 },
                                 child: SizedBox(
                                   height: GlobalSizes.getDeviceHeight(context) *
@@ -185,16 +183,7 @@ class HomeSeller extends StatelessWidget {
                             tabs: [
                               Tab(
                                 child: Text(
-                                  'New (05)',
-                                  style: TextStyles.openSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Tab(
-                                child: Text(
-                                  'In process (02)',
+                                  'New',
                                   style: TextStyles.openSans(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -233,9 +222,9 @@ class HomeSeller extends StatelessWidget {
                                 storeName:
                                     flavourContoler.comapamyName.storeName,
                               ), // inprocess tab
-                              const InProcessTab(),
+
                               const DealDoneTab(), //Deal Done
-                              RejectedTab(), // rejected tab
+                              const RejectedTab(), // rejected tab
                             ],
                           ),
                         ),
@@ -306,7 +295,10 @@ class HomeSeller extends StatelessWidget {
                             // ),
                             SizedBox(
                               width: GlobalSizes.getDeviceWidth(context) * 0.3,
-                              child: Image.asset("assest/small_tick.png"),
+                              child: Image.asset(
+                                "assest/tickk.png",
+                                fit: BoxFit.cover,
+                              ),
                             ),
                             SizedBox(
                               width: 150.w,
@@ -330,7 +322,7 @@ class HomeSeller extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () {
-                                Get.toNamed(RouteName.myStore);
+                                Get.to(MyStore(StoreId: storeId));
                               },
                               child: SvgPicture.asset(
                                 height: 20.h,
@@ -411,7 +403,7 @@ class HomeSeller extends StatelessWidget {
                             tabs: [
                               Tab(
                                 child: Text(
-                                  'New (05)',
+                                  'New',
                                   style: TextStyles.openSans(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -420,7 +412,7 @@ class HomeSeller extends StatelessWidget {
                               ),
                               Tab(
                                 child: Text(
-                                  'Pending quotes (02)',
+                                  'In process',
                                   style: TextStyles.openSans(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -429,7 +421,7 @@ class HomeSeller extends StatelessWidget {
                               ),
                               Tab(
                                 child: Text(
-                                  'In process (02)',
+                                  'Accepted',
                                   style: TextStyles.openSans(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -438,16 +430,7 @@ class HomeSeller extends StatelessWidget {
                               ),
                               Tab(
                                 child: Text(
-                                  'Accepted (03)',
-                                  style: TextStyles.openSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Tab(
-                                child: Text(
-                                  'Deal Done (01)',
+                                  'Deal Done',
                                   style: TextStyles.openSans(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -477,21 +460,18 @@ class HomeSeller extends StatelessWidget {
                                 storeName:
                                     flavourContoler.comapamyName.storeName,
                               ),
-                              PandingTabSeller(
-                                storeId: storeId,
-                                storeName:
-                                    flavourContoler.comapamyName.storeName,
-                              ),
                               ProcessTabSeller(
                                 storeId: storeId,
                               ),
                               AcceptedTabSeller(
                                 storeName:
                                     flavourContoler.comapamyName.storeName,
+                                storeId: storeId,
                               ),
                               DealDoneTabSeller(
                                 storeName:
                                     flavourContoler.comapamyName.storeName,
+                                storeId: storeId,
                               ),
                               RejectedTabSeller(
                                 storeId: storeId,

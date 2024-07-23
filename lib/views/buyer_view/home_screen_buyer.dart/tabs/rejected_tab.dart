@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../controllers/rejectedTabController.dart';
 import '../../../../utils/components/buyerScreenTiles/rejected_tiles.dart';
 import '../../../../utils/components/textstyle.dart';
 
 class RejectedTab extends StatelessWidget {
-  RejectedTab({super.key});
-
-  RejectedBuyerTabController buyerRejectedController =
-      Get.put(RejectedBuyerTabController(mobileNo: '1234567890'));
+  const RejectedTab({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final box = Hive.box('myBox');
+    final String formattedPhoneNumber = box.get('phone');
+
+    RejectedBuyerTabController buyerRejectedController =
+        Get.put(RejectedBuyerTabController(mobileNo: formattedPhoneNumber));
     return Obx(() => buyerRejectedController.isLoading.value
         ? Scaffold(
-            backgroundColor: const Color(0xffFC8019),
-            body: Center(
-              child: LoadingAnimationWidget.inkDrop(
-                  color: const Color(0xffE4E4E4), size: 200),
-            ),
+            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
           )
         : buyerRejectedController.rejectedItems.isEmpty
             ? Center(
@@ -46,6 +46,7 @@ class RejectedTab extends StatelessWidget {
                 ],
               ))
             : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 10.h),
