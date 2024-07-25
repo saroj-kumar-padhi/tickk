@@ -21,7 +21,7 @@ class DealDoneTab extends StatelessWidget {
         Get.put(BuyerDealDonecontroller(mobileNo: formattedPhoneNumber));
     return Obx(() => buyerDealDonecontroller.isLoading.value
         ? Scaffold(
-            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
+            body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
           )
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,

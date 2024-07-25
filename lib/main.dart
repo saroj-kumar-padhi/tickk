@@ -122,8 +122,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
       if (response.message == 'Mobile registered for buyer') {
         destinationWidget = const HomeBuyer();
-      } else if (response.message ==
-          'Mobile registered as both buyer and seller') {
+      } else if (response.message == 'Mobile registered for seller') {
         try {
           final storeData =
               await restClient.checkStoreId(int.parse(formattedPhoneNumber));
@@ -151,7 +150,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
   Widget build(BuildContext context) {
     if (isLoading) {
       return Scaffold(
-        body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
+        body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
       );
     } else {
       return destinationWidget ?? const Pagenotfound();

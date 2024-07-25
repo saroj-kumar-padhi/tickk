@@ -162,8 +162,10 @@ class GoogleMapPage extends StatelessWidget {
                 Buttons.longButton(
                   color: const Color(0xffFC8019),
                   context: context,
-                  onPressedCallback: () {
-                    Get.back();
+                  onPressedCallback: () async {
+                    Future.delayed(const Duration(seconds: 0), () {
+                      Get.back();
+                    });
                     ProductSetUpController().updateButtonState();
                   },
                   buttonText: "Confirm",

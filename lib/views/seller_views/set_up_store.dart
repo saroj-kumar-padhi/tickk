@@ -309,7 +309,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    heading(title: 'Store Name'),
+                    heading(title: 'Store Name *'),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -337,7 +337,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: 'Store category'),
+                    heading(title: 'Store category *'),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -370,7 +370,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                           // }
                         },
                         options: convertToValueItems(
-                            categoriesController.categories),
+                            categoriesController.setupCategories),
                         maxItems: 10,
                         selectionType: SelectionType.multi,
                         chipConfig: const ChipConfig(
@@ -388,13 +388,24 @@ class _SetUpProductState extends State<SetUpProduct> {
                       height: 10.h,
                     ),
                     SubSubCategoryItems.isEmpty
-                        ? Text(
-                            "Sub categories",
-                            style: TextStyles.openSans(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w600,
-                                color:
-                                    const Color(0xff313333).withOpacity(0.5)),
+                        ? Row(
+                            children: [
+                              Text(
+                                "Sub categories",
+                                style: TextStyles.openSans(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xff313333)
+                                        .withOpacity(0.5)),
+                              ),
+                              Text(
+                                " (optional)",
+                                style: TextStyles.openSans(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey),
+                              ),
+                            ],
                           )
                         : heading(title: 'Sub categories'),
                     SizedBox(
@@ -497,13 +508,24 @@ class _SetUpProductState extends State<SetUpProduct> {
                       height: 10.h,
                     ),
                     SubSubCategoryItems.isEmpty
-                        ? Text(
-                            "Sub categories",
-                            style: TextStyles.openSans(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w600,
-                                color:
-                                    const Color(0xff313333).withOpacity(0.5)),
+                        ? Row(
+                            children: [
+                              Text(
+                                "Sub Sub categories",
+                                style: TextStyles.openSans(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xff313333)
+                                        .withOpacity(0.5)),
+                              ),
+                              Text(
+                                " (optional)",
+                                style: TextStyles.openSans(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey),
+                              ),
+                            ],
                           )
                         : heading(title: 'Sub Sub categories'),
                     SizedBox(
@@ -644,7 +666,18 @@ class _SetUpProductState extends State<SetUpProduct> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: "About your store"),
+                    Row(
+                      children: [
+                        heading(title: "About your store"),
+                        Text(
+                          " (optional)",
+                          style: TextStyles.openSans(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -760,7 +793,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: "Timings"),
+                    heading(title: "Timings *"),
                     SizedBox(
                       height: 10.h,
                     ),
@@ -937,6 +970,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                                     onTap: () {
                                       // Get.toNamed(RouteName.changeLocation);
                                     },
+                                    keyboardType: TextInputType.number,
                                     controller: productSetUpController
                                         .pinCodeController.value,
                                     decoration: const InputDecoration(
@@ -1083,6 +1117,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                       onTap: () async {
                         await dialogBoxController.getCurrentLoaction();
                         Get.to(const GoogleMapPage());
+                        productSetUpController.updateButtonState();
                       },
                       child: Text(
                         "Use my current location",
@@ -1278,7 +1313,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                   height: 5.h,
                 ),
                 Text(
-                  "Add your store images",
+                  "Add your store images *",
                   style: TextStyles.openSans(
                       fontWeight: FontWeight.w400,
                       fontSize: 10.sp,

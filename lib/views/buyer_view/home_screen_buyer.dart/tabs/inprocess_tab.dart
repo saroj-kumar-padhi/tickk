@@ -24,7 +24,7 @@ class InProcessTab extends StatelessWidget {
       return buyerinprocesscontroller.isLoading.value
           ? Scaffold(
               body:
-                  Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
+                  Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,

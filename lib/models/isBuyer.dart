@@ -1,12 +1,10 @@
 class BuyerResponse {
-  final bool success;
   final String message;
 
-  BuyerResponse({required this.success, required this.message});
+  BuyerResponse({required this.message});
 
   factory BuyerResponse.fromJson(Map<String, dynamic> json) {
     return BuyerResponse(
-      success: json['success'],
       message: json['message'],
     );
   }

@@ -34,7 +34,7 @@ class HomeSeller extends StatelessWidget {
         Get.put(FlavourContoler(storeID: storeId));
     return Obx(() => flavourContoler.isLoading.value
         ? Scaffold(
-            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
+            body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
           )
         : flavourContoler.isBuying.value
             ? DefaultTabController(
@@ -77,21 +77,21 @@ class HomeSeller extends StatelessWidget {
                                 width: 120.w,
                               ),
 
-                              InkWell(
-                                onTap: () {
-                                  Get.toNamed(RouteName.buyerNotification);
-                                },
-                                child: SizedBox(
-                                    height:
-                                        GlobalSizes.getDeviceHeight(context) *
-                                            0.03,
-                                    child: Image.asset(
-                                      "assest/bell.png",
-                                      fit: BoxFit.fitHeight,
-                                    )),
-                              ),
+                              // InkWell(
+                              //   onTap: () {
+                              //     Get.toNamed(RouteName.buyerNotification);
+                              //   },
+                              //   child: SizedBox(
+                              //       height:
+                              //           GlobalSizes.getDeviceHeight(context) *
+                              //               0.03,
+                              //       child: Image.asset(
+                              //         "assest/bell.png",
+                              //         fit: BoxFit.fitHeight,
+                              //       )),
+                              // ),
                               SizedBox(
-                                width: 15.w,
+                                width: 40.w,
                               ),
                               InkWell(
                                 onTap: () {
@@ -100,14 +100,14 @@ class HomeSeller extends StatelessWidget {
                                 child: SizedBox(
                                   height: GlobalSizes.getDeviceHeight(context) *
                                       0.03,
-                                  child: Image.asset(
-                                    "assest/user.png",
+                                  child: SvgPicture.asset(
+                                    "assest/user (1).svg",
                                     fit: BoxFit.fitHeight,
                                   ),
                                 ),
                               ),
                               SizedBox(
-                                width: 15.w,
+                                width: 20.w,
                               ),
                               InkWell(
                                 onTap: () {
@@ -184,6 +184,24 @@ class HomeSeller extends StatelessWidget {
                               Tab(
                                 child: Text(
                                   'New',
+                                  style: TextStyles.openSans(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              Tab(
+                                child: Text(
+                                  'In process',
+                                  style: TextStyles.openSans(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              Tab(
+                                child: Text(
+                                  'Accepted',
                                   style: TextStyles.openSans(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -341,7 +359,7 @@ class HomeSeller extends StatelessWidget {
                               child: SvgPicture.asset(
                                 height: 20.h,
                                 width: 20.w,
-                                "assest/user.svg",
+                                "assest/user (1).svg",
                                 fit: BoxFit.fill,
                               ),
                             ),
@@ -351,50 +369,51 @@ class HomeSeller extends StatelessWidget {
                           height: 10
                               .h, // Adjust spacing between search bar and tab bar
                         ),
-                        SizedBox(
-                            height: 90.h,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: flavourContoler.categoryData.length,
-                              itemBuilder: (context, index) {
-                                String categoryName = flavourContoler
-                                    .categoryData.keys
-                                    .elementAt(index);
-                                String imagePath = flavourContoler
-                                    .categoryData.values
-                                    .elementAt(index);
+                        // SizedBox(
+                        //     height: 90.h,
+                        //     child: ListView.builder(
+                        //       scrollDirection: Axis.horizontal,
+                        //       itemCount: flavourContoler.categoryData.length,
+                        //       itemBuilder: (context, index) {
+                        //         String categoryName = flavourContoler
+                        //             .categoryData.keys
+                        //             .elementAt(index);
+                        //         String imagePath = flavourContoler
+                        //             .categoryData.values
+                        //             .elementAt(index);
 
-                                return Padding(
-                                  padding: EdgeInsets.all(8.r),
-                                  child: Column(
-                                    children: [
-                                      Material(
-                                        elevation: 4,
-                                        shadowColor:
-                                            Colors.grey.withOpacity(0.1),
-                                        shape: const CircleBorder(),
-                                        child: CircleAvatar(
-                                          radius: 25.r,
-                                          backgroundColor: const Color.fromARGB(
-                                                  255, 232, 231, 231)
-                                              .withOpacity(0.25),
-                                          child: imagePath.isNotEmpty
-                                              ? SvgPicture.asset(imagePath)
-                                              : const Icon(Icons.category,
-                                                  color: Colors
-                                                      .grey), // Fallback icon
-                                        ),
-                                      ),
-                                      SizedBox(height: 5.h),
-                                      Text(
-                                        categoryName,
-                                        style: TextStyle(fontSize: 12.sp),
-                                      )
-                                    ],
-                                  ),
-                                );
-                              },
-                            )),
+                        //         return Padding(
+                        //           padding: EdgeInsets.all(8.r),
+                        //           child: Column(
+                        //             children: [
+                        //               Material(
+                        //                 elevation: 4,
+                        //                 shadowColor:
+                        //                     Colors.grey.withOpacity(0.1),
+                        //                 shape: const CircleBorder(),
+                        //                 child: CircleAvatar(
+                        //                   radius: 25.r,
+                        //                   backgroundColor: const Color.fromARGB(
+                        //                           255, 232, 231, 231)
+                        //                       .withOpacity(0.25),
+                        //                   child: imagePath.isNotEmpty
+                        //                       ? SvgPicture.asset(imagePath)
+                        //                       : const Icon(Icons.category,
+                        //                           color: Colors
+                        //                               .grey), // Fallback icon
+                        //                 ),
+                        //               ),
+                        //               SizedBox(height: 5.h),
+                        //               Text(
+                        //                 categoryName,
+                        //                 style: TextStyle(fontSize: 12.sp),
+                        //               )
+                        //             ],
+                        //           ),
+                        //         );
+                        //       },
+                        //     )),
+
                         SizedBox(
                           height: GlobalSizes.getDeviceHeight(context) * 0.05,
                           child: TabBar(

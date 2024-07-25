@@ -8,6 +8,7 @@ import '../models/categororiesModel.dart';
 
 class CategoriesController extends GetxController {
   final RxList<String> categories = <String>[].obs;
+  final RxList<String> setupCategories = <String>[].obs;
   final RxList<String> subCategories = <String>[].obs;
   final RxList<String> setupsubCategories = <String>[].obs;
   final RxList<String> setupsubSubCategories = <String>[].obs;
@@ -24,6 +25,31 @@ class CategoriesController extends GetxController {
   void onInit() {
     super.onInit();
     fetchCategories();
+    fetchCategoriesSetUp();
+  }
+
+  Future<void> fetchCategoriesSetUp() async {
+    try {
+      isLoading.value = true;
+      final List<StoreCategory> response =
+          await restClient.getAllCategoriesStoreSetUp();
+
+      setupCategories
+          .assignAll(response.expand((category) => category.storeCategory));
+      isLoading.value = false;
+
+      if (setupCategories.isNotEmpty) {
+        Logger().f('First category: ${setupCategories.first}');
+      } else {
+        Logger().f('No categories found');
+      }
+    } catch (error) {
+      isLoading.value = true;
+      Logger().e('Error fetching categories: $error');
+      isLoading.value = false;
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   Future<void> fetchCategories() async {

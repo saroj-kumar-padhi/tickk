@@ -63,7 +63,7 @@ class OTP extends StatelessWidget {
                 GoogleFonts.openSans(fontSize: 12, fontWeight: FontWeight.w600),
           ),
           Text(
-            "to +91 6280644889",
+            "to +91 ${authController.phoneAuthController.text}",
             style:
                 GoogleFonts.openSans(fontSize: 12, fontWeight: FontWeight.w600),
           ),
@@ -113,15 +113,6 @@ class OTP extends StatelessWidget {
             );
           }),
           const Spacer(),
-          Padding(
-              padding: const EdgeInsets.only(bottom: 35),
-              child: CoustumRichText(
-                text1: 'Already have an account? ',
-                text2: AppStrings.logInButtonString,
-                callBack: () {
-                  Get.toNamed(RouteName.logInphoneScreen);
-                },
-              ))
         ],
       ),
     );

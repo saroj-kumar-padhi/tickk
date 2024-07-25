@@ -22,7 +22,7 @@ class PandingTabSeller extends StatelessWidget {
         Get.put(Sellerpandingcontroller(storeId: storeId));
     return Obx(() => sellerpandingcontroller.isLoading.value
         ? Scaffold(
-            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
+            body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
           )
         : Column(
             children: [

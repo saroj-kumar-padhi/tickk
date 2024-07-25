@@ -1,6 +1,8 @@
+import 'package:dekhlo/controllers/authController.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/components/dialog_boxs/succsess_dialog.dart';
+import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +12,7 @@ import 'package:hive/hive.dart';
 import 'package:logger/logger.dart';
 import 'package:pinput/pinput.dart';
 import '../../../controllers/basicControllerEdit.dart';
+import '../../../views/login.dart';
 import '../../size/global_size/global_size.dart';
 import '../textstyle.dart';
 
@@ -93,7 +96,7 @@ class OtpDialog extends StatelessWidget {
                     padding: EdgeInsets.only(
                         bottom: GlobalSizes.getDeviceHeight(context) * 0.01),
                     child: Text(
-                      "We sent a verification code to $phone",
+                      "We sent a verification code to ${AuthController().phoneAuthController.text}",
                       style: TextStyles.openSans(
                           fontSize: 18, fontWeight: FontWeight.w600),
                     ),
@@ -116,40 +119,6 @@ class OtpDialog extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 10.h),
-                  Center(
-                    child: Obx(() => Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "Didn't you get OTP? ",
-                                style: TextStyles.openSans(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12.sp,
-                                ),
-                              ),
-                              TextSpan(
-                                text: otpController.canResend.value
-                                    ? "Resend OTP"
-                                    : "Resend OTP in ${otpController.remainingTime.value}s",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12.sp,
-                                  color: otpController.canResend.value
-                                      ? Colors.orange
-                                      : Colors.grey,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = otpController.canResend.value
-                                      ? () {
-                                          // Implement your OTP resend logic here
-                                          otpController.startResendTimer();
-                                        }
-                                      : null,
-                              ),
-                            ],
-                          ),
-                        )),
-                  ),
                   SizedBox(height: 65.h),
                   Buttons.longButton(
                     color: const Color(0xffFC8019),
@@ -167,7 +136,11 @@ class OtpDialog extends StatelessWidget {
                         }
 
                         await restClient.deleteAccount(formattedPhoneNumber,
-                            {"deleteAccountReason": reason});
+                            {"DeleteAccountReason": reason});
+
+                        await Future.delayed(const Duration(seconds: 3));
+
+                        Get.to(const Login());
                       } catch (e) {
                         Logger().d(e);
                       }

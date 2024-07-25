@@ -22,7 +22,7 @@ class RejectedTabSeller extends StatelessWidget {
       return rejectedTabController.isLoading.value
           ? Scaffold(
               body:
-                  Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
+                  Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
             )
           : rejectedTabController.rejectedItems.isEmpty
               ? Center(

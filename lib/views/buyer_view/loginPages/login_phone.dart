@@ -1,18 +1,37 @@
 import 'package:dekhlo/controllers/authController.dart';
+import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/Strings/strings.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:logger/web.dart';
 import 'package:lottie/lottie.dart';
 import '../../../utils/components/Coustum_RichText.dart';
+import '../../singUpPages/Singup_phone.dart';
+
+class ErrorResponse {
+  final String message;
+
+  ErrorResponse({required this.message});
+
+  factory ErrorResponse.fromJson(Map<String, dynamic> json) {
+    return ErrorResponse(
+      message: json['message'] as String,
+    );
+  }
+}
 
 class LogInPhone extends StatelessWidget {
-  const LogInPhone({super.key});
+  final String? msg;
+
+  const LogInPhone({super.key, this.msg});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +41,11 @@ class LogInPhone extends StatelessWidget {
         return authController.isLoading.value
             ? Scaffold(
                 body: Center(
-                    child: LottieBuilder.asset("assest/XyglI35BZO.json")),
+                    child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
               )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
                       padding: const EdgeInsets.only(top: 60),
@@ -35,14 +55,23 @@ class LogInPhone extends StatelessWidget {
                         style: TextStyles.openSans(),
                       ))),
                   SizedBox(height: GlobalSizes.getDeviceHeight(context) * 0.01),
-                  Text(
-                    "Enter your mobile number, We will",
-                    style: TextStyles.openSans(
-                        fontSize: 12, fontWeight: FontWeight.w400),
-                  ),
-                  Text("send you OTP",
-                      style: TextStyles.openSans(
-                          fontSize: 12, fontWeight: FontWeight.w400)),
+                  msg == null
+                      ? Text(
+                          "Enter your registered mobile number, We will send you OTP",
+                          style: TextStyles.openSans(
+                              fontSize: 12, fontWeight: FontWeight.w400),
+                        )
+                      : Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 50.w),
+                          child: Text(
+                            "The mobile number you are trying to signup is already registered on Tickk. Please Login here.",
+                            style: TextStyles.openSans(
+                                fontSize: 12, fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                  // Text("send you OTP",
+                  //     style: TextStyles.openSans(
+                  //         fontSize: 12, fontWeight: FontWeight.w400)),
                   SizedBox(
                     height: GlobalSizes.getDeviceHeight(context) * .05,
                   ),
@@ -102,17 +131,35 @@ class LogInPhone extends StatelessWidget {
                         textColor: Colors.white,
                         context: context,
                         onPressedCallback: () async {
-                          if (!authController.isPhoneNumberEmpty.value) {
-                            if (authController
-                                    .phoneAuthController.text.length !=
-                                10) {
-                              authController.errorMessagePhoneNumber.value =
-                                  'The number you entered is not valid.';
-                            } else {
-                              await authController.LoginWithOtp();
+                          //check logic
+                          try {
+                            ErrorResponse errorResponse =
+                                await restClient.checkMobileNumberIfRegistered(
+                                    authController.phoneAuthController.text);
 
-                              Get.toNamed(RouteName.logInotpScreen);
+                            if (errorResponse.message ==
+                                "Mobile not registered") {
+                              authController.phoneAuthController.clear();
+                              await Future.delayed(const Duration(seconds: 1));
+                              Get.to(const Phone(
+                                msg: "eufukgfy",
+                              ));
+                            } else {
+                              if (!authController.isPhoneNumberEmpty.value) {
+                                if (authController
+                                        .phoneAuthController.text.length !=
+                                    10) {
+                                  authController.errorMessagePhoneNumber.value =
+                                      'The number you entered is not valid.';
+                                } else {
+                                  await authController.LoginWithOtp();
+
+                                  Get.toNamed(RouteName.logInotpScreen);
+                                }
+                              }
                             }
+                          } catch (e) {
+                            Logger().f(e);
                           }
                         });
                   }),

@@ -52,7 +52,7 @@ class PickImageDialog extends StatelessWidget {
                     padding: EdgeInsets.only(
                         bottom: GlobalSizes.getDeviceHeight(context) * 0.01),
                     child: Text(
-                      "Upload reference image",
+                      "Upload your store images",
                       style: TextStyles.openSans(
                           fontSize: 18, fontWeight: FontWeight.w600),
                     ),
@@ -69,7 +69,7 @@ class PickImageDialog extends StatelessWidget {
                         child: Column(
                           children: [
                             SvgPicture.asset(
-                              "assest/gallery.svg",
+                              "assest/cam_svg.svg",
                               height: 23.h,
                               width: 28.w,
                             ),

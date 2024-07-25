@@ -21,7 +21,7 @@ class RejectedTab extends StatelessWidget {
         Get.put(RejectedBuyerTabController(mobileNo: formattedPhoneNumber));
     return Obx(() => buyerRejectedController.isLoading.value
         ? Scaffold(
-            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
+            body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
           )
         : buyerRejectedController.rejectedItems.isEmpty
             ? Center(

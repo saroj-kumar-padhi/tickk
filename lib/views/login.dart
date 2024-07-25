@@ -5,6 +5,7 @@ import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'buyer_view/profileScreen/FAQ_webview.dart';
@@ -15,69 +16,74 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthController authController = Get.put(AuthController());
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              width: GlobalSizes.getDeviceWidth(context),
-              height: GlobalSizes.getDeviceHeight(context) * .35,
-              decoration: const BoxDecoration(
-                color: Color(0xffFFF5EC),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30.0),
-                  bottomRight: Radius.circular(30.0),
+    return WillPopScope(
+      onWillPop: () async {
+        // Directly quit the app
+        SystemNavigator.pop();
+        return false;
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              Container(
+                width: GlobalSizes.getDeviceWidth(context),
+                height: GlobalSizes.getDeviceHeight(context) * .35,
+                decoration: const BoxDecoration(
+                  color: Color(0xffFFF5EC),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30.0),
+                    bottomRight: Radius.circular(30.0),
+                  ),
+                ),
+                child: Center(
+                  child: Image.asset("assest/tickk.png"),
                 ),
               ),
-              child: Center(
-                child: Image.asset("assest/tickk.png"), // Corrected asset path
+              SizedBox(
+                height: GlobalSizes.getDeviceWidth(context) * 0.04,
               ),
-            ),
-            SizedBox(
-              height: GlobalSizes.getDeviceWidth(context) * 0.04,
-            ),
-            Buttons.longButton(
-                color: const Color(0xffFC8019),
-                buttonText: AppStrings.logInButtonString,
-                textColor: const Color(0xffFFFFFF),
-                context: context,
-                onPressedCallback: () {
-                  authController.isLogin.value = true;
-                  authController.isOtpEmpty.value = true;
-                  authController.isPhoneNumberEmpty.value = true;
-                  authController.otpController.clear();
-                  authController.phoneAuthController.clear();
-                  Get.toNamed(RouteName.logInphoneScreen);
-                }),
-            Buttons.longButton(
-                color: const Color(0xffFFFFFF),
-                buttonText: AppStrings.signUpButtonText,
-                textColor: const Color(0xffFC8019),
-                context: context,
-                onPressedCallback: () {
-                  authController.isLogin.value = false;
-                  authController.isOtpEmpty.value = true;
-                  authController.isPhoneNumberEmpty.value = true;
-                  authController.otpController.clear();
-                  authController.phoneAuthController.clear();
-
-                  Get.toNamed(RouteName.signPhoneScreen);
-                }),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Text(AppStrings.arreingText1),
-                  ),
-                  const TermsAndPolicyText()
-                ],
-              ),
-            )
-            // Terms of Services & Privacy Policy
-          ],
+              Buttons.longButton(
+                  color: const Color(0xffFC8019),
+                  buttonText: AppStrings.logInButtonString,
+                  textColor: const Color(0xffFFFFFF),
+                  context: context,
+                  onPressedCallback: () {
+                    authController.isLogin.value = true;
+                    authController.isOtpEmpty.value = true;
+                    authController.isPhoneNumberEmpty.value = true;
+                    authController.otpController.clear();
+                    authController.phoneAuthController.clear();
+                    Get.toNamed(RouteName.logInphoneScreen);
+                  }),
+              Buttons.longButton(
+                  color: const Color(0xffFFFFFF),
+                  buttonText: AppStrings.signUpButtonText,
+                  textColor: const Color(0xffFC8019),
+                  context: context,
+                  onPressedCallback: () {
+                    authController.isLogin.value = false;
+                    authController.isOtpEmpty.value = true;
+                    authController.isPhoneNumberEmpty.value = true;
+                    authController.otpController.clear();
+                    authController.phoneAuthController.clear();
+                    Get.toNamed(RouteName.signPhoneScreen);
+                  }),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      child: Text(AppStrings.arreingText1),
+                    ),
+                    const TermsAndPolicyText()
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

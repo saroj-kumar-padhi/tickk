@@ -42,7 +42,7 @@ class _PostRequirementsState extends State<PostRequirements> {
   Widget build(BuildContext context) {
     return Obx(() => categoriesController.isLoading.value
         ? Scaffold(
-            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
+            body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
           )
         : Scaffold(
             appBar: AppBar(

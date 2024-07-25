@@ -13,7 +13,7 @@ class _RestClient implements RestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.1.42:3002';
+    baseUrl ??= 'http://13.201.210.192:3002';
   }
 
   final Dio _dio;
@@ -200,6 +200,33 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<ErrorResponse> checkMobileNumberIfRegistered(String mobileNo) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ErrorResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/buyer/CheckRegisteredOrNot/${mobileNo}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ErrorResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<CountModel> fetchSubCategoriesCount(String subCat) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -241,6 +268,35 @@ class _RestClient implements RestClient {
             .compose(
               _dio.options,
               '/CatSubCategories/AllCategories',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => StoreCategory.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<StoreCategory>> getAllCategoriesStoreSetUp() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<StoreCategory>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/CatSubCategories/AllStoreCategories',
               queryParameters: queryParameters,
               data: _data,
             )

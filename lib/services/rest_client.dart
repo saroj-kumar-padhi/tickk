@@ -9,6 +9,7 @@ import 'package:dekhlo/models/sellerInprocess.dart';
 import 'package:dekhlo/models/selleracceptedTabModel.dart';
 import 'package:dekhlo/models/subSubCategory.dart';
 import 'package:dekhlo/models/userFcmModel.dart';
+import 'package:dekhlo/views/buyer_view/loginPages/login_phone.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
@@ -30,8 +31,8 @@ import '../utils/components/buyerScreenTiles/send_tile.dart';
 
 part 'rest_client.g.dart';
 
-// @RestApi(baseUrl: 'http://3.214.24.150:3002')
-@RestApi(baseUrl: 'http://192.168.1.42:3002')
+@RestApi(baseUrl: 'http://13.201.210.192:3002')
+// @RestApi(baseUrl: 'http://192.168.1.31:3002')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
@@ -66,11 +67,18 @@ abstract class RestClient {
   @GET('/postrequirement/countofStores/{cate}')
   Future<CountModel> fetchCategoriesCount(@Path('cate') String cate);
 
+  @GET('/buyer/CheckRegisteredOrNot/{mobileNo}')
+  Future<ErrorResponse> checkMobileNumberIfRegistered(
+      @Path('mobileNo') String mobileNo);
+
   @GET('/postrequirement/countofStores/ /{subCat}')
   Future<CountModel> fetchSubCategoriesCount(@Path('subCat') String subCat);
 
   @GET('/CatSubCategories/AllCategories')
   Future<List<StoreCategory>> getAllCategories();
+
+  @GET('/CatSubCategories/AllStoreCategories')
+  Future<List<StoreCategory>> getAllCategoriesStoreSetUp();
 
   @GET('/buyer/buyerData/{mobileNumber}')
   Future<User> getProfileDetails(@Path('mobileNumber') int mobileNumber);

@@ -18,7 +18,7 @@ class NewTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() => newTabController.isLoading.value
         ? Scaffold(
-            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
+            body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
           )
         : newTabController.requirementsList.isEmpty
             ? Column(

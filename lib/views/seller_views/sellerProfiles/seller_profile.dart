@@ -27,7 +27,7 @@ class SellerProfile extends StatelessWidget {
         Get.put(SellerProfileController(formattedPhoneNumber));
     return Obx(() => sellerProfileController.isLoading.value
         ? Scaffold(
-            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
+            body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
           )
         : Scaffold(
             appBar: AppBar(
@@ -78,7 +78,7 @@ class SellerProfile extends StatelessWidget {
                           SizedBox(
                             width: 10.w,
                           ),
-                          const Text("Delete Account")
+                          const Text("assest/mX2qe5gUvP.json")
                         ],
                       ),
                     ),

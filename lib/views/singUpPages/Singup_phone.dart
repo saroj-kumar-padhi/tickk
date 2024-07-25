@@ -5,20 +5,25 @@ import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import '../../services/injection.dart';
 import '../../utils/components/Coustum_RichText.dart';
+import '../buyer_view/loginPages/login_phone.dart';
 
 class Phone extends StatelessWidget {
-  const Phone({super.key});
+  final String? msg;
+
+  const Phone({super.key, this.msg});
 
   @override
   Widget build(BuildContext context) {
     final AuthController authController = Get.put(AuthController());
     return Obx(() => authController.isLoading.value
         ? Scaffold(
-            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
+            body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
           )
         : Scaffold(
             body: SafeArea(
@@ -33,14 +38,20 @@ class Phone extends StatelessWidget {
                         style: TextStyles.openSans(),
                       ))),
                   SizedBox(height: GlobalSizes.getDeviceHeight(context) * 0.01),
-                  Text(
-                    "Enter your mobile number, We will",
-                    style: TextStyles.openSans(
-                        fontSize: 12, fontWeight: FontWeight.w400),
-                  ),
-                  Text("send you OTP",
-                      style: TextStyles.openSans(
-                          fontSize: 12, fontWeight: FontWeight.w400)),
+                  msg == null
+                      ? Text(
+                          "Enter your mobile number, We will send you OTP",
+                          style: TextStyles.openSans(
+                              fontSize: 12, fontWeight: FontWeight.w400),
+                        )
+                      : Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 50.w),
+                          child: Text(
+                            "The mobile number you are trying to login is not registered on Tickk. Please Signup here.",
+                            style: TextStyles.openSans(
+                                fontSize: 12, fontWeight: FontWeight.w400),
+                          ),
+                        ),
                   SizedBox(
                     height: GlobalSizes.getDeviceHeight(context) * .05,
                   ),
@@ -100,15 +111,29 @@ class Phone extends StatelessWidget {
                         textColor: Colors.white,
                         context: context,
                         onPressedCallback: () async {
-                          authController.isPhoneNumberEmpty.value
-                              ? () {}
-                              : authController
-                                          .phoneAuthController.text.length !=
-                                      10
-                                  ? authController
-                                          .errorMessagePhoneNumber.value =
-                                      'The number you entered is not Registered.'
-                                  : await authController.signUpWithOtp();
+                          ErrorResponse errorResponse =
+                              await restClient.checkMobileNumberIfRegistered(
+                                  authController.phoneAuthController.text);
+
+                          if (errorResponse.message ==
+                              "Mobile already registered") {
+                            authController.phoneAuthController.clear();
+                            await Future.delayed(const Duration(seconds: 1));
+                            Get.to(const LogInPhone(
+                              msg:
+                                  "The mobile number you are trying to signup is already registered on Tickk. Please Login here.",
+                            ));
+                          } else {
+                            authController.isPhoneNumberEmpty.value
+                                ? () {}
+                                : authController
+                                            .phoneAuthController.text.length !=
+                                        10
+                                    ? authController
+                                            .errorMessagePhoneNumber.value =
+                                        'The number you entered is not Registered.'
+                                    : await authController.signUpWithOtp();
+                          }
                         });
                   }),
                   const Spacer(),

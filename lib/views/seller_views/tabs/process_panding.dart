@@ -19,7 +19,7 @@ class ProcessTabSeller extends StatelessWidget {
       body: Obx(() {
         if (sellerInprocesscontroller.isLoading.value) {
           return Scaffold(
-            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
+            body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
           );
         } else {
           if (sellerInprocesscontroller.requirementsList.isEmpty) {

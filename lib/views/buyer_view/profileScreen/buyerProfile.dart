@@ -24,7 +24,7 @@ class BuyerProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() => basiccontrollerEdit.isLoading.value
         ? Scaffold(
-            body: Center(child: LottieBuilder.asset("assest/XyglI35BZO.json")),
+            body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
           )
         : Scaffold(
             appBar: AppBar(
