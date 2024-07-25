@@ -150,7 +150,7 @@ class _PostRequirementsDialogState extends State<PostRequirementsDialog> {
                   dropdownController.postRequirements(
                       brand: widget.brands,
                       modelNo: widget.modelNo,
-                      quote: 5600,
+                      quote: 0,
                       size: widget.size,
                       quantity: int.parse(widget.quantity),
                       details: widget.description,
@@ -165,10 +165,6 @@ class _PostRequirementsDialogState extends State<PostRequirementsDialog> {
                         widget.category, widget.subcategory);
                     // PushNotificationServices.sendNotification(fcm, context,
                     //     "A new requirement has been Posted of requirement id $category please check it out");
-                    Fluttertoast.showToast(msg: "send to sellers succusfully");
-                    categoriesController.selectedCategory.value = '';
-                    categoriesController.selectedSubCategory.value = '';
-                    categoriesController.selectedSubSubCategory.value = '';
                   } catch (e) {
                     Logger().d(e);
                   }

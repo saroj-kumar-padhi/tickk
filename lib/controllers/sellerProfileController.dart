@@ -16,7 +16,6 @@ class SellerProfileController extends GetxController {
       gender: "",
       age: 12,
       otp: 123456,
-      verified: false,
       fcm: "hcei",
       v: 0);
 

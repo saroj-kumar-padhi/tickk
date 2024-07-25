@@ -25,7 +25,7 @@ class Data {
   final int size;
   final int quantity;
   final String units;
-  final int quote;
+  final String quote;
   final String requirementInDetails;
   final String addImage;
   final String location;
@@ -72,12 +72,12 @@ class Data {
       storeSubCategory: json['storeSubCategory'] ?? "",
       brands: json['Brands'] ?? "",
       modelNo: json['ModelNo'] ?? "",
-      size: json['size'] ?? "",
+      size: json['size'] ?? -1,
       quantity: json['Quantity'] ?? "",
       units: json['Units'] ?? "",
       quote: json['Quote'] ?? "",
       requirementInDetails: json['Requirement_in_details'] ?? "",
-      addImage: json['AddImage'] ?? "",
+      addImage: json['AddImageURL'] ?? "",
       location: json['Location'] ?? "",
       status: json['Status'] ?? "",
       deleteButton: json['deletebutton'] ?? "",

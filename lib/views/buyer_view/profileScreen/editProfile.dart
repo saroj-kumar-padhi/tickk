@@ -43,7 +43,8 @@ class EditProfile extends StatelessWidget {
               actions: [
                 InkWell(
                   onTap: () {
-                    Get.toNamed(RouteName.homeBuyerScreen);
+                    Get.back();
+                    Get.back();
                   },
                   child: Padding(
                     padding: EdgeInsets.only(right: 10.w),
@@ -261,7 +262,8 @@ class EditProfile extends StatelessWidget {
                         });
                         basiccontrollerEdit.fetchBasicDetailsEdit(
                             mobile: formattedPhoneNumber);
-                        Get.toNamed(RouteName.homeBuyerScreen);
+                        Get.back();
+                        Get.back();
                       },
                       buttonText: 'Update',
                       textColor: Colors.white),

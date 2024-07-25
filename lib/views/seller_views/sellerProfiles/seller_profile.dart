@@ -1,13 +1,11 @@
 import 'package:dekhlo/controllers/sellerProfileController.dart';
 import 'package:dekhlo/utils/components/dialog_boxs/log_out_dialog.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../utils/components/buttons.dart';
@@ -15,16 +13,27 @@ import '../../../utils/components/dialog_boxs/support_dialogbox.dart';
 import '../../../utils/components/textstyle.dart';
 import '../../buyer_view/profileScreen/FAQ_webview.dart';
 
-class SellerProfile extends StatelessWidget {
+class SellerProfile extends StatefulWidget {
   const SellerProfile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final box = Hive.box('myBox');
-    final String formattedPhoneNumber = box.get('phone') ?? "";
+  State<SellerProfile> createState() => _SellerProfileState();
+}
 
-    SellerProfileController sellerProfileController =
-        Get.put(SellerProfileController(formattedPhoneNumber));
+final box = Hive.box('myBox');
+final String formattedPhoneNumber = box.get('phone') ?? "";
+SellerProfileController sellerProfileController =
+    Get.put(SellerProfileController(formattedPhoneNumber));
+
+class _SellerProfileState extends State<SellerProfile> {
+  @override
+  void initState() {
+    super.initState();
+    sellerProfileController.fetchProfile();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Obx(() => sellerProfileController.isLoading.value
         ? Scaffold(
             body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),

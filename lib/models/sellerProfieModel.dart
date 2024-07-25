@@ -6,7 +6,6 @@ class User {
   final String gender;
   final int age;
   final int otp;
-  final bool verified;
   final String fcm;
   final int v;
 
@@ -18,7 +17,6 @@ class User {
     required this.gender,
     required this.age,
     required this.otp,
-    required this.verified,
     required this.fcm,
     required this.v,
   });
@@ -32,7 +30,6 @@ class User {
       gender: json['gender'],
       age: json['age'],
       otp: json['otp'],
-      verified: json['verified'],
       fcm: json['FCM'],
       v: json['__v'],
     );
@@ -47,7 +44,6 @@ class User {
       'gender': gender,
       'age': age,
       'otp': otp,
-      'verified': verified,
       'FCM': fcm,
       '__v': v,
     };

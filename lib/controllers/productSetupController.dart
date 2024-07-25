@@ -143,6 +143,7 @@ class ProductSetUpController extends GetxController {
         MapEntry("timings", jsonEncode(getTimings())),
         MapEntry("youtubelink", youTubeEditingController.text),
         MapEntry("instagarmlink", instagram.text),
+        MapEntry("Websitelink", website.text),
         const MapEntry("languages", "english"),
         MapEntry("StreetNo_BuildingName", buildingController.text),
         const MapEntry("Country", "India"),

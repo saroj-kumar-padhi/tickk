@@ -201,15 +201,6 @@ class HomeSeller extends StatelessWidget {
                               ),
                               Tab(
                                 child: Text(
-                                  'Accepted',
-                                  style: TextStyles.openSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Tab(
-                                child: Text(
                                   'Deal Done',
                                   style: TextStyles.openSans(
                                     fontSize: 14,
@@ -235,11 +226,8 @@ class HomeSeller extends StatelessWidget {
                         Expanded(
                           child: TabBarView(
                             children: [
-                              NewTabSeller(
-                                storeId: storeId,
-                                storeName:
-                                    flavourContoler.comapamyName.storeName,
-                              ), // inprocess tab
+                              NewTab(), // inprocess tab
+                              const InProcessTab(),
 
                               const DealDoneTab(), //Deal Done
                               const RejectedTab(), // rejected tab
@@ -338,20 +326,7 @@ class HomeSeller extends StatelessWidget {
                             SizedBox(
                               width: 15.w,
                             ),
-                            InkWell(
-                              onTap: () {
-                                Get.to(MyStore(StoreId: storeId));
-                              },
-                              child: SvgPicture.asset(
-                                height: 20.h,
-                                width: 20.w,
-                                "assest/seller_hut.svg",
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 15.w,
-                            ),
+
                             InkWell(
                               onTap: () {
                                 Get.to(() => const SellerProfile());
@@ -360,6 +335,20 @@ class HomeSeller extends StatelessWidget {
                                 height: 20.h,
                                 width: 20.w,
                                 "assest/user (1).svg",
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 15.w,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Get.to(MyStore(StoreId: storeId));
+                              },
+                              child: SvgPicture.asset(
+                                height: 20.h,
+                                width: 20.w,
+                                "assest/seller_hut.svg",
                                 fit: BoxFit.fill,
                               ),
                             ),

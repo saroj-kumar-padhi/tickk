@@ -26,6 +26,7 @@ class NewSellerCard extends StatelessWidget {
   final String units;
   final String Requirement_in_details;
   final String FCM;
+  final String image;
 
   const NewSellerCard(
       {super.key,
@@ -39,7 +40,8 @@ class NewSellerCard extends StatelessWidget {
       required this.units,
       required this.Requirement_in_details,
       required this.requirementId,
-      required this.FCM});
+      required this.FCM,
+      required this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -159,12 +161,12 @@ class NewSellerCard extends StatelessWidget {
                     child: SizedBox(
                         width: GlobalSizes.getDeviceWidth(context) * 0.15,
                         height: GlobalSizes.getDeviceHeight(context) * 0.09,
-                        child: Image.asset("assest/sellitems.png")),
+                        child: Image.network(image)),
                   ),
                   Column(
                     children: [
                       Text(
-                        modelNo,
+                        modelNo == "" ? "--" : modelNo,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),
@@ -200,7 +202,7 @@ class NewSellerCard extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        size,
+                        size == '-1' ? "--" : size,
                         style: TextStyles.openSans(
                             fontWeight: FontWeight.w600, fontSize: 12),
                       ),

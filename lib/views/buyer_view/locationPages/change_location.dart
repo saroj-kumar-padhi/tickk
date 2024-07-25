@@ -11,9 +11,14 @@ import 'package:logger/web.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../controllers/productSetupController.dart';
+import '../../google_map_page.dart';
+
 class ChangeLocation extends StatefulWidget {
   ChangeLocation({super.key});
   DialogBoxController dialogBoxController = Get.put(DialogBoxController());
+  final ProductSetUpController productSetUpController =
+      Get.put(ProductSetUpController());
   var uuid = const Uuid();
   final String _sessionToken = '123456';
   List<dynamic> _placesList = [];
@@ -122,16 +127,23 @@ class _ChangeLocationState extends State<ChangeLocation> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    "Use my current location",
-                    style: TextStyles.openSansUnderLine(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        color: const Color(0xffFC8019)),
+              InkWell(
+                onTap: () async {
+                  await widget.dialogBoxController.getCurrentLoaction();
+                  Get.to(const GoogleMapPage());
+                  widget.productSetUpController.updateButtonState();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      "Use my current location",
+                      style: TextStyles.openSansUnderLine(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                          color: const Color(0xffFC8019)),
+                    ),
                   ),
                 ),
               )

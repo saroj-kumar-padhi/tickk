@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+
 import 'package:lottie/lottie.dart';
 import '../../../controllers/homeSellerController.dart';
 import '../../../utils/components/sellerScreenTiles/newSellerTile.dart';
@@ -83,6 +83,8 @@ class NewTabSeller extends StatelessWidget {
                                     .sellerDataList[index].requirementID,
                                 FCM: homeSellerController
                                     .sellerDataList[index].FCM,
+                                image: homeSellerController
+                                    .sellerDataList[index].addImage,
                               ),
                             );
                           }),
