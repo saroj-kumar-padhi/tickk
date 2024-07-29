@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:logger/logger.dart';
 import '../utils/routes/routes_names.dart';
+import '../views/buyer_view/home_screen_buyer.dart/home_screenBuyer.dart';
+import '../views/seller_views/seller_home_screens/seller_home.dart';
 
 class AuthController extends GetxController {
   RxBool isLogin = false.obs;
@@ -49,9 +51,31 @@ class AuthController extends GetxController {
 
       final box = Hive.box('mybox');
       box.put('phone', phoneAuthController.text);
-      islogin
-          ? Get.toNamed(RouteName.homeBuyerScreen)
-          : Get.toNamed(RouteName.basicDetails);
+      try {
+        final response = await restClient
+            .checkBuyerOrSeller(int.parse(phoneAuthController.text));
+        if (response.message == 'Mobile registered for buyer') {
+          Logger().f(response.message);
+          Get.to(const HomeBuyer());
+        } else if (response.message == 'Mobile registered for seller') {
+          try {
+            final storeData = await restClient
+                .checkStoreId(int.parse(phoneAuthController.text));
+            final storeId = storeData.StoreID;
+            Logger().d(storeId);
+            Get.to(HomeSeller(storeId: storeId.toString()));
+          } catch (e) {
+            Get.snackbar("Login Failed",
+                "Oop's something wrong with server try to login later");
+          }
+        } else {
+          islogin
+              ? Get.toNamed(RouteName.homeBuyerScreen)
+              : Get.toNamed(RouteName.basicDetails);
+        }
+      } catch (e) {
+        Logger().d(e);
+      }
     } catch (e) {
       Fluttertoast.showToast(msg: "Invalid otp");
     }

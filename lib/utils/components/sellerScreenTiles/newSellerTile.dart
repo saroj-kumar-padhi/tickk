@@ -15,6 +15,7 @@ import '../dialog_boxs/pick_diallo.dart';
 import '../textstyle.dart';
 
 class NewSellerCard extends StatelessWidget {
+  final String storeId;
   final String storeCategory;
   final String requirementId;
   final String storeSubCategory;
@@ -41,7 +42,8 @@ class NewSellerCard extends StatelessWidget {
       required this.Requirement_in_details,
       required this.requirementId,
       required this.FCM,
-      required this.image});
+      required this.image,
+      required this.storeId});
 
   @override
   Widget build(BuildContext context) {
@@ -587,6 +589,7 @@ class NewSellerCard extends StatelessWidget {
                                     imageList: dataImage,
                                     requiremetId: requirementId,
                                     fcm: FCM,
+                                    storeId: storeId,
                                   );
                                 },
                               );

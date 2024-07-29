@@ -54,8 +54,8 @@ class RequirementData {
       storeSubSubCategory: json['storeSubSubCategory'] ?? "",
       addImage: json['AddImage'] ?? "",
       modelNo: json['ModelNo'] ?? "",
-      quantity: json['Quantity'] ?? "",
-      size: json['size'] ?? "",
+      quantity: json['Quantity'] ?? -1,
+      size: json['size'] ?? -1,
       units: json['Units'] ?? "",
       requirementInDetails: json['Requirement_in_details'] ?? "",
       stores:
@@ -72,6 +72,8 @@ class Store {
   final String addImage;
   final int quote;
   final bool similar;
+  final List<dynamic> ExactSimilarImage;
+  final String stared;
   final bool exact;
   final String? totalDiatance;
 
@@ -83,20 +85,24 @@ class Store {
       required this.quote,
       required this.similar,
       required this.exact,
-      this.totalDiatance});
+      required this.totalDiatance,
+      required this.ExactSimilarImage,
+      required this.stared});
 
   factory Store.fromJson(Map<String, dynamic> json) {
     return Store(
       storeName: json['StoreName'] ?? "",
       storeID: json['StoreID'] ?? "",
       addImage: json['stared'] ?? "",
-      quote: json['Quote'] ?? "",
-      similar: json['Similar'] ?? "",
-      exact: json['Exact'] ?? "",
+      quote: json['Quote'] ?? -1,
+      similar: json['Similar'] ?? false,
+      exact: json['Exact'] ?? false,
       totalDiatance: json['TotalDistance'] != null
           ? json['TotalDistance'].toString()
           : "0",
       mobile: json['mobile'] ?? "",
+      ExactSimilarImage: json['ExactSimilarImage'],
+      stared: json['stared'],
     );
   }
 }

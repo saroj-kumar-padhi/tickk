@@ -77,7 +77,7 @@ class Data {
       units: json['Units'] ?? "",
       quote: json['Quote'] ?? "",
       requirementInDetails: json['Requirement_in_details'] ?? "",
-      addImage: json['AddImageURL'] ?? "",
+      addImage: json['AddImage'] ?? "",
       location: json['Location'] ?? "",
       status: json['Status'] ?? "",
       deleteButton: json['deletebutton'] ?? "",

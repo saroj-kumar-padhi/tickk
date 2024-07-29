@@ -35,6 +35,7 @@ class InprocessTile extends StatelessWidget {
   final String des;
   final String date;
   final List stores;
+  final String image;
   const InprocessTile(
       {super.key,
       required this.requirementId,
@@ -49,7 +50,8 @@ class InprocessTile extends StatelessWidget {
       required this.date,
       required this.stores,
       required this.mobile,
-      required this.requirementImge});
+      required this.requirementImge,
+      required this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -387,8 +389,23 @@ class InprocessTile extends StatelessWidget {
                                                             vertical: 2.h),
                                                     child: Row(
                                                       children: [
-                                                        Image.asset(
-                                                            "assest/bookImage.png"),
+                                                        ClipOval(
+                                                          child: SizedBox(
+                                                            width: 25
+                                                                .w, // Adjust size as needed
+                                                            height: 20
+                                                                .h, // Adjust size as needed
+                                                            child:
+                                                                Image.network(
+                                                              stores[index]
+                                                                  .stared,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 5.w,
+                                                        ),
                                                         InkWell(
                                                           onTap: () async {
                                                             await mystoreaccountcontroller
@@ -586,7 +603,10 @@ class InprocessTile extends StatelessWidget {
                                                                       builder:
                                                                           (BuildContext
                                                                               context) {
-                                                                        return const SizedBox();
+                                                                        return CarouselDialog(
+                                                                          images:
+                                                                              stores[index].ExactSimilarImage,
+                                                                        );
                                                                       },
                                                                     );
                                                                   },

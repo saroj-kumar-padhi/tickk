@@ -13,6 +13,7 @@ import 'package:path/path.dart' as path;
 import 'package:dio/dio.dart' as dio;
 import 'package:http_parser/http_parser.dart' show MediaType;
 import '../../../controllers/exactController.dart';
+import '../../../controllers/homeSellerController.dart';
 import '../../size/global_size/global_size.dart';
 import '../buttons.dart';
 import '../coustoumTextField.dart';
@@ -22,6 +23,7 @@ class AcceptDialodBox extends StatelessWidget {
   final bool isExact;
   final List<dynamic> imageList;
   final String requiremetId;
+  final String storeId;
 
   const AcceptDialodBox({
     super.key,
@@ -29,11 +31,13 @@ class AcceptDialodBox extends StatelessWidget {
     required this.fcm,
     required this.imageList,
     required this.requiremetId,
+    required this.storeId,
   });
 
   @override
   Widget build(BuildContext context) {
     ExactController exactController = Get.put(ExactController());
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -162,7 +166,17 @@ class AcceptDialodBox extends StatelessWidget {
                               await restClient
                                   .pushtoBuyerInProcessAndSellerInProcess(
                                       requiremetId, {"Accept": true});
-                              Fluttertoast.showToast(
+
+                              try {
+                                final HomeSellerController
+                                    homeSellerController =
+                                    Get.put(HomeSellerController(storeId));
+                                homeSellerController.fetchSellerData(storeId);
+                              } catch (e) {
+                                Logger().f(e);
+                              }
+
+                              await Fluttertoast.showToast(
                                   msg:
                                       "accepted requested"); // Close the dialog after successful submission
                             } catch (e) {

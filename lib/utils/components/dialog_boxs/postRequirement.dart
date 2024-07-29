@@ -163,6 +163,7 @@ class _PostRequirementsDialogState extends State<PostRequirementsDialog> {
                   try {
                     restClient.putRequirementInSellerTab(
                         widget.category, widget.subcategory);
+
                     // PushNotificationServices.sendNotification(fcm, context,
                     //     "A new requirement has been Posted of requirement id $category please check it out");
                   } catch (e) {

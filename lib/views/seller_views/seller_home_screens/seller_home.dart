@@ -3,6 +3,7 @@ import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:dekhlo/views/seller_views/store_screens/mystore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -37,230 +38,238 @@ class HomeSeller extends StatelessWidget {
             body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
           )
         : flavourContoler.isBuying.value
-            ? DefaultTabController(
-                length: 4, // Number of tabs
-                child: Scaffold(
-                  floatingActionButton: Padding(
-                    padding: EdgeInsets.only(bottom: 30.h),
-                    child: FloatingActionButton(
-                      backgroundColor: const Color(0xffFC8019),
-                      onPressed: () {
-                        Get.toNamed(RouteName.postRequirements);
-                      },
-                      child: const Icon(Icons.add),
+            ? PopScope(
+                onPopInvoked: (onPoped) async {
+                  await SystemNavigator.pop();
+                },
+                child: DefaultTabController(
+                  length: 4, // Number of tabs
+                  child: Scaffold(
+                    floatingActionButton: Padding(
+                      padding: EdgeInsets.only(bottom: 30.h),
+                      child: FloatingActionButton(
+                        backgroundColor: const Color(0xffFC8019),
+                        onPressed: () {
+                          Get.toNamed(RouteName.postRequirements);
+                        },
+                        child: const Icon(Icons.add),
+                      ),
                     ),
-                  ),
-                  body: SafeArea(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: GlobalSizes.getDeviceHeight(context) * 0.012,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal:
-                                GlobalSizes.getDeviceHeight(context) * 0.019,
+                    body: SafeArea(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height:
+                                GlobalSizes.getDeviceHeight(context) * 0.012,
                           ),
-                          child: Row(
-                            children: [
-                              // SizedBox(
-                              //   width: GlobalSizes.getDeviceWidth(context) * 0.6,
-                              //   child: SlimSearchBar(),
-                              // ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  GlobalSizes.getDeviceHeight(context) * 0.019,
+                            ),
+                            child: Row(
+                              children: [
+                                // SizedBox(
+                                //   width: GlobalSizes.getDeviceWidth(context) * 0.6,
+                                //   child: SlimSearchBar(),
+                                // ),
 
-                              SizedBox(
-                                width:
-                                    GlobalSizes.getDeviceWidth(context) * 0.3,
-                                child: Image.asset("assest/tickk.png"),
-                              ),
-                              SizedBox(
-                                width: 120.w,
-                              ),
+                                SizedBox(
+                                  width:
+                                      GlobalSizes.getDeviceWidth(context) * 0.3,
+                                  child: Image.asset("assest/tickk.png"),
+                                ),
+                                SizedBox(
+                                  width: 120.w,
+                                ),
 
-                              // InkWell(
-                              //   onTap: () {
-                              //     Get.toNamed(RouteName.buyerNotification);
-                              //   },
-                              //   child: SizedBox(
-                              //       height:
-                              //           GlobalSizes.getDeviceHeight(context) *
-                              //               0.03,
-                              //       child: Image.asset(
-                              //         "assest/bell.png",
-                              //         fit: BoxFit.fitHeight,
-                              //       )),
-                              // ),
-                              SizedBox(
-                                width: 40.w,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Get.to(() => const SellerProfile());
-                                },
-                                child: SizedBox(
-                                  height: GlobalSizes.getDeviceHeight(context) *
-                                      0.03,
-                                  child: SvgPicture.asset(
-                                    "assest/user (1).svg",
-                                    fit: BoxFit.fitHeight,
+                                // InkWell(
+                                //   onTap: () {
+                                //     Get.toNamed(RouteName.buyerNotification);
+                                //   },
+                                //   child: SizedBox(
+                                //       height:
+                                //           GlobalSizes.getDeviceHeight(context) *
+                                //               0.03,
+                                //       child: Image.asset(
+                                //         "assest/bell.png",
+                                //         fit: BoxFit.fitHeight,
+                                //       )),
+                                // ),
+                                SizedBox(
+                                  width: 40.w,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Get.to(() => const SellerProfile());
+                                  },
+                                  child: SizedBox(
+                                    height:
+                                        GlobalSizes.getDeviceHeight(context) *
+                                            0.03,
+                                    child: SvgPicture.asset(
+                                      "assest/user (1).svg",
+                                      fit: BoxFit.fitHeight,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 20.w,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Get.toNamed(RouteName.myStore);
-                                },
-                                child: SvgPicture.asset(
-                                  height: 20.h,
+                                SizedBox(
                                   width: 20.w,
-                                  "assest/seller_hut.svg",
-                                  fit: BoxFit.fill,
                                 ),
-                              ),
-                              SizedBox(
-                                width: GlobalSizes.getDeviceHeight(context) *
-                                    0.001,
-                              ),
-                            ],
+                                InkWell(
+                                  onTap: () {
+                                    Get.toNamed(RouteName.myStore);
+                                  },
+                                  child: SvgPicture.asset(
+                                    height: 20.h,
+                                    width: 20.w,
+                                    "assest/seller_hut.svg",
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: GlobalSizes.getDeviceHeight(context) *
+                                      0.001,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                            height: 90.h,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: flavourContoler.categoryData.length,
-                              itemBuilder: (context, index) {
-                                String categoryName = flavourContoler
-                                    .categoryData.keys
-                                    .elementAt(index);
-                                String imagePath = flavourContoler
-                                    .categoryData.values
-                                    .elementAt(index);
+                          SizedBox(
+                              height: 90.h,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: flavourContoler.categoryData.length,
+                                itemBuilder: (context, index) {
+                                  String categoryName = flavourContoler
+                                      .categoryData.keys
+                                      .elementAt(index);
+                                  String imagePath = flavourContoler
+                                      .categoryData.values
+                                      .elementAt(index);
 
-                                return Padding(
-                                  padding: EdgeInsets.all(8.r),
-                                  child: Column(
-                                    children: [
-                                      Material(
-                                        elevation: 4,
-                                        shadowColor:
-                                            Colors.grey.withOpacity(0.1),
-                                        shape: const CircleBorder(),
-                                        child: CircleAvatar(
-                                          radius: 25.r,
-                                          backgroundColor: const Color.fromARGB(
-                                                  255, 232, 231, 231)
-                                              .withOpacity(0.25),
-                                          child: imagePath.isNotEmpty
-                                              ? SvgPicture.asset(imagePath)
-                                              : const Icon(Icons.category,
-                                                  color: Colors
-                                                      .grey), // Fallback icon
+                                  return Padding(
+                                    padding: EdgeInsets.all(8.r),
+                                    child: Column(
+                                      children: [
+                                        Material(
+                                          elevation: 4,
+                                          shadowColor:
+                                              Colors.grey.withOpacity(0.1),
+                                          shape: const CircleBorder(),
+                                          child: CircleAvatar(
+                                            radius: 25.r,
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                        255, 232, 231, 231)
+                                                    .withOpacity(0.25),
+                                            child: imagePath.isNotEmpty
+                                                ? SvgPicture.asset(imagePath)
+                                                : const Icon(Icons.category,
+                                                    color: Colors
+                                                        .grey), // Fallback icon
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(height: 5.h),
-                                      Text(
-                                        categoryName,
-                                        style: TextStyle(fontSize: 12.sp),
-                                      )
-                                    ],
-                                  ),
-                                );
-                              },
-                            )),
-                        const SizedBox(
-                          height:
-                              14, // Adjust spacing between search bar and tab bar
-                        ),
-                        SizedBox(
-                          height: GlobalSizes.getDeviceHeight(context) * 0.05,
-                          child: TabBar(
-                            labelColor: const Color(0xffFC8019),
-                            unselectedLabelColor: const Color(0xff4A4A4A),
-                            tabs: [
-                              Tab(
-                                child: Text(
-                                  'New',
-                                  style: TextStyles.openSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Tab(
-                                child: Text(
-                                  'In process',
-                                  style: TextStyles.openSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Tab(
-                                child: Text(
-                                  'Deal Done',
-                                  style: TextStyles.openSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Tab(
-                                child: Text(
-                                  'Rejected',
-                                  style: TextStyles.openSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ],
-                            isScrollable: true,
-                            indicatorColor: const Color(0xffFC8019),
-                          ),
-                        ),
-                        const Divider(),
-                        Expanded(
-                          child: TabBarView(
-                            children: [
-                              NewTab(), // inprocess tab
-                              const InProcessTab(),
-
-                              const DealDoneTab(), //Deal Done
-                              const RejectedTab(), // rejected tab
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 50.h,
-                          child: Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  flavourContoler.isBuying.value =
-                                      !flavourContoler.isBuying.value;
+                                        SizedBox(height: 5.h),
+                                        Text(
+                                          categoryName,
+                                          style: TextStyle(fontSize: 12.sp),
+                                        )
+                                      ],
+                                    ),
+                                  );
                                 },
-                                child: SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                    child: SvgPicture.asset(
-                                        "assest/selling_white.svg")),
-                              ),
-                              InkWell(
-                                onTap: () {},
-                                child: SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                    child: SvgPicture.asset(
-                                        "assest/buying_orange.svg")),
-                              )
-                            ],
+                              )),
+                          const SizedBox(
+                            height:
+                                14, // Adjust spacing between search bar and tab bar
                           ),
-                        )
-                      ],
+                          SizedBox(
+                            height: GlobalSizes.getDeviceHeight(context) * 0.05,
+                            child: TabBar(
+                              labelColor: const Color(0xffFC8019),
+                              unselectedLabelColor: const Color(0xff4A4A4A),
+                              tabs: [
+                                Tab(
+                                  child: Text(
+                                    'New',
+                                    style: TextStyles.openSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    'In process',
+                                    style: TextStyles.openSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    'Deal Done',
+                                    style: TextStyles.openSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    'Rejected',
+                                    style: TextStyles.openSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              isScrollable: true,
+                              indicatorColor: const Color(0xffFC8019),
+                            ),
+                          ),
+                          const Divider(),
+                          Expanded(
+                            child: TabBarView(
+                              children: [
+                                NewTab(), // inprocess tab
+                                const InProcessTab(),
+
+                                const DealDoneTab(), //Deal Done
+                                const RejectedTab(), // rejected tab
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 50.h,
+                            child: Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    flavourContoler.isBuying.value =
+                                        !flavourContoler.isBuying.value;
+                                  },
+                                  child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: SvgPicture.asset(
+                                          "assest/selling_white.svg")),
+                                ),
+                                InkWell(
+                                  onTap: () {},
+                                  child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: SvgPicture.asset(
+                                          "assest/buying_orange.svg")),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),

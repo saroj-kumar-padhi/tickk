@@ -85,6 +85,7 @@ class NewTabSeller extends StatelessWidget {
                                     .sellerDataList[index].FCM,
                                 image: homeSellerController
                                     .sellerDataList[index].addImage,
+                                storeId: storeId,
                               ),
                             );
                           }),
