@@ -159,7 +159,7 @@ abstract class RestClient {
   @GET('/BuyerRejectedTabData/{mobileNo}')
   Future<List<RejectedItemd>> buyerRejected(@Path('mobileNo') String mobileNo);
 
-  @POST('/buyerInProcess/buyersellerDealDone/RequirementID/StoreID')
+  @POST('/buyerInProcess/buyersellerDealDone/{RequirementID}/{StoreID}')
   Future<void> moveToDealDone(
     @Path('RequirementID') String RequirementID,
     @Path('StoreID') String StoreID,

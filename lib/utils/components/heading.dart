@@ -15,9 +15,9 @@ class SmallHeading extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Text(headingText,
           style: TextStyles.openSans(
-              fontSize: 18.sp,
+              fontSize: 15.sp,
               fontWeight: FontWeight.w600,
-              color: Color(0xff4A4A4A))),
+              color: const Color(0xff4A4A4A))),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:blur/blur.dart';
 import 'package:dekhlo/services/injection.dart';
@@ -15,6 +16,7 @@ import '../dialog_boxs/pick_diallo.dart';
 import '../textstyle.dart';
 
 class NewSellerCard extends StatelessWidget {
+  final int index;
   final String storeId;
   final String storeCategory;
   final String requirementId;
@@ -28,6 +30,7 @@ class NewSellerCard extends StatelessWidget {
   final String Requirement_in_details;
   final String FCM;
   final String image;
+  final String name;
 
   const NewSellerCard(
       {super.key,
@@ -43,7 +46,9 @@ class NewSellerCard extends StatelessWidget {
       required this.requirementId,
       required this.FCM,
       required this.image,
-      required this.storeId});
+      required this.storeId,
+      required this.name,
+      required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +58,7 @@ class NewSellerCard extends StatelessWidget {
     return Obx(() {
       return Container(
           width: double.infinity, // Adjust the width as needed
-          height: exactController.toShow.value
+          height: exactController.items[index] != ""
               ? 415.h
               : 270.h, // Adjust the height as needed
           decoration: BoxDecoration(
@@ -84,8 +89,7 @@ class NewSellerCard extends StatelessWidget {
                         height: 40.h,
                         width: 40.h,
                         child: Image.asset('assest/profileImage.png').blurred(
-                          colorOpacity: 0.5,
-                          blur: 90,
+                          blur: 2,
                         ),
                       ),
                     ),
@@ -95,7 +99,11 @@ class NewSellerCard extends StatelessWidget {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(left: 17.w),
-                        child: SvgPicture.asset("assest/name.svg"),
+                        child: Text(
+                          name.isNotEmpty ? '${name[0]}${'.....'}' : '',
+                          style: const TextStyle(
+                              fontSize: 16), // Adjust font size as needed
+                        ),
                       ),
                       SizedBox(
                         height: GlobalSizes.getDeviceHeight(context) * 0.003,
@@ -158,12 +166,38 @@ class NewSellerCard extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal:
-                            GlobalSizes.getDeviceHeight(context) * 0.025),
+                        horizontal: GlobalSizes.getDeviceHeight(context) * 0.0),
                     child: SizedBox(
-                        width: GlobalSizes.getDeviceWidth(context) * 0.15,
-                        height: GlobalSizes.getDeviceHeight(context) * 0.09,
-                        child: Image.network(image)),
+                        height: 50.h,
+                        width: 100.w,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => EnlargedImageView(
+                                    image: image, heroTag: 'heroTag'),
+                              ),
+                            );
+                          },
+                          child: Hero(
+                            tag: 'heroTag',
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    GlobalSizes.getDeviceHeight(context) *
+                                        0.025,
+                              ),
+                              child: SizedBox(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      8.0), // Adjust the value to make the image rectangular with rounded corners
+                                  child:
+                                      Image.network(image, fit: BoxFit.cover),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )),
                   ),
                   Column(
                     children: [
@@ -284,56 +318,54 @@ class NewSellerCard extends StatelessWidget {
                   Flexible(
                     child: Obx(() => RadioListTile(
                           dense: true,
-                          fillColor:
-                              const WidgetStatePropertyAll(Color(0xffFC8019)),
+                          activeColor: const Color(0xffFC8019),
                           title: Text(
                             'Exact',
                             style: TextStyles.openSans(
                                 fontSize: 12, fontWeight: FontWeight.w600),
                           ),
                           value: 'Exact',
-                          groupValue: exactController
-                              .seletedOption.value, // access value with .value
+                          groupValue: exactController.items[index],
                           onChanged: (value) {
                             exactController.isExact.value = true;
                             exactController.toShow.value = true;
                             exactController.changeSelectedOption(
-                                option: value.toString());
+                                option: value.toString(), index: index);
                           },
                         )),
                   ),
                   Flexible(
                     child: Obx(() => RadioListTile(
                           dense: true,
-                          fillColor:
-                              const WidgetStatePropertyAll(Color(0xffFC8019)),
+                          activeColor: const Color(0xffFC8019),
                           title: Text(
                             'Similar',
                             style: TextStyles.openSans(
                                 fontSize: 12, fontWeight: FontWeight.w600),
                           ),
                           value: 'Similar',
-                          groupValue: exactController
-                              .seletedOption.value, // access value with .value
+                          groupValue: exactController.items[index],
                           onChanged: (value) {
                             exactController.isExact.value = false;
                             exactController.toShow.value = true;
                             exactController.changeSelectedOption(
-                                option: value.toString());
+                                option: value.toString(), index: index);
                           },
                         )),
                   ),
                 ],
               ),
               Obx(() {
-                return exactController.toShow.value
+                return exactController.items[index] != ""
                     ? pickedImage.isEmpty
                         ? InkWell(
                             onTap: () async {
                               final result = await showDialog<String>(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return const PickImageDialog();
+                                  return const PickImageDialog(
+                                    heading: 'upload image',
+                                  );
                                 },
                               );
                               if (result != null) {
@@ -449,7 +481,9 @@ class NewSellerCard extends StatelessWidget {
                                     final result = await showDialog<String>(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return const PickImageDialog();
+                                        return const PickImageDialog(
+                                          heading: 'upload image',
+                                        );
                                       },
                                     );
                                     if (result != null) {
@@ -515,7 +549,7 @@ class NewSellerCard extends StatelessWidget {
                 height: 10.h,
               ),
               Obx(() {
-                return exactController.toShow.isTrue
+                return exactController.items[index] != ""
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -613,5 +647,68 @@ class NewSellerCard extends StatelessWidget {
             ],
           ));
     });
+  }
+}
+
+class EnlargedImageView extends StatefulWidget {
+  final String image;
+  final String heroTag;
+
+  const EnlargedImageView(
+      {super.key, required this.image, required this.heroTag});
+
+  @override
+  _EnlargedImageViewState createState() => _EnlargedImageViewState();
+}
+
+class _EnlargedImageViewState extends State<EnlargedImageView> {
+  final TransformationController _controller = TransformationController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _resetZoom() {
+    _controller.value = Matrix4.identity();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: [
+          GestureDetector(
+            onTap: _resetZoom,
+            child: Center(
+              child: InteractiveViewer(
+                transformationController: _controller,
+                minScale: 0.5,
+                maxScale: 4.0,
+                child: Hero(
+                  tag: widget.heroTag,
+                  child: Image.network(
+                    widget.image,
+                    fit: BoxFit.contain,
+                    width: GlobalSizes.getDeviceWidth(context),
+                    height: GlobalSizes.getDeviceHeight(context),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 40,
+            right: 20,
+            child: IconButton(
+              icon: const Icon(Icons.close, color: Colors.white, size: 30),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

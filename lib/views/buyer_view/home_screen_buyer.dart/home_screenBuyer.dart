@@ -14,6 +14,7 @@ import '../../../controllers/categoriesController.dart';
 import '../../../controllers/flavourController.dart';
 import '../../../utils/components/textstyle.dart';
 
+import '../../seller_views/welcome_screen.dart';
 import 'tabs/deal_done.dart';
 import 'tabs/inprocess_tab.dart';
 
@@ -43,13 +44,6 @@ class HomeBuyer extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      // SizedBox(
-                      //   width: GlobalSizes.getDeviceWidth(context) * 0.6,
-                      //   child: SlimSearchBar(),
-                      // ),
-                      // SizedBox(
-                      //   width: GlobalSizes.getDeviceHeight(context) * 0.015,
-                      // ),
                       SizedBox(
                         width: GlobalSizes.getDeviceWidth(context) * 0.3,
                         child: SvgPicture.asset("assest/small_tick.svg"),
@@ -57,24 +51,6 @@ class HomeBuyer extends StatelessWidget {
                       SizedBox(
                         width: 140.w,
                       ),
-                      // InkWell(
-                      //   onTap: () {
-                      //     Get.toNamed(RouteName.buyerNotification);
-                      //     // showDialog(
-                      //     //   context: context,
-                      //     //   builder: (BuildContext context) {
-                      //     //     return const RateNowCustomDialog();
-                      //     //   },
-                      //     // );
-                      //   },
-                      //   child: SizedBox(
-                      //       height: GlobalSizes.getDeviceHeight(context) * 0.03,
-                      //       child: Image.asset(
-                      //         "assest/bell.png",
-                      //         fit: BoxFit.fitHeight,
-                      //       )),
-                      // ),
-
                       SizedBox(
                         width: GlobalSizes.getDeviceHeight(context) * 0.015,
                       ),
@@ -107,7 +83,7 @@ class HomeBuyer extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          Get.toNamed(RouteName.setUpProduct);
+                          Get.to(const EnhancedWelcomeScreen());
                         },
                         child: SizedBox(
                           height: GlobalSizes.getDeviceHeight(context) * 0.036,
@@ -155,13 +131,11 @@ class HomeBuyer extends StatelessWidget {
                               children: [
                                 Material(
                                   elevation: 4,
-                                  shadowColor: Colors.grey.withOpacity(0.1),
+                                  shadowColor: Colors.grey.withOpacity(0.2),
                                   shape: const CircleBorder(),
                                   child: CircleAvatar(
                                     radius: 25.r,
-                                    backgroundColor:
-                                        const Color.fromARGB(255, 232, 231, 231)
-                                            .withOpacity(0.25),
+                                    backgroundColor: const Color(0xffFFF5EC),
                                     child: imagePath.isNotEmpty
                                         ? SvgPicture.asset(imagePath)
                                         : const Icon(Icons.category,

@@ -121,7 +121,9 @@ class EditProfile extends StatelessWidget {
                     final result = await showDialog<String>(
                       context: context,
                       builder: (BuildContext context) {
-                        return const PickImageDialog();
+                        return const PickImageDialog(
+                          heading: 'Add your profile image',
+                        );
                       },
                     );
                     if (result != null) {

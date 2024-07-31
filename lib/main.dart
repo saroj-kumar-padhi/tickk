@@ -21,6 +21,8 @@ import 'views/seller_views/seller_home_screens/seller_home.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'views/seller_views/welcome_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
@@ -73,7 +75,7 @@ class MyApp extends StatelessWidget {
         // home: const HomeSeller(
         //   storeId: 'TS156235HP',
         // ),
-        // home: const HomeBuyer(),
+        // home: const EnhancedWelcomeScreen(),
 
         home: const AuthWrapper(),
 

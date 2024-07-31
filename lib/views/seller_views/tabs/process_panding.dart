@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
@@ -31,7 +32,13 @@ class ProcessTabSeller extends StatelessWidget {
             );
           } else {
             return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 20.w),
+                  child: Text(
+                      "Total requirement : ${sellerInprocesscontroller.requirementsList.length}"),
+                ),
                 Expanded(
                   flex: 12,
                   child: ListView.builder(

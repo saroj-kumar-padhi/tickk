@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:logger/web.dart';
 
 import '../dialog_boxs/delete_dialog.dart';
+import '../sellerScreenTiles/newSellerTile.dart';
 import '../textstyle.dart';
 
 class NewSquareCard extends StatelessWidget {
@@ -122,17 +123,35 @@ class NewSquareCard extends StatelessWidget {
             ),
             Row(
               children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: GlobalSizes.getDeviceHeight(context) * 0.025),
-                  child: SizedBox(
-                      width: GlobalSizes.getDeviceWidth(context) * 0.15,
-                      height: GlobalSizes.getDeviceHeight(context) * 0.09,
-                      child: Image.network(
-                        image,
-                        fit: BoxFit.cover,
-                      )),
-                ),
+                SizedBox(
+                    width: 100.w,
+                    height: 50.h,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => EnlargedImageView(
+                                image: image, heroTag: 'heroTag'),
+                          ),
+                        );
+                      },
+                      child: Hero(
+                        tag: 'heroTag',
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal:
+                                GlobalSizes.getDeviceHeight(context) * 0.025,
+                          ),
+                          child: SizedBox(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                  8.0), // Adjust the value to make the image rectangular with rounded corners
+                              child: Image.network(image, fit: BoxFit.cover),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )),
                 Column(
                   children: [
                     Text(

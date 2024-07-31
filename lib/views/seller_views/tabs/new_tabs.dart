@@ -52,43 +52,64 @@ class NewTabSeller extends StatelessWidget {
                             ),
                           ],
                         ))
-                      : ListView.builder(
-                          itemCount: homeSellerController.sellerDataList.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: NewSellerCard(
-                                storeCategory: homeSellerController
-                                    .sellerDataList[index].storeCategory,
-                                storeSubCategory: homeSellerController
-                                    .sellerDataList[index].storeSubCategory,
-                                brands: homeSellerController
-                                    .sellerDataList[index].brands,
-                                date: DateFormat('yyyy-MM-dd').format(
-                                    homeSellerController
-                                        .sellerDataList[index].date),
-                                modelNo: homeSellerController
-                                    .sellerDataList[index].modelNo,
-                                Qty: homeSellerController
-                                    .sellerDataList[index].quantity
-                                    .toString(),
-                                size: homeSellerController
-                                    .sellerDataList[index].size
-                                    .toString(),
-                                units: homeSellerController
-                                    .sellerDataList[index].units,
-                                Requirement_in_details: homeSellerController
-                                    .sellerDataList[index].requirementInDetails,
-                                requirementId: homeSellerController
-                                    .sellerDataList[index].requirementID,
-                                FCM: homeSellerController
-                                    .sellerDataList[index].FCM,
-                                image: homeSellerController
-                                    .sellerDataList[index].addImage,
-                                storeId: storeId,
-                              ),
-                            );
-                          }),
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 20.w),
+                              child: Text(
+                                  "Total requirement : ${homeSellerController.sellerDataList.length}"),
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                  itemCount: homeSellerController
+                                      .sellerDataList.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: NewSellerCard(
+                                        storeCategory: homeSellerController
+                                            .sellerDataList[index]
+                                            .storeCategory,
+                                        storeSubCategory: homeSellerController
+                                            .sellerDataList[index]
+                                            .storeSubCategory,
+                                        brands: homeSellerController
+                                            .sellerDataList[index].brands,
+                                        date: DateFormat('yyyy-MM-dd').format(
+                                            homeSellerController
+                                                .sellerDataList[index].date),
+                                        modelNo: homeSellerController
+                                            .sellerDataList[index].modelNo,
+                                        Qty: homeSellerController
+                                            .sellerDataList[index].quantity
+                                            .toString(),
+                                        size: homeSellerController
+                                            .sellerDataList[index].size
+                                            .toString(),
+                                        units: homeSellerController
+                                            .sellerDataList[index].units,
+                                        Requirement_in_details:
+                                            homeSellerController
+                                                .sellerDataList[index]
+                                                .requirementInDetails,
+                                        requirementId: homeSellerController
+                                            .sellerDataList[index]
+                                            .requirementID,
+                                        FCM: homeSellerController
+                                            .sellerDataList[index].FCM,
+                                        image: homeSellerController
+                                            .sellerDataList[index].addImage,
+                                        storeId: storeId,
+                                        name: homeSellerController
+                                            .sellerDataList[index].yourName,
+                                        index: index,
+                                      ),
+                                    );
+                                  }),
+                            ),
+                          ],
+                        ),
             )),
       ],
     );

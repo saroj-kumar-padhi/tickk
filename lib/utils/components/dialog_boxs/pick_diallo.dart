@@ -7,7 +7,8 @@ import '../../size/global_size/global_size.dart';
 import '../textstyle.dart';
 
 class PickImageDialog extends StatelessWidget {
-  const PickImageDialog({super.key});
+  final String heading;
+  const PickImageDialog({super.key, required this.heading});
 
   Future<void> pickImage(ImageSource source, BuildContext context) async {
     final ImagePicker picker = ImagePicker();

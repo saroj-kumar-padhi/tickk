@@ -18,6 +18,7 @@ import '../../../views/buyer_view/home_screen_buyer.dart/tabs/rejected_tab.dart'
 import '../../size/global_size/global_size.dart';
 import '../bottomSheets/sort.dart';
 import '../dialog_boxs/coursal_dialog.dart';
+import '../sellerScreenTiles/newSellerTile.dart';
 import '../textstyle.dart';
 import 'package:intl/intl.dart';
 
@@ -140,87 +141,106 @@ class InprocessTile extends StatelessWidget {
               SizedBox(
                 height: 3.h,
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 10.w),
-                child: Row(
-                  children: [
-                    SizedBox(
-                        width: 90.w,
-                        height: 60.h,
-                        child: Image.network(
-                          requirementImge,
-                          fit: BoxFit.cover,
-                        )),
-                    Column(
-                      children: [
-                        Text(
-                          "#$modelNo",
-                          style: TextStyles.openSans(
-                              fontWeight: FontWeight.w600, fontSize: 12.sp),
+              Row(
+                children: [
+                  SizedBox(
+                      width: 100.w,
+                      height: 50.h,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => EnlargedImageView(
+                                  image: image, heroTag: 'heroTag'),
+                            ),
+                          );
+                        },
+                        child: Hero(
+                          tag: 'heroTag',
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  GlobalSizes.getDeviceHeight(context) * 0.025,
+                            ),
+                            child: SizedBox(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                    8.0), // Adjust the value to make the image rectangular with rounded corners
+                                child: Image.network(image, fit: BoxFit.cover),
+                              ),
+                            ),
+                          ),
                         ),
-                        Text(
-                          "Model No",
-                          style: TextStyles.openSans(
-                              fontWeight: FontWeight.w400, fontSize: 12.sp),
-                        )
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.h),
-                      child: Image.asset("assest/bigLine.png"),
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          oty,
-                          style: TextStyles.openSans(
-                              fontWeight: FontWeight.w600, fontSize: 12.sp),
-                        ),
-                        Text(
-                          "Qty",
-                          style: TextStyles.openSans(
-                              fontWeight: FontWeight.w400, fontSize: 12.sp),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 9.h),
-                      child: Image.asset("assest/bigLine.png"),
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          size,
-                          style: TextStyles.openSans(
-                              fontWeight: FontWeight.w600, fontSize: 12.sp),
-                        ),
-                        Text(
-                          "size",
-                          style: TextStyles.openSans(
-                              fontWeight: FontWeight.w400, fontSize: 12.sp),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 9.h),
-                      child: Image.asset("assest/bigLine.png"),
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          units,
-                          style: TextStyles.openSans(
-                              fontWeight: FontWeight.w600, fontSize: 12.sp),
-                        ),
-                        Text(
-                          "Units",
-                          style: TextStyles.openSans(
-                              fontWeight: FontWeight.w400, fontSize: 12.sp),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      )),
+                  Column(
+                    children: [
+                      Text(
+                        "#$modelNo",
+                        style: TextStyles.openSans(
+                            fontWeight: FontWeight.w600, fontSize: 12.sp),
+                      ),
+                      Text(
+                        "Model No",
+                        style: TextStyles.openSans(
+                            fontWeight: FontWeight.w400, fontSize: 12.sp),
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.h),
+                    child: Image.asset("assest/bigLine.png"),
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        oty,
+                        style: TextStyles.openSans(
+                            fontWeight: FontWeight.w600, fontSize: 12.sp),
+                      ),
+                      Text(
+                        "Qty",
+                        style: TextStyles.openSans(
+                            fontWeight: FontWeight.w400, fontSize: 12.sp),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 9.h),
+                    child: Image.asset("assest/bigLine.png"),
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        size,
+                        style: TextStyles.openSans(
+                            fontWeight: FontWeight.w600, fontSize: 12.sp),
+                      ),
+                      Text(
+                        "size",
+                        style: TextStyles.openSans(
+                            fontWeight: FontWeight.w400, fontSize: 12.sp),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 9.h),
+                    child: Image.asset("assest/bigLine.png"),
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        units,
+                        style: TextStyles.openSans(
+                            fontWeight: FontWeight.w600, fontSize: 12.sp),
+                      ),
+                      Text(
+                        "Units",
+                        style: TextStyles.openSans(
+                            fontWeight: FontWeight.w400, fontSize: 12.sp),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),

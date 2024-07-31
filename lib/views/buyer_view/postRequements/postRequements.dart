@@ -40,6 +40,11 @@ class _PostRequirementsState extends State<PostRequirements> {
 
   @override
   Widget build(BuildContext context) {
+    String removeExtraSpaces(String input) {
+      // Remove leading and trailing spaces, then replace multiple spaces with a single space
+      return input.trim().replaceAll(RegExp(r'\s+'), ' ');
+    }
+
     return Obx(() => categoriesController.isLoading.value
         ? Scaffold(
             body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
@@ -66,7 +71,7 @@ class _PostRequirementsState extends State<PostRequirements> {
               ),
             ),
             body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              padding: EdgeInsets.symmetric(horizontal: 28.w),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -77,9 +82,9 @@ class _PostRequirementsState extends State<PostRequirements> {
                     categoriesController.categories.isNotEmpty
                         ? Align(
                             alignment: Alignment.centerLeft,
-                            child: Text("Category",
+                            child: Text("Category *",
                                 style: TextStyles.openSans(
-                                    fontSize: 18.sp,
+                                    fontSize: 15.sp,
                                     fontWeight: FontWeight.w600,
                                     color: const Color(0xff4A4A4A))),
                           )
@@ -118,7 +123,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                             alignment: Alignment.centerLeft,
                             child: Text("Sub Category",
                                 style: TextStyles.openSans(
-                                    fontSize: 18.sp,
+                                    fontSize: 15.sp,
                                     fontWeight: FontWeight.w600,
                                     color: const Color(0xff4A4A4A))),
                           )
@@ -126,7 +131,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                             alignment: Alignment.centerLeft,
                             child: Text("Sub Category",
                                 style: TextStyles.openSans(
-                                    fontSize: 18.sp,
+                                    fontSize: 15.sp,
                                     fontWeight: FontWeight.w600,
                                     color: const Color(0xff959595))),
                           ),
@@ -155,7 +160,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                             alignment: Alignment.centerLeft,
                             child: Text("Sub Sub Category",
                                 style: TextStyles.openSans(
-                                    fontSize: 18.sp,
+                                    fontSize: 15.sp,
                                     fontWeight: FontWeight.w600,
                                     color: const Color(0xff4A4A4A))),
                           )
@@ -191,7 +196,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                           Text(
                             "Brand",
                             style: TextStyles.openSans(
-                              fontSize: 18.sp,
+                              fontSize: 15.sp,
                               fontWeight: FontWeight.w600,
                               color: const Color(0xff4A4A4A),
                             ),
@@ -199,7 +204,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                           Text(
                             "(optional)",
                             style: TextStyles.openSans(
-                              fontSize: 18.sp,
+                              fontSize: 15.sp,
                               fontWeight: FontWeight.w600,
                               color: const Color(0xffA9A7A7),
                             ),
@@ -215,7 +220,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                       controller: brandController,
                       hintText: '',
                       height: 55.h,
-                      width: 350.w,
+                      width: 300.w,
                     ),
                     SizedBox(
                       height: 5.h,
@@ -227,7 +232,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                           Text(
                             "Model no",
                             style: TextStyles.openSans(
-                              fontSize: 18.sp,
+                              fontSize: 15.sp,
                               fontWeight: FontWeight.w600,
                               color: const Color(0xff4A4A4A),
                             ),
@@ -251,7 +256,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                       controller: modelController,
                       hintText: '',
                       height: 55.h,
-                      width: 350.w,
+                      width: 300.w,
                     ),
                     SizedBox(
                       height: 5.h,
@@ -270,7 +275,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                                 Text(
                                   "(optional)",
                                   style: TextStyles.openSans(
-                                    fontSize: 16.sp,
+                                    fontSize: 15.sp,
                                     fontWeight: FontWeight.w600,
                                     color: const Color(0xffA9A7A7),
                                   ),
@@ -282,7 +287,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                               controller: sizeController,
                               hintText: '',
                               height: 55.h,
-                              width: 100.w,
+                              width: 90.w,
                               keyboardType: TextInputType.number,
                             ),
                           ],
@@ -291,7 +296,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SmallHeading(
-                              headingText: 'Qty',
+                              headingText: 'Qty *',
                             ),
                             CustomTextField(
                               onChanged: (value) {
@@ -300,7 +305,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                               isenable: true,
                               hintText: '',
                               height: 55.h,
-                              width: 100.w,
+                              width: 90.w,
                               controller: quntityController,
                               keyboardType: TextInputType.number,
                             ),
@@ -310,11 +315,11 @@ class _PostRequirementsState extends State<PostRequirements> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SmallHeading(
-                              headingText: 'Units',
+                              headingText: 'Units *',
                             ),
                             SizedBox(
                               height: 55.h,
-                              width: 100.w,
+                              width: 90.w,
                               child: CustomDropdownFormField(
                                 items: const [
                                   'units',
@@ -350,51 +355,67 @@ class _PostRequirementsState extends State<PostRequirements> {
                       height: 10.h,
                     ),
                     const SmallHeading(
-                        headingText: "Enter your requirement in details"),
+                        headingText: "Enter your requirement in details *"),
                     SizedBox(
                       height: 5.h,
                     ),
-                    // CustomTextField(
-
-                    //   controller: commentsController,
-                    //   hintText: '',
-                    //   height: 100.h,
-                    //   width: double.infinity,
-                    //   isenable: true,
-                    // ),
                     Container(
                       height: 80.h,
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      width: 300.w,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        border: Border.all(width: 1, color: Colors.grey),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(4.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 1,
+                            blurRadius: 6,
+                            offset: const Offset(0, 3),
+                          ),
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 6,
+                            offset: const Offset(-3, 0),
+                          ),
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 6,
+                            offset: const Offset(3, 0),
+                          ),
+                        ],
                       ),
                       child: Align(
-                        alignment: Alignment.centerLeft,
+                        alignment: Alignment.topLeft,
                         child: TextField(
                           maxLines:
                               null, // This allows the field to expand vertically
                           keyboardType: TextInputType.multiline,
                           controller: commentsController,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             hintText: '',
                             border: InputBorder.none,
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(
+                              color: const Color(0xffD8D8D8),
+                              fontSize: 16.sp,
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16.w, vertical: 16.h),
                           ),
-                          style: const TextStyle(fontSize: 16.0),
+                          style: TextStyle(fontSize: 16.sp),
                         ),
                       ),
                     ),
-
                     SizedBox(
                       height: 10.h,
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Add your image",
+                        "Add your image *",
                         style: TextStyles.openSans(
-                          fontSize: 18.sp,
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.w600,
                           color: const Color(0xff4A4A4A),
                         ),
@@ -435,7 +456,9 @@ class _PostRequirementsState extends State<PostRequirements> {
                                 final result = await showDialog<String>(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return const PickImageDialog();
+                                    return const PickImageDialog(
+                                      heading: 'Upload Product image',
+                                    );
                                   },
                                 );
                                 if (result != null) {
@@ -451,7 +474,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                                       color: Color(0xffFC8019),
                                     ),
                                   ),
-                                  Text("Add IMAGE",
+                                  Text("Add Image",
                                       style: TextStyles.openSans(
                                           fontSize: 16.sp,
                                           fontWeight: FontWeight.w600,
@@ -463,15 +486,13 @@ class _PostRequirementsState extends State<PostRequirements> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    const SmallHeading(headingText: "Select your target City"),
+                    const SmallHeading(
+                        headingText: "Select your target City *"),
                     SizedBox(
                       height: 5.h,
                     ),
                     CustomDropdownFormField(
-                      items: const [
-                        "Hyderabad",
-                        "Other cities are coming soon"
-                      ],
+                      items: const ["Hyderabad"],
                       onChanged: (value) {
                         selectedCity = value ?? '';
                         updateFormValidity();
@@ -517,12 +538,15 @@ class _PostRequirementsState extends State<PostRequirements> {
                                       .selectedSubCategory.value,
                                   subsubCategory: categoriesController
                                       .selectedSubSubCategory.value,
-                                  brands: brandController.text,
-                                  modelNo: modelController.text,
+                                  brands:
+                                      removeExtraSpaces(brandController.text),
+                                  modelNo:
+                                      removeExtraSpaces(modelController.text),
                                   size: sizeController.text,
                                   quantity: quntityController.text,
                                   units: dropdownController.selectedUnits.value,
-                                  description: commentsController.text,
+                                  description: removeExtraSpaces(
+                                      commentsController.text.trim()),
                                   image: imagePath.value,
                                   fcm: dataToGo,
                                 );
@@ -534,10 +558,12 @@ class _PostRequirementsState extends State<PostRequirements> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          side: const BorderSide(
-                            color: Color(0xffFC8019),
-                            width: 0,
-                          ),
+                          side: isFormValid.value
+                              ? const BorderSide(
+                                  color: Color(0xffFC8019),
+                                  width: 0,
+                                )
+                              : null,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),

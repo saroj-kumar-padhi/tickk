@@ -792,7 +792,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/buyerInProcess/buyersellerDealDone/RequirementID/StoreID',
+          '/buyerInProcess/buyersellerDealDone/${RequirementID}/${StoreID}',
           queryParameters: queryParameters,
           data: _data,
         )

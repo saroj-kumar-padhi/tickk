@@ -170,7 +170,8 @@ class _PostRequirementsDialogState extends State<PostRequirementsDialog> {
                     Logger().d(e);
                   }
                   newTabController.fetchRequirements();
-                  Get.toNamed(RouteName.homeBuyerScreen);
+                  Get.back();
+                  Get.back();
                 },
                 buttonText: "Send",
                 textColor: Colors.white,

@@ -1,4 +1,5 @@
 import 'package:blur/blur.dart';
+import 'package:dekhlo/utils/components/sellerScreenTiles/newSellerTile.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -81,8 +82,7 @@ class ProcessSellerCard extends StatelessWidget {
                         height: 40.h,
                         width: 40.h,
                         child: Image.asset('assest/profileImage.png').blurred(
-                          colorOpacity: 0.5,
-                          blur: 90,
+                          blur: 2,
                         ),
                       ),
                     ),
@@ -92,7 +92,11 @@ class ProcessSellerCard extends StatelessWidget {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(left: 17.w),
-                        child: SvgPicture.asset("assest/name.svg"),
+                        child: Text(
+                          name.isNotEmpty ? '${name[0]}${'.....'}' : '',
+                          style: const TextStyle(
+                              fontSize: 16), // Adjust font size as needed
+                        ),
                       ),
                       SizedBox(
                         height: GlobalSizes.getDeviceHeight(context) * 0.003,
@@ -158,9 +162,36 @@ class ProcessSellerCard extends StatelessWidget {
                         horizontal:
                             GlobalSizes.getDeviceHeight(context) * 0.025),
                     child: SizedBox(
-                        width: GlobalSizes.getDeviceWidth(context) * 0.15,
-                        height: GlobalSizes.getDeviceHeight(context) * 0.09,
-                        child: Image.network(image)),
+                        height: 50.h,
+                        width: 100.w,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => EnlargedImageView(
+                                    image: image, heroTag: 'heroTag'),
+                              ),
+                            );
+                          },
+                          child: Hero(
+                            tag: 'heroTag',
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    GlobalSizes.getDeviceHeight(context) *
+                                        0.025,
+                              ),
+                              child: SizedBox(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      8.0), // Adjust the value to make the image rectangular with rounded corners
+                                  child:
+                                      Image.network(image, fit: BoxFit.cover),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )),
                   ),
                   Column(
                     children: [

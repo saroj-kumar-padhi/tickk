@@ -260,7 +260,9 @@ class _SetUpProductState extends State<SetUpProduct> {
                               final result = await showDialog<String>(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return const PickImageDialog();
+                                  return const PickImageDialog(
+                                    heading: 'Upload your store image',
+                                  );
                                 },
                               );
                               if (result != null) {
@@ -1275,7 +1277,9 @@ class _SetUpProductState extends State<SetUpProduct> {
         final result = await showDialog<String>(
           context: context,
           builder: (BuildContext context) {
-            return const PickImageDialog();
+            return const PickImageDialog(
+              heading: 'upload your stote image',
+            );
           },
         );
         if (result != null) {

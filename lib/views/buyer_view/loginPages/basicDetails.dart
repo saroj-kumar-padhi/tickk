@@ -77,7 +77,7 @@ class BasicDetails extends StatelessWidget {
                           child: SizedBox(
                             height: 55.h,
                             child: CustomDropdownFormField(
-                              borderColor: const Color(0xFFC4C4C4),
+                              // borderColor: const Color(0xFFC4C4C4),
                               hintText: 'Gender',
                               items: dropdownController.GenderList,
                               onChanged: (value) async {
