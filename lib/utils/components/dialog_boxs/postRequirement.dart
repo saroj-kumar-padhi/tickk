@@ -160,15 +160,7 @@ class _PostRequirementsDialogState extends State<PostRequirementsDialog> {
                       subsubCategory: subFormatted,
                       units: widget.units,
                       name: basiccontrollerEdit.response.value.yourName);
-                  try {
-                    restClient.putRequirementInSellerTab(
-                        widget.category, widget.subcategory);
 
-                    // PushNotificationServices.sendNotification(fcm, context,
-                    //     "A new requirement has been Posted of requirement id $category please check it out");
-                  } catch (e) {
-                    Logger().d(e);
-                  }
                   newTabController.fetchRequirements();
                   Get.back();
                   Get.back();

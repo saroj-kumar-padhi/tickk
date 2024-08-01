@@ -43,7 +43,7 @@ class Buyerinprocesscontroller extends GetxController {
     try {
       // Fetch the requirements from the API
       final BuyerInprossModel requirementList =
-          await restClient.sortByPrice(mobileNo, "TR1A2639");
+          await restClient.sortByPrice(mobileNo, requirementId);
 
       // Update the observable list with the fetched requirements
       requirementsList.assignAll(requirementList.data);
@@ -64,7 +64,7 @@ class Buyerinprocesscontroller extends GetxController {
     try {
       // Fetch the requirements from the API
       final BuyerInprossModel requirementList =
-          await restClient.sortByDiatance("TR1A2639");
+          await restClient.sortByDiatance(requirementId);
 
       // Update the observable list with the fetched requirements
       requirementsList.assignAll(requirementList.data);

@@ -32,7 +32,7 @@ import '../utils/components/buyerScreenTiles/send_tile.dart';
 part 'rest_client.g.dart';
 
 // @RestApi(baseUrl: 'http://13.201.210.192:3002')
-@RestApi(baseUrl: 'http://192.168.1.23:3002')
+@RestApi(baseUrl: 'http://192.168.1.32:3002')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 

@@ -304,7 +304,7 @@ class InprocessTile extends StatelessWidget {
                                                 .selectedTab.value = 0;
                                             sortDialogBox(
                                               context: context,
-                                              mobileNumber: modelNo,
+                                              mobileNumber: mobile,
                                               requiestId: requirementId,
                                             );
                                           },
@@ -840,7 +840,7 @@ class InprocessTile extends StatelessWidget {
                                                       .selectedTab.value = 0;
                                                   sortDialogBox(
                                                     context: context,
-                                                    mobileNumber: '1234567890',
+                                                    mobileNumber: mobile,
                                                     requiestId: requirementId,
                                                   );
                                                 },

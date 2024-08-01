@@ -77,12 +77,12 @@ sortDialogBox({
                 children: [
                   // Sort by Price Tab
                   _buildSortByPriceTab(
-                      context, dialogBoxController, '9', "TR1A2639"),
+                      context, dialogBoxController, mobileNumber, requiestId),
                   // Sort by Distance Tab
                   _buildSortByDistanceTab(
                     context,
                     dialogBoxController,
-                    "TR1A2639",
+                    requiestId,
                   ),
                 ],
               ),

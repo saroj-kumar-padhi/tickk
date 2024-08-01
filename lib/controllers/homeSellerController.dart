@@ -24,6 +24,7 @@ class HomeSellerController extends GetxController {
       isLoading.value = true;
       dynamic response = await restClient.fetchNewSeller(storeId);
       sellerDataList.value = response.data;
+      sellerDataList.value = sellerDataList.reversed.toList();
       isLoading.value = false;
     } catch (e) {
       // Handle error

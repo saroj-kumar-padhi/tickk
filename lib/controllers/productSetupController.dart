@@ -123,6 +123,7 @@ class ProductSetUpController extends GetxController {
       var formData = dio.FormData();
       final box = Hive.box('myBox');
       final String formattedPhoneNumber = box.get('phone') ?? "";
+
       // Add non-file fields
       formData.fields.addAll([
         MapEntry("mobile", formattedPhoneNumber),
@@ -149,8 +150,13 @@ class ProductSetUpController extends GetxController {
         const MapEntry("Country", "India"),
         MapEntry("Postcode_ZIP", pinCodeController.value.text),
         MapEntry("StreetName_Area", colonyController.value.text),
-        // MapEntry("sellerLocation", jsonEncode(convertedAddressToLatLong)),
-        const MapEntry("District_City", "Hydrabad"),
+        MapEntry(
+            "sellerLocation",
+            jsonEncode({
+              "latitude": convertedAddressToLatLong["latitude"].toString(),
+              "longitude": convertedAddressToLatLong["longitude"].toString(),
+            })),
+        const MapEntry("District_City", "Hyderabad"),
         MapEntry(
             "stared",
             staredImage.isEmpty
@@ -177,13 +183,12 @@ class ProductSetUpController extends GetxController {
       // Send the request
       await postdio.setupStrore(formData);
       Get.snackbar("Restart Required",
-          "restart required to make some functinalities work");
+          "Restart required to make some functionalities work");
       Get.to(const HomeSeller(storeId: ''));
-      // If successful, you might want to show a success message or navigate to a new screen
       Get.snackbar('Success', 'Store setup completed successfully');
     } catch (e) {
       Logger().e('Error in setupStrore: $e');
-      Get.snackbar('Error', 'Failed to setup store. Please try again.');
+      Get.snackbar('Error', '$e.');
     } finally {
       isLoading.value = false;
     }

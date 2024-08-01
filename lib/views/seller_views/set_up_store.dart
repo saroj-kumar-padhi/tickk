@@ -752,7 +752,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: "Languages you know"),
+                    heading(title: "Languages you know *"),
                     SizedBox(
                       height: 10.h,
                     ),

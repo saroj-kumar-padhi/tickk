@@ -104,10 +104,16 @@ class DropdownController extends GetxController {
           ),
         ));
       }
-
       await postdio.postRequirements(formData);
-
-      Fluttertoast.showToast(msg: "Thanks Your requirements sent successfully");
+      try {
+        restClient.putRequirementInSellerTab(category, subcategory);
+        Fluttertoast.showToast(
+            msg: "Thanks Your requirements sent successfully");
+        // PushNotificationServices.sendNotification(fcm, context,
+        //     "A new requirement has been Posted of requirement id $category please check it out"); here notification solve issue
+      } catch (e) {
+        Logger().d(e);
+      }
       newTabController.fetchRequirements();
       Get.toNamed(RouteName.homeBuyerScreen);
     } catch (e) {
