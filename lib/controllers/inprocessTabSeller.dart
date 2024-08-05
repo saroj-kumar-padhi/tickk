@@ -18,6 +18,23 @@ class SellerInprocesscontroller extends GetxController {
     await fetchProcessSellerRequirements(storeId: storeId);
   }
 
+  //refresh action
+  Future<void> refreshData() async {
+    isLoading.value = true;
+    try {
+      // Clear existing items
+      requirementsList.clear();
+      requirementsList.clear();
+
+      // Fetch new items
+      await fetchProcessSellerRequirements(storeId: storeId);
+    } catch (e) {
+      print('Error refreshing data: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> fetchProcessSellerRequirements({required String storeId}) async {
     isLoading.value = true;
     try {

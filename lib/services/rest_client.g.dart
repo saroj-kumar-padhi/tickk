@@ -13,7 +13,7 @@ class _RestClient implements RestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.1.32:3002';
+    baseUrl ??= 'http://192.168.1.13:3002';
   }
 
   final Dio _dio;
@@ -775,6 +775,36 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<DocumentResponse> knowIsAccepeted(
+    String reqId,
+    String storeId,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<DocumentResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/SellerAccepted/AcceptTrueFalse/${reqId}/${storeId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = DocumentResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<void> moveToDealDone(
     String RequirementID,
     String StoreID,
@@ -793,6 +823,35 @@ class _RestClient implements RestClient {
         .compose(
           _dio.options,
           '/buyerInProcess/buyersellerDealDone/${RequirementID}/${StoreID}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<void> moveToAccepet(
+    String RequirementID,
+    String StoreID,
+    Map<String, dynamic> data,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/buyerInProcess/buyerAcceptingSeller/${RequirementID}/${StoreID}',
           queryParameters: queryParameters,
           data: _data,
         )

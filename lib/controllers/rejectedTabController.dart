@@ -14,6 +14,23 @@ class RejectedBuyerTabController extends GetxController {
     await fetchRejectedItems(mobileNo);
   }
 
+  //refresh action
+  Future<void> refreshData() async {
+    isLoading.value = true;
+    try {
+      // Clear existing items
+      rejectedItems.clear();
+      rejectedItems.clear();
+
+      // Fetch new items
+      await fetchRejectedItems(mobileNo);
+    } catch (e) {
+      print('Error refreshing data: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   RxList<RejectedItemd> rejectedItems = <RejectedItemd>[].obs;
   RxBool isLoading = false.obs;
   RxString error = ''.obs;

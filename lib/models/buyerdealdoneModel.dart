@@ -20,6 +20,7 @@ class BuyerDealDoneResponse {
 class RequirementData {
   final String requirementID;
   final String storeCategory;
+  final String storeSubCategory;
   final String addImage;
   final DateTime date;
   final String modelNo;
@@ -31,6 +32,7 @@ class RequirementData {
   final List<Store> stores;
 
   RequirementData({
+    required this.storeSubCategory,
     required this.requirementID,
     required this.storeCategory,
     required this.addImage,
@@ -58,6 +60,7 @@ class RequirementData {
       requirementInDetails: json['Requirement_in_details'] ?? "",
       stores:
           (json['stores'] as List).map((item) => Store.fromJson(item)).toList(),
+      storeSubCategory: json['storeSubCategory'] ?? "",
     );
   }
 }

@@ -17,6 +17,23 @@ class Dealdonesellercontroller extends GetxController {
     fetchDealDoneItems();
   }
 
+  // refresh action
+  Future<void> refreshData() async {
+    isLoading.value = true;
+    try {
+      // Clear existing items
+      dealDoneItems.clear();
+      processedItems.clear();
+
+      // Fetch new items
+      await fetchDealDoneItems();
+    } catch (e) {
+      print('Error refreshing data: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> fetchDealDoneItems() async {
     try {
       isLoading(true);

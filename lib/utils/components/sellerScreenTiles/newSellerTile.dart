@@ -572,9 +572,9 @@ class NewSellerCard extends StatelessWidget {
                             ),
                             onPressed: () async {
                               try {
-                                await restClient.rejectBySeller("TS156235HP", {
+                                await restClient.rejectBySeller(storeId, {
                                   "Reject": 'true',
-                                  "RequirementID": "DR1A265"
+                                  "RequirementID": requirementId
                                 });
                               } catch (e) {
                                 Logger().d(e.toString());

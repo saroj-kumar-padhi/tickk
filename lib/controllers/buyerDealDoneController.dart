@@ -19,6 +19,23 @@ class BuyerDealDonecontroller extends GetxController {
     await fetchProcessBuyerRequirements(mobileNo: mobileNo);
   }
 
+//refresh action
+  Future<void> refreshData() async {
+    isLoading.value = true;
+    try {
+      // Clear existing items
+      requirementsList.clear();
+      requirementsList.clear();
+
+      // Fetch new items
+      await fetchProcessBuyerRequirements(mobileNo: mobileNo);
+    } catch (e) {
+      print('Error refreshing data: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> fetchProcessBuyerRequirements({required String mobileNo}) async {
     isLoading.value = true;
     try {

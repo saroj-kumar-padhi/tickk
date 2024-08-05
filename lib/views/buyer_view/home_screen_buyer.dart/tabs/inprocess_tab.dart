@@ -26,64 +26,75 @@ class InProcessTab extends StatelessWidget {
               body:
                   Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
             )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 10.h),
-                  child: Text(
-                      "Total Requirements : ${buyerinprocesscontroller.requirementsList.length} "),
-                ),
-                Expanded(
-                  flex: 12,
-                  child: buyerinprocesscontroller.requirementsList.isEmpty
-                      ? Center(
-                          child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset('assest/empty.png'),
-                            SizedBox(
-                              height: 10.sp,
-                            ),
-                            Text(
-                              "No Requirement Yet.",
-                              style: TextStyles.openSans(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.sp,
-                                  color: const Color(0xff4A4A4A)),
-                            ),
-                          ],
-                        ))
-                      : ListView.builder(
-                          itemCount:
-                              buyerinprocesscontroller.requirementsList.length,
-                          itemBuilder: (context, index) {
-                            var data = buyerinprocesscontroller
-                                .requirementsList[index];
-                            return Padding(
-                              padding: EdgeInsets.all(10.0.h),
-                              child: InprocessTile(
-                                requirementId: data.requirementID,
-                                catagory: data.storeCategory,
-                                subCategory: data.storeSubSubCategory,
-                                brands: data.storeSubCategory,
-                                modelNo: data.modelNo,
-                                oty: data.quantity.toString(),
-                                size: data.size.toString(),
-                                units: data.units.toString(),
-                                des: data.requirementInDetails,
-                                date: data.Date,
-                                stores: data.stores,
-                                mobile: formattedPhoneNumber,
-                                requirementImge: data.addImage,
-                                image: data.addImage,
-                              ),
-                            );
-                          }),
-                ),
-              ],
+          : RefreshIndicator(
+              onRefresh: buyerinprocesscontroller.refreshData,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.h),
+                    child: Text(
+                        "Total Requirements : ${buyerinprocesscontroller.requirementsList.length} "),
+                  ),
+                  Expanded(
+                    flex: 12,
+                    child: buyerinprocesscontroller.requirementsList.isEmpty
+                        ? emptyStateBuild()
+                        : dataBuildState(
+                            buyerinprocesscontroller, formattedPhoneNumber),
+                  ),
+                ],
+              ),
             );
     });
+  }
+
+  ListView dataBuildState(Buyerinprocesscontroller buyerinprocesscontroller,
+      String formattedPhoneNumber) {
+    return ListView.builder(
+        itemCount: buyerinprocesscontroller.requirementsList.length,
+        itemBuilder: (context, index) {
+          var data = buyerinprocesscontroller.requirementsList[index];
+          return Padding(
+            padding: EdgeInsets.all(10.0.h),
+            child: InprocessTile(
+              requirementId: data.requirementID,
+              catagory: data.storeCategory,
+              subCategory: data.storeSubSubCategory,
+              brands: data.storeSubCategory,
+              modelNo: data.modelNo,
+              oty: data.quantity.toString(),
+              size: data.size.toString(),
+              units: data.units.toString(),
+              des: data.requirementInDetails,
+              date: data.Date,
+              stores: data.stores,
+              mobile: formattedPhoneNumber,
+              requirementImge: data.addImage,
+              image: data.addImage,
+            ),
+          );
+        });
+  }
+
+  Center emptyStateBuild() {
+    return Center(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Image.asset('assest/empty.png'),
+        SizedBox(
+          height: 10.sp,
+        ),
+        Text(
+          "No Requirement Yet.",
+          style: TextStyles.openSans(
+              fontWeight: FontWeight.w600,
+              fontSize: 14.sp,
+              color: const Color(0xff4A4A4A)),
+        ),
+      ],
+    ));
   }
 }

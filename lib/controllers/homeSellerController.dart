@@ -18,6 +18,23 @@ class HomeSellerController extends GetxController {
     fetchSellerData(storeId);
   }
 
+  //refresh action
+  Future<void> refreshData() async {
+    isLoading.value = true;
+    try {
+      // Clear existing items
+      sellerDataList.clear();
+      sellerDataList.clear();
+
+      // Fetch new items
+      await fetchSellerData(storeId);
+    } catch (e) {
+      print('Error refreshing data: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> fetchSellerData(String storeId) async {
     sellerDataList.clear();
     try {

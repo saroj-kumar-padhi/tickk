@@ -2,6 +2,7 @@ import 'package:dekhlo/controllers/sellerProfileController.dart';
 import 'package:dekhlo/utils/components/dialog_boxs/log_out_dialog.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -110,69 +111,121 @@ class _SellerProfileState extends State<SellerProfile> {
                     color: const Color(0xff4A4A4A)),
               ),
             ),
-            body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Image.asset("assest/profileImage.png"),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              sellerProfileController.user!.yourName,
-                              style: TextStyles.openSans(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w700,
-                                  color: const Color(0xff000000)),
-                            ),
-                            Text(
-                              sellerProfileController.user!.email,
-                              style: TextStyles.openSans(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14.sp,
-                                  color: const Color(0xff828282)),
-                            ),
-                            Text(
-                              sellerProfileController.user!.mobile,
-                              style: TextStyles.openSans(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14.sp,
-                                  color: const Color(0xff828282)),
-                            ),
-                            SizedBox(
-                              height: 8.h,
-                            ),
-                            Buttons.smallCallButton(
-                                height: 35.h,
-                                width: 120.w,
-                                buttonText: 'Edit profile',
-                                textStyle: TextStyles.openSans(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16.sp),
-                                borderColor: const Color(0xffDADADA),
-                                foregroundColor: const Color(0xff4a4a4a),
-                                onPressed: () {
-                                  Get.toNamed(RouteName.editProfile);
-                                }),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  const Divider(),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  InkWell(
+            body: Animate(
+              effects: [
+                SlideEffect(
+                    begin: const Offset(1, 0), // Start from right edge
+                    end: const Offset(0, 0), // End at normal position
+                    duration: 1000.ms, // Animation duration
+                    curve: Curves.easeOut // Animation curve
+                    ),
+                FadeEffect(
+                    begin: 0, end: 1, duration: 1000.ms, curve: Curves.easeOut),
+              ],
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Image.asset("assest/profileImage.png"),
+                        Padding(
+                          padding: EdgeInsets.only(left: 20.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                sellerProfileController.user!.yourName,
+                                style: TextStyles.openSans(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: const Color(0xff000000)),
+                              ),
+                              Text(
+                                sellerProfileController.user!.email,
+                                style: TextStyles.openSans(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14.sp,
+                                    color: const Color(0xff828282)),
+                              ),
+                              Text(
+                                sellerProfileController.user!.mobile,
+                                style: TextStyles.openSans(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14.sp,
+                                    color: const Color(0xff828282)),
+                              ),
+                              SizedBox(
+                                height: 8.h,
+                              ),
+                              Buttons.smallCallButton(
+                                  height: 35.h,
+                                  width: 120.w,
+                                  buttonText: 'Edit profile',
+                                  textStyle: TextStyles.openSans(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16.sp),
+                                  borderColor: const Color(0xffDADADA),
+                                  foregroundColor: const Color(0xff4a4a4a),
+                                  onPressed: () {
+                                    Get.toNamed(RouteName.editProfile);
+                                  }),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    const Divider(),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const SupportDialogBox();
+                            },
+                          );
+                        },
+                        child: buyerSupport(
+                          imagePath: "assest/info_grey.svg",
+                          title: "Buyer Support",
+                        )),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(RouteName.faqScreens);
+                      },
+                      child: textSupport(
+                          imagePath: "assest/question_mark.svg",
+                          title: "Buyer FAQs",
+                          url: 'https://www.tickk.in/faqs'),
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(RouteName.termsCondition);
+                      },
+                      child: textSupport(
+                          imagePath: "assest/doc.svg",
+                          title: "Buyer Terms & Conditions",
+                          url: 'https://www.tickk.in/terms-and-conditions'),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    const Divider(),
+                    InkWell(
                       onTap: () {
                         showDialog(
                           context: context,
@@ -182,65 +235,25 @@ class _SellerProfileState extends State<SellerProfile> {
                         );
                       },
                       child: buyerSupport(
-                        imagePath: "assest/info_grey.svg",
-                        title: "Buyer Support",
-                      )),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Get.toNamed(RouteName.faqScreens);
-                    },
-                    child: textSupport(
+                          imagePath: "assest/info_grey.svg",
+                          title: "Seller Support"),
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    textSupport(
                         imagePath: "assest/question_mark.svg",
-                        title: "Buyer FAQs",
+                        title: "Seller FAQs",
                         url: 'https://www.tickk.in/faqs'),
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Get.toNamed(RouteName.termsCondition);
-                    },
-                    child: textSupport(
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    textSupport(
                         imagePath: "assest/doc.svg",
-                        title: "Buyer Terms & Conditions",
+                        title: "Seller Terms & Conditions",
                         url: 'https://www.tickk.in/terms-and-conditions'),
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  const Divider(),
-                  InkWell(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const SupportDialogBox();
-                        },
-                      );
-                    },
-                    child: buyerSupport(
-                        imagePath: "assest/info_grey.svg",
-                        title: "Seller Support"),
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  textSupport(
-                      imagePath: "assest/question_mark.svg",
-                      title: "Seller FAQs",
-                      url: 'https://www.tickk.in/faqs'),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  textSupport(
-                      imagePath: "assest/doc.svg",
-                      title: "Seller Terms & Conditions",
-                      url: 'https://www.tickk.in/terms-and-conditions'),
-                ],
+                  ],
+                ),
               ),
             ),
           ));

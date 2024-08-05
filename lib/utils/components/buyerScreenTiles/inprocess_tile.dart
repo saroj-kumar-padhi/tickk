@@ -7,6 +7,7 @@ import 'package:dekhlo/views/seller_views/store_screens/mystore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
@@ -658,71 +659,37 @@ class InprocessTile extends StatelessWidget {
                                                           width: 6.w,
                                                         ),
                                                         Obx(() {
-                                                          return InkWell(
-                                                            child: inProcessController
-                                                                    .index
-                                                                    .contains(
-                                                                        index)
-                                                                ? Buttons
-                                                                    .smallCallButton(
-                                                                        buttonText:
-                                                                            'Call',
-                                                                        onPressed:
-                                                                            () {
-                                                                          String
-                                                                              phone =
-                                                                              stores[index].mobile;
-                                                                          FlutterPhoneDirectCaller.callNumber(
-                                                                              '+91$phone');
-                                                                        })
-                                                                : InkWell(
-                                                                    onTap: () {
-                                                                      if (inProcessController
-                                                                          .index
-                                                                          .contains(
-                                                                              index)) {
-                                                                        inProcessController
-                                                                            .index
-                                                                            .remove(index);
-                                                                      } else {
-                                                                        inProcessController
-                                                                            .index
-                                                                            .add(index);
-                                                                      }
-                                                                    },
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Padding(
-                                                                          padding: EdgeInsets.fromLTRB(
-                                                                              6.w,
-                                                                              0.h,
-                                                                              10.h,
-                                                                              0.h),
-                                                                          child:
-                                                                              Container(
-                                                                            decoration:
-                                                                                const BoxDecoration(shape: BoxShape.circle, color: Color(0xffCEEDE3)),
-                                                                            child:
-                                                                                Icon(
-                                                                              Icons.check,
-                                                                              size: 15.sp,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                          );
-                                                        }),
-                                                        Obx(() {
-                                                          Buyerinprocesscontroller
-                                                              buyerinprocesscontroller =
-                                                              Get.find();
-                                                          return inProcessController
-                                                                  .index
-                                                                  .contains(
-                                                                      index)
-                                                              ? Buttons.smallDealDoneButton(
+                                                          final inProcessController =
+                                                              Get.find<
+                                                                  InProcessController>();
+                                                          final buyerinprocesscontroller =
+                                                              Get.find<
+                                                                  Buyerinprocesscontroller>();
+
+                                                          // Fetch the acceptance status only once
+                                                          inProcessController
+                                                              .fetchIsAccepted(
+                                                                  reqId:
+                                                                      requirementId,
+                                                                  storeId: stores[
+                                                                          index]
+                                                                      .storeID);
+
+                                                          // Get the response for this specific store
+                                                          final documentResponse =
+                                                              inProcessController
+                                                                      .documentResponses[
+                                                                  stores[index]
+                                                                      .storeID];
+
+                                                          if (documentResponse
+                                                                  ?.message ==
+                                                              "Document found") {
+                                                            // Show "Deal Done" and "Call" buttons
+                                                            return Row(
+                                                              children: [
+                                                                Buttons
+                                                                    .smallDealDoneButton(
                                                                   RequrementId:
                                                                       requirementId,
                                                                   storeId: stores[
@@ -731,33 +698,102 @@ class InprocessTile extends StatelessWidget {
                                                                   buyerinprocesscontroller:
                                                                       buyerinprocesscontroller,
                                                                   mobile:
-                                                                      mobile)
-                                                              : Center(
+                                                                      mobile,
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 10),
+                                                                Buttons
+                                                                    .smallCallButton(
+                                                                  buttonText:
+                                                                      'Call',
+                                                                  onPressed:
+                                                                      () {
+                                                                    String
+                                                                        phone =
+                                                                        stores[index]
+                                                                            .mobile;
+                                                                    FlutterPhoneDirectCaller
+                                                                        .callNumber(
+                                                                            '+91$phone');
+                                                                  },
+                                                                ),
+                                                              ],
+                                                            );
+                                                          } else {
+                                                            // Show check and cross buttons
+                                                            return Row(
+                                                              children: [
+                                                                InkWell(
+                                                                  onTap:
+                                                                      () async {
+                                                                    try {
+                                                                      await restClient.moveToAccepet(
+                                                                          requirementId,
+                                                                          stores[index].storeID,
+                                                                          {
+                                                                            "Accept":
+                                                                                true
+                                                                          });
+                                                                      // Update the local state after successful API call
+                                                                      inProcessController
+                                                                              .documentResponses[
+                                                                          stores[index]
+                                                                              .storeID] = DocumentResponse(
+                                                                          message:
+                                                                              "Document found");
+                                                                    } catch (e) {
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                              msg: "Unfortunately, can't move to seller accepted tab due to $e");
+                                                                    }
+                                                                  },
                                                                   child:
                                                                       Container(
                                                                     decoration: const BoxDecoration(
                                                                         shape: BoxShape
                                                                             .circle,
                                                                         color: Color(
-                                                                            0xffFFEAEC)),
+                                                                            0xffCEEDE3)),
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .check,
+                                                                      size:
+                                                                          15.sp,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 10),
+                                                                InkWell(
+                                                                  onTap:
+                                                                      () async {
+                                                                    try {
+                                                                      await restClient.rejectQuote(
+                                                                          stores[index]
+                                                                              .storeID,
+                                                                          requirementId,
+                                                                          {
+                                                                            "Reject":
+                                                                                true
+                                                                          });
+                                                                      Get.to(
+                                                                          const RejectedTab());
+                                                                    } catch (e) {
+                                                                      Logger()
+                                                                          .d(e);
+                                                                    }
+                                                                  },
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        () {},
                                                                     child:
-                                                                        InkWell(
-                                                                      onTap:
-                                                                          () async {
-                                                                        try {
-                                                                          await restClient.rejectQuote(
-                                                                              stores[index].storeID,
-                                                                              requirementId,
-                                                                              {
-                                                                                "Reject": true
-                                                                              });
-                                                                          Get.to(
-                                                                              const RejectedTab());
-                                                                        } catch (e) {
-                                                                          Logger()
-                                                                              .d(e);
-                                                                        }
-                                                                      },
+                                                                        Container(
+                                                                      decoration: const BoxDecoration(
+                                                                          shape: BoxShape
+                                                                              .circle,
+                                                                          color:
+                                                                              Color(0xffFFEAEC)),
                                                                       child:
                                                                           Icon(
                                                                         Icons
@@ -769,7 +805,10 @@ class InprocessTile extends StatelessWidget {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                );
+                                                                ),
+                                                              ],
+                                                            );
+                                                          }
                                                         })
                                                       ],
                                                     ),

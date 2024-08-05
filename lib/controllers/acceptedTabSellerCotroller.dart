@@ -18,6 +18,23 @@ class Acceptedtabsellercotroller extends GetxController {
     fetchAcceptedItems();
   }
 
+//refresh action
+  Future<void> refreshData() async {
+    isLoading.value = true;
+    try {
+      // Clear existing items
+      acceptedItems.clear();
+      acceptedItems.clear();
+
+      // Fetch new items
+      await fetchAcceptedItems();
+    } catch (e) {
+      print('Error refreshing data: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> fetchAcceptedItems() async {
     try {
       isLoading(true);

@@ -101,7 +101,7 @@ class Store {
           ? json['TotalDistance'].toString()
           : "0",
       mobile: json['mobile'] ?? "",
-      ExactSimilarImage: json['ExactSimilarImage'] ?? "",
+      ExactSimilarImage: json['ExactSimilarImage'] ?? [],
       stared: json['stared'] ?? "",
     );
   }

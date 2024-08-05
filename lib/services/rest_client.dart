@@ -15,6 +15,7 @@ import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 import '../controllers/authController.dart';
 import '../controllers/categoriesController.dart';
+import '../controllers/inprocessController.dart';
 import '../models/basicDetailsEdit.dart';
 import '../models/categoriesBased.dart';
 import '../models/genderFetch.dart';
@@ -32,7 +33,7 @@ import '../utils/components/buyerScreenTiles/send_tile.dart';
 part 'rest_client.g.dart';
 
 // @RestApi(baseUrl: 'http://13.201.210.192:3002')
-@RestApi(baseUrl: 'http://192.168.1.32:3002')
+@RestApi(baseUrl: 'http://192.168.1.13:3002')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
@@ -159,8 +160,19 @@ abstract class RestClient {
   @GET('/BuyerRejectedTabData/{mobileNo}')
   Future<List<RejectedItemd>> buyerRejected(@Path('mobileNo') String mobileNo);
 
+  @GET('/SellerAccepted/AcceptTrueFalse/{reqId}/{storeId}')
+  Future<DocumentResponse> knowIsAccepeted(
+      @Path('reqId') String reqId, @Path('storeId') String storeId);
+
   @POST('/buyerInProcess/buyersellerDealDone/{RequirementID}/{StoreID}')
   Future<void> moveToDealDone(
+    @Path('RequirementID') String RequirementID,
+    @Path('StoreID') String StoreID,
+    @Body() Map<String, dynamic> data,
+  );
+
+  @POST('/buyerInProcess/buyerAcceptingSeller/{RequirementID}/{StoreID}')
+  Future<void> moveToAccepet(
     @Path('RequirementID') String RequirementID,
     @Path('StoreID') String StoreID,
     @Body() Map<String, dynamic> data,

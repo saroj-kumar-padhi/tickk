@@ -22,95 +22,87 @@ class NewTabSeller extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-            flex: 12,
-            child: Obx(
-              () => homeSellerController.isLoading.value
+          flex: 12,
+          child: Obx(
+            () => RefreshIndicator(
+              onRefresh: homeSellerController.refreshData,
+              child: homeSellerController.isLoading.value
                   ? Scaffold(
                       body: Center(
                           child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
                     )
                   : homeSellerController.sellerDataList.isEmpty
-                      ? Center(
-                          child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                      ? ListView(
+                          // Wrap empty state in ListView to make it scrollable
                           children: [
-                            Image.asset('assest/empty.png'),
                             SizedBox(
-                              height: 10.sp,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(
-                                "No Requirement Yet.Tickk is working for $storeName to get Request",
-                                style: TextStyles.openSans(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14.sp,
-                                    color: const Color(0xff4A4A4A)),
+                              height: MediaQuery.of(context).size.height * 0.7,
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image.asset('assest/empty.png'),
+                                    SizedBox(height: 10.sp),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
+                                      child: Text(
+                                        "No Requirement Yet.Tickk is working for $storeName to get Request",
+                                        style: TextStyles.openSans(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14.sp,
+                                            color: const Color(0xff4A4A4A)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
-                        ))
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        )
+                      : ListView(
+                          // Use ListView instead of Column for non-empty state
                           children: [
                             Padding(
                               padding: EdgeInsets.only(left: 20.w),
                               child: Text(
                                   "Total requirement : ${homeSellerController.sellerDataList.length}"),
                             ),
-                            Expanded(
-                              child: ListView.builder(
-                                  itemCount: homeSellerController
-                                      .sellerDataList.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: NewSellerCard(
-                                        storeCategory: homeSellerController
-                                            .sellerDataList[index]
-                                            .storeCategory,
-                                        storeSubCategory: homeSellerController
-                                            .sellerDataList[index]
-                                            .storeSubCategory,
-                                        brands: homeSellerController
-                                            .sellerDataList[index].brands,
-                                        date: DateFormat('yyyy-MM-dd').format(
-                                            homeSellerController
-                                                .sellerDataList[index].date),
-                                        modelNo: homeSellerController
-                                            .sellerDataList[index].modelNo,
-                                        Qty: homeSellerController
-                                            .sellerDataList[index].quantity
-                                            .toString(),
-                                        size: homeSellerController
-                                            .sellerDataList[index].size
-                                            .toString(),
-                                        units: homeSellerController
-                                            .sellerDataList[index].units,
-                                        Requirement_in_details:
-                                            homeSellerController
-                                                .sellerDataList[index]
-                                                .requirementInDetails,
-                                        requirementId: homeSellerController
-                                            .sellerDataList[index]
-                                            .requirementID,
-                                        FCM: homeSellerController
-                                            .sellerDataList[index].FCM,
-                                        image: homeSellerController
-                                            .sellerDataList[index].addImage,
-                                        storeId: storeId,
-                                        name: homeSellerController
-                                            .sellerDataList[index].yourName,
-                                        index: index,
-                                      ),
-                                    );
-                                  }),
-                            ),
+                            ...homeSellerController.sellerDataList
+                                .asMap()
+                                .entries
+                                .map((entry) {
+                              int index = entry.key;
+                              var data = entry.value;
+                              return Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: NewSellerCard(
+                                  storeCategory: data.storeCategory,
+                                  storeSubCategory: data.storeSubCategory,
+                                  brands: data.brands,
+                                  date: DateFormat('yyyy-MM-dd')
+                                      .format(data.date),
+                                  modelNo: data.modelNo,
+                                  Qty: data.quantity.toString(),
+                                  size: data.size.toString(),
+                                  units: data.units,
+                                  Requirement_in_details:
+                                      data.requirementInDetails,
+                                  requirementId: data.requirementID,
+                                  FCM: data.FCM,
+                                  image: data.addImage,
+                                  storeId: storeId,
+                                  name: data.yourName,
+                                  index: index,
+                                ),
+                              );
+                            }),
                           ],
                         ),
-            )),
+            ),
+          ),
+        ),
       ],
     );
   }

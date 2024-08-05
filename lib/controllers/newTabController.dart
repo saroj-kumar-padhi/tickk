@@ -6,6 +6,20 @@ import 'package:logger/web.dart';
 import '../models/newRequrements.dart';
 
 class NewTabController extends GetxController {
+  // refresh action
+  Future<void> refreshData() async {
+    isLoading.value = true;
+    try {
+      // Implement your refresh logic here
+      // For example, re-fetch the requirements list
+      await fetchRequirements();
+    } catch (e) {
+      print('Error refreshing data: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   // Observable list to store the requirements
   var requirementsList = <Requirement>[].obs;
   RxBool isLoading = false.obs;
