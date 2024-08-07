@@ -175,8 +175,8 @@ class DayTiming {
 }
 
 class SellerLocation {
-  final double latitude;
-  final double longitude;
+  final String latitude;
+  final String longitude;
 
   SellerLocation({
     required this.latitude,
@@ -185,8 +185,8 @@ class SellerLocation {
 
   factory SellerLocation.fromJson(Map<String, dynamic> json) {
     return SellerLocation(
-      latitude: json['latitude'].toDouble(),
-      longitude: json['longitude'].toDouble(),
+      latitude: json['latitude'],
+      longitude: json['longitude'],
     );
   }
 

@@ -165,5 +165,5 @@ class Mystoreaccountcontroller extends GetxController {
   List<String> get storeImages => storeDetails.value?.addImage ?? [];
   SellerLocation get sellerLocation =>
       storeDetails.value?.sellerLocation ??
-      SellerLocation(latitude: 90.676, longitude: 90.76586);
+      SellerLocation(latitude: "90.676", longitude: "90.76586");
 }

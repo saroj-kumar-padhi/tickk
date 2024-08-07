@@ -77,27 +77,24 @@ class CategoriesController extends GetxController {
 
   // fetch categories with subcategory
   Future<void> fetchSetupSubcategories(List<String> categories) async {
-    setupsubCategories.clear();
     try {
       isLoading.value = true;
+      setupsubCategories.clear(); // Clear at the beginning of the method
 
       final String categoriesList = categories.join(',');
       final List<CategoryWithSubcategories> response =
           await restClient.getSetupsubcategorieswithCategories(categoriesList);
 
       for (var category in response) {
-        for (var subCategory in category.storeSubCategory) {
-          setupsubCategories.add(subCategory.name);
-        }
+        setupsubCategories
+            .addAll(category.storeSubCategory.map((sub) => sub.name));
       }
-      setupsubCategories.refresh(); // Force update
 
       Logger().f('Fetched setup subcategories: $setupsubCategories');
-
-      isLoading.value = false;
     } catch (error) {
-      isLoading.value = false;
       Logger().e('Error fetching setup subcategories: $error');
+    } finally {
+      isLoading.value = false;
     }
   }
 

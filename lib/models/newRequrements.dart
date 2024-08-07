@@ -8,7 +8,7 @@ class Requirement {
   final String storeSubSubCategory;
   final String brands;
   final String modelNo;
-  final int size;
+  final String size;
   final int quantity;
   final String units;
   final int quote;
@@ -58,7 +58,7 @@ class Requirement {
       storeSubSubCategory: json['storeSubSubCategory'] ?? "",
       brands: json['Brands'] ?? "",
       modelNo: json['ModelNo'] ?? "",
-      size: json['size'] ?? -1,
+      size: json['size'] ?? "",
       quantity: json['Quantity'] ?? "",
       units: json['Units'] ?? "",
       quote: json['Quote'] ?? -1,
