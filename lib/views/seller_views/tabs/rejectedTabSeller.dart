@@ -75,6 +75,7 @@ class RejectedTabSeller extends StatelessWidget {
                     units: item.units,
                     des: item.requirementInDetails,
                     image: item.addImage,
+                    requirementId: item.requirementID,
                   ),
                 );
               },

@@ -8,8 +8,6 @@ import 'package:dekhlo/views/login.dart';
 import 'package:dekhlo/views/buyer_view/notificationsScreens/buyer_notification.dart';
 import 'package:dekhlo/views/buyer_view/profileScreen/buyerProfile.dart';
 import 'package:dekhlo/views/seller_views/sellerProfiles/seller_profile.dart';
-import 'package:dekhlo/views/seller_views/seller_home_screens/seller_home.dart';
-import 'package:dekhlo/views/seller_views/seller_home_screens/storeEditScreen.dart';
 import 'package:dekhlo/views/seller_views/seller_notification.dart';
 import 'package:dekhlo/views/seller_views/set_up_store.dart';
 import 'package:dekhlo/views/seller_views/store_screens/mystore.dart';
@@ -48,11 +46,11 @@ class AppPages {
     GetPage(name: RouteName.deleteScreen, page: () => const DeleteScreen()),
     GetPage(name: RouteName.buyerNotification, page: () => BuyerNotification()),
     GetPage(name: RouteName.basicDetails, page: () => const BasicDetails()),
-    GetPage(name: RouteName.setUpProduct, page: () => SetUpProduct()),
+    GetPage(name: RouteName.setUpProduct, page: () => const SetUpProduct()),
     GetPage(
         name: RouteName.myStore,
         page: () => MyStore(
-              StoreId: null,
+              StoreId: '',
             )),
     GetPage(
         name: RouteName.sellerNotification, page: () => SellerNotification()),
@@ -62,7 +60,24 @@ class AppPages {
     GetPage(
         name: RouteName.custoumSubSubCategory,
         page: () => CustoumSubSubCategory()),
-    GetPage(name: RouteName.storeEditScreen, page: () => StoreEditScreen()),
+    // GetPage(
+    //     name: RouteName.storeEditScreen,
+    //     page: () => const StoreEditScreen(
+    //           storeName: '',
+    //           storeCategory: [],
+    //           storeSubcategory: [],
+    //           about: '',
+    //           yt: '',
+    //           iG: '',
+    //           webSite: '',
+    //           houseNo: '',
+    //           pincode: '',
+    //           city: '',
+    //           yourStoreLoaction: '',
+    //           area: '',
+    //           brands: [],
+    //         )),
+
     GetPage(name: RouteName.sellerProfile, page: () => const SellerProfile()),
   ];
 }

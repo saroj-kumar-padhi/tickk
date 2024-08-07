@@ -40,151 +40,193 @@ class _SellerProfileState extends State<SellerProfile> {
             body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
           )
         : Scaffold(
-            appBar: AppBar(
-              elevation: 1,
-              centerTitle: true,
-              actions: [
-                PopupMenuButton<int>(
-                  icon: const Icon(
-                    Icons.more_vert,
-                    color: Colors.black,
-                  ),
-                  onSelected: (item) => onSelected(context, item),
-                  itemBuilder: (context) => [
-                    PopupMenuItem<int>(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return const LogOutDialog();
-                            });
-                      },
-                      value: 0,
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.logout,
-                            color: Color(0xff4A4A4A),
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          const Text("Logout")
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem<int>(
-                      onTap: () {
-                        Get.toNamed(RouteName.deleteScreen);
-                      },
-                      value: 1,
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            "assest/delete.svg",
-                            height: 23.h,
-                            width: 28.w,
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          const Text("assest/mX2qe5gUvP.json")
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-              leading: IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Color(0xff4A4A4A),
-                  )),
-              title: Text(
-                'My profile',
-                style: TextStyles.openSans(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18.sp,
-                    color: const Color(0xff4A4A4A)),
-              ),
-            ),
             body: Animate(
               effects: [
                 SlideEffect(
                     begin: const Offset(1, 0), // Start from right edge
                     end: const Offset(0, 0), // End at normal position
-                    duration: 1000.ms, // Animation duration
+                    duration: 500.ms, // Animation duration
                     curve: Curves.easeOut // Animation curve
                     ),
-                FadeEffect(
-                    begin: 0, end: 1, duration: 1000.ms, curve: Curves.easeOut),
+                // FadeEffect(
+                //     begin: 0, end: 1, duration: 1000.ms, curve: Curves.easeOut),
               ],
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.asset("assest/profileImage.png"),
-                        Padding(
-                          padding: EdgeInsets.only(left: 20.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+              child: Scaffold(
+                appBar: AppBar(
+                  elevation: 1,
+                  centerTitle: true,
+                  actions: [
+                    PopupMenuButton<int>(
+                      icon: const Icon(
+                        Icons.more_vert,
+                        color: Colors.black,
+                      ),
+                      onSelected: (item) => onSelected(context, item),
+                      itemBuilder: (context) => [
+                        PopupMenuItem<int>(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const LogOutDialog();
+                                });
+                          },
+                          value: 0,
+                          child: Row(
                             children: [
-                              Text(
-                                sellerProfileController.user!.yourName,
-                                style: TextStyles.openSans(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w700,
-                                    color: const Color(0xff000000)),
-                              ),
-                              Text(
-                                sellerProfileController.user!.email,
-                                style: TextStyles.openSans(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14.sp,
-                                    color: const Color(0xff828282)),
-                              ),
-                              Text(
-                                sellerProfileController.user!.mobile,
-                                style: TextStyles.openSans(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14.sp,
-                                    color: const Color(0xff828282)),
+                              const Icon(
+                                Icons.logout,
+                                color: Color(0xff4A4A4A),
                               ),
                               SizedBox(
-                                height: 8.h,
+                                width: 10.w,
                               ),
-                              Buttons.smallCallButton(
-                                  height: 35.h,
-                                  width: 120.w,
-                                  buttonText: 'Edit profile',
-                                  textStyle: TextStyles.openSans(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16.sp),
-                                  borderColor: const Color(0xffDADADA),
-                                  foregroundColor: const Color(0xff4a4a4a),
-                                  onPressed: () {
-                                    Get.toNamed(RouteName.editProfile);
-                                  }),
+                              const Text("Logout")
                             ],
                           ),
-                        )
+                        ),
+                        PopupMenuItem<int>(
+                          onTap: () {
+                            Get.toNamed(RouteName.deleteScreen);
+                          },
+                          value: 1,
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                "assest/delete.svg",
+                                height: 23.h,
+                                width: 28.w,
+                              ),
+                              SizedBox(
+                                width: 10.w,
+                              ),
+                              const Text("Delete")
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    const Divider(),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    InkWell(
+                  ],
+                  leading: IconButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Color(0xff4A4A4A),
+                      )),
+                  title: Text(
+                    'My profile',
+                    style: TextStyles.openSans(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18.sp,
+                        color: const Color(0xff4A4A4A)),
+                  ),
+                ),
+                body: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset("assest/profileImage.png"),
+                          Padding(
+                            padding: EdgeInsets.only(left: 20.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  sellerProfileController.user!.yourName,
+                                  style: TextStyles.openSans(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w700,
+                                      color: const Color(0xff000000)),
+                                ),
+                                Text(
+                                  sellerProfileController.user!.email,
+                                  style: TextStyles.openSans(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.sp,
+                                      color: const Color(0xff828282)),
+                                ),
+                                Text(
+                                  sellerProfileController.user!.mobile,
+                                  style: TextStyles.openSans(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.sp,
+                                      color: const Color(0xff828282)),
+                                ),
+                                SizedBox(
+                                  height: 8.h,
+                                ),
+                                Buttons.smallCallButton(
+                                    height: 35.h,
+                                    width: 120.w,
+                                    buttonText: 'Edit profile',
+                                    textStyle: TextStyles.openSans(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16.sp),
+                                    borderColor: const Color(0xffDADADA),
+                                    foregroundColor: const Color(0xff4a4a4a),
+                                    onPressed: () {
+                                      Get.toNamed(RouteName.editProfile);
+                                    }),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      const Divider(),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      InkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const SupportDialogBox();
+                              },
+                            );
+                          },
+                          child: buyerSupport(
+                            imagePath: "assest/info_grey.svg",
+                            title: "Buyer Support",
+                          )),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(RouteName.faqScreens);
+                        },
+                        child: textSupport(
+                            imagePath: "assest/question_mark.svg",
+                            title: "Buyer FAQs",
+                            url: 'https://www.tickk.in/faqs'),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(RouteName.termsCondition);
+                        },
+                        child: textSupport(
+                            imagePath: "assest/doc.svg",
+                            title: "Buyer Terms & Conditions",
+                            url: 'https://www.tickk.in/terms-and-conditions'),
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      const Divider(),
+                      InkWell(
                         onTap: () {
                           showDialog(
                             context: context,
@@ -194,65 +236,25 @@ class _SellerProfileState extends State<SellerProfile> {
                           );
                         },
                         child: buyerSupport(
-                          imagePath: "assest/info_grey.svg",
-                          title: "Buyer Support",
-                        )),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Get.toNamed(RouteName.faqScreens);
-                      },
-                      child: textSupport(
+                            imagePath: "assest/info_grey.svg",
+                            title: "Seller Support"),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      textSupport(
                           imagePath: "assest/question_mark.svg",
-                          title: "Buyer FAQs",
+                          title: "Seller FAQs",
                           url: 'https://www.tickk.in/faqs'),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Get.toNamed(RouteName.termsCondition);
-                      },
-                      child: textSupport(
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      textSupport(
                           imagePath: "assest/doc.svg",
-                          title: "Buyer Terms & Conditions",
+                          title: "Seller Terms & Conditions",
                           url: 'https://www.tickk.in/terms-and-conditions'),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    const Divider(),
-                    InkWell(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return const SupportDialogBox();
-                          },
-                        );
-                      },
-                      child: buyerSupport(
-                          imagePath: "assest/info_grey.svg",
-                          title: "Seller Support"),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    textSupport(
-                        imagePath: "assest/question_mark.svg",
-                        title: "Seller FAQs",
-                        url: 'https://www.tickk.in/faqs'),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    textSupport(
-                        imagePath: "assest/doc.svg",
-                        title: "Seller Terms & Conditions",
-                        url: 'https://www.tickk.in/terms-and-conditions'),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -1,5 +1,7 @@
+import 'package:dekhlo/utils/components/sellerScreenTiles/newSellerTile.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../utils/components/textstyle.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +18,7 @@ class RejectedSellerSquareCard extends StatelessWidget {
   final String units;
   final String des;
   final String image;
+  final String requirementId;
   const RejectedSellerSquareCard(
       {super.key,
       required this.requirementID,
@@ -28,7 +31,8 @@ class RejectedSellerSquareCard extends StatelessWidget {
       required this.size,
       required this.units,
       required this.des,
-      required this.image});
+      required this.image,
+      required this.requirementId});
 
   @override
   Widget build(BuildContext context) {
@@ -118,11 +122,36 @@ class RejectedSellerSquareCard extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: GlobalSizes.getDeviceHeight(context) * 0.025),
+                      horizontal: GlobalSizes.getDeviceHeight(context) * 0.002),
                   child: SizedBox(
-                      width: GlobalSizes.getDeviceWidth(context) * 0.15,
-                      height: GlobalSizes.getDeviceHeight(context) * 0.09,
-                      child: Image.network(image)),
+                      height: 50.h,
+                      width: 100.w,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => EnlargedImageView(
+                                  image: image, heroTag: 'heroTag'),
+                            ),
+                          );
+                        },
+                        child: Hero(
+                          tag: 'heroTag',
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  GlobalSizes.getDeviceHeight(context) * 0.025,
+                            ),
+                            child: SizedBox(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                    8.0), // Adjust the value to make the image rectangular with rounded corners
+                                child: Image.network(image, fit: BoxFit.cover),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )),
                 ),
                 Column(
                   children: [

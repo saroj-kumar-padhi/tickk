@@ -2,6 +2,7 @@ import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/views/buyer_view/profileScreen/FAQ_webview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -27,201 +28,218 @@ class BuyerProfile extends StatelessWidget {
             body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
           )
         : Scaffold(
-            appBar: AppBar(
-              elevation: 1,
-              centerTitle: true,
-              actions: [
-                PopupMenuButton<int>(
-                  icon: const Icon(
-                    Icons.more_vert,
-                    color: Colors.black,
-                  ),
-                  onSelected: (item) => onSelected(context, item),
-                  itemBuilder: (context) => [
-                    PopupMenuItem<int>(
-                      onTap: () async {
-                        try {
-                          final box = Hive.box('myBox');
-                          final String formattedPhoneNumber = box.get('phone');
-                          await restClient.Logout({
-                            "mobile": formattedPhoneNumber,
-                          });
-                        } catch (e) {
-                          Logger().d("error: $e");
-                        }
-                        Get.to(() => const Login());
-                      },
-                      value: 0,
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.logout,
-                            color: Color(0xff4A4A4A),
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          const Text("Logout")
-                        ],
-                      ),
+            body: Animate(
+              effects: [
+                SlideEffect(
+                    begin: const Offset(1, 0), // Start from bottom
+                    end: const Offset(0, 0), // End at normal position
+                    duration: 500.ms, // Animation duration
+                    curve: Curves.easeOut // Animation curve
                     ),
-                    PopupMenuItem<int>(
-                      onTap: () {
-                        Get.toNamed(RouteName.deleteScreen);
-                      },
-                      value: 1,
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            "assest/delete.svg",
-                            height: 23.h,
-                            width: 28.w,
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          const Text("Delete Account")
-                        ],
+              ],
+              child: Scaffold(
+                appBar: AppBar(
+                  elevation: 1,
+                  centerTitle: true,
+                  actions: [
+                    PopupMenuButton<int>(
+                      icon: const Icon(
+                        Icons.more_vert,
+                        color: Colors.black,
                       ),
+                      onSelected: (item) => onSelected(context, item),
+                      itemBuilder: (context) => [
+                        PopupMenuItem<int>(
+                          onTap: () async {
+                            try {
+                              final box = Hive.box('myBox');
+                              final String formattedPhoneNumber =
+                                  box.get('phone');
+                              await restClient.Logout({
+                                "mobile": formattedPhoneNumber,
+                              });
+                            } catch (e) {
+                              Logger().d("error: $e");
+                            }
+                            Get.to(() => const Login());
+                          },
+                          value: 0,
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.logout,
+                                color: Color(0xff4A4A4A),
+                              ),
+                              SizedBox(
+                                width: 10.w,
+                              ),
+                              const Text("Logout")
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem<int>(
+                          onTap: () {
+                            Get.toNamed(RouteName.deleteScreen);
+                          },
+                          value: 1,
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                "assest/delete.svg",
+                                height: 23.h,
+                                width: 28.w,
+                              ),
+                              SizedBox(
+                                width: 10.w,
+                              ),
+                              const Text("Delete Account")
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
+                  leading: IconButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Color(0xff4A4A4A),
+                      )),
+                  title: Text(
+                    'My profile',
+                    style: TextStyles.openSans(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18.sp,
+                        color: const Color(0xff4A4A4A)),
+                  ),
                 ),
-              ],
-              leading: IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Color(0xff4A4A4A),
-                  )),
-              title: Text(
-                'My profile',
-                style: TextStyles.openSans(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18.sp,
-                    color: const Color(0xff4A4A4A)),
-              ),
-            ),
-            body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                body: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+                  child: Column(
                     children: [
-                      basiccontrollerEdit.response.value.profileImage == "" &&
-                              basiccontrollerEdit.response.value.profileImage ==
-                                  null
-                          ? Image.asset("assest/profileImage.png")
-                          : CircleAvatar(
-                              radius: 40.r,
-                              child: ClipOval(
-                                child: Image.network(
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          basiccontrollerEdit.response.value.profileImage ==
+                                      "" &&
                                   basiccontrollerEdit
-                                      .response.value.profileImage,
-                                  fit: BoxFit.cover,
-                                  width: 80.r,
-                                  height: 80.r,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Icon(Icons.person, size: 40.r);
-                                  },
-                                  loadingBuilder:
-                                      (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return const CircularProgressIndicator();
-                                  },
+                                          .response.value.profileImage ==
+                                      null
+                              ? Image.asset("assest/profileImage.png")
+                              : CircleAvatar(
+                                  radius: 40.r,
+                                  child: ClipOval(
+                                    child: Image.network(
+                                      basiccontrollerEdit
+                                          .response.value.profileImage,
+                                      fit: BoxFit.cover,
+                                      width: 80.r,
+                                      height: 80.r,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Icon(Icons.person, size: 40.r);
+                                      },
+                                      loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                        if (loadingProgress == null)
+                                          return child;
+                                        return const CircularProgressIndicator();
+                                      },
+                                    ),
+                                  ),
                                 ),
-                              ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 20.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  basiccontrollerEdit.response.value.yourName,
+                                  style: TextStyles.openSans(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w700,
+                                      color: const Color(0xff000000)),
+                                ),
+                                Text(
+                                  basiccontrollerEdit.response.value.email,
+                                  style: TextStyles.openSans(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.sp,
+                                      color: const Color(0xff828282)),
+                                ),
+                                Text(
+                                  basiccontrollerEdit.response.value.mobile,
+                                  style: TextStyles.openSans(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.sp,
+                                      color: const Color(0xff828282)),
+                                ),
+                                SizedBox(
+                                  height: 8.h,
+                                ),
+                                Buttons.smallCallButton(
+                                    height: 35.h,
+                                    width: 120.w,
+                                    buttonText: 'Edit profile',
+                                    textStyle: TextStyles.openSans(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16.sp),
+                                    borderColor: const Color(0xffDADADA),
+                                    foregroundColor: const Color(0xff4a4a4a),
+                                    onPressed: () {
+                                      Get.toNamed(RouteName.editProfile);
+                                    }),
+                              ],
                             ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              basiccontrollerEdit.response.value.yourName,
-                              style: TextStyles.openSans(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w700,
-                                  color: const Color(0xff000000)),
-                            ),
-                            Text(
-                              basiccontrollerEdit.response.value.email,
-                              style: TextStyles.openSans(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14.sp,
-                                  color: const Color(0xff828282)),
-                            ),
-                            Text(
-                              basiccontrollerEdit.response.value.mobile,
-                              style: TextStyles.openSans(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14.sp,
-                                  color: const Color(0xff828282)),
-                            ),
-                            SizedBox(
-                              height: 8.h,
-                            ),
-                            Buttons.smallCallButton(
-                                height: 35.h,
-                                width: 120.w,
-                                buttonText: 'Edit profile',
-                                textStyle: TextStyles.openSans(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16.sp),
-                                borderColor: const Color(0xffDADADA),
-                                foregroundColor: const Color(0xff4a4a4a),
-                                onPressed: () {
-                                  Get.toNamed(RouteName.editProfile);
-                                }),
-                          ],
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      const Divider(),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const SupportDialogBox();
+                            },
+                          );
+                        },
+                        child: buyerSupport(
+                          imagePath: "assest/info_grey.svg",
+                          title: "Buyer Support",
                         ),
-                      )
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      textSupport(
+                          imagePath: "assest/question_mark.svg",
+                          title: "Buyer FAQs",
+                          url: 'https://www.tickk.in/faqs'),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(RouteName.termsCondition);
+                        },
+                        child: textSupport(
+                            imagePath: "assest/doc.svg",
+                            title: "Buyer Terms & Conditions",
+                            url: 'https://www.tickk.in/terms-and-conditions'),
+                      ),
                     ],
                   ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  const Divider(),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const SupportDialogBox();
-                        },
-                      );
-                    },
-                    child: buyerSupport(
-                      imagePath: "assest/info_grey.svg",
-                      title: "Buyer Support",
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  textSupport(
-                      imagePath: "assest/question_mark.svg",
-                      title: "Buyer FAQs",
-                      url: 'https://www.tickk.in/faqs'),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Get.toNamed(RouteName.termsCondition);
-                    },
-                    child: textSupport(
-                        imagePath: "assest/doc.svg",
-                        title: "Buyer Terms & Conditions",
-                        url: 'https://www.tickk.in/terms-and-conditions'),
-                  ),
-                ],
+                ),
               ),
             ),
           ));

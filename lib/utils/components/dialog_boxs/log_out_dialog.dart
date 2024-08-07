@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:logger/web.dart';
 
+import '../../../services/injection.dart';
 import '../../routes/routes_names.dart';
 import '../../size/global_size/global_size.dart';
 import '../buttons.dart';
@@ -73,8 +76,16 @@ class LogOutDialog extends StatelessWidget {
                         color: const Color(0xffFC8019),
                         context: context,
                         onPressedCallback: () async {
-                          await FirebaseAuth.instance.signOut();
-                          Get.toNamed(RouteName.signPhoneScreen);
+                          final box = Hive.box('myBox');
+                          final String formattedPhoneNumber = box.get('phone');
+                          try {
+                            await restClient.Logout({
+                              "mobile": formattedPhoneNumber,
+                            });
+                          } catch (e) {
+                            Logger().d(e);
+                          }
+                          Get.toNamed(RouteName.logInphoneScreen);
                         },
                         buttonText: "LogOut",
                         textColor: Colors.white,

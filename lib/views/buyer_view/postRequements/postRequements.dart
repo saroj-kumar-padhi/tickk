@@ -288,7 +288,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                               hintText: '',
                               height: 55.h,
                               width: 90.w,
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.text,
                             ),
                           ],
                         ),

@@ -67,6 +67,8 @@ class DealDoneTabSeller extends StatelessWidget {
             addImages: data.addImage,
             exactImages: data.exactImgages,
             exact: data.exact,
+            addImage: data.addImage,
+            requirementId: data.requirementId,
           ),
         );
       },

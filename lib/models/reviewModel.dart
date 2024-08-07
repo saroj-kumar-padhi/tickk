@@ -19,7 +19,7 @@ class Review {
       date: DateTime.parse(json['Date']),
       yourName: json['your_name'],
       rating: json['Rating'],
-      description: json['description'],
+      description: json['description'] ?? "",
     );
   }
 }

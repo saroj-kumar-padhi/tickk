@@ -1,46 +1,212 @@
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dekhlo/controllers/flavourController.dart';
 import 'package:dekhlo/controllers/productSetupController.dart';
 import 'package:dekhlo/utils/components/coustoumTextField.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
+import 'package:dekhlo/views/google_map_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+import 'package:logger/web.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
+import '../../../controllers/categoriesController.dart';
 import '../../../controllers/dropDownController.dart';
 import '../../../controllers/exactController.dart';
 import '../../../controllers/sortDialogBoxController.dart';
 import '../../../utils/components/dialog_boxs/pick_diallo.dart';
-import '../../../utils/coustoumDropDown.dart';
 import '../../../utils/size/global_size/global_size.dart';
+import '../set_up_store.dart';
 
-class StoreEditScreen extends StatelessWidget {
-  StoreEditScreen({super.key});
-  final DropdownController dropdownController = Get.put(DropdownController());
+class StoreEditScreen extends StatefulWidget {
   static final MultiSelectController categorySelectController =
-      MultiSelectController();
-  final MultiSelectController languageSelectController =
       MultiSelectController();
   static final MultiSelectController subCategorySelectController =
       MultiSelectController();
   static final MultiSelectController subSubCategorySelectController =
       MultiSelectController();
+
+  final String storeName;
+  final List<String> storeCategory;
+  final List<dynamic> storeSubcategory;
+
+  final List<dynamic> brands;
+  final String about;
+  final String yt;
+  final String iG;
+  final String webSite;
+
+  final String houseNo;
+  final String area;
+  final String pincode;
+  final String city;
+  final String yourStoreLoaction;
+
+  // Timing for each day of the week
+  final String sundayOpentime;
+  final String sundayClosetime;
+  final String mondayOpentime;
+  final String mondayClosetime;
+  final String tuesdayOpentime;
+  final String tuesdayClosetime;
+  final String wednesdayOpentime;
+  final String wednesdayClosetime;
+  final String thursdayOpentime;
+  final String thursdayClosetime;
+  final String fridayOpentime;
+  final String fridayClosetime;
+  final String saturdayOpentime;
+  final String saturdayClosetime;
+
+  const StoreEditScreen(
+      {super.key,
+      required this.storeName,
+      required this.storeCategory,
+      required this.storeSubcategory,
+      required this.about,
+      required this.yt,
+      required this.iG,
+      required this.webSite,
+      required this.houseNo,
+      required this.pincode,
+      required this.city,
+      required this.yourStoreLoaction,
+      required this.area,
+      required this.brands,
+      required this.sundayOpentime,
+      required this.sundayClosetime,
+      required this.mondayOpentime,
+      required this.mondayClosetime,
+      required this.tuesdayOpentime,
+      required this.tuesdayClosetime,
+      required this.wednesdayOpentime,
+      required this.wednesdayClosetime,
+      required this.thursdayOpentime,
+      required this.thursdayClosetime,
+      required this.fridayOpentime,
+      required this.fridayClosetime,
+      required this.saturdayOpentime,
+      required this.saturdayClosetime});
+
+  @override
+  State<StoreEditScreen> createState() => _StoreEditScreenState();
+}
+
+class _StoreEditScreenState extends State<StoreEditScreen> {
+  List<String> SubCategoryItems = [];
+
+  List<String> SubSubCategoryItems = [];
+
+  List<dynamic> selectedSubCategoryItems = [];
+
+  List<dynamic> selectedSubSubCategoryItems = [];
+
+  final DropdownController dropdownController = Get.put(DropdownController());
+
+  final MultiSelectController languageSelectController =
+      MultiSelectController();
+
   final ProductSetUpController productSetUpController =
       Get.put(ProductSetUpController());
+
+  final ProductSetUpController brandsController =
+      Get.put(ProductSetUpController());
+
   DialogBoxController dialogBoxController = Get.put(DialogBoxController());
+
+  CategoriesController categoriesController = Get.put(CategoriesController());
+
+  List<ValueItem> convertToValueItems(List<String> items) {
+    return items.asMap().entries.map((entry) {
+      return ValueItem(label: entry.value, value: entry.key.toString());
+    }).toList();
+  }
 
   final ExactController exactController = Get.put(ExactController());
 
-  final RxList<String> imagePaths = <String>[].obs;
-  RxBool isLiked = false.obs;
   RxInt currentPage = 0.obs;
+
+  RxBool sundayIsOpen = true.obs;
+
+  RxBool mondayIsOpen = true.obs;
+
+  RxBool tuesdayIsOpen = true.obs;
+
+  RxBool wednesdayIsOpen = true.obs;
+
+  RxBool thursdayIsOpen = true.obs;
+
+  RxBool fridayIsOpen = true.obs;
+
+  RxBool saturdayIsOpen = true.obs;
+
   @override
   Widget build(BuildContext context) {
+    String brands = widget.brands.join(',');
+    TextEditingController storeNameController =
+        TextEditingController(text: widget.storeName);
+    TextEditingController brandsController =
+        TextEditingController(text: brands);
+    TextEditingController aboutYourStoreController =
+        TextEditingController(text: widget.about);
+//social media
+    TextEditingController ytController = TextEditingController(text: widget.yt);
+    TextEditingController iGController = TextEditingController(text: widget.iG);
+    TextEditingController wLController =
+        TextEditingController(text: widget.webSite);
+
+    //address
+    TextEditingController houseNoController =
+        TextEditingController(text: widget.houseNo);
+    TextEditingController streetController =
+        TextEditingController(text: widget.area);
+    TextEditingController pinCodeController =
+        TextEditingController(text: widget.pincode);
+    TextEditingController cityController =
+        TextEditingController(text: widget.city);
+
+    TextEditingController locationController =
+        TextEditingController(text: widget.yourStoreLoaction);
+
+    // Opening and closing times
+    TextEditingController sundayOpenController =
+        TextEditingController(text: widget.sundayOpentime);
+    TextEditingController sundayCloseController =
+        TextEditingController(text: widget.sundayClosetime);
+    TextEditingController mondayOpenController =
+        TextEditingController(text: widget.mondayOpentime);
+    TextEditingController mondayCloseController =
+        TextEditingController(text: widget.mondayClosetime);
+    TextEditingController tuesdayOpenController =
+        TextEditingController(text: widget.tuesdayOpentime);
+    TextEditingController tuesdayCloseController =
+        TextEditingController(text: widget.tuesdayClosetime);
+    TextEditingController wednesdayOpenController =
+        TextEditingController(text: widget.wednesdayOpentime);
+    TextEditingController wednesdayCloseController =
+        TextEditingController(text: widget.wednesdayClosetime);
+    TextEditingController thursdayOpenController =
+        TextEditingController(text: widget.thursdayOpentime);
+    TextEditingController thursdayCloseController =
+        TextEditingController(text: widget.thursdayClosetime);
+    TextEditingController fridayOpenController =
+        TextEditingController(text: widget.fridayOpentime);
+    TextEditingController fridayCloseController =
+        TextEditingController(text: widget.fridayClosetime);
+    TextEditingController saturdayOpenController =
+        TextEditingController(text: widget.saturdayOpentime);
+    TextEditingController saturdayCloseController =
+        TextEditingController(text: widget.saturdayClosetime);
+
+    final box = Hive.box('myBox');
+    final String formattedPhoneNumber = box.get('phone') ?? "";
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -56,7 +222,7 @@ class StoreEditScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          "Setup your store",
+          "Edit profile",
           style: TextStyles.openSans(
             fontWeight: FontWeight.w600,
             fontSize: 17.sp,
@@ -73,25 +239,24 @@ class StoreEditScreen extends StatelessWidget {
                 height: 20.h,
               ),
               Obx(() {
-                return imagePaths.value.isEmpty
+                return productSetUpController.imagePaths.value.isEmpty
                     ? addImages(context)
                     : Column(
                         children: [
                           CarouselSlider.builder(
                             options: CarouselOptions(
                               enableInfiniteScroll: false,
-                              // enlargeCenterPage: true,
                               onPageChanged: (index, reason) {
                                 currentPage.value = index;
                               },
                               viewportFraction: 0.4,
                               height: 160.0.h,
                             ),
-                            itemCount: imagePaths.length,
-                            itemBuilder: (BuildContext context,
-                                int index, //ic_launcher
+                            itemCount: productSetUpController.imagePaths.length,
+                            itemBuilder: (BuildContext context, int index,
                                 int realIndex) {
-                              final String imagePath = imagePaths[index];
+                              final String imagePath =
+                                  productSetUpController.imagePaths[index];
                               return Column(
                                 children: [
                                   Stack(
@@ -120,99 +285,138 @@ class StoreEditScreen extends StatelessWidget {
                                         ),
                                       ),
                                       Obx(() => Positioned(
-                                              child: Row(
-                                            children: [
-                                              isLiked.value
-                                                  ? InkWell(
-                                                      onTap: () {
-                                                        isLiked.value =
-                                                            !isLiked.value;
-                                                      },
-                                                      child: const Icon(
-                                                        Icons.star,
-                                                        color:
-                                                            Color(0xffFFD361),
-                                                      ),
-                                                    )
-                                                  : InkWell(
-                                                      onTap: () {
-                                                        isLiked.value =
-                                                            !isLiked.value;
-                                                      },
-                                                      child: const Icon(
-                                                        Icons.star_border,
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
-                                              SizedBox(
-                                                width: 80.w,
-                                              ),
-                                              InkWell(
-                                                onTap: () {
-                                                  imagePaths.remove(imagePath);
-                                                },
-                                                child: const Icon(
-                                                  Icons.cancel,
-                                                  color: Color(0xff4A4A4A),
+                                            child: Row(
+                                              children: [
+                                                InkWell(
+                                                  onTap: () {
+                                                    if (productSetUpController
+                                                        .staredImage
+                                                        .contains(imagePath)) {
+                                                      productSetUpController
+                                                          .staredImage
+                                                          .clear();
+                                                    } else {
+                                                      productSetUpController
+                                                          .staredImage
+                                                          .clear();
+                                                      productSetUpController
+                                                          .staredImage
+                                                          .add(imagePath);
+                                                    }
+                                                  },
+                                                  child: Icon(
+                                                    productSetUpController
+                                                            .staredImage
+                                                            .contains(imagePath)
+                                                        ? Icons.star
+                                                        : Icons.star_border,
+                                                    color:
+                                                        productSetUpController
+                                                                .staredImage
+                                                                .contains(
+                                                                    imagePath)
+                                                            ? const Color(
+                                                                0xffFFD361)
+                                                            : Colors.grey,
+                                                  ),
                                                 ),
-                                              )
-                                            ],
-                                          )))
+                                                SizedBox(width: 80.w),
+                                                InkWell(
+                                                  onTap: () {
+                                                    productSetUpController
+                                                        .imagePaths
+                                                        .remove(imagePath);
+                                                    if (productSetUpController
+                                                        .staredImage
+                                                        .contains(imagePath)) {
+                                                      productSetUpController
+                                                          .staredImage
+                                                          .clear();
+                                                    }
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.cancel,
+                                                    color: Color(0xff4A4A4A),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ))
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  imagePaths.value.length > 1
-                                      ? showIndicator()
-                                      : const SizedBox(),
                                 ],
                               );
                             },
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          SizedBox(height: 10.h),
+                          // Separate indicator widget
+                          Obx(() => productSetUpController
+                                      .imagePaths.value.length >
+                                  1
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(
+                                    productSetUpController.imagePaths.length,
+                                    (index) => Container(
+                                      width: 8.0,
+                                      height: 8.0,
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 4.0),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: currentPage.value == index
+                                            ? const Color(0xffFC8019)
+                                            : const Color(0xffD9D9D9),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox()),
+                          SizedBox(height: 10.h),
                           GestureDetector(
                             onTap: () async {
                               final result = await showDialog<String>(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return const PickImageDialog(
-                                    heading: 'Add your store image',
+                                    heading: 'Upload your store image',
                                   );
                                 },
                               );
                               if (result != null) {
-                                imagePaths.add(result);
+                                productSetUpController.imagePaths.add(result);
                               }
                             },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4.r),
-                                  border: Border.all(
-                                      width: 1,
-                                      color: const Color(0xffFC8019))),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Center(
-                                      child: Icon(
-                                        Icons.add,
-                                        color: Color(0xffFC8019),
+                            child: productSetUpController.imagePaths.length > 3
+                                ? const SizedBox()
+                                : Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(4.r),
+                                        border: Border.all(
+                                            width: 1,
+                                            color: const Color(0xffFC8019))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Center(
+                                            child: Icon(
+                                              Icons.add,
+                                              color: Color(0xffFC8019),
+                                            ),
+                                          ),
+                                          Text("Add images",
+                                              style: TextStyles.openSans(
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.w600,
+                                                  color:
+                                                      const Color(0xffFC8019)))
+                                        ],
                                       ),
                                     ),
-                                    Text("Add images",
-                                        style: TextStyles.openSans(
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.w600,
-                                            color: const Color(0xffFC8019)))
-                                  ],
-                                ),
-                              ),
-                            ),
+                                  ),
                           ),
                         ],
                       );
@@ -225,14 +429,13 @@ class StoreEditScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    heading(title: 'Store Name'),
+                    heading(title: 'Store Name *'),
                     SizedBox(
                       height: 5.h,
                     ),
                     CustomTextField(
                         isenable: true,
-                        controller:
-                            productSetUpController.nameEditingController,
+                        controller: storeNameController,
                         hintText: "Enter your shop name",
                         height: 48.h,
                         width: 330.w),
@@ -244,55 +447,50 @@ class StoreEditScreen extends StatelessWidget {
                       height: 5.h,
                     ),
                     CustomTextField(
-                        isenable: true,
+                        isenable: false,
                         controller:
-                            productSetUpController.nameEditingController,
-                        hintText: "Enter your contact number",
+                            productSetUpController.contactEditingController,
+                        hintText: formattedPhoneNumber,
                         height: 48.h,
                         width: 330.w),
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: 'Store category'),
+                    heading(title: 'Store category *'),
                     SizedBox(
                       height: 5.h,
                     ),
                     Padding(
                       padding: EdgeInsets.only(right: 20.w),
                       child: MultiSelectDropDown(
+                        suffixIcon: const Icon(Icons.arrow_downward),
                         borderColor: Colors.grey,
                         borderWidth: 1,
                         borderRadius: 4.r,
                         selectedOptionTextColor: const Color(0xffFC8019),
                         clearIcon: const Icon(Icons.close_outlined),
-                        controller: categorySelectController,
+                        controller: SetUpProduct.categorySelectController,
                         onOptionSelected: (options) {
                           debugPrint(options.toString());
-                          if (options.contains(
-                            const ValueItem(
-                              label: 'Custom Category',
-                              value: 4,
-                            ),
-                          )) {
-                            Get.toNamed(RouteName.custoumCategory);
-                          }
-                        },
-                        options: const <ValueItem>[
-                          ValueItem(label: 'Electronics', value: '1'),
-                          ValueItem(label: 'Fashion', value: '2'),
-                          ValueItem(label: 'Sports', value: '3'),
-                          ValueItem(label: 'Electricals', value: '4'),
-                          ValueItem(label: 'Pet stores', value: '5'),
-                          ValueItem(label: 'Medical', value: '6'),
-                          ValueItem(label: 'Construction', value: '7'),
-                          ValueItem(label: 'Gifts', value: '7'),
+                          List<String> selectedCategories =
+                              options.map((option) => option.label).toList();
 
-                          ValueItem(
-                            label: 'Custom Category',
-                            value: 8,
-                          ), // Custom Category option
-                        ],
-                        maxItems: 7,
+                          // Call fetchSetupSubcategories with the selected categories
+                          categoriesController
+                              .fetchSetupSubcategories(selectedCategories);
+
+                          // if (options.contains(
+                          //   const ValueItem(
+                          //     label: 'Custom Category',
+                          //     value: 8,
+                          //   ),
+                          // )) {
+                          //   Get.toNamed(RouteName.custoumCategory);
+                          // }
+                        },
+                        options: convertToValueItems(
+                            categoriesController.setupCategories),
+                        maxItems: 10,
                         selectionType: SelectionType.multi,
                         chipConfig: const ChipConfig(
                           deleteIcon: Icon(Icons.close_outlined),
@@ -308,181 +506,297 @@ class StoreEditScreen extends StatelessWidget {
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: 'Sub categories'),
+                    SubSubCategoryItems.isEmpty
+                        ? Row(
+                            children: [
+                              Text(
+                                "Sub categories",
+                                style: TextStyles.openSans(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xff313333)
+                                        .withOpacity(0.5)),
+                              ),
+                              Text(
+                                " (optional)",
+                                style: TextStyles.openSans(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey),
+                              ),
+                            ],
+                          )
+                        : heading(title: 'Sub categories'),
                     SizedBox(
                       height: 5.h,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 20.w),
-                      child: MultiSelectDropDown(
-                        borderColor: Colors.grey,
-                        borderWidth: 1,
-                        borderRadius: 4.r,
-                        selectedOptionTextColor: const Color(0xffFC8019),
-                        clearIcon: const Icon(Icons.close_outlined),
-                        controller: subCategorySelectController,
-                        onOptionSelected: (options) {
-                          debugPrint(options.toString());
-                          if (options.contains(
-                            const ValueItem(
-                                label: 'Custom sub category', value: '4'),
-                          )) {
-                            Get.toNamed(RouteName.custoumSubCategory);
-                          }
-                        },
-                        options: const <ValueItem>[
-                          ValueItem(
-                              label: 'Mobile phones and accessories',
-                              value: '1'),
-                          ValueItem(
-                              label: 'Laptops, computers, and accessories',
-                              value: '2'),
-                          ValueItem(label: 'Home appliances', value: '3'),
-                          ValueItem(label: 'Kitchen appliances', value: '4'),
-                          ValueItem(label: "Head phones", value: '5'),
-                          ValueItem(label: "Smart watches", value: '6'),
-                          ValueItem(label: "Video games", value: '7'),
-                          ValueItem(label: "Tablets", value: '8'),
-                          ValueItem(label: "Home audio", value: '9'),
-                          ValueItem(label: "Grooming appliances", value: '10'),
-                          ValueItem(label: "Women's clothing", value: '11'),
-                          //Faction
-                          ValueItem(label: "Women's clothing", value: '12'),
-                          ValueItem(label: "Men's clothing", value: '13'),
-                          ValueItem(label: "Kids fashion", value: '14'),
-                          ValueItem(label: "Beauty and makeup", value: '15'),
-                          ValueItem(label: "Shoes and footwear", value: '16'),
-                          ValueItem(
-                              label: "Bags, wallets and luggage", value: '17'),
-                          ValueItem(label: "Watches", value: '18'),
-                          ValueItem(label: "Jewellery", value: '19'),
-                          ValueItem(
-                              label: "Women's lingerie and sleepwear",
-                              value: '20'),
-                          ValueItem(label: "Men's boutique", value: '21'),
-                          ValueItem(label: "Women's clothing", value: '22'),
-                          ValueItem(label: "Unisex boutique", value: '23'),
-                          //Electricals
-                          ValueItem(label: "Fancy lights", value: '24'),
-                          ValueItem(label: "Fans", value: '25'),
-                          ValueItem(label: "Lighting", value: '26'),
-                          ValueItem(label: "Wiring", value: '27'),
-                          ValueItem(label: "Switches", value: '28'),
-                          //Pet stores
-                          ValueItem(label: "Dogs", value: '29'),
-                          ValueItem(label: "Cats", value: '30'),
-                          ValueItem(label: "Fish & Aquatics", value: '31'),
-                          ValueItem(label: "Birds", value: '32'),
-                          ValueItem(label: "Cattle", value: '33'),
-                          ValueItem(label: "Other pets", value: '34'),
-                          //Medical
-                          ValueItem(label: "Pharmacy", value: '35'),
-                          ValueItem(
-                              label: "Surgically & equipment", value: '36'),
-                          //Gifts
-                          ValueItem(label: "Books & Stationery", value: '37'),
-                          ValueItem(label: "Toys", value: '38'),
-                          ValueItem(label: "Home Decor", value: '39'),
-                        ],
-                        maxItems: 40,
-                        selectionType: SelectionType.multi,
-                        chipConfig: const ChipConfig(
-                            wrapType: WrapType.wrap,
-                            backgroundColor: Color(0xffFC8019)),
-                        dropdownHeight: 200.h,
-                        optionTextStyle: TextStyle(fontSize: 16.sp),
-                        selectedOptionIcon: const Icon(Icons.check_circle),
-                      ),
-                    ),
+                    Obx(() {
+                      SubCategoryItems =
+                          categoriesController.setupsubCategories.value;
+
+                      return categoriesController.isLoading.value
+                          ? const Center(child: CircularProgressIndicator())
+                          : Padding(
+                              padding: EdgeInsets.only(right: 20.w),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(
+                                      color: SubCategoryItems.isEmpty
+                                          ? Colors.grey.shade300
+                                          : Colors.grey),
+                                ),
+                                child: AbsorbPointer(
+                                  absorbing: SubCategoryItems.isEmpty,
+                                  child: Opacity(
+                                    opacity:
+                                        SubCategoryItems.isEmpty ? 0.5 : 1.0,
+                                    child: MultiSelectDialogField<dynamic>(
+                                      items: SubCategoryItems.map((item) =>
+                                          MultiSelectItem<dynamic>(
+                                              item, item)).toList(),
+                                      title:
+                                          const Text("Select Sub Categories"),
+                                      selectedColor: const Color(0xffFC8019),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Colors.white,
+                                      ),
+                                      buttonText:
+                                          const Text("Select Sub Categories"),
+                                      onConfirm: (values) {
+                                        if (SubCategoryItems.isNotEmpty) {
+                                          categoriesController
+                                              .fetchSubSubsetUpCategories(
+                                                  values.cast<String>());
+
+                                          Logger().d(values);
+                                          // Store the selected values in a separate list if needed
+                                          selectedSubCategoryItems.clear();
+                                          selectedSubCategoryItems = values
+                                              .map((value) => ValueItem(
+                                                    label: value.toString(),
+                                                    value: value,
+                                                  ))
+                                              .toList();
+
+                                          // Update the subCategorySelectController
+                                          SetUpProduct
+                                              .subCategorySelectController
+                                              .setSelectedOptions(
+                                            values
+                                                .map((value) => ValueItem(
+                                                      label: value.toString(),
+                                                      value: value,
+                                                    ))
+                                                .toList(),
+                                          );
+                                        }
+                                      },
+                                      chipDisplay: MultiSelectChipDisplay(
+                                        onTap: (item) {
+                                          if (SubCategoryItems.isNotEmpty) {
+                                            List<ValueItem> currentOptions =
+                                                SetUpProduct
+                                                    .subCategorySelectController
+                                                    .selectedOptions;
+                                            currentOptions.removeWhere(
+                                                (option) =>
+                                                    option.value == item);
+                                            SetUpProduct
+                                                .subCategorySelectController
+                                                .setSelectedOptions(
+                                                    currentOptions);
+
+                                            selectedSubCategoryItems =
+                                                currentOptions;
+                                          }
+                                        },
+                                        chipColor: const Color(0xffFC8019),
+                                        textStyle: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                    }),
 
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: 'Sub Sub categories'),
+                    SubSubCategoryItems.isEmpty
+                        ? Row(
+                            children: [
+                              Text(
+                                "Sub Sub categories",
+                                style: TextStyles.openSans(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xff313333)
+                                        .withOpacity(0.5)),
+                              ),
+                              Text(
+                                " (optional)",
+                                style: TextStyles.openSans(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey),
+                              ),
+                            ],
+                          )
+                        : heading(title: 'Sub Sub categories'),
                     SizedBox(
                       height: 5.h,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 20.w),
-                      child: MultiSelectDropDown(
-                        borderColor: Colors.grey,
-                        borderWidth: 1,
-                        borderRadius: 4.r,
-                        selectedOptionTextColor: const Color(0xffFC8019),
-                        clearIcon: const Icon(Icons.close_outlined),
-                        controller: subSubCategorySelectController,
-                        onOptionSelected: (options) {
-                          debugPrint(options.toString());
-                          if (options.contains(
-                            const ValueItem(
-                                label: 'Custom sub sub category', value: '4'),
-                          )) {
-                            Get.toNamed(RouteName.custoumSubSubCategory);
-                          }
-                        },
-                        options: const <ValueItem>[
-                          ValueItem(label: 'Adult geared cycles', value: '1'),
-                          ValueItem(
-                              label: 'Adult non geared cycles', value: '2'),
-                          ValueItem(label: 'Kids cycles', value: '3'),
-                          ValueItem(label: 'Electric cycles', value: '4'),
-                          ValueItem(
-                              label: 'Cycling kits & accessories', value: '5'),
 
-                          //Strength training
-                          ValueItem(label: 'Dumbbells', value: '6'),
-                          ValueItem(label: 'Home gym sets', value: '7'),
-                          ValueItem(label: 'Benches', value: '8'),
-                          ValueItem(
-                              label: 'Wearable weights & accessories',
-                              value: '9'),
-                          ValueItem(
-                              label: 'Multi gym functional trainers',
-                              value: '10'),
-                          ValueItem(label: 'Plates & barbells', value: '11'),
-                          ValueItem(label: 'Kettle bells', value: '12'),
-//Cardio
-                          ValueItem(label: 'Treadmills', value: '13'),
-                          ValueItem(label: 'Fitness bikes', value: '14'),
-                          ValueItem(label: 'Ellipticals', value: '15'),
-                          ValueItem(label: 'Rowers', value: '16'),
-                          //Badminton
-                          ValueItem(label: 'Racquets', value: '13'),
-                          ValueItem(label: 'Shuttle cocks', value: '14'),
-                          ValueItem(label: 'Badminton sets', value: '15'),
-                          ValueItem(label: 'Badminton shoes', value: '16'),
-                          ValueItem(label: 'Kit bags', value: '17'),
-                          ValueItem(label: 'Accessories', value: '18'),
-                        ],
-                        maxItems: 3,
-                        selectionType: SelectionType.multi,
-                        chipConfig: const ChipConfig(
-                            wrapType: WrapType.wrap,
-                            backgroundColor: Color(0xffFC8019)),
-                        dropdownHeight: 200.h,
-                        optionTextStyle: TextStyle(fontSize: 16.sp),
-                        selectedOptionIcon: const Icon(Icons.check_circle),
-                      ),
-                    ),
+                    Obx(() {
+                      SubSubCategoryItems =
+                          categoriesController.subSubCategoriessetup;
+
+                      return categoriesController.isLoadingSubSub.value
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : Padding(
+                              padding: EdgeInsets.only(right: 20.w),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4.r),
+                                  border: Border.all(
+                                      color: SubSubCategoryItems.isEmpty
+                                          ? Colors.grey.shade300
+                                          : Colors.grey,
+                                      width: 1),
+                                ),
+                                child: AbsorbPointer(
+                                  absorbing: SubSubCategoryItems.isEmpty,
+                                  child: Opacity(
+                                    opacity:
+                                        SubSubCategoryItems.isEmpty ? 0.5 : 1.0,
+                                    child: MultiSelectDialogField<String>(
+                                      items: SubSubCategoryItems.map(
+                                          (subSubCategory) =>
+                                              MultiSelectItem<String>(
+                                                  subSubCategory,
+                                                  subSubCategory)).toList(),
+                                      title: const Text(
+                                          "Select Sub Sub Categories"),
+                                      selectedColor: const Color(0xffFC8019),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(4.r),
+                                        color: Colors.white,
+                                      ),
+                                      buttonText: const Text(
+                                          "Select Sub Sub Categories"),
+                                      onConfirm: (values) {
+                                        selectedSubSubCategoryItems.clear();
+                                        selectedSubSubCategoryItems = values
+                                            .map((value) => ValueItem(
+                                                  label: value.toString(),
+                                                  value: value,
+                                                ))
+                                            .toList();
+                                        if (SubSubCategoryItems.isNotEmpty) {
+                                          debugPrint(values.toString());
+                                          SetUpProduct
+                                              .subSubCategorySelectController
+                                              .setSelectedOptions(
+                                            values
+                                                .map((value) => ValueItem(
+                                                      label: value,
+                                                      value: value,
+                                                    ))
+                                                .toList(),
+                                          );
+                                          if (values
+                                              .contains('Electric cycles')) {
+                                            Get.toNamed(RouteName
+                                                .custoumSubSubCategory);
+                                          }
+                                          categoriesController
+                                              .fetchSubSubsetUpCategories(
+                                                  values);
+                                        }
+                                      },
+                                      chipDisplay: MultiSelectChipDisplay(
+                                        onTap: (value) {
+                                          // Store the selected values in a separate list if needed
+
+                                          if (SubSubCategoryItems.isNotEmpty) {
+                                            List<ValueItem> currentOptions =
+                                                SetUpProduct
+                                                    .subSubCategorySelectController
+                                                    .selectedOptions;
+                                            currentOptions.removeWhere(
+                                                (option) =>
+                                                    option.value == value);
+                                            SetUpProduct
+                                                .subSubCategorySelectController
+                                                .setSelectedOptions(
+                                                    currentOptions);
+                                            categoriesController
+                                                .fetchSubSubsetUpCategories(
+                                                    currentOptions
+                                                        .map((option) => option
+                                                            .value
+                                                            .toString())
+                                                        .toList());
+                                          }
+                                        },
+                                        chipColor: const Color(0xffFC8019),
+                                        textStyle: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                    }),
+
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: 'Brands'),
+                    Row(
+                      children: [
+                        heading(title: 'Brands'),
+                        Text(
+                          " (optional)",
+                          style: TextStyles.openSans(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
                     SizedBox(
                       height: 5.h,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 18.w),
-                      child: CustomDropdownFormField(
-                        items: const [],
-                        onChanged: (value) {},
-                        onSaved: (value) {},
-                      ),
-                    ),
+                    CustomTextField(
+                        isenable: true,
+                        controller: brandsController,
+                        hintText: "Enter Brands name as list",
+                        height: 48.h,
+                        width: 330.w),
+
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: "About your store"),
+                    Row(
+                      children: [
+                        heading(title: "About your store"),
+                        Text(
+                          " (optional)",
+                          style: TextStyles.openSans(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -497,14 +811,15 @@ class StoreEditScreen extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: TextField(
-                          controller:
-                              productSetUpController.discriptionController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(bottom: 60.h),
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          controller: aboutYourStoreController,
+                          decoration: const InputDecoration(
+                            // contentPadding: EdgeInsets.only(bottom: 60.h),
                             hintText:
                                 "e.g This store has all the types of books.",
                             border: InputBorder.none,
-                            hintStyle: const TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(color: Colors.grey),
                           ),
                           style: const TextStyle(fontSize: 16.0),
                         ),
@@ -515,112 +830,281 @@ class StoreEditScreen extends StatelessWidget {
                     SizedBox(
                       height: 20.h,
                     ),
-                    heading(title: "Link your social media accounts"),
+                    Row(
+                      children: [
+                        heading(title: "Link your social media accounts"),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        Text(
+                          " (optional)",
+                          style: TextStyles.openSans(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    socialLinkBox(
+                        controller: ytController,
+                        imagePath: 'assest/you_tube.png',
+                        platform: 'youtube'),
+
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    socialLinkBox(
+                        controller: iGController,
+                        imagePath: 'assest/instagram.png',
+                        platform: 'instagram'),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    socialLinkBox(
+                        controller: wLController,
+                        imagePath: 'assest/internet.png',
+                        platform: 'Website'),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    // heading(title: "Languages you know *"),
+                    // SizedBox(
+                    //   height: 10.h,
+                    // ),
+                    // Padding(
+                    //   padding: EdgeInsets.only(right: 20.w),
+                    //   child: MultiSelectDropDown(
+                    //     borderColor: Colors.grey,
+                    //     borderWidth: 1,
+                    //     borderRadius: 4.r,
+                    //     selectedOptionTextColor:
+                    //         const Color(0xffFC8019).withOpacity(0.1),
+                    //     clearIcon: const Icon(Icons.close_outlined),
+                    //     controller: languageSelectController,
+                    //     onOptionSelected: (options) {
+                    //       debugPrint(options.toString());
+                    //     },
+                    //     options: const <ValueItem>[
+                    //       ValueItem(label: 'Bangla', value: '1'),
+                    //       ValueItem(label: 'English', value: '2'),
+                    //       ValueItem(label: 'Gujarati', value: '3'),
+                    //       ValueItem(label: 'Hindi', value: '4'),
+                    //       ValueItem(label: 'Kannada', value: '5'),
+                    //       ValueItem(label: 'Marathi', value: '6'),
+                    //       ValueItem(label: 'Malayalam', value: '7'),
+                    //       ValueItem(label: 'Punjabi', value: '8'),
+                    //       ValueItem(label: 'Tamil', value: '9'),
+                    //       ValueItem(label: 'Telugu', value: '10')
+                    //     ],
+                    //     maxItems: 3,
+                    //     selectionType: SelectionType.multi,
+                    //     chipConfig: const ChipConfig(
+                    //         wrapType: WrapType.wrap,
+                    //         backgroundColor: Color(0xffFC8019)),
+                    //     dropdownHeight: 200.h,
+                    //     optionTextStyle: TextStyle(fontSize: 16.sp),
+                    //     selectedOptionIcon: const Icon(Icons.check_circle),
+                    //   ),
+                    // ),
+
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    heading(title: "Timings *"),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+
+                    timings(
+                      context,
+                      "S",
+                      sundayOpenController,
+                      sundayCloseController,
+                      sundayIsOpen,
+                    ),
+                    timings(
+                      context,
+                      "M",
+                      mondayOpenController,
+                      mondayCloseController,
+                      mondayIsOpen,
+                    ),
+                    timings(
+                      context,
+                      "T",
+                      tuesdayOpenController,
+                      tuesdayCloseController,
+                      tuesdayIsOpen,
+                    ),
+                    timings(
+                      context,
+                      "W",
+                      wednesdayOpenController,
+                      wednesdayCloseController,
+                      wednesdayIsOpen,
+                    ),
+                    timings(
+                      context,
+                      "T",
+                      thursdayOpenController,
+                      thursdayCloseController,
+                      thursdayIsOpen,
+                    ),
+                    timings(
+                      context,
+                      "F",
+                      fridayOpenController,
+                      fridayCloseController,
+                      fridayIsOpen,
+                    ),
+                    timings(
+                      context,
+                      "S",
+                      saturdayOpenController,
+                      saturdayCloseController,
+                      saturdayIsOpen,
+                    ),
+
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        heading(title: 'House No, Building Name *'),
+                        CustomTextField(
+                          isenable: true,
+                          onChanged: (Value) {
+                            productSetUpController.updateButtonState();
+                          },
+                          hintText: '',
+                          height: 55.h,
+                          width: 330.w,
+                          controller: houseNoController,
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    heading(title: 'Street Name, Area*'),
                     SizedBox(
                       height: 5.h,
                     ),
-                    socialLinkBox(
-                        controller:
-                            productSetUpController.youTubeEditingController,
-                        imagePath: 'assest/you_tube.png'),
-
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    socialLinkBox(
-                        controller:
-                            productSetUpController.youTubeEditingController,
-                        imagePath: 'assest/instagram.png'),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    heading(title: "Languages you know"),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 20.w),
-                      child: MultiSelectDropDown(
-                        borderColor: Colors.grey,
-                        borderWidth: 1,
-                        borderRadius: 4.r,
-                        selectedOptionTextColor:
-                            const Color(0xffFC8019).withOpacity(0.1),
-                        clearIcon: const Icon(Icons.close_outlined),
-                        controller: languageSelectController,
-                        onOptionSelected: (options) {
-                          debugPrint(options.toString());
+                    CustomTextField(
+                        isenable: true,
+                        onChanged: (Value) {
+                          productSetUpController.updateButtonState();
                         },
-                        options: const <ValueItem>[
-                          ValueItem(label: 'Bangla', value: '1'),
-                          ValueItem(label: 'English', value: '2'),
-                          ValueItem(label: 'Gujarati', value: '3'),
-                          ValueItem(label: 'Hindi', value: '4'),
-                          ValueItem(label: 'Kannada', value: '5'),
-                          ValueItem(label: 'Marathi', value: '6'),
-                          ValueItem(label: 'Malayalam', value: '7'),
-                          ValueItem(label: 'Punjabi', value: '8'),
-                          ValueItem(label: 'Tamil', value: '9'),
-                          ValueItem(label: 'Telugu', value: '10')
-                        ],
-                        maxItems: 3,
-                        selectionType: SelectionType.multi,
-                        chipConfig: const ChipConfig(
-                            wrapType: WrapType.wrap,
-                            backgroundColor: Color(0xffFC8019)),
-                        dropdownHeight: 200.h,
-                        optionTextStyle: TextStyle(fontSize: 16.sp),
-                        selectedOptionIcon: const Icon(Icons.check_circle),
-                      ),
-                    ),
+                        controller: streetController,
+                        hintText: "",
+                        height: 48.h,
+                        width: 330.w),
 
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: "Timings"),
-                    SizedBox(
-                      height: 10.h,
+                    // heading(title: 'Landmark'),
+                    // SizedBox(
+                    //   height: 5.h,
+                    // ),
+                    // CustomTextField(
+                    //     isenable: true,
+                    //     onChanged: (Value) {
+                    //       productSetUpController.updateButtonState();
+                    //     },
+                    //     controller:
+                    //         productSetUpController.landMarkController.value,
+                    //     hintText: "",
+                    //     height: 48.h,
+                    //     width: 330.w),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            heading(title: 'Country *'),
+                            SizedBox(
+                              height: 5.h,
+                            ),
+                            Container(
+                              height: 48.h,
+                              width: 160.w,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.0),
+                                border:
+                                    Border.all(width: 1, color: Colors.grey),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: 'India',
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16.0),
+                                  onChanged: (String? newValue) {
+                                    // Since there's only one option, this won't actually change anything
+                                    // But you can add logic here if needed in the future
+                                  },
+                                  items: <String>['India']
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 10.h),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              heading(title: 'Pincode *'),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Container(
+                                height: 48.h,
+                                width: 160.w,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  border:
+                                      Border.all(width: 1, color: Colors.grey),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: TextField(
+                                    onTap: () {
+                                      // Get.toNamed(RouteName.changeLocation);
+                                    },
+                                    keyboardType: TextInputType.number,
+                                    controller: pinCodeController,
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                    ),
+                                    style: const TextStyle(fontSize: 16.0),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
                     ),
-
-                    timmings(
-                        context,
-                        "S",
-                        productSetUpController.sundayOpenTimeEditingController,
-                        productSetUpController.sundayCloseEditingController),
-                    timmings(
-                        context,
-                        "M",
-                        productSetUpController.mondayOpenTimeEditingController,
-                        productSetUpController.mondayCloseEditingController),
-                    timmings(
-                        context,
-                        "T",
-                        productSetUpController.tuesdayCloseEditingController,
-                        productSetUpController.thursdayCloseEditingController),
-                    timmings(
-                        context,
-                        "W",
-                        productSetUpController
-                            .wednesdayOpenTimeEditingController,
-                        productSetUpController.wednesdayCloseEditingController),
-                    timmings(
-                        context,
-                        "T",
-                        productSetUpController
-                            .thursdayOpenTimeEditingController,
-                        productSetUpController.thursdayCloseEditingController),
-                    timmings(
-                        context,
-                        "F",
-                        productSetUpController.fridayOpenTimeEditingController,
-                        productSetUpController.fridayCloseEditingController),
-                    timmings(
-                        context,
-                        "S",
-                        productSetUpController
-                            .saturdayOpenTimeEditingController,
-                        productSetUpController.saturdayCloseEditingController),
-
                     SizedBox(
                       height: 10.h,
                     ),
@@ -630,84 +1114,90 @@ class StoreEditScreen extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            heading(title: 'Building No.'),
-                            CustomTextField(
-                              isenable: true,
-                              onChanged: (Value) {
-                                productSetUpController.updateButtonState();
-                              },
-                              hintText: '',
-                              height: 55.h,
-                              width: 100.w,
-                              controller:
-                                  productSetUpController.buildingController,
+                            heading(title: 'State *'),
+                            SizedBox(
+                              height: 5.h,
                             ),
+                            Container(
+                              height: 48.h,
+                              width: 160.w,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.0),
+                                border:
+                                    Border.all(width: 1, color: Colors.grey),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: 'Telangana',
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16.0),
+                                  onChanged: (String? newValue) {
+                                    // Since there's only one option, this won't actually change anything
+                                    // But you can add logic here if needed in the future
+                                  },
+                                  items: <String>['Telangana']
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            )
                           ],
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 20.h),
+                          padding: EdgeInsets.only(right: 10.h),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              heading(title: 'Pincode'),
-                              CustomTextField(
-                                isenable: true,
-                                onChanged: (Value) {
-                                  productSetUpController.updateButtonState();
-                                },
-                                hintText: '',
-                                height: 55.h,
-                                width: 100.w,
-                                controller: productSetUpController
-                                    .pinCodeController.value,
+                              heading(title: 'City / District *'),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Container(
+                                height: 48.h,
+                                width: 160.w,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  border:
+                                      Border.all(width: 1, color: Colors.grey),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: TextField(
+                                    onTap: () {
+                                      // Get.toNamed(RouteName.changeLocation);
+                                    },
+                                    controller: cityController,
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                    ),
+                                    style: const TextStyle(fontSize: 16.0),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
-                        ),
+                        )
                       ],
                     ),
 
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: 'Area/Colony Name'),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    CustomTextField(
-                        isenable: true,
-                        onChanged: (Value) {
-                          productSetUpController.updateButtonState();
-                        },
-                        controller:
-                            productSetUpController.colonyController.value,
-                        hintText: "",
-                        height: 48.h,
-                        width: 330.w),
 
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    heading(title: 'Landmark'),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    CustomTextField(
-                        isenable: true,
-                        onChanged: (Value) {
-                          productSetUpController.updateButtonState();
-                        },
-                        controller:
-                            productSetUpController.landMarkController.value,
-                        hintText: "",
-                        height: 48.h,
-                        width: 330.w),
-
-                    SizedBox(
-                      height: 10.h,
-                    ),
-
-                    heading(title: 'Your Store Location'),
+                    heading(title: 'Your Store Location *'),
                     SizedBox(
                       height: 10.h,
                     ),
@@ -726,10 +1216,9 @@ class StoreEditScreen extends StatelessWidget {
                           onTap: () {
                             Get.toNamed(RouteName.changeLocation);
                           },
-                          controller:
-                              dialogBoxController.locacationController.value,
+                          controller: locationController,
                           decoration: const InputDecoration(
-                            hintText: 'e.g Delhi',
+                            hintText: 'Point Your location',
                             border: InputBorder.none,
                             hintStyle: TextStyle(color: Colors.grey),
                           ),
@@ -741,56 +1230,51 @@ class StoreEditScreen extends StatelessWidget {
                       height: 10.h,
                     ),
 
-                    Text(
-                      "Use my current location",
-                      style: TextStyles.openSansUnderLine(
-                          color: const Color(0xffFC8019),
-                          fontWeight: FontWeight.normal),
+                    InkWell(
+                      onTap: () async {
+                        await dialogBoxController.getCurrentLoaction();
+                        Get.to(const GoogleMapPage());
+                        productSetUpController.updateButtonState();
+                      },
+                      child: Text(
+                        "Use my current location",
+                        style: TextStyles.openSansUnderLine(
+                            color: const Color(0xffFC8019),
+                            fontWeight: FontWeight.normal),
+                      ),
                     ),
                     SizedBox(
                       height: 30.h,
                     ),
 
-                    Obx(() {
-                      return Padding(
-                        padding: EdgeInsets.only(right: 20.w),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: productSetUpController
-                                    .isButtonEnabled.value
-                                ? () {
-                                    Get.toNamed(RouteName.sellerHome);
-                                    exactController.isSeller.value = false;
-                                  }
-                                : null, // Disable the button if fields are not filled
-                            style: ElevatedButton.styleFrom(
-                              side: BorderSide(
-                                color: const Color(0xffFC8019).withOpacity(
-                                    productSetUpController.isButtonEnabled.value
-                                        ? 1.0
-                                        : 0.9),
-                                width: 0,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              backgroundColor: const Color(0xffFC8019),
-                              padding: EdgeInsets.all(
-                                GlobalSizes.getDeviceWidth(context) * 0.04,
-                              ),
+                    Padding(
+                      padding: EdgeInsets.only(right: 20.w),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // TODO: Implement button work
+                          },
+                          style: ElevatedButton.styleFrom(
+                            side: const BorderSide(color: Color(0xffFC8019)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
-                            child: const Text(
-                              "Next",
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                color: Colors.white, // Text color
-                              ),
+                            backgroundColor: const Color(0xffFC8019),
+                            padding: EdgeInsets.all(
+                              GlobalSizes.getDeviceWidth(context) * 0.04,
+                            ),
+                          ),
+                          child: const Text(
+                            "Update",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: Colors.white, // Text color
                             ),
                           ),
                         ),
-                      );
-                    }),
+                      ),
+                    ),
 
                     SizedBox(
                       height: 30.h,
@@ -805,45 +1289,67 @@ class StoreEditScreen extends StatelessWidget {
     );
   }
 
-  Padding timmings(BuildContext context, String day,
-      TextEditingController openTime, TextEditingController closeTime) {
+  Padding timings(
+      BuildContext context,
+      String day,
+      TextEditingController openTime,
+      TextEditingController closeTime,
+      RxBool isOpen) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.h),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor: const Color(0xffFC8019),
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: const Color(0xffE0E0E0),
-                  width: 2.0,
+      child: Obx(() => Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: const Color(0xffFC8019),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: const Color(0xffE0E0E0),
+                      width: 2.0,
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    day,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ),
-              alignment: Alignment.center,
-              child: Text(
-                day,
-                style: const TextStyle(
-                  color: Colors.black,
+              SizedBox(width: 10.w),
+              timeEditingBox(
+                controller: openTime,
+                context: context,
+                hintText: 'Open',
+                enabled: isOpen.value,
+              ),
+              SizedBox(width: 10.w),
+              timeEditingBox(
+                controller: closeTime,
+                context: context,
+                hintText: 'Close ',
+                enabled: isOpen.value,
+              ),
+              SizedBox(width: 10.w),
+              Flexible(
+                child: Switch(
+                  value: isOpen.value,
+                  onChanged: (value) {
+                    isOpen.value = value;
+                    if (!value) {
+                      openTime.clear();
+                      closeTime.clear();
+                    }
+                  },
+                  activeColor: const Color(0xffFC8019),
+                  inactiveTrackColor: const Color(0xff939393),
+                  inactiveThumbColor: Colors.white,
                 ),
               ),
-            ),
-          ),
-          SizedBox(
-            width: 10.w,
-          ),
-          timeEditingBox(
-              controller: openTime, context: context, hintText: 'Open Timing'),
-          SizedBox(
-            width: 10.w,
-          ),
-          timeEditingBox(
-              controller: closeTime,
-              context: context,
-              hintText: 'Close Timing'),
-        ],
-      ),
+            ],
+          )),
     );
   }
 
@@ -854,12 +1360,15 @@ class StoreEditScreen extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return const PickImageDialog(
-              heading: 'Add your profile image',
+              heading: 'upload your stote image',
             );
           },
         );
         if (result != null) {
-          imagePaths.add(result);
+          productSetUpController.imagePaths.add(result);
+          if (productSetUpController.imagePaths.length == 1) {
+            productSetUpController.staredImage.add(result);
+          }
         }
       },
       child: Center(
@@ -890,7 +1399,7 @@ class StoreEditScreen extends StatelessWidget {
                   height: 5.h,
                 ),
                 Text(
-                  "Add your store images",
+                  "Add your store images *",
                   style: TextStyles.openSans(
                       fontWeight: FontWeight.w400,
                       fontSize: 10.sp,
@@ -904,78 +1413,53 @@ class StoreEditScreen extends StatelessWidget {
     );
   }
 
-  Container timeEditingBox({
+  Widget timeEditingBox({
     required TextEditingController controller,
     required BuildContext context,
     required String hintText,
+    required bool enabled,
   }) {
-    return Container(
-      height: 48.h,
-      width: 130.w,
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5.0),
-        border: Border.all(width: 1, color: Colors.grey),
-      ),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            suffixIcon: InkWell(
-              onTap: () async {
-                TimeOfDay? selectedTime = await showTimePicker(
-                  helpText: '',
-                  initialEntryMode: TimePickerEntryMode.input,
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                  builder: (BuildContext context, Widget? child) {
-                    return MediaQuery(
-                      data: MediaQuery.of(context).copyWith(
-                        alwaysUse24HourFormat: false,
-                      ),
-                      child: Theme(
-                        data: Theme.of(context).copyWith(
-                          textTheme: Theme.of(context).textTheme.copyWith(
-                                bodySmall: const TextStyle(
-                                  fontSize: 22,
-                                  color: Colors.black,
-                                ),
-                              ),
-                        ),
-                        child: child!,
-                      ),
-                    );
-                  },
-                );
-
-                if (selectedTime != null) {
-                  // Set the selected time to the controller
-                  String formattedTime =
-                      '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}';
-                  controller.text = formattedTime;
-                }
-              },
-              child: SizedBox(
-                height: 10.h,
-                width: 10.h,
-                child: Image.asset(
-                  "assest/calendar_icon.png",
-                ),
+    return ValueListenableBuilder<TextEditingValue>(
+      valueListenable: controller,
+      builder: (context, value, child) {
+        return SizedBox(
+          width: 120.w,
+          child: TextFormField(
+            controller: controller,
+            enabled: enabled,
+            readOnly: true,
+            decoration: InputDecoration(
+              hintText: hintText,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5),
               ),
             ),
-            hintText: hintText,
-            border: InputBorder.none,
-            hintStyle: const TextStyle(color: Colors.grey),
+            onTap: enabled
+                ? () async {
+                    TimeOfDay? pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    if (pickedTime != null) {
+                      String formattedTime = pickedTime.format(context);
+                      controller.text = formattedTime;
+                      // Force refresh if using GetX
+                      setState(() {});
+                      // Or use setState if in a StatefulWidget
+                      // setState(() {});
+                    }
+                  }
+                : null,
           ),
-          style: const TextStyle(fontSize: 16.0),
-        ),
-      ),
+        );
+      },
     );
   }
 
   Container socialLinkBox(
-      {required TextEditingController controller, required String imagePath}) {
+      {required TextEditingController controller,
+      required String imagePath,
+      required String platform}) {
     return Container(
       height: 50.h,
       width: 330.w,
@@ -996,7 +1480,7 @@ class StoreEditScreen extends StatelessWidget {
                 imagePath,
               ),
             ),
-            hintText: "paste the link",
+            hintText: "paste the $platform link",
             border: InputBorder.none,
             hintStyle: const TextStyle(color: Colors.grey),
           ),
@@ -1021,7 +1505,7 @@ class StoreEditScreen extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
-        imagePaths.length,
+        productSetUpController.imagePaths.length,
         (index) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
           child: Obx(

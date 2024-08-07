@@ -86,6 +86,7 @@ class ProcessTabSeller extends StatelessWidget {
                       exact: requirement.exact,
                       image: requirement.addImage,
                       exactSimilarImage: requirement.exactSimilarImage,
+                      requirementId: requirement.requirementID,
                     ),
                   );
                 }),

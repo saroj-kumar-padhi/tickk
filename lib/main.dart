@@ -124,7 +124,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
       if (response.message == 'Mobile registered for buyer') {
         destinationWidget = const HomeBuyer();
-      } else if (response.message == 'Mobile registered for seller') {
+      } else if (response.message == 'Mobile registered for buyer and seller') {
         try {
           final storeData =
               await restClient.checkStoreId(int.parse(formattedPhoneNumber));

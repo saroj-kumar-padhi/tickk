@@ -7,10 +7,12 @@ import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:logger/web.dart';
 
 import '../../../controllers/exactController.dart';
+import '../../../controllers/homeSellerController.dart';
 import '../dialog_boxs/accept_dialod_box.dart';
 import '../dialog_boxs/pick_diallo.dart';
 import '../textstyle.dart';
@@ -32,27 +34,30 @@ class NewSellerCard extends StatelessWidget {
   final String image;
   final String name;
 
-  const NewSellerCard(
-      {super.key,
-      required this.storeCategory,
-      required this.storeSubCategory,
-      required this.brands,
-      required this.date,
-      required this.modelNo,
-      required this.Qty,
-      required this.size,
-      required this.units,
-      required this.Requirement_in_details,
-      required this.requirementId,
-      required this.FCM,
-      required this.image,
-      required this.storeId,
-      required this.name,
-      required this.index});
+  const NewSellerCard({
+    super.key,
+    required this.storeCategory,
+    required this.storeSubCategory,
+    required this.brands,
+    required this.date,
+    required this.modelNo,
+    required this.Qty,
+    required this.size,
+    required this.units,
+    required this.Requirement_in_details,
+    required this.requirementId,
+    required this.FCM,
+    required this.image,
+    required this.storeId,
+    required this.name,
+    required this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
     ExactController exactController = Get.put(ExactController());
+    final HomeSellerController homeSellerController =
+        Get.put(HomeSellerController(storeId));
     String text = Requirement_in_details;
     RxList pickedImage = [].obs;
     return Obx(() {
@@ -100,6 +105,14 @@ class NewSellerCard extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(left: 17.w),
                         child: Text(
+                          "Requirement ID : #$requirementId",
+                          style: TextStyles.openSans(
+                              fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 17.w),
+                        child: Text(
                           name.isNotEmpty ? '${name[0]}${'.....'}' : '',
                           style: const TextStyle(
                               fontSize: 16), // Adjust font size as needed
@@ -117,16 +130,6 @@ class NewSellerCard extends StatelessWidget {
                             Container(
                               child: Row(
                                 children: [
-                                  Text(
-                                    storeCategory,
-                                    style: TextStyles.openSans(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                  Text(" | ",
-                                      style: TextStyles.openSans(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400)),
                                   Text(
                                     storeSubCategory,
                                     style: TextStyles.openSans(
@@ -576,8 +579,10 @@ class NewSellerCard extends StatelessWidget {
                                   "Reject": 'true',
                                   "RequirementID": requirementId
                                 });
+                                await homeSellerController
+                                    .fetchSellerData(storeId);
                               } catch (e) {
-                                Logger().d(e.toString());
+                                Fluttertoast.showToast(msg: "$e");
                               }
                             },
                             child: Padding(

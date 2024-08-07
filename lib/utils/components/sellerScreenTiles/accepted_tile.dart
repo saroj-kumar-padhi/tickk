@@ -1,6 +1,8 @@
 import 'package:blur/blur.dart';
+import 'package:dekhlo/utils/components/sellerScreenTiles/newSellerTile.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -12,6 +14,8 @@ import '../textstyle.dart';
 import 'package:intl/intl.dart';
 
 class AcceptedSellerCard extends StatelessWidget {
+  final int mobile;
+  final String addImage;
   final String yourName;
   final String category;
   final String subCategories;
@@ -26,6 +30,7 @@ class AcceptedSellerCard extends StatelessWidget {
   final String image;
   final List<dynamic> exactImage;
   final bool exact;
+  final String requirementId;
 
   const AcceptedSellerCard(
       {super.key,
@@ -42,7 +47,10 @@ class AcceptedSellerCard extends StatelessWidget {
       required this.quote,
       required this.image,
       required this.exactImage,
-      required this.exact});
+      required this.exact,
+      required this.addImage,
+      required this.mobile,
+      required this.requirementId});
 
   @override
   Widget build(BuildContext context) {
@@ -79,12 +87,15 @@ class AcceptedSellerCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: ClipOval(
-                      child: SizedBox(
-                        height: 40.h,
-                        width: 40.h,
-                        child: Image.asset('assest/profileImage.png').blurred(
-                          colorOpacity: 0.5,
-                          blur: 90,
+                      child: Container(
+                        width: 40, // Adjust size as needed
+                        height: 40, // Adjust size as needed
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: NetworkImage(addImage),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
@@ -94,7 +105,15 @@ class AcceptedSellerCard extends StatelessWidget {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(left: 17.w),
-                        child: SvgPicture.asset("assest/name.svg"),
+                        child: Text(
+                          "Requirement ID : #$requirementId",
+                          style: TextStyles.openSans(
+                              fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 17.w),
+                        child: Text(yourName),
                       ),
                       SizedBox(
                         height: GlobalSizes.getDeviceHeight(context) * 0.003,
@@ -108,16 +127,16 @@ class AcceptedSellerCard extends StatelessWidget {
                             Container(
                               child: Row(
                                 children: [
-                                  Text(
-                                    category,
-                                    style: TextStyles.openSans(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                  Text(" | ",
-                                      style: TextStyles.openSans(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400)),
+                                  // Text(
+                                  //   category,
+                                  //   style: TextStyles.openSans(
+                                  //       fontSize: 12,
+                                  //       fontWeight: FontWeight.w400),
+                                  // ),
+                                  // Text(" | ",
+                                  //     style: TextStyles.openSans(
+                                  //         fontSize: 12,
+                                  //         fontWeight: FontWeight.w400)),
                                   Text(
                                     subCategories,
                                     style: TextStyles.openSans(
@@ -155,15 +174,35 @@ class AcceptedSellerCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal:
-                            GlobalSizes.getDeviceHeight(context) * 0.025),
-                    child: SizedBox(
-                        width: GlobalSizes.getDeviceWidth(context) * 0.15,
-                        height: GlobalSizes.getDeviceHeight(context) * 0.09,
-                        child: Image.network(image)),
-                  ),
+                  SizedBox(
+                      height: 50.h,
+                      width: 100.w,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => EnlargedImageView(
+                                  image: image, heroTag: 'heroTag'),
+                            ),
+                          );
+                        },
+                        child: Hero(
+                          tag: 'heroTag',
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  GlobalSizes.getDeviceHeight(context) * 0.025,
+                            ),
+                            child: SizedBox(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                    8.0), // Adjust the value to make the image rectangular with rounded corners
+                                child: Image.network(image, fit: BoxFit.cover),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )),
                   Column(
                     children: [
                       Text(
@@ -281,46 +320,46 @@ class AcceptedSellerCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Flexible(
-                    child: Obx(() => RadioListTile(
-                          dense: true,
-                          fillColor: WidgetStatePropertyAll(exact
-                              ? const Color(0xffFC8019)
+                      child: RadioListTile(
+                    dense: true,
+                    fillColor: WidgetStatePropertyAll(exact
+                        ? const Color(0xffFC8019)
+                        : const Color(0xff959595)),
+                    title: Text(
+                      'Exact',
+                      style: TextStyles.openSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: exact
+                              ? const Color(0xff313333)
                               : const Color(0xff959595)),
-                          title: Text(
-                            'Exact',
-                            style: TextStyles.openSans(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: exact
-                                    ? const Color(0xff313333)
-                                    : const Color(0xff959595)),
-                          ),
-                          value: 'Exact',
-                          groupValue: exactController
-                              .seletedOption.value, // access value with .value
-                          onChanged: (value) {},
-                        )),
-                  ),
+                    ),
+                    value: 'Exact',
+                    groupValue:
+                        exact ? "Exact" : "Similar", // access value with .value
+                    onChanged: (value) {},
+                  )),
                   Flexible(
-                    child: Obx(() => RadioListTile(
-                          dense: true,
-                          fillColor: WidgetStatePropertyAll(exact == false
-                              ? const Color(0xffFC8019)
-                              : const Color(0xff959595)),
-                          title: Text(
-                            'Similar',
-                            style: TextStyles.openSans(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: exact == false
-                                    ? const Color(0xff313333)
-                                    : const Color(0xff959595)),
-                          ),
-                          value: 'Similar',
-                          groupValue: exactController
-                              .seletedOption.value, // access value with .value
-                          onChanged: (value) {},
-                        )),
+                    child: RadioListTile(
+                      dense: true,
+                      fillColor: WidgetStatePropertyAll(exact == false
+                          ? const Color(0xffFC8019)
+                          : const Color(0xff959595)),
+                      title: Text(
+                        'Similar',
+                        style: TextStyles.openSans(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: exact == false
+                                ? const Color(0xff313333)
+                                : const Color(0xff959595)),
+                      ),
+                      value: 'Similar',
+                      groupValue: exact == false
+                          ? "Similar"
+                          : "Exact", // access value with .value
+                      onChanged: (value) {},
+                    ),
                   ),
                   const SizedBox.shrink(),
                   Row(
@@ -406,7 +445,9 @@ class AcceptedSellerCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      FlutterPhoneDirectCaller.callNumber('+91$mobile');
+                    },
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: Row(
@@ -425,39 +466,40 @@ class AcceptedSellerCard extends StatelessWidget {
                   SizedBox(
                     width: 5.w,
                   ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                        elevation:
-                            WidgetStateProperty.all(0.0), // Remove elevation
-                        shape: WidgetStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                3.0), // Adjust radius as needed
-                          ),
-                        ),
-                        backgroundColor:
-                            WidgetStateProperty.all(const Color(0xffFC8019))
-                        // Transparent background
-                        ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const DealDoneSuccessDialog(
-                            tile: 'Deal Done Successfully!',
-                          );
-                        },
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Text(
-                        "Deal Done",
-                        style: TextStyles.openSans(
-                            color: Colors.white, fontSize: 14.sp),
-                      ),
-                    ),
-                  ),
+                  // ElevatedButton(
+                  //   style: ButtonStyle(
+                  //       elevation:
+                  //           WidgetStateProperty.all(0.0), // Remove elevation
+                  //       shape: WidgetStateProperty.all(
+                  //         RoundedRectangleBorder(
+                  //           borderRadius: BorderRadius.circular(
+                  //               3.0), // Adjust radius as needed
+                  //         ),
+                  //       ),
+                  //       backgroundColor:
+                  //           WidgetStateProperty.all(const Color(0xffFC8019))
+                  //       // Transparent background
+                  //       ),
+                  //   onPressed: () {
+                  //     showDialog(
+                  //       context: context,
+                  //       builder: (BuildContext context) {
+                  //         return const DealDoneSuccessDialog(
+                  //           tile: 'Deal Done Successfully!',
+                  //         );
+                  //       },
+                  //     );
+                  //   },
+                  //   child: Padding(
+                  //     padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  //     child: Text(
+                  //       "Deal Done",
+                  //       style: TextStyles.openSans(
+                  //           color: Colors.white, fontSize: 14.sp),
+                  //     ),
+                  //   ),
+                  // ),
+
                   SizedBox(
                     width: 10.w,
                   )

@@ -6,7 +6,6 @@ import 'package:dekhlo/utils/components/coustoumTextField.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/views/google_map_page.dart';
-import 'package:dekhlo/views/seller_views/seller_home_screens/seller_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';

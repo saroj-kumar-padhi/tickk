@@ -7,6 +7,7 @@ import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -45,8 +46,20 @@ class LogInPhone extends StatelessWidget {
         body: SafeArea(child: Obx(() {
           return authController.isLoading.value
               ? Scaffold(
-                  body: Center(
-                      child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
+                  body: Animate(
+                    effects: [
+                      SlideEffect(
+                          begin: const Offset(1, 0), // Start from bottom
+                          end: const Offset(0, 0), // End at normal position
+                          duration: 500.ms, // Animation duration
+                          curve: Curves.easeOut // Animation curve
+                          ),
+                    ],
+                    child: Scaffold(
+                      body: Center(
+                          child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
+                    ),
+                  ),
                 )
               : PopScope(
                   onPopInvoked: (onPoped) {

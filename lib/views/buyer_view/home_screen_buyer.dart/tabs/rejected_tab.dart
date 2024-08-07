@@ -52,7 +52,7 @@ class RejectedTab extends StatelessWidget {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 20),
                                       child: Text(
-                                        "No Requirement Yet. Tickk is working for ABC Store to get Request",
+                                        "No Rejection Yet.",
                                         style: TextStyles.openSans(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 14.sp,

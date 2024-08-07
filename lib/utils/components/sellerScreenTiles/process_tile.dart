@@ -25,6 +25,7 @@ class ProcessSellerCard extends StatelessWidget {
   final bool exact;
   final String image;
   final List<dynamic> exactSimilarImage;
+  final String requirementId;
 
   const ProcessSellerCard(
       {super.key,
@@ -41,7 +42,8 @@ class ProcessSellerCard extends StatelessWidget {
       required this.qute,
       required this.exact,
       required this.image,
-      required this.exactSimilarImage});
+      required this.exactSimilarImage,
+      required this.requirementId});
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +95,14 @@ class ProcessSellerCard extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(left: 17.w),
                         child: Text(
+                          "Requirement ID : #$requirementId",
+                          style: TextStyles.openSans(
+                              fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 17.w),
+                        child: Text(
                           name.isNotEmpty ? '${name[0]}${'.....'}' : '',
                           style: const TextStyle(
                               fontSize: 16), // Adjust font size as needed
@@ -110,16 +120,6 @@ class ProcessSellerCard extends StatelessWidget {
                             Container(
                               child: Row(
                                 children: [
-                                  Text(
-                                    name,
-                                    style: TextStyles.openSans(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                  Text(" | ",
-                                      style: TextStyles.openSans(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400)),
                                   Text(
                                     subCategory,
                                     style: TextStyles.openSans(
@@ -160,7 +160,7 @@ class ProcessSellerCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal:
-                            GlobalSizes.getDeviceHeight(context) * 0.025),
+                            GlobalSizes.getDeviceHeight(context) * 0.001),
                     child: SizedBox(
                         height: 50.h,
                         width: 100.w,
@@ -309,48 +309,47 @@ class ProcessSellerCard extends StatelessWidget {
               Row(
                 children: [
                   Flexible(
-                    child: Obx(() => RadioListTile(
-                          dense: true,
+                      child: RadioListTile(
+                    dense: true,
 
-                          fillColor: WidgetStatePropertyAll(exact
-                              ? const Color(0xffFC8019)
+                    fillColor: WidgetStatePropertyAll(exact
+                        ? const Color(0xffFC8019)
+                        : const Color(0xff959595)),
+                    title: Text(
+                      'Exact',
+                      style: TextStyles.openSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: exact
+                              ? const Color(0xff313333)
                               : const Color(0xff959595)),
-                          title: Text(
-                            'Exact',
-                            style: TextStyles.openSans(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: exact
-                                    ? const Color(0xff313333)
-                                    : const Color(0xff959595)),
-                          ),
-                          value: 'Exact',
-                          groupValue: exactController
-                              .seletedOption.value, // access value with .value
-                          onChanged: (value) {},
-                        )),
-                  ),
+                    ),
+                    value: 'Exact',
+                    groupValue:
+                        exact ? "Exact" : "Similar", // access value with .value
+                    onChanged: (value) {},
+                  )),
                   Expanded(
-                    child: Obx(() => RadioListTile(
-                          dense: true,
-                          fillColor: WidgetStatePropertyAll(exact == false
-                              ? const Color(0xffFC8019)
+                      child: RadioListTile(
+                    dense: true,
+                    fillColor: WidgetStatePropertyAll(exact == false
+                        ? const Color(0xffFC8019)
+                        : const Color(0xff959595)),
+                    title: Text(
+                      'Similar',
+                      style: TextStyles.openSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: exact == false
+                              ? const Color(0xff313333)
                               : const Color(0xff959595)),
-                          title: Text(
-                            'Similar',
-                            style: TextStyles.openSans(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: exact == false
-                                    ? const Color(0xff313333)
-                                    : const Color(0xff959595)),
-                          ),
-                          value: 'Similar',
-                          groupValue: exactController
-                              .seletedOption.value, // access value with .value
-                          onChanged: (value) {},
-                        )),
-                  ),
+                    ),
+                    value: 'Similar',
+                    groupValue: exact == false
+                        ? "Similar"
+                        : "Exact", // access value with .value
+                    onChanged: (value) {},
+                  )),
                   Padding(
                     padding: EdgeInsets.only(right: 3.w),
                     child: Row(

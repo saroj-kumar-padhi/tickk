@@ -14,10 +14,12 @@ class StoreDetails {
   final String aboutTheStore;
   final String youtubeLink;
   final String instagarmLink;
+  final String websiteLink;
   final List<String> languages;
-  final int buildingNo;
+  final String buildingNo;
   final int pincode;
   final String colonyName;
+
   final String landmark;
   final int v;
 
@@ -42,6 +44,7 @@ class StoreDetails {
     required this.pincode,
     required this.colonyName,
     required this.landmark,
+    required this.websiteLink,
     required this.v,
   });
 
@@ -49,25 +52,26 @@ class StoreDetails {
     return StoreDetails(
       timings: Timings.fromJson(json['timings']),
       sellerLocation: SellerLocation.fromJson(json['sellerLocation']),
-      id: json['_id'],
-      mobile: json['mobile'],
-      storeID: json['StoreID'],
-      addImage: List<String>.from(json['AddImage']),
-      staredImage: json['stared'],
-      storeName: json['StoreName'],
-      storeCategory: List<String>.from(json['storeCategory']),
-      storeSubCategory: List<String>.from(json['storeSubCategory']),
-      storeSubSubCategory: List<String>.from(json['storeSubSubCategory']),
-      brands: List<String>.from(json['Brands']),
-      aboutTheStore: json['About_the_store'],
-      youtubeLink: json['youtubelink'],
-      instagarmLink: json['instagarmlink'],
-      languages: List<String>.from(json['languages']),
-      buildingNo: json['BuildingNo'],
-      pincode: json['Pincode'],
-      colonyName: json['ColonyName'],
-      landmark: json['Landmark'],
+      id: json['_id'] ?? "",
+      mobile: json['mobile'] ?? "",
+      storeID: json['StoreID'] ?? "",
+      addImage: List<String>.from(json['AddImage'] ?? ""),
+      staredImage: json['stared'] ?? "",
+      storeName: json['StoreName'] ?? "",
+      storeCategory: List<String>.from(json['storeCategory'] ?? []),
+      storeSubCategory: List<String>.from(json['storeSubCategory'] ?? []),
+      storeSubSubCategory: List<String>.from(json['storeSubSubCategory'] ?? []),
+      brands: List<String>.from(json['Brands'] ?? []),
+      aboutTheStore: json['About_the_store'] ?? "",
+      youtubeLink: json['youtubelink'] ?? "",
+      instagarmLink: json['instagarmlink'] ?? "",
+      languages: List<String>.from(json['languages'] ?? []),
+      buildingNo: json['StreetNo_BuildingName'] ?? "",
+      pincode: json['Postcode_ZIP'] ?? -1,
+      colonyName: json['StreetName_Area'] ?? "",
+      landmark: json['District_City'] ?? "",
       v: json['__v'],
+      websiteLink: json['Websitelink'],
     );
   }
 

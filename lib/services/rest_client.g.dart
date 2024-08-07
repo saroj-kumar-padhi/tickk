@@ -13,7 +13,7 @@ class _RestClient implements RestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.1.13:3002';
+    baseUrl ??= 'http://192.168.1.10:3002';
   }
 
   final Dio _dio;
@@ -35,6 +35,34 @@ class _RestClient implements RestClient {
         .compose(
           _dio.options,
           '/buyer/signupAllDetails',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<void> editStore(
+    String StoreID,
+    Map<String, dynamic> data,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/selling/EditstoreDetails/${StoreID}',
           queryParameters: queryParameters,
           data: _data,
         )

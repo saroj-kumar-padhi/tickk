@@ -115,7 +115,8 @@ class DropdownController extends GetxController {
         Logger().d(e);
       }
       newTabController.fetchRequirements();
-      Get.toNamed(RouteName.homeBuyerScreen);
+      Get.back();
+      Get.back();
     } catch (e) {
       Logger().d(e);
       Fluttertoast.showToast(msg: e.toString());

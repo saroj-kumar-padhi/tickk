@@ -1,4 +1,5 @@
 import 'package:blur/blur.dart';
+import 'package:dekhlo/utils/components/sellerScreenTiles/newSellerTile.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +12,7 @@ import '../dialog_boxs/coursal_dialog.dart';
 import '../textstyle.dart';
 
 class DoneDoneSellerCard extends StatelessWidget {
+  final String addImage;
   final String yourName;
   final String category;
   final String subCategories;
@@ -25,6 +27,7 @@ class DoneDoneSellerCard extends StatelessWidget {
   final String addImages;
   final List<dynamic> exactImages;
   final bool exact;
+  final String requirementId;
   const DoneDoneSellerCard(
       {super.key,
       required this.yourName,
@@ -40,7 +43,9 @@ class DoneDoneSellerCard extends StatelessWidget {
       required this.quote,
       required this.addImages,
       required this.exactImages,
-      required this.exact});
+      required this.exact,
+      required this.addImage,
+      required this.requirementId});
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +85,7 @@ class DoneDoneSellerCard extends StatelessWidget {
                       child: SizedBox(
                         height: 40.h,
                         width: 40.h,
-                        child: Image.asset('assest/profileImage.png').blurred(
-                          colorOpacity: 0.5,
-                          blur: 90,
-                        ),
+                        child: Image.asset('assest/profileImage.png'),
                       ),
                     ),
                   ),
@@ -92,7 +94,15 @@ class DoneDoneSellerCard extends StatelessWidget {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(left: 17.w),
-                        child: SvgPicture.asset("assest/name.svg"),
+                        child: Text(
+                          "Requirement ID : #$requirementId",
+                          style: TextStyles.openSans(
+                              fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 17.w),
+                        child: Text(yourName),
                       ),
                       SizedBox(
                         height: GlobalSizes.getDeviceHeight(context) * 0.003,
@@ -156,11 +166,38 @@ class DoneDoneSellerCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal:
-                            GlobalSizes.getDeviceHeight(context) * 0.025),
+                            GlobalSizes.getDeviceHeight(context) * 0.001),
                     child: SizedBox(
-                        width: GlobalSizes.getDeviceWidth(context) * 0.15,
-                        height: GlobalSizes.getDeviceHeight(context) * 0.09,
-                        child: Image.network(addImages)),
+                        height: 50.h,
+                        width: 100.w,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => EnlargedImageView(
+                                    image: addImages, heroTag: 'heroTag'),
+                              ),
+                            );
+                          },
+                          child: Hero(
+                            tag: 'heroTag',
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    GlobalSizes.getDeviceHeight(context) *
+                                        0.025,
+                              ),
+                              child: SizedBox(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      8.0), // Adjust the value to make the image rectangular with rounded corners
+                                  child: Image.network(addImages,
+                                      fit: BoxFit.cover),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )),
                   ),
                   Column(
                     children: [
@@ -280,46 +317,44 @@ class DoneDoneSellerCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Flexible(
-                      child: Obx(() => RadioListTile(
-                            dense: true,
-                            fillColor: WidgetStatePropertyAll(exact
-                                ? const Color(0xffFC8019)
-                                : const Color(0xff959595)),
-                            title: Text(
-                              'Exact',
-                              style: TextStyles.openSans(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: exact
-                                      ? const Color(0xff313333)
-                                      : const Color(0xff959595)),
-                            ),
-                            value: 'Exact',
-                            groupValue: exactController.seletedOption
-                                .value, // access value with .value
-                            onChanged: (value) {},
-                          )),
+                      child: RadioListTile(
+                        dense: true,
+                        fillColor: WidgetStatePropertyAll(exact
+                            ? const Color(0xffFC8019)
+                            : const Color(0xff959595)),
+                        title: Text(
+                          'Exact',
+                          style: TextStyles.openSans(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: exact
+                                  ? const Color(0xff313333)
+                                  : const Color(0xff959595)),
+                        ),
+                        value: 'Exact',
+                        groupValue: exact ? "Exact" : "Similar",
+                        onChanged: (value) {},
+                      ),
                     ),
                     Flexible(
-                      child: Obx(() => RadioListTile(
-                            dense: true,
-                            fillColor: WidgetStatePropertyAll(exact == false
-                                ? const Color(0xffFC8019)
-                                : const Color(0xff959595)),
-                            title: Text(
-                              'Similar',
-                              style: TextStyles.openSans(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: exact == false
-                                      ? const Color(0xff313333)
-                                      : const Color(0xff959595)),
-                            ),
-                            value: 'Similar',
-                            groupValue: exactController.seletedOption
-                                .value, // access value with .value
-                            onChanged: (value) {},
-                          )),
+                      child: RadioListTile(
+                        dense: true,
+                        fillColor: WidgetStatePropertyAll(exact == false
+                            ? const Color(0xffFC8019)
+                            : const Color(0xff959595)),
+                        title: Text(
+                          'Similar',
+                          style: TextStyles.openSans(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: exact == false
+                                  ? const Color(0xff313333)
+                                  : const Color(0xff959595)),
+                        ),
+                        value: 'Similar',
+                        groupValue: exact == false ? "Similar" : "Exact",
+                        onChanged: (value) {},
+                      ),
                     ),
                     const SizedBox.shrink(),
                     Row(

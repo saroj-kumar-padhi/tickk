@@ -8,10 +8,13 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../controllers/categoriesController.dart';
+import '../../../controllers/myStoreAccountController.dart';
+import '../../../services/injection.dart';
 import '../../../utils/components/coustoum_serch_bar.dart';
 import '../../../utils/components/textstyle.dart';
 import '../../buyer_view/home_screen_buyer.dart/tabs/deal_done.dart';
@@ -135,8 +138,23 @@ class HomeSeller extends StatelessWidget {
                                     width: 20.w,
                                   ),
                                   InkWell(
-                                    onTap: () {
-                                      Get.toNamed(RouteName.myStore);
+                                    onTap: () async {
+                                      final box = Hive.box('myBox');
+                                      final String formattedPhoneNumber =
+                                          box.get('phone') ?? "";
+                                      final storeData =
+                                          await restClient.checkStoreId(
+                                              int.parse(formattedPhoneNumber));
+                                      final storeId = storeData.StoreID;
+                                      // final Mystoreaccountcontroller
+                                      //     mystoreaccountcontroller = Get.put(
+                                      //         Mystoreaccountcontroller(
+                                      //             storeId: storeId));
+                                      // mystoreaccountcontroller
+                                      //     .fetchStoreDetails(storeId);
+                                      Get.to(() => MyStore(
+                                          StoreId: storeId,
+                                          isFromSeller: true));
                                     },
                                     child: SvgPicture.asset(
                                       height: 20.h,
@@ -389,7 +407,8 @@ class HomeSeller extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () {
-                                Get.to(MyStore(StoreId: storeId));
+                                Get.to(() => MyStore(
+                                    StoreId: storeId, isFromSeller: true));
                               },
                               child: SvgPicture.asset(
                                 height: 20.h,

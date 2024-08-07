@@ -8,7 +8,7 @@ class AcceptSeller {
   });
 
   factory AcceptSeller.fromJson(Map<String, dynamic> json) {
-    var ddItemsList = json['DDItems'] as List;
+    var ddItemsList = json['acceptedItems'] as List;
     List<DdItem> ddItemsObjects =
         ddItemsList.map((itemJson) => DdItem.fromJson(itemJson)).toList();
 
@@ -22,6 +22,7 @@ class DdItem {
   bool exact;
   bool similar;
   String id;
+  int mobile;
   String requirementId;
   String storeId;
   DateTime date;
@@ -64,6 +65,7 @@ class DdItem {
     required this.addImage,
     required this.location,
     required this.status,
+    required this.mobile,
     required this.v,
   });
 
@@ -91,6 +93,7 @@ class DdItem {
       location: json['Location'] ?? '',
       status: json['Status'] ?? '',
       v: json['__v'] ?? 0,
+      mobile: json['mobile'] ?? 1234,
     );
   }
 }
