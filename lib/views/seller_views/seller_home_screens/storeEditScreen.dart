@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dekhlo/controllers/flavourController.dart';
 import 'package:dekhlo/controllers/productSetupController.dart';
+import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/coustoumTextField.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
@@ -11,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:logger/web.dart';
@@ -33,6 +37,7 @@ class StoreEditScreen extends StatefulWidget {
   static final MultiSelectController subSubCategorySelectController =
       MultiSelectController();
 
+  final String storeID;
   final String storeName;
   final List<String> storeCategory;
   final List<dynamic> storeSubcategory;
@@ -93,7 +98,8 @@ class StoreEditScreen extends StatefulWidget {
       required this.fridayOpentime,
       required this.fridayClosetime,
       required this.saturdayOpentime,
-      required this.saturdayClosetime});
+      required this.saturdayClosetime,
+      required this.storeID});
 
   @override
   State<StoreEditScreen> createState() => _StoreEditScreenState();
@@ -102,9 +108,13 @@ class StoreEditScreen extends StatefulWidget {
 class _StoreEditScreenState extends State<StoreEditScreen> {
   List<ValueItem> selectedCategoryOptions = [];
   List<ValueItem> selectedSubCategoryOptions = [];
-  List<String> SubCategoryItems = [];
 
+  List<String> SubCategoryItems = [];
   List<String> SubSubCategoryItems = [];
+
+  List<String> categorySelected = [];
+  List<String> subCategorySelected = [];
+  List<String> subSubCategorySelected = [];
 
   List<ValueItem<dynamic>> selectedSubCategoryItems = [];
 
@@ -201,8 +211,8 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
     TextEditingController cityController =
         TextEditingController(text: widget.city);
 
-    TextEditingController locationController =
-        TextEditingController(text: widget.yourStoreLoaction);
+    dialogBoxController.locacationController.value.text =
+        widget.yourStoreLoaction;
 
     // Opening and closing times
     TextEditingController sundayOpenController =
@@ -506,17 +516,9 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                             List<String> selectedCategories =
                                 options.map((option) => option.label).toList();
 
+                            categorySelected = selectedCategories;
                             categoriesController
                                 .fetchSetupSubcategories(selectedCategories);
-
-                            // if (options.contains(
-                            //   const ValueItem(
-                            //     label: 'Custom Category',
-                            //     value: 8,
-                            //   ),
-                            // )) {
-                            //   Get.toNamed(RouteName.custoumCategory);
-                            // }
                           },
                           options: convertToValueItems(
                               categoriesController.setupCategories),
@@ -565,8 +567,8 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                                           onSelectionChanged: (selectedItems) {
                                             print(
                                                 "Selected subcategories: $selectedItems");
-                                            // Update your controller or state here if needed
-                                            // categoriesController.selectedSubCategories = selectedItems;
+
+                                            subCategorySelected = selectedItems;
 
                                             // Fetch sub-subcategories
                                             categoriesController
@@ -656,14 +658,12 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                                                         ))
                                                     .toList(),
                                               );
-                                              if (values.contains(
-                                                  'Electric cycles')) {
-                                                Get.toNamed(RouteName
-                                                    .custoumSubSubCategory);
-                                              }
+
                                               categoriesController
                                                   .fetchSubSubsetUpCategories(
                                                       values);
+
+                                              subSubCategorySelected = values;
                                             }
                                           },
                                           chipDisplay: MultiSelectChipDisplay(
@@ -1162,7 +1162,8 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                           onTap: () {
                             Get.toNamed(RouteName.changeLocation);
                           },
-                          controller: locationController,
+                          controller:
+                              dialogBoxController.locacationController.value,
                           decoration: const InputDecoration(
                             hintText: 'Point Your location',
                             border: InputBorder.none,
@@ -1172,6 +1173,7 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                         ),
                       ),
                     ),
+
                     SizedBox(
                       height: 10.h,
                     ),
@@ -1198,8 +1200,76 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            // TODO: Implement button work
+                          onPressed: () async {
+                            Map<String, double> convertedAddressToLatLong =
+                                await convertAddressToLatLong(
+                                    dialogBoxController
+                                        .locacationController.value.text);
+                            Map<String, dynamic> data = {
+                              "StoreName": storeNameController.text,
+                              "storeCategory": categorySelected.isEmpty
+                                  ? widget.storeCategory
+                                  : categorySelected,
+                              "storeSubCategory": subCategorySelected.isEmpty
+                                  ? widget.storeSubcategory
+                                  : subCategorySelected,
+                              "About_the_store": aboutYourStoreController.text,
+                              "youtubelink": ytController.text,
+                              "instagarmlink": iGController.text,
+                              "Websitelink": wLController.text,
+                              "StreetNo_BuildingName": houseNoController.text,
+                              "StreetName_Area": streetController.text,
+                              "Brands": brandsController.text,
+                              "timings": {
+                                "Sunday": {
+                                  "open": sundayOpenController.text,
+                                  "close": sundayCloseController.text
+                                },
+                                "Monday": {
+                                  "open": mondayOpenController.text,
+                                  "close": mondayCloseController.text
+                                },
+                                "Tuesday": {
+                                  "open": tuesdayOpenController.text,
+                                  "close": tuesdayCloseController.text
+                                },
+                                "Wednesday": {
+                                  "open": wednesdayOpenController.text,
+                                  "close": wednesdayCloseController.text
+                                },
+                                "Thursday": {
+                                  "open": thursdayOpenController.text,
+                                  "close": thursdayCloseController.text
+                                },
+                                "Friday": {
+                                  "open": fridayOpenController.text,
+                                  "close": fridayCloseController.text
+                                },
+                                "Saturday": {
+                                  "open": saturdayOpenController.text,
+                                  "close": saturdayCloseController.text
+                                }
+                              },
+                              "Postcode_ZIP": pinCodeController.text,
+                              "sellerLocation": {
+                                "latitude":
+                                    convertedAddressToLatLong["latitude"]
+                                        .toString(),
+                                "longitude":
+                                    convertedAddressToLatLong["longitude"]
+                                        .toString()
+                              }
+                            };
+
+                            try {
+                              await restClient.editStore(widget.storeID, data);
+                              Fluttertoast.showToast(
+                                  msg: "store updated successfully");
+                              Get.back();
+                              Get.back();
+                            } catch (e) {
+                              Logger().e(e);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             side: const BorderSide(color: Color(0xffFC8019)),
@@ -1572,5 +1642,28 @@ class _CustomMultiSelectDropdownState extends State<CustomMultiSelectDropdown> {
         ],
       ),
     );
+  }
+}
+
+Future<Map<String, double>> convertAddressToLatLong(String address) async {
+  try {
+    List<Location> locations = await locationFromAddress(address);
+
+    if (locations.isNotEmpty) {
+      Location location = locations.first;
+      double latitude = location.latitude;
+      double longitude = location.longitude;
+
+      print('Latitude: $latitude, Longitude: $longitude');
+      return {"latitude": latitude, "longitude": longitude};
+      // You can now use these latitude and longitude values as needed
+      // For example, you might want to store them in variables or send them to an API
+    } else {
+      print('No coordinates found for the given address.');
+      return {"latitude": 0, "longitude": 0};
+    }
+  } catch (e) {
+    print('Error occurred while converting address to coordinates: $e');
+    return {"latitude": 0, "longitude": 0};
   }
 }

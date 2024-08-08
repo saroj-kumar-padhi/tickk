@@ -11,7 +11,7 @@ class Requirement {
   final String size;
   final int quantity;
   final String units;
-  final int quote;
+  final String quote;
   final String requirementInDetails;
   final String? addImage;
   final String location;

@@ -1,4 +1,5 @@
 import 'package:dekhlo/controllers/newTabController.dart';
+import 'package:dekhlo/models/stores_fcm.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/buyerScreenTiles/send_tile.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
@@ -28,21 +29,20 @@ class PostRequirementsDialog extends StatefulWidget {
   final String units;
   final String description;
   final String image;
-  final List fcm;
 
-  const PostRequirementsDialog(
-      {super.key,
-      required this.category,
-      required this.subcategory,
-      required this.subsubCategory,
-      required this.brands,
-      required this.modelNo,
-      required this.size,
-      required this.quantity,
-      required this.units,
-      required this.description,
-      required this.image,
-      required this.fcm});
+  const PostRequirementsDialog({
+    super.key,
+    required this.category,
+    required this.subcategory,
+    required this.subsubCategory,
+    required this.brands,
+    required this.modelNo,
+    required this.size,
+    required this.quantity,
+    required this.units,
+    required this.description,
+    required this.image,
+  });
 
   @override
   State<PostRequirementsDialog> createState() => _PostRequirementsDialogState();
@@ -146,11 +146,23 @@ class _PostRequirementsDialogState extends State<PostRequirementsDialog> {
               Buttons.shortButton(
                 color: const Color(0xffFC8019),
                 context: context,
-                onPressedCallback: () {
+                onPressedCallback: () async {
+                  List<String> dataToGo = [];
+                  try {
+                    final MatchingStoresResponse data =
+                        await restClient.fechingMachingStores(
+                            widget.category, widget.subcategory);
+                    List<String> fcmTokens =
+                        data.matchingStores.map((store) => store.fcm).toList();
+                    dataToGo = fcmTokens;
+                    Logger().d(data.matchingStores.first.fcm);
+                  } catch (e) {
+                    Logger().d(e);
+                  }
                   dropdownController.postRequirements(
                       brand: widget.brands,
                       modelNo: widget.modelNo,
-                      quote: 0,
+                      quote: "0",
                       size: widget.size,
                       quantity: int.parse(widget.quantity),
                       details: widget.description,
@@ -159,7 +171,9 @@ class _PostRequirementsDialogState extends State<PostRequirementsDialog> {
                       subcategory: widget.subcategory,
                       subsubCategory: subFormatted,
                       units: widget.units,
-                      name: basiccontrollerEdit.response.value.yourName);
+                      name: basiccontrollerEdit.response.value.yourName,
+                      fcmTokens: dataToGo,
+                      context: context);
 
                   newTabController.fetchRequirements();
                   Get.back();

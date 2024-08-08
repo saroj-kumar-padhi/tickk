@@ -1,3 +1,19 @@
+// Function to parse sellerLocation
+import 'dart:convert';
+
+SellerLocation parseSellerLocation(dynamic json) {
+  if (json is String) {
+    // If the sellerLocation is a JSON string, decode it first
+    Map<String, dynamic> decodedJson = jsonDecode(json);
+    return SellerLocation.fromJson(decodedJson);
+  } else if (json is Map<String, dynamic>) {
+    // If the sellerLocation is already a map, use it directly
+    return SellerLocation.fromJson(json);
+  } else {
+    throw TypeError();
+  }
+}
+
 class StoreDetails {
   final Timings timings;
   final SellerLocation sellerLocation;
@@ -51,7 +67,7 @@ class StoreDetails {
   factory StoreDetails.fromJson(Map<String, dynamic> json) {
     return StoreDetails(
       timings: Timings.fromJson(json['timings']),
-      sellerLocation: SellerLocation.fromJson(json['sellerLocation']),
+      sellerLocation: parseSellerLocation(json['sellerLocation']),
       id: json['_id'] ?? "",
       mobile: json['mobile'] ?? "",
       storeID: json['StoreID'] ?? "",
@@ -123,13 +139,13 @@ class Timings {
 
   factory Timings.fromJson(Map<String, dynamic> json) {
     return Timings(
-      sunday: DayTiming.fromJson(json['Sunday']),
-      monday: DayTiming.fromJson(json['Monday']),
-      tuesday: DayTiming.fromJson(json['Tuesday']),
-      wednesday: DayTiming.fromJson(json['Wednesday']),
-      thursday: DayTiming.fromJson(json['Thursday']),
-      friday: DayTiming.fromJson(json['Friday']),
-      saturday: DayTiming.fromJson(json['Saturday']),
+      sunday: DayTiming.fromJson(json['Sunday'] ?? {}),
+      monday: DayTiming.fromJson(json['Monday'] ?? {}),
+      tuesday: DayTiming.fromJson(json['Tuesday'] ?? {}),
+      wednesday: DayTiming.fromJson(json['Wednesday'] ?? {}),
+      thursday: DayTiming.fromJson(json['Thursday'] ?? {}),
+      friday: DayTiming.fromJson(json['Friday'] ?? {}),
+      saturday: DayTiming.fromJson(json['Saturday'] ?? {}),
     );
   }
 
@@ -159,9 +175,9 @@ class DayTiming {
 
   factory DayTiming.fromJson(Map<String, dynamic> json) {
     return DayTiming(
-      open: json['open'],
-      close: json['close'],
-      id: json['_id'],
+      open: json['open'] ?? "",
+      close: json['close'] ?? "",
+      id: json['_id'] ?? "",
     );
   }
 

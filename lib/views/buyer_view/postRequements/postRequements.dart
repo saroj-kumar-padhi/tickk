@@ -513,21 +513,6 @@ class _PostRequirementsState extends State<PostRequirements> {
                       child: ElevatedButton(
                         onPressed: () async {
                           if (isFormValid.value) {
-                            List<String> dataToGo = [];
-                            try {
-                              final MatchingStoresResponse data =
-                                  await restClient.fechingMachingStores(
-                                      dropdownController.selectedCategory.value,
-                                      dropdownController
-                                          .selectedSubcategory.value);
-                              List<String> fcmTokens = data.matchingStores
-                                  .map((store) => store.fcm)
-                                  .toList();
-                              dataToGo = fcmTokens;
-                              Logger().d(data.matchingStores.first.fcm);
-                            } catch (e) {
-                              Logger().d(e);
-                            }
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -548,7 +533,6 @@ class _PostRequirementsState extends State<PostRequirements> {
                                   description: removeExtraSpaces(
                                       commentsController.text.trim()),
                                   image: imagePath.value,
-                                  fcm: dataToGo,
                                 );
                               },
                             );

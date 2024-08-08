@@ -127,6 +127,7 @@ class PushNotificationServices {
 
   static Future<void> sendNotification(
       List<dynamic> deviceTokens, BuildContext context, String data) async {
+    Logger().f(deviceTokens);
     final String serverKey = await getAccessToken();
     String endpointFirebaseCloudMessaging =
         'https://fcm.googleapis.com/v1/projects/tickk-90b57/messages:send';

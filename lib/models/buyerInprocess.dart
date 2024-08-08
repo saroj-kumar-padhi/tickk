@@ -70,7 +70,7 @@ class Store {
   final String storeID;
   final String mobile;
   final String addImage;
-  final int quote;
+  final String quote;
   final bool similar;
   final List<dynamic> ExactSimilarImage;
   final String stared;

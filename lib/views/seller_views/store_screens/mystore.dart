@@ -195,86 +195,53 @@ class MyStore extends StatelessWidget {
                                           isFromSeller
                                               ? OutlinedButton(
                                                   onPressed: () {
-                                                    Get.to(
-                                                        () => StoreEditScreen(
-                                                              storeName:
-                                                                  mystoreaccountcontroller
-                                                                      .storeName,
-                                                              storeCategory:
-                                                                  mystoreaccountcontroller
-                                                                      .storeCategories,
-                                                              storeSubcategory:
-                                                                  mystoreaccountcontroller
-                                                                      .storeSubCategory,
-                                                              about:
-                                                                  mystoreaccountcontroller
-                                                                      .about,
-                                                              yt: mystoreaccountcontroller
-                                                                  .yt,
-                                                              iG: mystoreaccountcontroller
-                                                                  .iG,
-                                                              webSite:
-                                                                  mystoreaccountcontroller
-                                                                      .wL,
-                                                              houseNo:
-                                                                  mystoreaccountcontroller
-                                                                      .houseNoBuildingName,
-                                                              pincode:
-                                                                  mystoreaccountcontroller
-                                                                      .pinCode
-                                                                      .toString(),
-                                                              city: "Hyderabad",
-                                                              yourStoreLoaction:
-                                                                  mystoreaccountcontroller
-                                                                      .storeAddress,
-                                                              area: mystoreaccountcontroller
-                                                                  .streetController,
-                                                              brands: mystoreaccountcontroller
-                                                                      .brands ??
-                                                                  [],
-                                                              sundayOpentime:
-                                                                  mystoreaccountcontroller
-                                                                      .sundayOpen,
-                                                              sundayClosetime:
-                                                                  mystoreaccountcontroller
-                                                                      .sundayClose,
-                                                              mondayOpentime:
-                                                                  mystoreaccountcontroller
-                                                                      .mondayOpen,
-                                                              mondayClosetime:
-                                                                  mystoreaccountcontroller
-                                                                      .mondayClose,
-                                                              tuesdayOpentime:
-                                                                  mystoreaccountcontroller
-                                                                      .tuesdayOpen,
-                                                              tuesdayClosetime:
-                                                                  mystoreaccountcontroller
-                                                                      .tuesdayClose,
-                                                              wednesdayOpentime:
-                                                                  mystoreaccountcontroller
-                                                                      .wednesdayOpen,
-                                                              wednesdayClosetime:
-                                                                  mystoreaccountcontroller
-                                                                      .wednesdayClose,
-                                                              thursdayOpentime:
-                                                                  mystoreaccountcontroller
-                                                                      .thursdayOpen,
-                                                              thursdayClosetime:
-                                                                  mystoreaccountcontroller
-                                                                      .thursdayClose,
-                                                              fridayOpentime:
-                                                                  mystoreaccountcontroller
-                                                                      .fridayOpen,
-                                                              fridayClosetime:
-                                                                  mystoreaccountcontroller
-                                                                      .fridayClose,
-                                                              saturdayOpentime:
-                                                                  mystoreaccountcontroller
-                                                                      .saturdayOpen,
-                                                              saturdayClosetime:
-                                                                  mystoreaccountcontroller
-                                                                      .saturdayClose,
-                                                            ));
+                                                    Get.to(() => StoreEditScreen(
+                                                        storeName:
+                                                            mystoreaccountcontroller
+                                                                .storeName,
+                                                        storeCategory:
+                                                            mystoreaccountcontroller
+                                                                .storeCategories,
+                                                        storeSubcategory:
+                                                            mystoreaccountcontroller
+                                                                .storeSubCategory,
+                                                        about: mystoreaccountcontroller
+                                                            .about,
+                                                        yt: mystoreaccountcontroller
+                                                            .yt,
+                                                        iG: mystoreaccountcontroller
+                                                            .iG,
+                                                        webSite: mystoreaccountcontroller
+                                                            .wL,
+                                                        houseNo: mystoreaccountcontroller
+                                                            .houseNoBuildingName,
+                                                        pincode: mystoreaccountcontroller
+                                                            .pinCode
+                                                            .toString(),
+                                                        city: "Hyderabad",
+                                                        yourStoreLoaction:
+                                                            mystoreaccountcontroller
+                                                                .storeAddress,
+                                                        area: mystoreaccountcontroller
+                                                            .streetController,
+                                                        brands: mystoreaccountcontroller.brands ??
+                                                            [],
+                                                        sundayOpentime:
+                                                            mystoreaccountcontroller.sundayOpen,
+                                                        sundayClosetime: mystoreaccountcontroller.sundayClose,
+                                                        mondayOpentime: mystoreaccountcontroller.mondayOpen,
+                                                        mondayClosetime: mystoreaccountcontroller.mondayClose,
+                                                        tuesdayOpentime: mystoreaccountcontroller.tuesdayOpen,
+                                                        tuesdayClosetime: mystoreaccountcontroller.tuesdayClose,
+                                                        wednesdayOpentime: mystoreaccountcontroller.wednesdayOpen,
+                                                        wednesdayClosetime: mystoreaccountcontroller.wednesdayClose,
+                                                        thursdayOpentime: mystoreaccountcontroller.thursdayOpen,
+                                                        thursdayClosetime: mystoreaccountcontroller.thursdayClose,
+                                                        fridayOpentime: mystoreaccountcontroller.fridayOpen,
+                                                        fridayClosetime: mystoreaccountcontroller.fridayClose,
+                                                        saturdayOpentime: mystoreaccountcontroller.saturdayOpen,
+                                                        saturdayClosetime: mystoreaccountcontroller.saturdayClose,
+                                                        storeID: StoreId));
                                                   },
                                                   style:
                                                       OutlinedButton.styleFrom(

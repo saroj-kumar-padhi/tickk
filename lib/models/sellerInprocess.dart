@@ -30,7 +30,7 @@ class Data {
   final String addImage;
   final String location;
   final String status;
-  final int quote;
+  final String quote;
   final bool similar;
   final int v;
   final String storeSubCategory;

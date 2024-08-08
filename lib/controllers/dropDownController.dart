@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:dekhlo/services/notificationServices.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:dio/dio.dart' as dio;
 import 'package:http_parser/http_parser.dart' show MediaType;
@@ -50,6 +52,8 @@ class DropdownController extends GetxController {
   }
 
   Future<void> postRequirements({
+    required final List<dynamic> fcmTokens,
+    required BuildContext context,
     required final String name,
     required final String units,
     required final String category,
@@ -57,7 +61,7 @@ class DropdownController extends GetxController {
     required final String subsubCategory,
     required final String brand,
     required final String modelNo,
-    required final int quote,
+    required final String quote,
     required final String size,
     required final int quantity,
     required final String details,
@@ -106,11 +110,22 @@ class DropdownController extends GetxController {
       }
       await postdio.postRequirements(formData);
       try {
-        restClient.putRequirementInSellerTab(category, subcategory);
+        try {
+          await restClient.putRequirementInSellerTab(category, subcategory);
+        } catch (e) {
+          Logger().e(e);
+        }
         Fluttertoast.showToast(
             msg: "Thanks Your requirements sent successfully");
-        // PushNotificationServices.sendNotification(fcm, context,
-        //     "A new requirement has been Posted of requirement id $category please check it out"); here notification solve issue
+        // here notification solve issue
+
+        try {
+          Logger().f(fcmTokens);
+          PushNotificationServices.sendNotification(fcmTokens, context,
+              "A new requirement has been Posted of requirement id $category please check it out");
+        } catch (e) {
+          Logger().f(e);
+        }
       } catch (e) {
         Logger().d(e);
       }

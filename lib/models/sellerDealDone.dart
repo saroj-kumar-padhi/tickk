@@ -37,7 +37,7 @@ class DdItem {
   String addImage;
   String location;
   String status;
-  int quote;
+  String quote;
   bool exact;
   bool similar;
   bool yes;
@@ -104,7 +104,7 @@ class DdItem {
       addImage: json['AddImage'] ?? '',
       location: json['Location'] ?? '',
       status: json['Status'] ?? '',
-      quote: json['Quote'] ?? 0,
+      quote: json['Quote'] ?? "",
       exact: json['Exact'] ?? false,
       similar: json['Similar'] ?? false,
       yes: json['Yes'] ?? false,

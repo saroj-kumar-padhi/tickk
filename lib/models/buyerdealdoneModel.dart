@@ -72,7 +72,7 @@ class Store {
   final String addImage;
   final String location;
   final bool productType;
-  final int quot;
+  final String quot;
 
   Store(
       {required this.storeName,

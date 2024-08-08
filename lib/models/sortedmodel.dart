@@ -79,7 +79,7 @@ class Store {
   final String mobile;
   final String stared;
   final DateTime date;
-  final int quote;
+  final String quote;
   final bool dealDone;
   final bool similar;
   final bool exact;
@@ -134,7 +134,7 @@ class AllRequirementDetails {
   final String addImage;
   final String location;
   final String status;
-  final int quote;
+  final String quote;
   final bool exact;
   final bool similar;
   final bool yes;
