@@ -32,7 +32,7 @@ class RequirementData {
   final String modelNo;
   final int quantity;
   final String brands;
-  final int size;
+  final String size;
   final String units;
   final String requirementInDetails;
   final List<Store> stores;
@@ -127,7 +127,7 @@ class AllRequirementDetails {
   final String storeSubSubCategory;
   final String brands;
   final String modelNo;
-  final int size;
+  final String size;
   final int quantity;
   final String units;
   final String requirementInDetails;

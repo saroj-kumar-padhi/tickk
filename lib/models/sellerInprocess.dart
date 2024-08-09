@@ -23,7 +23,7 @@ class Data {
   final String storeCategory;
   final String brands;
   final String modelNo;
-  final int size;
+  final String size;
   final int quantity;
   final String units;
   final String requirementInDetails;
@@ -75,7 +75,7 @@ class Data {
       storeCategory: json['storeCategory'],
       brands: json['Brands'] ?? "",
       modelNo: json['ModelNo'] ?? "",
-      size: json['size'] ?? -1,
+      size: json['size'] ?? "",
       quantity: json['Quantity'] ?? -1,
       units: json['Units'] ?? "",
       requirementInDetails: json['Requirement_in_details'] ?? "",

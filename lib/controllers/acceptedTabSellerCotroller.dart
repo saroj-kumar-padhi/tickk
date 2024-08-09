@@ -20,12 +20,8 @@ class Acceptedtabsellercotroller extends GetxController {
 
 //refresh action
   Future<void> refreshData() async {
-    isLoading.value = true;
     try {
-      // Clear existing items
-      acceptedItems.clear();
-
-      // Fetch new items
+      isLoading.value = true;
       await fetchAcceptedItems();
     } catch (e) {
       print('Error refreshing data: $e');
@@ -36,15 +32,16 @@ class Acceptedtabsellercotroller extends GetxController {
 
   Future<void> fetchAcceptedItems() async {
     try {
-      acceptedItems.clear();
       isLoading(true);
       final response = await restClient.acceptedSellerSide(storeId);
+
+      // Clear the list before adding new items
+      acceptedItems.clear();
       acceptedItems.addAll(response.ddItems);
 
-      // Log detailed information about each item
-      for (var item in acceptedItems) {
-        sentItems.add(item);
-      }
+      // Clear and update sentItems as well
+      sentItems.clear();
+      sentItems.addAll(response.ddItems);
 
       Logger().d('Total items: ${acceptedItems.length}');
     } catch (e) {

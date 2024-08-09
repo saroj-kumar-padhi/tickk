@@ -33,7 +33,7 @@ class DdItem {
   String brands;
   String modelNo;
   String quote;
-  int size;
+  String size;
   int quantity;
   String units;
   String requirementInDetails;
@@ -85,7 +85,7 @@ class DdItem {
       brands: json['Brands'] ?? '',
       modelNo: json['ModelNo'] ?? '',
       quote: json['Quote']?.toString() ?? '0',
-      size: json['size'] ?? 0,
+      size: json['size'] ?? "",
       quantity: json['Quantity'] ?? 0,
       units: json['Units'] ?? '',
       requirementInDetails: json['Requirement_in_details'] ?? '',

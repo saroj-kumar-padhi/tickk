@@ -33,9 +33,9 @@ class FlavourContoler extends GetxController {
   Map<String, String> categoryData = {
     "Medical": "assest/medicine.svg",
     "Pet stores": "assest/pets.svg",
-    "Fashion": "assest/cloths.svg",
-    "Construction": "assest/consruction.svg",
-    "Home decor": "assest/home_dec.svg",
+    "Fashion": "assest/Fashoin.svg",
+    "Construction": "assest/building-07.svg",
+    "Home decor": "assest/homeDeocor.svg",
     "Electronics": "assest/electronics.svg",
     "Electricals": "assest/plug.svg",
     "Nursery": "assest/flower.svg",

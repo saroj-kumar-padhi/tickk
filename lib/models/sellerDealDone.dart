@@ -30,7 +30,7 @@ class DdItem {
   String storeSubSubCategory;
   String brands;
   String modelNo;
-  int size;
+  String size;
   int quantity;
   String units;
   String requirementInDetails;
@@ -97,7 +97,7 @@ class DdItem {
       storeSubSubCategory: json['storeSubSubCategory'] ?? '',
       brands: json['Brands'] ?? '',
       modelNo: json['ModelNo'] ?? '',
-      size: json['size'] ?? 0,
+      size: json['size'] ?? "",
       quantity: json['Quantity'] ?? 0,
       units: json['Units'] ?? '',
       requirementInDetails: json['Requirement_in_details'] ?? '',

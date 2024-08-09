@@ -1,11 +1,13 @@
 import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
+import 'package:dekhlo/views/seller_views/sellerProfiles/seller_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
+import '../../controllers/buyerDealDoneController.dart';
 import '../../controllers/buyerInprocessController.dart';
 
 class Buttons {
@@ -179,10 +181,15 @@ class Buttons {
               foregroundColor: const WidgetStatePropertyAll(Colors.white)),
           onPressed: () async {
             try {
+              BuyerDealDonecontroller buyerDealDonecontroller = Get.put(
+                  BuyerDealDonecontroller(mobileNo: formattedPhoneNumber));
               await restClient
                   .moveToDealDone(RequrementId, storeId, {"DealDone": true});
               buyerinprocesscontroller.fetchProcessBuyerRequirements(
                   mobileNo: mobile);
+
+              buyerDealDonecontroller.fetchProcessBuyerRequirements(
+                  mobileNo: formattedPhoneNumber);
             } catch (e) {
               Logger().d(e);
             }

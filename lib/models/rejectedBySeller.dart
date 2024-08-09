@@ -21,7 +21,7 @@ class RejectedItem {
   String storeCategory;
   String brands;
   String modelNo;
-  int size;
+  String size;
   int quantity;
   String units;
   String requirementInDetails;

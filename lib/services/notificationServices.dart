@@ -125,8 +125,8 @@ class PushNotificationServices {
     return credentials.accessToken.data;
   }
 
-  static Future<void> sendNotification(
-      List<dynamic> deviceTokens, BuildContext context, String data) async {
+  static Future<void> sendNotification(List<dynamic> deviceTokens,
+      BuildContext context, String title, String body) async {
     Logger().f(deviceTokens);
     final String serverKey = await getAccessToken();
     String endpointFirebaseCloudMessaging =
@@ -136,7 +136,7 @@ class PushNotificationServices {
       final Map<String, dynamic> message = {
         'message': {
           'token': token,
-          'notification': {'title': data, 'body': 'Test message'},
+          'notification': {'title': title, 'body': body},
           'data': {
             'tripID': '123',
           }

@@ -22,7 +22,7 @@ class Data {
   final String storeSubCategory;
   final String brands;
   final String modelNo;
-  final int size;
+  final String size;
   final int quantity;
   final String units;
   final String quote;
@@ -72,7 +72,7 @@ class Data {
       storeSubCategory: json['storeSubCategory'] ?? "",
       brands: json['Brands'] ?? "",
       modelNo: json['ModelNo'] ?? "",
-      size: json['size'] ?? -1,
+      size: json['size'] ?? "",
       quantity: json['Quantity'] ?? "",
       units: json['Units'] ?? "",
       quote: json['Quote'] ?? "",

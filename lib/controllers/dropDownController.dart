@@ -121,8 +121,11 @@ class DropdownController extends GetxController {
 
         try {
           Logger().f(fcmTokens);
-          PushNotificationServices.sendNotification(fcmTokens, context,
-              "A new requirement has been Posted of requirement id $category please check it out");
+          PushNotificationServices.sendNotification(
+              fcmTokens,
+              context,
+              "New Requirement from Tickk",
+              "Hurray! you have received a new requirement  .Respond to it as soon as possible.");
         } catch (e) {
           Logger().f(e);
         }

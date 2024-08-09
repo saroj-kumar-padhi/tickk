@@ -24,7 +24,7 @@ class Data {
   final List<String> storeSubSubCategory;
   final String brands;
   final String modelNo;
-  final int size;
+  final String size;
   final int quantity;
   final String units;
   final String requirementInDetails;

@@ -25,7 +25,7 @@ class RequirementData {
   final String addImage;
   final String modelNo;
   final int quantity;
-  final int size;
+  final String size;
   final String units;
   final String Date;
   final String requirementInDetails;
@@ -55,7 +55,7 @@ class RequirementData {
       addImage: json['AddImage'] ?? "",
       modelNo: json['ModelNo'] ?? "",
       quantity: json['Quantity'] ?? -1,
-      size: json['size'] ?? -1,
+      size: json['size'] ?? "",
       units: json['Units'] ?? "",
       requirementInDetails: json['Requirement_in_details'] ?? "",
       stores:

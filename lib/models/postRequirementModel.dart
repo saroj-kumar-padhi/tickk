@@ -7,7 +7,7 @@ class CreatePostRequest {
   final String Brands;
   final String ModelNo;
   final int Quote;
-  final int size;
+  final String size;
   final int Quantity;
   final String Units;
   final String Requirement_in_details;

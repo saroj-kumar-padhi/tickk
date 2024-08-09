@@ -61,269 +61,246 @@ class HomeSeller extends StatelessWidget {
                         child: const Icon(Icons.add),
                       ),
                     ),
-                    body: Animate(
-                      effects: [
-                        SlideEffect(
-                            begin: const Offset(1, 0), // Start from right edge
-                            end: const Offset(0, 0), // End at normal position
-                            duration: 300.ms, // Animation duration
-                            curve: Curves.easeOut // Animation curve
+                    body: SafeArea(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height:
+                                GlobalSizes.getDeviceHeight(context) * 0.012,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  GlobalSizes.getDeviceHeight(context) * 0.019,
                             ),
-                        FadeEffect(
-                            begin: 0,
-                            end: 1,
-                            duration: 300.ms,
-                            curve: Curves.easeOut),
-                      ],
-                      child: SafeArea(
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height:
-                                  GlobalSizes.getDeviceHeight(context) * 0.012,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    GlobalSizes.getDeviceHeight(context) *
-                                        0.019,
-                              ),
-                              child: Row(
-                                children: [
-                                  // SizedBox(
-                                  //   width: GlobalSizes.getDeviceWidth(context) * 0.6,
-                                  //   child: SlimSearchBar(),
-                                  // ),
+                            child: Row(
+                              children: [
+                                // SizedBox(
+                                //   width: GlobalSizes.getDeviceWidth(context) * 0.6,
+                                //   child: SlimSearchBar(),
+                                // ),
 
-                                  SizedBox(
-                                    width: GlobalSizes.getDeviceWidth(context) *
-                                        0.3,
-                                    child: Image.asset("assest/tickk.png"),
-                                  ),
-                                  SizedBox(
-                                    width: 120.w,
-                                  ),
+                                SizedBox(
+                                  width:
+                                      GlobalSizes.getDeviceWidth(context) * 0.3,
+                                  child: Image.asset("assest/tickk.png"),
+                                ),
+                                SizedBox(
+                                  width: 120.w,
+                                ),
 
-                                  // InkWell(
-                                  //   onTap: () {
-                                  //     Get.toNamed(RouteName.buyerNotification);
-                                  //   },
-                                  //   child: SizedBox(
-                                  //       height:
-                                  //           GlobalSizes.getDeviceHeight(context) *
-                                  //               0.03,
-                                  //       child: Image.asset(
-                                  //         "assest/bell.png",
-                                  //         fit: BoxFit.fitHeight,
-                                  //       )),
-                                  // ),
-                                  SizedBox(
-                                    width: 40.w,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      Get.to(() => const SellerProfile());
-                                    },
-                                    child: SizedBox(
-                                      height:
-                                          GlobalSizes.getDeviceHeight(context) *
-                                              0.03,
-                                      child: SvgPicture.asset(
-                                        "assest/user (1).svg",
-                                        fit: BoxFit.fitHeight,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20.w,
-                                  ),
-                                  InkWell(
-                                    onTap: () async {
-                                      final box = Hive.box('myBox');
-                                      final String formattedPhoneNumber =
-                                          box.get('phone') ?? "";
-                                      final storeData =
-                                          await restClient.checkStoreId(
-                                              int.parse(formattedPhoneNumber));
-                                      final storeId = storeData.StoreID;
-                                      // final Mystoreaccountcontroller
-                                      //     mystoreaccountcontroller = Get.put(
-                                      //         Mystoreaccountcontroller(
-                                      //             storeId: storeId));
-                                      // mystoreaccountcontroller
-                                      //     .fetchStoreDetails(storeId);
-                                      Get.to(() => MyStore(
-                                          StoreId: storeId,
-                                          isFromSeller: true));
-                                    },
-                                    child: SvgPicture.asset(
-                                      height: 20.h,
-                                      width: 20.w,
-                                      "assest/seller_hut.svg",
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width:
-                                        GlobalSizes.getDeviceHeight(context) *
-                                            0.001,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                                height: 90.h,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount:
-                                      flavourContoler.categoryData.length,
-                                  itemBuilder: (context, index) {
-                                    String categoryName = flavourContoler
-                                        .categoryData.keys
-                                        .elementAt(index);
-                                    String imagePath = flavourContoler
-                                        .categoryData.values
-                                        .elementAt(index);
-
-                                    return GestureDetector(
-                                      onTap: () async {
-                                        categoriesController.selectedCategory
-                                            .value = categoryName;
-                                        await categoriesController
-                                            .fetchSubcategories(
-                                                categoriesController
-                                                    .selectedCategory
-                                                    .value = categoryName);
-
-                                        Get.toNamed(RouteName.postRequirements);
-                                      },
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 12.w, vertical: 10.h),
-                                        child: Column(
-                                          children: [
-                                            Material(
-                                              elevation: 4,
-                                              shadowColor:
-                                                  Colors.grey.withOpacity(0.2),
-                                              shape: const CircleBorder(),
-                                              child: CircleAvatar(
-                                                radius: 25.r,
-                                                backgroundColor:
-                                                    const Color(0xffFFF5EC),
-                                                child: imagePath.isNotEmpty
-                                                    ? SvgPicture.asset(
-                                                        imagePath)
-                                                    : const Icon(Icons.category,
-                                                        color: Colors
-                                                            .grey), // Fallback icon
-                                              ),
-                                            ),
-                                            SizedBox(height: 5.h),
-                                            Text(
-                                              categoryName,
-                                              style: TextStyle(fontSize: 12.sp),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    );
+                                // InkWell(
+                                //   onTap: () {
+                                //     Get.toNamed(RouteName.buyerNotification);
+                                //   },
+                                //   child: SizedBox(
+                                //       height:
+                                //           GlobalSizes.getDeviceHeight(context) *
+                                //               0.03,
+                                //       child: Image.asset(
+                                //         "assest/bell.png",
+                                //         fit: BoxFit.fitHeight,
+                                //       )),
+                                // ),
+                                SizedBox(
+                                  width: 40.w,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Get.to(() => const SellerProfile());
                                   },
-                                )),
-                            const SizedBox(
-                              height:
-                                  14, // Adjust spacing between search bar and tab bar
+                                  child: SizedBox(
+                                    height:
+                                        GlobalSizes.getDeviceHeight(context) *
+                                            0.03,
+                                    child: SvgPicture.asset(
+                                      "assest/user (1).svg",
+                                      fit: BoxFit.fitHeight,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20.w,
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    final box = Hive.box('myBox');
+                                    final String formattedPhoneNumber =
+                                        box.get('phone') ?? "";
+                                    final storeData =
+                                        await restClient.checkStoreId(
+                                            int.parse(formattedPhoneNumber));
+                                    final storeId = storeData.StoreID;
+                                    // final Mystoreaccountcontroller
+                                    //     mystoreaccountcontroller = Get.put(
+                                    //         Mystoreaccountcontroller(
+                                    //             storeId: storeId));
+                                    // mystoreaccountcontroller
+                                    //     .fetchStoreDetails(storeId);
+                                    Get.to(() => MyStore(
+                                        StoreId: storeId, isFromSeller: true));
+                                  },
+                                  child: SvgPicture.asset(
+                                    height: 20.h,
+                                    width: 20.w,
+                                    "assest/seller_hut.svg",
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: GlobalSizes.getDeviceHeight(context) *
+                                      0.001,
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              height:
-                                  GlobalSizes.getDeviceHeight(context) * 0.05,
-                              child: TabBar(
-                                labelColor: const Color(0xffFC8019),
-                                unselectedLabelColor: const Color(0xff4A4A4A),
-                                tabs: [
-                                  Tab(
-                                    child: Text(
-                                      'New',
-                                      style: TextStyles.openSans(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  Tab(
-                                    child: Text(
-                                      'In process',
-                                      style: TextStyles.openSans(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  Tab(
-                                    child: Text(
-                                      'Deal Done',
-                                      style: TextStyles.openSans(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  Tab(
-                                    child: Text(
-                                      'Rejected',
-                                      style: TextStyles.openSans(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                                isScrollable: true,
-                                indicatorColor: const Color(0xffFC8019),
-                              ),
-                            ),
-                            const Divider(),
-                            Expanded(
-                              child: TabBarView(
-                                children: [
-                                  NewTab(), // inprocess tab
-                                  const InProcessTab(),
+                          ),
+                          SizedBox(
+                              height: 90.h,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: flavourContoler.categoryData.length,
+                                itemBuilder: (context, index) {
+                                  String categoryName = flavourContoler
+                                      .categoryData.keys
+                                      .elementAt(index);
+                                  String imagePath = flavourContoler
+                                      .categoryData.values
+                                      .elementAt(index);
 
-                                  const DealDoneTab(), //Deal Done
-                                  const RejectedTab(), // rejected tab
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 50.h,
-                              child: Row(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      flavourContoler.isBuying.value =
-                                          !flavourContoler.isBuying.value;
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      categoriesController.selectedCategory
+                                          .value = categoryName;
+                                      await categoriesController
+                                          .fetchSubcategories(
+                                              categoriesController
+                                                  .selectedCategory
+                                                  .value = categoryName);
+
+                                      Get.toNamed(RouteName.postRequirements);
                                     },
-                                    child: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.5,
-                                        child: SvgPicture.asset(
-                                            "assest/selling_white.svg")),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 12.w, vertical: 10.h),
+                                      child: Column(
+                                        children: [
+                                          Material(
+                                            elevation: 4,
+                                            shadowColor:
+                                                Colors.grey.withOpacity(0.2),
+                                            shape: const CircleBorder(),
+                                            child: CircleAvatar(
+                                              radius: 25.r,
+                                              backgroundColor:
+                                                  const Color(0xffFFF5EC),
+                                              child: imagePath.isNotEmpty
+                                                  ? SvgPicture.asset(imagePath)
+                                                  : const Icon(Icons.category,
+                                                      color: Colors
+                                                          .grey), // Fallback icon
+                                            ),
+                                          ),
+                                          SizedBox(height: 5.h),
+                                          Text(
+                                            categoryName,
+                                            style: TextStyle(fontSize: 12.sp),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )),
+                          const SizedBox(
+                            height:
+                                14, // Adjust spacing between search bar and tab bar
+                          ),
+                          SizedBox(
+                            height: GlobalSizes.getDeviceHeight(context) * 0.05,
+                            child: TabBar(
+                              labelColor: const Color(0xffFC8019),
+                              unselectedLabelColor: const Color(0xff4A4A4A),
+                              tabs: [
+                                Tab(
+                                  child: Text(
+                                    'New',
+                                    style: TextStyles.openSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                  InkWell(
-                                    onTap: () {},
-                                    child: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.5,
-                                        child: SvgPicture.asset(
-                                            "assest/buying_orange.svg")),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    'In process',
+                                    style: TextStyles.openSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    'Deal Done',
+                                    style: TextStyles.openSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    'Rejected',
+                                    style: TextStyles.openSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              isScrollable: true,
+                              indicatorColor: const Color(0xffFC8019),
+                            ),
+                          ),
+                          const Divider(),
+                          Expanded(
+                            child: TabBarView(
+                              children: [
+                                NewTab(), // inprocess tab
+                                const InProcessTab(),
+
+                                const DealDoneTab(), //Deal Done
+                                const RejectedTab(), // rejected tab
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 50.h,
+                            child: Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    flavourContoler.isBuying.value =
+                                        !flavourContoler.isBuying.value;
+                                  },
+                                  child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: SvgPicture.asset(
+                                          "assest/selling_white.svg")),
+                                ),
+                                InkWell(
+                                  onTap: () {},
+                                  child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: SvgPicture.asset(
+                                          "assest/buying_orange.svg")),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),

@@ -28,53 +28,51 @@ class InProcessTab extends StatelessWidget {
             )
           : RefreshIndicator(
               onRefresh: buyerinprocesscontroller.refreshData,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 10.h),
-                    child: Text(
-                        "Total Requirements : ${buyerinprocesscontroller.requirementsList.length} "),
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10.h),
+                      child: Text(
+                        "Total Requirements : ${buyerinprocesscontroller.requirementsList.length}",
+                      ),
+                    ),
                   ),
-                  Expanded(
-                    flex: 12,
-                    child: buyerinprocesscontroller.requirementsList.isEmpty
-                        ? emptyStateBuild()
-                        : dataBuildState(
-                            buyerinprocesscontroller, formattedPhoneNumber),
-                  ),
+                  buyerinprocesscontroller.requirementsList.isEmpty
+                      ? SliverFillRemaining(child: emptyStateBuild())
+                      : SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              var data = buyerinprocesscontroller
+                                  .requirementsList[index];
+                              return Padding(
+                                padding: EdgeInsets.all(10.0.h),
+                                child: InprocessTile(
+                                  requirementId: data.requirementID,
+                                  catagory: data.storeCategory,
+                                  subCategory: data.storeSubSubCategory,
+                                  brands: data.storeSubCategory,
+                                  modelNo: data.modelNo,
+                                  oty: data.quantity.toString(),
+                                  size: data.size.toString(),
+                                  units: data.units.toString(),
+                                  des: data.requirementInDetails,
+                                  date: data.Date,
+                                  stores: data.stores,
+                                  mobile: formattedPhoneNumber,
+                                  requirementImge: data.addImage,
+                                  image: data.addImage,
+                                ),
+                              );
+                            },
+                            childCount: buyerinprocesscontroller
+                                .requirementsList.length,
+                          ),
+                        ),
                 ],
               ),
             );
     });
-  }
-
-  ListView dataBuildState(Buyerinprocesscontroller buyerinprocesscontroller,
-      String formattedPhoneNumber) {
-    return ListView.builder(
-        itemCount: buyerinprocesscontroller.requirementsList.length,
-        itemBuilder: (context, index) {
-          var data = buyerinprocesscontroller.requirementsList[index];
-          return Padding(
-            padding: EdgeInsets.all(10.0.h),
-            child: InprocessTile(
-              requirementId: data.requirementID,
-              catagory: data.storeCategory,
-              subCategory: data.storeSubSubCategory,
-              brands: data.storeSubCategory,
-              modelNo: data.modelNo,
-              oty: data.quantity.toString(),
-              size: data.size.toString(),
-              units: data.units.toString(),
-              des: data.requirementInDetails,
-              date: data.Date,
-              stores: data.stores,
-              mobile: formattedPhoneNumber,
-              requirementImge: data.addImage,
-              image: data.addImage,
-            ),
-          );
-        });
   }
 
   Center emptyStateBuild() {
@@ -83,6 +81,9 @@ class InProcessTab extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        const SizedBox(
+          height: 20,
+        ),
         Image.asset('assest/empty.png'),
         SizedBox(
           height: 10.sp,

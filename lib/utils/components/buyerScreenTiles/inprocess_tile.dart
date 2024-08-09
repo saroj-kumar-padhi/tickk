@@ -1,7 +1,6 @@
 import 'package:dekhlo/controllers/inprocessController.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
-import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/views/seller_views/store_screens/mystore.dart';
 
 import 'package:flutter/material.dart';
@@ -340,7 +339,7 @@ class InprocessTile extends StatelessWidget {
                                         Padding(
                                           padding: EdgeInsets.only(left: 11.w),
                                           child: Text(
-                                            "Requests ( ${stores.length} )",
+                                            "Requests (${stores.length})",
                                             style: TextStyles.openSans(
                                               fontWeight: FontWeight.w600,
                                               fontSize: 11.5.sp,
@@ -784,25 +783,19 @@ class InprocessTile extends StatelessWidget {
                                                                     }
                                                                   },
                                                                   child:
-                                                                      InkWell(
-                                                                    onTap:
-                                                                        () {},
-                                                                    child:
-                                                                        Container(
-                                                                      decoration: const BoxDecoration(
-                                                                          shape: BoxShape
-                                                                              .circle,
-                                                                          color:
-                                                                              Color(0xffFFEAEC)),
-                                                                      child:
-                                                                          Icon(
-                                                                        Icons
-                                                                            .close,
-                                                                        size: 15
-                                                                            .sp,
-                                                                        color: const Color(
-                                                                            0xffBC0000),
-                                                                      ),
+                                                                      Container(
+                                                                    decoration: const BoxDecoration(
+                                                                        shape: BoxShape
+                                                                            .circle,
+                                                                        color: Color(
+                                                                            0xffFFEAEC)),
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .close,
+                                                                      size:
+                                                                          15.sp,
+                                                                      color: const Color(
+                                                                          0xffBC0000),
                                                                     ),
                                                                   ),
                                                                 ),
@@ -918,7 +911,7 @@ class InprocessTile extends StatelessWidget {
                                                 padding:
                                                     EdgeInsets.only(left: 11.w),
                                                 child: Text(
-                                                  "Requests (03)",
+                                                  "Requests (${stores.length})",
                                                   style: TextStyles.openSans(
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 12.sp,

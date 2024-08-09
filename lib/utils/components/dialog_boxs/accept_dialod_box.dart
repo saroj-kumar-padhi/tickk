@@ -14,6 +14,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:http_parser/http_parser.dart' show MediaType;
 import '../../../controllers/exactController.dart';
 import '../../../controllers/homeSellerController.dart';
+import '../../../controllers/inprocessTabSeller.dart';
 import '../../size/global_size/global_size.dart';
 import '../buttons.dart';
 import '../coustoumTextField.dart';
@@ -168,10 +169,17 @@ class AcceptDialodBox extends StatelessWidget {
                                       requiremetId, {"Accept": true});
 
                               try {
+                                final SellerInprocesscontroller
+                                    sellerInprocesscontroller = Get.put(
+                                        SellerInprocesscontroller(
+                                            storeId: storeId));
                                 final HomeSellerController
                                     homeSellerController =
                                     Get.put(HomeSellerController(storeId));
                                 homeSellerController.fetchSellerData(storeId);
+                                sellerInprocesscontroller
+                                    .fetchProcessSellerRequirements(
+                                        storeId: storeId);
                               } catch (e) {
                                 Logger().f(e);
                               }
