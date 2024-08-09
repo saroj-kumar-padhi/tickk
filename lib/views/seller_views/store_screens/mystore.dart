@@ -151,23 +151,6 @@ class MyStore extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                        Positioned(
-                                          bottom: 5,
-                                          right: 0,
-                                          child: Container(
-                                            height: 24,
-                                            width: 24,
-                                            decoration: const BoxDecoration(
-                                              color: Color(0xffFC8019),
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: const Icon(
-                                              Icons.add,
-                                              size: 16,
-                                              color: Colors.white, // Icon color
-                                            ),
-                                          ),
-                                        ),
                                       ],
                                     ),
                                     Padding(
@@ -279,10 +262,12 @@ class MyStore extends StatelessWidget {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
                                         children: [
-                                          const Text("4.7 (5)"),
+                                          Text(
+                                              "${reviewscontrollers.ratingResponse.averageRating} (${reviewscontrollers.ratingResponse.ratingCount})"),
                                           RatingBar(
                                             itemSize: 12,
-                                            initialRating: 4,
+                                            initialRating: reviewscontrollers
+                                                .ratingResponse.averageRating,
                                             direction: Axis.horizontal,
                                             allowHalfRating: true,
                                             itemCount: 5,

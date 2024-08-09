@@ -17,68 +17,79 @@ class DealDoneTab extends StatelessWidget {
     final String formattedPhoneNumber = box.get('phone');
     BuyerDealDonecontroller buyerDealDonecontroller =
         Get.put(BuyerDealDonecontroller(mobileNo: formattedPhoneNumber));
-    return Obx(() => buyerDealDonecontroller.isLoading.value
-        ? Scaffold(
-            body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
-          )
-        : RefreshIndicator(
+
+    return Scaffold(
+      body: Obx(() {
+        if (buyerDealDonecontroller.isLoading.value) {
+          return Center(
+            child: LottieBuilder.asset("assest/mX2qe5gUvP.json"),
+          );
+        } else {
+          return RefreshIndicator(
             onRefresh: buyerDealDonecontroller.refreshData,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
               children: [
                 Padding(
                   padding: EdgeInsets.only(left: 10.h),
                   child: Text(
-                      "Total Requirements : ${buyerDealDonecontroller.requirementsList.length} "),
+                    "Total Requirements : ${buyerDealDonecontroller.requirementsList.length}",
+                  ),
                 ),
-                Expanded(
-                  flex: 12,
-                  child: buyerDealDonecontroller.requirementsList.isEmpty
-                      ? emptyBuild()
-                      : listBuild(buyerDealDonecontroller),
-                ),
+                if (buyerDealDonecontroller.requirementsList.isEmpty)
+                  emptyBuild()
+                else
+                  ...List.generate(
+                    buyerDealDonecontroller.requirementsList.length,
+                    (index) => Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: DealDoneCard(
+                        requirementId: buyerDealDonecontroller
+                            .requirementsList[index].requirementID,
+                        category: buyerDealDonecontroller
+                            .requirementsList[index].storeCategory,
+                        subCategory: buyerDealDonecontroller
+                            .requirementsList[index].storeCategory,
+                        brands: buyerDealDonecontroller
+                            .requirementsList[index].brands,
+                        modelNo: buyerDealDonecontroller
+                            .requirementsList[index].modelNo,
+                        qty: buyerDealDonecontroller
+                            .requirementsList[index].quantity
+                            .toString(),
+                        size: buyerDealDonecontroller
+                            .requirementsList[index].size
+                            .toString(),
+                        units: buyerDealDonecontroller
+                            .requirementsList[index].units,
+                        des: buyerDealDonecontroller
+                            .requirementsList[index].requirementInDetails,
+                        date: buyerDealDonecontroller
+                            .requirementsList[index].date,
+                        stores: buyerDealDonecontroller
+                            .requirementsList[index].stores,
+                        requiredImage: buyerDealDonecontroller
+                            .requirementsList[index].addImage,
+                      ),
+                    ),
+                  ),
               ],
             ),
-          ));
-  }
-
-  ListView listBuild(BuyerDealDonecontroller buyerDealDonecontroller) {
-    return ListView.builder(
-        itemCount: buyerDealDonecontroller.requirementsList.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: DealDoneCard(
-              requirementId:
-                  buyerDealDonecontroller.requirementsList[index].requirementID,
-              category:
-                  buyerDealDonecontroller.requirementsList[index].storeCategory,
-              subCategory:
-                  buyerDealDonecontroller.requirementsList[index].storeCategory,
-              brands: buyerDealDonecontroller.requirementsList[index].brands,
-              modelNo: buyerDealDonecontroller.requirementsList[index].modelNo,
-              qty: buyerDealDonecontroller.requirementsList[index].quantity
-                  .toString(),
-              size: buyerDealDonecontroller.requirementsList[index].size
-                  .toString(),
-              units: buyerDealDonecontroller.requirementsList[index].units,
-              des: buyerDealDonecontroller
-                  .requirementsList[index].requirementInDetails,
-              date: buyerDealDonecontroller.requirementsList[index].date,
-              stores: buyerDealDonecontroller.requirementsList[index].stores,
-              requiredImage:
-                  buyerDealDonecontroller.requirementsList[index].addImage,
-            ),
           );
-        });
+        }
+      }),
+    );
   }
+}
 
-  Center emptyBuild() {
-    return Center(
-        child: Column(
+Center emptyBuild() {
+  return Center(
+    child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        SizedBox(
+          height: 130.h,
+        ),
         Image.asset('assest/empty.png'),
         SizedBox(
           height: 10.sp,
@@ -86,11 +97,12 @@ class DealDoneTab extends StatelessWidget {
         Text(
           "No Requirement Yet.",
           style: TextStyles.openSans(
-              fontWeight: FontWeight.w600,
-              fontSize: 14.sp,
-              color: const Color(0xff4A4A4A)),
+            fontWeight: FontWeight.w600,
+            fontSize: 14.sp,
+            color: const Color(0xff4A4A4A),
+          ),
         ),
       ],
-    ));
-  }
+    ),
+  );
 }

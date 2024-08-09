@@ -181,14 +181,19 @@ class ProductSetUpController extends GetxController {
       }
 
       // Send the request
-      await postdio.setupStrore(formData);
-      Get.snackbar("Restart Required",
-          "Restart required to make some functionalities work");
-      Get.to(const HomeSeller(storeId: ''));
-      Get.snackbar('Success', 'Store setup completed successfully');
+      try {
+        await postdio.setupStrore(formattedPhoneNumber, formData);
+
+        final storeData =
+            await restClient.checkStoreId(int.parse(formattedPhoneNumber));
+        final storeId = storeData.StoreID;
+        Get.to(HomeSeller(storeId: storeId));
+        Get.snackbar('Success', 'Store setup completed successfully');
+      } catch (e) {
+        Logger().d(e);
+      }
     } catch (e) {
       Logger().e('Error in setupStrore: $e');
-      Get.snackbar('Error', '$e.');
     } finally {
       isLoading.value = false;
     }

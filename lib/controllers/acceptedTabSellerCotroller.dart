@@ -24,7 +24,6 @@ class Acceptedtabsellercotroller extends GetxController {
     try {
       // Clear existing items
       acceptedItems.clear();
-      acceptedItems.clear();
 
       // Fetch new items
       await fetchAcceptedItems();
@@ -37,6 +36,7 @@ class Acceptedtabsellercotroller extends GetxController {
 
   Future<void> fetchAcceptedItems() async {
     try {
+      acceptedItems.clear();
       isLoading(true);
       final response = await restClient.acceptedSellerSide(storeId);
       acceptedItems.addAll(response.ddItems);

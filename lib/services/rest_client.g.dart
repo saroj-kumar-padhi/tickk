@@ -13,7 +13,7 @@ class _RestClient implements RestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://13.201.210.192:3002';
+    baseUrl ??= 'http://192.168.1.16:3002';
   }
 
   final Dio _dio;
@@ -123,7 +123,10 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<void> setupStrore(FormData setupStrore) async {
+  Future<void> setupStrore(
+    String phone,
+    FormData setupStrore,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -135,7 +138,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/storeSetup',
+          '/storeSetup/{phone}',
           queryParameters: queryParameters,
           data: _data,
         )
