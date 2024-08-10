@@ -81,6 +81,7 @@ dependencies:
   typewritertext: ^3.0.8
   gif: ^2.3.0
   flutter_animate: ^4.5.0
+  flutter_google_maps_webservices: ^1.1.1
  
   
 

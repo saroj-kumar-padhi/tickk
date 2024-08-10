@@ -180,7 +180,7 @@ Widget _buildSortByDistanceTab(
       ),
       InkWell(
         onTap: () async {
-          await dialogBoxController.getCurrentLoaction();
+          await dialogBoxController.getCurrentLocation();
           Get.to(const GoogleMapPage());
         },
         child: Padding(

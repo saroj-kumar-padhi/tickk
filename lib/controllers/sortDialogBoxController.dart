@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:logger/logger.dart';
 
 class DialogBoxController extends GetxController {
@@ -10,12 +11,30 @@ class DialogBoxController extends GetxController {
   var locacationController = TextEditingController().obs;
   var latitude = 0.0.obs;
   var longitude = 0.0.obs;
+  var currentZoom = 14.0.obs;
   Logger logger = Logger();
+  Rx<GoogleMapController?> mapController = Rx<GoogleMapController?>(null);
+
   final ProductSetUpController productSetUpController =
       Get.put(ProductSetUpController());
 
   void setSelectedValue(int value) {
     selectedValue.value = value;
+  }
+
+  void setMapController(GoogleMapController controller) {
+    mapController.value = controller;
+  }
+
+  Future<void> moveCameraToLocation(double lat, double lng) async {
+    if (mapController.value != null) {
+      final CameraPosition newPosition = CameraPosition(
+        target: LatLng(lat, lng),
+        zoom: 14.0,
+      );
+      mapController.value!
+          .animateCamera(CameraUpdate.newCameraPosition(newPosition));
+    }
   }
 
   Future<void> updateLocationFromCoordinates(double lat, double lng) async {
@@ -29,43 +48,27 @@ class DialogBoxController extends GetxController {
           val?.text =
               "${place.name} ${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
         });
-        // productSetUpController.pinCodeController.value.text =
-        //     place.postalCode ?? "";
-        // productSetUpController.colonyController.value.text = place.street ?? "";
-        // productSetUpController.landMarkController.value.text = place.name ?? "";
       }
+      await moveCameraToLocation(lat, lng);
     } catch (e) {
       logger.e("Error updating location: $e");
     }
   }
 
-  getCurrentLoaction() async {
+  Future<void> getCurrentLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
-      logger.d("Loaction Denied");
+      logger.d("Location Denied");
       LocationPermission ask = await Geolocator.requestPermission();
     } else {
       Position currentLocation = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.best);
-      // logger.d("floor${currentLocation.latitude}");
-      // logger.d(currentLocation.longitude);
 
       latitude.value = currentLocation.latitude;
       longitude.value = currentLocation.longitude;
-      List<Placemark> placemarks = await placemarkFromCoordinates(
+      await updateLocationFromCoordinates(
           currentLocation.latitude, currentLocation.longitude);
-      logger.d(placemarks.first);
-      // productSetUpController.pinCodeController.value.text =
-      //     placemarks.first.postalCode ?? "";
-      // productSetUpController.cityController.value.text =
-      //     placemarks.first.locality ?? "";
-      // productSetUpController.colonyController.value.text =
-      //     placemarks.first.street ?? "";
-      // productSetUpController.landMarkController.value.text =
-      //     placemarks.first.name ?? "";
-      locacationController.value.text =
-          "${placemarks.first.name} ${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}";
     }
   }
 

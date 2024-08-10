@@ -1116,7 +1116,7 @@ class _SetUpProductState extends State<SetUpProduct> {
 
                     InkWell(
                       onTap: () async {
-                        await dialogBoxController.getCurrentLoaction();
+                        await dialogBoxController.getCurrentLocation();
                         Get.to(const GoogleMapPage());
                         productSetUpController.updateButtonState();
                       },

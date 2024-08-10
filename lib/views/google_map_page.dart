@@ -4,28 +4,27 @@ import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:get/get.dart';
-
-import 'package:dekhlo/controllers/sortDialogBoxController.dart';
-import 'package:dekhlo/utils/components/buttons.dart';
-import 'package:dekhlo/utils/components/textstyle.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class GoogleMapPage extends StatelessWidget {
+class GoogleMapPage extends StatefulWidget {
   const GoogleMapPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    DialogBoxController dialogBoxController = Get.put(DialogBoxController());
+  State<GoogleMapPage> createState() => _GoogleMapPageState();
+}
 
+class _GoogleMapPageState extends State<GoogleMapPage> {
+  late GoogleMapController _mapController;
+  DialogBoxController dialogBoxController = Get.put(DialogBoxController());
+
+  refresh() {
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -45,11 +44,17 @@ class GoogleMapPage extends StatelessWidget {
                 dialogBoxController.latitude.value,
                 dialogBoxController.longitude.value,
               );
+
               return GoogleMap(
                 initialCameraPosition: CameraPosition(
                   target: position,
                   zoom: 14,
                 ),
+                onMapCreated: (GoogleMapController controller) {
+                  _mapController = controller;
+                  dialogBoxController.setMapController(controller);
+                  setState(() {});
+                },
                 onCameraMove: (CameraPosition newPosition) {
                   dialogBoxController.latitude.value =
                       newPosition.target.latitude;
@@ -57,6 +62,7 @@ class GoogleMapPage extends StatelessWidget {
                       newPosition.target.longitude;
                 },
                 onCameraIdle: () {
+                  // Trigger marker update when the camera stops moving
                   dialogBoxController.updateLocationFromCoordinates(
                     dialogBoxController.latitude.value,
                     dialogBoxController.longitude.value,
@@ -65,7 +71,10 @@ class GoogleMapPage extends StatelessWidget {
                 markers: {
                   Marker(
                     markerId: const MarkerId('selected_location'),
-                    position: position,
+                    position: LatLng(
+                      dialogBoxController.latitude.value,
+                      dialogBoxController.longitude.value,
+                    ),
                     draggable: true,
                     onDragEnd: (LatLng newPosition) {
                       dialogBoxController.updateLocationFromCoordinates(
@@ -117,7 +126,6 @@ class GoogleMapPage extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            // Add functionality for the "change" button if needed
                             Get.toNamed(RouteName.changeLocation);
                           },
                           child: Text(

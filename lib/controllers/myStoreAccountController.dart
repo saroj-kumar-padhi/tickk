@@ -1,6 +1,7 @@
 import 'package:dekhlo/models/categoriesBased.dart';
 import 'package:dekhlo/models/myStoreAcoount.dart';
 import 'package:dekhlo/services/injection.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 
 class Mystoreaccountcontroller extends GetxController {
@@ -8,13 +9,14 @@ class Mystoreaccountcontroller extends GetxController {
   RxBool isLoading = false.obs;
   RxString error = ''.obs;
   final String storeId;
+  RxString convertedAddress = "".obs;
 
   Mystoreaccountcontroller({required this.storeId});
 
   @override
   void onInit() {
     super.onInit();
-    fetchStoreDetails(storeId);
+    fetchStoreDetails(storeId).then((_) => updateSellerLocationAddress());
   }
 
   Future<void> fetchStoreDetails(String storeId) async {
@@ -30,6 +32,30 @@ class Mystoreaccountcontroller extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> updateSellerLocationAddress() async {
+    SellerLocation location = sellerLocation;
+    convertedAddress.value = await getAddressFromCoordinates(location);
+  }
+
+  Future<String> getAddressFromCoordinates(SellerLocation? location) async {
+    if (location == null) return "Address not found";
+
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          double.parse(location.latitude), double.parse(location.longitude));
+
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks[0];
+        String address =
+            "${place.street}, ${place.locality}, ${place.postalCode}, ${place.country}";
+        return address;
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+    return "Address not found";
   }
 
   String getCurrentDayTiming() {
@@ -156,14 +182,14 @@ class Mystoreaccountcontroller extends GetxController {
   String get yt => storeDetails.value?.youtubeLink ?? "";
   String get iG => storeDetails.value?.instagarmLink ?? "";
   String get wL => storeDetails.value?.websiteLink ?? "";
-  String get houseNoBuildingName => storeDetails.value?.websiteLink ?? "";
+  String get houseNoBuildingName => storeDetails.value?.buildingNo ?? "";
   int get pinCode => storeDetails.value?.pincode ?? -1;
-
   String get streetController => storeDetails.value?.colonyName ?? "";
-  String get storeAddress =>
-      '${storeDetails.value?.buildingNo ?? ''} ${storeDetails.value?.colonyName ?? ''}, ${storeDetails.value?.landmark ?? ''}, ${storeDetails.value?.pincode ?? ''}';
   List<String> get storeImages => storeDetails.value?.addImage ?? [];
+
   SellerLocation get sellerLocation =>
       storeDetails.value?.sellerLocation ??
       SellerLocation(latitude: "90.676", longitude: "90.76586");
+
+  String get storeAddress => convertedAddress.value;
 }
