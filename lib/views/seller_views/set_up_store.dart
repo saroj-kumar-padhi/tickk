@@ -388,27 +388,11 @@ class _SetUpProductState extends State<SetUpProduct> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    SubSubCategoryItems.isEmpty
-                        ? Row(
-                            children: [
-                              Text(
-                                "Sub categories",
-                                style: TextStyles.openSans(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xff313333)
-                                        .withOpacity(0.5)),
-                              ),
-                              Text(
-                                " (optional)",
-                                style: TextStyles.openSans(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.grey),
-                              ),
-                            ],
-                          )
-                        : heading(title: 'Sub categories'),
+                    Obx(() {
+                      return categoriesController.setupsubCategories.isEmpty
+                          ? const SizedBox()
+                          : heading(title: "Store Sub Category *");
+                    }),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -418,117 +402,106 @@ class _SetUpProductState extends State<SetUpProduct> {
 
                       return categoriesController.isLoading.value
                           ? const Center(child: CircularProgressIndicator())
-                          : Padding(
-                              padding: EdgeInsets.only(right: 20.w),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(
-                                      color: SubCategoryItems.isEmpty
-                                          ? Colors.grey.shade300
-                                          : Colors.grey),
-                                ),
-                                child: AbsorbPointer(
-                                  absorbing: SubCategoryItems.isEmpty,
-                                  child: Opacity(
-                                    opacity:
-                                        SubCategoryItems.isEmpty ? 0.5 : 1.0,
-                                    child: MultiSelectDialogField<dynamic>(
-                                      items: SubCategoryItems.map((item) =>
-                                          MultiSelectItem<dynamic>(
-                                              item, item)).toList(),
-                                      title:
-                                          const Text("Select Sub Categories"),
-                                      selectedColor: const Color(0xffFC8019),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(4),
-                                        color: Colors.white,
-                                      ),
-                                      buttonText:
-                                          const Text("Select Sub Categories"),
-                                      onConfirm: (values) {
-                                        if (SubCategoryItems.isNotEmpty) {
-                                          categoriesController
-                                              .fetchSubSubsetUpCategories(
-                                                  values.cast<String>());
+                          : categoriesController.setupsubCategories.isEmpty
+                              ? const SizedBox()
+                              : Padding(
+                                  padding: EdgeInsets.only(right: 20.w),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      border: Border.all(
+                                          color: SubCategoryItems.isEmpty
+                                              ? Colors.grey.shade300
+                                              : Colors.grey),
+                                    ),
+                                    child: AbsorbPointer(
+                                      absorbing: SubCategoryItems.isEmpty,
+                                      child: Opacity(
+                                        opacity: SubCategoryItems.isEmpty
+                                            ? 0.5
+                                            : 1.0,
+                                        child: MultiSelectDialogField<dynamic>(
+                                          items: SubCategoryItems.map((item) =>
+                                              MultiSelectItem<dynamic>(
+                                                  item, item)).toList(),
+                                          title: const Text(
+                                              "Select Sub Categories"),
+                                          selectedColor:
+                                              const Color(0xffFC8019),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                            color: Colors.white,
+                                          ),
+                                          buttonText: const Text(
+                                              "Select Sub Categories"),
+                                          onConfirm: (values) {
+                                            if (SubCategoryItems.isNotEmpty) {
+                                              categoriesController
+                                                  .fetchSubSubsetUpCategories(
+                                                      values.cast<String>());
 
-                                          Logger().d(values);
-                                          // Store the selected values in a separate list if needed
-                                          selectedSubCategoryItems.clear();
-                                          selectedSubCategoryItems = values
-                                              .map((value) => ValueItem(
-                                                    label: value.toString(),
-                                                    value: value,
-                                                  ))
-                                              .toList();
+                                              Logger().d(values);
+                                              // Store the selected values in a separate list if needed
+                                              selectedSubCategoryItems.clear();
+                                              selectedSubCategoryItems = values
+                                                  .map((value) => ValueItem(
+                                                        label: value.toString(),
+                                                        value: value,
+                                                      ))
+                                                  .toList();
 
-                                          // Update the subCategorySelectController
-                                          SetUpProduct
-                                              .subCategorySelectController
-                                              .setSelectedOptions(
-                                            values
-                                                .map((value) => ValueItem(
-                                                      label: value.toString(),
-                                                      value: value,
-                                                    ))
-                                                .toList(),
-                                          );
-                                        }
-                                      },
-                                      chipDisplay: MultiSelectChipDisplay(
-                                        onTap: (item) {
-                                          if (SubCategoryItems.isNotEmpty) {
-                                            List<ValueItem> currentOptions =
+                                              // Update the subCategorySelectController
+                                              SetUpProduct
+                                                  .subCategorySelectController
+                                                  .setSelectedOptions(
+                                                values
+                                                    .map((value) => ValueItem(
+                                                          label:
+                                                              value.toString(),
+                                                          value: value,
+                                                        ))
+                                                    .toList(),
+                                              );
+                                            }
+                                          },
+                                          chipDisplay: MultiSelectChipDisplay(
+                                            onTap: (item) {
+                                              if (SubCategoryItems.isNotEmpty) {
+                                                List<ValueItem> currentOptions =
+                                                    SetUpProduct
+                                                        .subCategorySelectController
+                                                        .selectedOptions;
+                                                currentOptions.removeWhere(
+                                                    (option) =>
+                                                        option.value == item);
                                                 SetUpProduct
                                                     .subCategorySelectController
-                                                    .selectedOptions;
-                                            currentOptions.removeWhere(
-                                                (option) =>
-                                                    option.value == item);
-                                            SetUpProduct
-                                                .subCategorySelectController
-                                                .setSelectedOptions(
-                                                    currentOptions);
+                                                    .setSelectedOptions(
+                                                        currentOptions);
 
-                                            selectedSubCategoryItems =
-                                                currentOptions;
-                                          }
-                                        },
-                                        chipColor: const Color(0xffFC8019),
-                                        textStyle: const TextStyle(
-                                            color: Colors.white),
+                                                selectedSubCategoryItems =
+                                                    currentOptions;
+                                              }
+                                            },
+                                            chipColor: const Color(0xffFC8019),
+                                            textStyle: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            );
+                                );
                     }),
 
                     SizedBox(
                       height: 10.h,
                     ),
-                    SubSubCategoryItems.isEmpty
-                        ? Row(
-                            children: [
-                              Text(
-                                "Sub Sub categories",
-                                style: TextStyles.openSans(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xff313333)
-                                        .withOpacity(0.5)),
-                              ),
-                              Text(
-                                " (optional)",
-                                style: TextStyles.openSans(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.grey),
-                              ),
-                            ],
-                          )
-                        : heading(title: 'Sub Sub categories'),
+
+                    categoriesController.subSubCategories.isEmpty
+                        ? const SizedBox()
+                        : heading(title: "Store Sub Sub Category"),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -541,102 +514,108 @@ class _SetUpProductState extends State<SetUpProduct> {
                           ? const Center(
                               child: CircularProgressIndicator(),
                             )
-                          : Padding(
-                              padding: EdgeInsets.only(right: 20.w),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4.r),
-                                  border: Border.all(
-                                      color: SubSubCategoryItems.isEmpty
-                                          ? Colors.grey.shade300
-                                          : Colors.grey,
-                                      width: 1),
-                                ),
-                                child: AbsorbPointer(
-                                  absorbing: SubSubCategoryItems.isEmpty,
-                                  child: Opacity(
-                                    opacity:
-                                        SubSubCategoryItems.isEmpty ? 0.5 : 1.0,
-                                    child: MultiSelectDialogField<String>(
-                                      items: SubSubCategoryItems.map(
-                                          (subSubCategory) =>
-                                              MultiSelectItem<String>(
-                                                  subSubCategory,
-                                                  subSubCategory)).toList(),
-                                      title: const Text(
-                                          "Select Sub Sub Categories"),
-                                      selectedColor: const Color(0xffFC8019),
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(4.r),
-                                        color: Colors.white,
-                                      ),
-                                      buttonText: const Text(
-                                          "Select Sub Sub Categories"),
-                                      onConfirm: (values) {
-                                        selectedSubSubCategoryItems.clear();
-                                        selectedSubSubCategoryItems = values
-                                            .map((value) => ValueItem(
-                                                  label: value.toString(),
-                                                  value: value,
-                                                ))
-                                            .toList();
-                                        if (SubSubCategoryItems.isNotEmpty) {
-                                          debugPrint(values.toString());
-                                          SetUpProduct
-                                              .subSubCategorySelectController
-                                              .setSelectedOptions(
-                                            values
+                          : categoriesController.subSubCategoriessetup.isEmpty
+                              ? const SizedBox()
+                              : Padding(
+                                  padding: EdgeInsets.only(right: 20.w),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4.r),
+                                      border: Border.all(
+                                          color: SubSubCategoryItems.isEmpty
+                                              ? Colors.grey.shade300
+                                              : Colors.grey,
+                                          width: 1),
+                                    ),
+                                    child: AbsorbPointer(
+                                      absorbing: SubSubCategoryItems.isEmpty,
+                                      child: Opacity(
+                                        opacity: SubSubCategoryItems.isEmpty
+                                            ? 0.5
+                                            : 1.0,
+                                        child: MultiSelectDialogField<String>(
+                                          items: SubSubCategoryItems.map(
+                                              (subSubCategory) =>
+                                                  MultiSelectItem<String>(
+                                                      subSubCategory,
+                                                      subSubCategory)).toList(),
+                                          title: const Text(
+                                              "Select Sub Sub Categories"),
+                                          selectedColor:
+                                              const Color(0xffFC8019),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(4.r),
+                                            color: Colors.white,
+                                          ),
+                                          buttonText: const Text(
+                                              "Select Sub Sub Categories"),
+                                          onConfirm: (values) {
+                                            selectedSubSubCategoryItems.clear();
+                                            selectedSubSubCategoryItems = values
                                                 .map((value) => ValueItem(
-                                                      label: value,
+                                                      label: value.toString(),
                                                       value: value,
                                                     ))
-                                                .toList(),
-                                          );
-                                          if (values
-                                              .contains('Electric cycles')) {
-                                            Get.toNamed(RouteName
-                                                .custoumSubSubCategory);
-                                          }
-                                          categoriesController
-                                              .fetchSubSubsetUpCategories(
-                                                  values);
-                                        }
-                                      },
-                                      chipDisplay: MultiSelectChipDisplay(
-                                        onTap: (value) {
-                                          // Store the selected values in a separate list if needed
+                                                .toList();
+                                            if (SubSubCategoryItems
+                                                .isNotEmpty) {
+                                              debugPrint(values.toString());
+                                              SetUpProduct
+                                                  .subSubCategorySelectController
+                                                  .setSelectedOptions(
+                                                values
+                                                    .map((value) => ValueItem(
+                                                          label: value,
+                                                          value: value,
+                                                        ))
+                                                    .toList(),
+                                              );
+                                              if (values.contains(
+                                                  'Electric cycles')) {
+                                                Get.toNamed(RouteName
+                                                    .custoumSubSubCategory);
+                                              }
+                                              categoriesController
+                                                  .fetchSubSubsetUpCategories(
+                                                      values);
+                                            }
+                                          },
+                                          chipDisplay: MultiSelectChipDisplay(
+                                            onTap: (value) {
+                                              // Store the selected values in a separate list if needed
 
-                                          if (SubSubCategoryItems.isNotEmpty) {
-                                            List<ValueItem> currentOptions =
+                                              if (SubSubCategoryItems
+                                                  .isNotEmpty) {
+                                                List<ValueItem> currentOptions =
+                                                    SetUpProduct
+                                                        .subSubCategorySelectController
+                                                        .selectedOptions;
+                                                currentOptions.removeWhere(
+                                                    (option) =>
+                                                        option.value == value);
                                                 SetUpProduct
                                                     .subSubCategorySelectController
-                                                    .selectedOptions;
-                                            currentOptions.removeWhere(
-                                                (option) =>
-                                                    option.value == value);
-                                            SetUpProduct
-                                                .subSubCategorySelectController
-                                                .setSelectedOptions(
-                                                    currentOptions);
-                                            categoriesController
-                                                .fetchSubSubsetUpCategories(
-                                                    currentOptions
-                                                        .map((option) => option
-                                                            .value
-                                                            .toString())
-                                                        .toList());
-                                          }
-                                        },
-                                        chipColor: const Color(0xffFC8019),
-                                        textStyle: const TextStyle(
-                                            color: Colors.white),
+                                                    .setSelectedOptions(
+                                                        currentOptions);
+                                                categoriesController
+                                                    .fetchSubSubsetUpCategories(
+                                                        currentOptions
+                                                            .map((option) =>
+                                                                option.value
+                                                                    .toString())
+                                                            .toList());
+                                              }
+                                            },
+                                            chipColor: const Color(0xffFC8019),
+                                            textStyle: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            );
+                                );
                     }),
 
                     SizedBox(
@@ -1098,6 +1077,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                         child: TextField(
                           onTap: () {
                             Get.toNamed(RouteName.changeLocation);
+                            productSetUpController.updateButtonState();
                           },
                           controller:
                               dialogBoxController.locacationController.value,

@@ -17,11 +17,11 @@ class SellerProfileController extends GetxController {
       age: 12,
       otp: 123456,
       fcm: "hcei",
+      profileImage: "",
       v: 0);
 
   @override
   void onInit() {
-    // TODO: implement onInit
     fetchProfile();
 
     super.onInit();

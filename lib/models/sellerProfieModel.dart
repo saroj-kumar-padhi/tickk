@@ -7,6 +7,7 @@ class User {
   final int age;
   final int otp;
   final String fcm;
+  final String profileImage;
   final int v;
 
   User({
@@ -18,6 +19,7 @@ class User {
     required this.age,
     required this.otp,
     required this.fcm,
+    required this.profileImage,
     required this.v,
   });
 
@@ -31,6 +33,7 @@ class User {
       age: json['age'] ?? "",
       otp: json['otp'] ?? "",
       fcm: json['FCM'] ?? "",
+      profileImage: json['profileImage'] ?? "",
       v: json['__v'],
     );
   }

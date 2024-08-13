@@ -164,10 +164,13 @@ class AcceptDialodBox extends StatelessWidget {
                             await postdio.exactOrSimilar(formData);
                             Get.back();
                             try {
-                              await restClient
-                                  .pushtoBuyerInProcessAndSellerInProcess(
-                                      requiremetId, {"Accept": true});
-
+                              try {
+                                await restClient
+                                    .pushtoBuyerInProcessAndSellerInProcess(
+                                        requiremetId, {"Accept": true});
+                              } catch (e) {
+                                Logger().e(e);
+                              }
                               try {
                                 final SellerInprocesscontroller
                                     sellerInprocesscontroller = Get.put(
@@ -228,31 +231,3 @@ class AcceptDialodBox extends StatelessWidget {
     }
   }
 }
-                          // PushNotificationServices.sendNotificationtoBuyer(
-                          //     fcm, context, "Your request has been accepted");
-
-                          // try {
-                          //   User? user = FirebaseAuth.instance.currentUser;
-                          //   String phoneNumber = user?.phoneNumber ?? "";
-                          //   String formattedPhoneNumber = phoneNumber.isNotEmpty
-                          //       ? phoneNumber.substring(3)
-                          //       : "";
-
-                          //   final storeData = await restClient
-                          //       .checkStoreId(int.parse(formattedPhoneNumber));
-                          //   final storeId = storeData.StoreID;
-                          //   try {
-                          //     await restClient.sendQuote(storeId, {
-                          //       "RequirementID": requiremetId,
-                          //       "Quote":
-                          //           exactController.quoteEditingController.text
-                          //     });
-                          //     Fluttertoast.showToast(msg: "Sent");
-                          //   } catch (e) {
-                          //     Logger().d(e);
-                          //   }
-                          //   Fluttertoast.showToast(msg: "Accepted");
-                          //   Get.back();
-                          // } catch (e) {
-                          //   Logger().d(e);
-                          // }

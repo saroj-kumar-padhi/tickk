@@ -135,29 +135,32 @@ class OtpDialog extends StatelessWidget {
                           Fluttertoast.showToast(msg: e.toString());
                         }
 
-                        await restClient.deleteAccount(formattedPhoneNumber,
-                            {"DeleteAccountReason": reason});
+                        try {
+                          await restClient.deleteAccount(formattedPhoneNumber,
+                              {"DeleteAccountReason": reason});
+                          Future.delayed(Duration.zero, () {
+                            nametoNavigate == 'success'
+                                ? showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return const SuccessDialog(
+                                        tile:
+                                            'Profile Details have been updated Successfully!',
+                                      );
+                                    },
+                                  )
+                                : showSuccessDeleteDialog(context);
+                            Get.to(const Login());
+                          });
 
-                        await Future.delayed(const Duration(seconds: 3));
-
-                        Get.to(const Login());
+                          Get.to(const Login());
+                        } catch (e) {
+                          Logger().d(e);
+                        }
                       } catch (e) {
                         Logger().d(e);
                       }
                       Get.back();
-                      Future.delayed(Duration.zero, () {
-                        nametoNavigate == 'success'
-                            ? showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const SuccessDialog(
-                                    tile:
-                                        'Profile Details have been updated Successfully!',
-                                  );
-                                },
-                              )
-                            : showSuccessDeleteDialog(context);
-                      });
                     },
                     buttonText: 'Delete',
                     textColor: Colors.white,

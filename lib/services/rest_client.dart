@@ -29,6 +29,8 @@ import '../models/sellerNewModel.dart';
 import '../models/sellerPandingQueta.dart';
 import '../models/stores_fcm.dart';
 import '../utils/components/buyerScreenTiles/send_tile.dart';
+import 'package:path/path.dart' as path;
+import 'package:dio/dio.dart' as dio;
 
 part 'rest_client.g.dart';
 
@@ -108,6 +110,12 @@ abstract class RestClient {
   @PUT('/buyer/editProfile/{mobileNo}')
   Future<void> editProfile(
     @Path('mobileNo') int mobileNo,
+  );
+
+  @POST('/StoreEditimages/{StoreID}')
+  Future<void> editProfileImage(
+    @Path('StoreID') String StoreID,
+    @Body() dio.FormData data,
   );
 
   @POST('/buyerInProcess/buyerLocationnnn/{RequirementID}')
@@ -259,6 +267,11 @@ abstract class RestClient {
   @POST('/Dealdonebuyer/RequirementReviewRating/{requestId}')
   Future<void> postReviews(
     @Path('requestId') String requestId,
+    @Body() Map<String, dynamic> data,
+  );
+
+  @DELETE('/deleteImageFromStoreDetails')
+  Future<void> deleteImageInEditStore(
     @Body() Map<String, dynamic> data,
   );
 

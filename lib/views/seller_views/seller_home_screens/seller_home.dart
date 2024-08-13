@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -154,63 +155,127 @@ class HomeSeller extends StatelessWidget {
                               ],
                             ),
                           ),
-                          SizedBox(
+                          Obx(() {
+                            if (categoriesController.isLoading.value) {
+                              return const Center(
+                                  child: CircularProgressIndicator(
+                                color: Color(0xffFC8019),
+                              ));
+                            }
+
+                            return SizedBox(
                               height: 90.h,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: flavourContoler.categoryData.length,
                                 itemBuilder: (context, index) {
-                                  String categoryName = flavourContoler
-                                      .categoryData.keys
-                                      .elementAt(index);
-                                  String imagePath = flavourContoler
-                                      .categoryData.values
-                                      .elementAt(index);
+                                  // Sort the categories
+                                  List<MapEntry<String, String>>
+                                      sortedCategories = flavourContoler
+                                          .categoryData.entries
+                                          .toList()
+                                        ..sort((a, b) {
+                                          bool isAEnabled = categoriesController
+                                              .categories
+                                              .contains(a.key);
+                                          bool isBEnabled = categoriesController
+                                              .categories
+                                              .contains(b.key);
+                                          if (isAEnabled && !isBEnabled) {
+                                            return -1;
+                                          }
+                                          if (!isAEnabled && isBEnabled) {
+                                            return 1;
+                                          }
+                                          return 0;
+                                        });
+
+                                  String categoryName =
+                                      sortedCategories[index].key;
+                                  String imagePath =
+                                      sortedCategories[index].value;
+                                  bool isEnabled = categoriesController
+                                      .categories
+                                      .contains(categoryName);
 
                                   return GestureDetector(
-                                    onTap: () async {
-                                      categoriesController.selectedCategory
-                                          .value = categoryName;
-                                      await categoriesController
-                                          .fetchSubcategories(
-                                              categoriesController
-                                                  .selectedCategory
-                                                  .value = categoryName);
-
-                                      Get.toNamed(RouteName.postRequirements);
-                                    },
+                                    onTap: isEnabled
+                                        ? () async {
+                                            categoriesController
+                                                .selectedCategory
+                                                .value = categoryName;
+                                            await categoriesController
+                                                .fetchSubcategories(
+                                                    categoriesController
+                                                        .selectedCategory
+                                                        .value = categoryName);
+                                            Get.toNamed(
+                                                RouteName.postRequirements);
+                                          }
+                                        : () {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    "This category is comming soon on tickk");
+                                          },
                                     child: Padding(
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 12.w, vertical: 10.h),
                                       child: Column(
                                         children: [
-                                          Material(
-                                            elevation: 4,
-                                            shadowColor:
-                                                Colors.grey.withOpacity(0.2),
-                                            shape: const CircleBorder(),
-                                            child: CircleAvatar(
-                                              radius: 25.r,
-                                              backgroundColor:
-                                                  const Color(0xffFFF5EC),
-                                              child: imagePath.isNotEmpty
-                                                  ? SvgPicture.asset(imagePath)
-                                                  : const Icon(Icons.category,
-                                                      color: Colors
-                                                          .grey), // Fallback icon
-                                            ),
+                                          Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              Material(
+                                                elevation: 4,
+                                                shadowColor: Colors.grey
+                                                    .withOpacity(0.2),
+                                                shape: const CircleBorder(),
+                                                child: CircleAvatar(
+                                                  radius: 25.r,
+                                                  backgroundColor:
+                                                      const Color(0xffFFF5EC),
+                                                  child: imagePath.isNotEmpty
+                                                      ? SvgPicture.asset(
+                                                          imagePath)
+                                                      : const Icon(
+                                                          Icons.category,
+                                                          color: Colors.grey),
+                                                ),
+                                              ),
+                                              if (!isEnabled)
+                                                Container(
+                                                  width: 50.r,
+                                                  height: 50.r,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Colors.white
+                                                        .withOpacity(0.7),
+                                                  ),
+                                                ),
+                                              if (!isEnabled)
+                                                Icon(Icons.info_outline,
+                                                    color: Colors.grey,
+                                                    size: 20.r),
+                                            ],
                                           ),
                                           SizedBox(height: 5.h),
                                           Text(
                                             categoryName,
-                                            style: TextStyle(fontSize: 12.sp),
+                                            style: TextStyle(
+                                              fontSize: 12.sp,
+                                              color: isEnabled
+                                                  ? Colors.black
+                                                  : Colors.grey,
+                                            ),
                                           )
                                         ],
                                       ),
                                     ),
                                   );
                                 },
-                              )),
+                              ),
+                            );
+                          }),
                           const SizedBox(
                             height:
                                 14, // Adjust spacing between search bar and tab bar
@@ -400,51 +465,6 @@ class HomeSeller extends StatelessWidget {
                           height: 10
                               .h, // Adjust spacing between search bar and tab bar
                         ),
-                        // SizedBox(
-                        //     height: 90.h,
-                        //     child: ListView.builder(
-                        //       scrollDirection: Axis.horizontal,
-                        //       itemCount: flavourContoler.categoryData.length,
-                        //       itemBuilder: (context, index) {
-                        //         String categoryName = flavourContoler
-                        //             .categoryData.keys
-                        //             .elementAt(index);
-                        //         String imagePath = flavourContoler
-                        //             .categoryData.values
-                        //             .elementAt(index);
-
-                        //         return Padding(
-                        //           padding: EdgeInsets.all(8.r),
-                        //           child: Column(
-                        //             children: [
-                        //               Material(
-                        //                 elevation: 4,
-                        //                 shadowColor:
-                        //                     Colors.grey.withOpacity(0.1),
-                        //                 shape: const CircleBorder(),
-                        //                 child: CircleAvatar(
-                        //                   radius: 25.r,
-                        //                   backgroundColor: const Color.fromARGB(
-                        //                           255, 232, 231, 231)
-                        //                       .withOpacity(0.25),
-                        //                   child: imagePath.isNotEmpty
-                        //                       ? SvgPicture.asset(imagePath)
-                        //                       : const Icon(Icons.category,
-                        //                           color: Colors
-                        //                               .grey), // Fallback icon
-                        //                 ),
-                        //               ),
-                        //               SizedBox(height: 5.h),
-                        //               Text(
-                        //                 categoryName,
-                        //                 style: TextStyle(fontSize: 12.sp),
-                        //               )
-                        //             ],
-                        //           ),
-                        //         );
-                        //       },
-                        //     )),
-
                         SizedBox(
                           height: GlobalSizes.getDeviceHeight(context) * 0.05,
                           child: TabBar(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -10,7 +11,8 @@ import 'package:logger/logger.dart';
 import '../buttons.dart';
 
 class RateNowCustomDialog extends StatelessWidget {
-  const RateNowCustomDialog({super.key});
+  final String requirementId;
+  const RateNowCustomDialog({super.key, required this.requirementId});
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,8 @@ class RateNowCustomDialog extends StatelessWidget {
     var ratingStar = 0.0.obs;
     TextEditingController textEditingController =
         Get.put(TextEditingController());
+    TextEditingController totalBillingAmountController =
+        TextEditingController();
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -57,7 +61,7 @@ class RateNowCustomDialog extends StatelessWidget {
                     ),
                   ),
                   RatingBar(
-                    initialRating: 1,
+                    initialRating: 0,
                     direction: Axis.horizontal,
                     allowHalfRating: false,
                     itemCount: 5,
@@ -132,6 +136,38 @@ class RateNowCustomDialog extends StatelessWidget {
                             );
                           }).toList(),
                         ),
+// total billing amount
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 40.h,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color:
+                                    Colors.grey.shade300, // Light border color
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                  4.0.r), // Rounded corners
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12.0),
+                              child: TextField(
+                                keyboardType: TextInputType.number,
+                                controller: totalBillingAmountController,
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter Billing amount',
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  border: InputBorder
+                                      .none, // Removes the default underline
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
                       ]),
                   Padding(
                     padding: EdgeInsets.only(
@@ -161,10 +197,12 @@ class RateNowCustomDialog extends StatelessWidget {
                             context: context,
                             onPressedCallback: () async {
                               try {
-                                await restClient.postReviews("DR1A264", {
+                                await restClient.postReviews("TR1A26249", {
                                   "Rating": ratingStar.value,
                                   "how_did_you_get_this": selectedOption.value,
-                                  "description": textEditingController.text
+                                  "description": textEditingController.text,
+                                  "TotalPurchaseAmount": int.parse(
+                                      totalBillingAmountController.text)
                                 });
 
                                 Fluttertoast.showToast(

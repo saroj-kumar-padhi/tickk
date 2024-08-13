@@ -35,6 +35,7 @@ class Data {
   final int v;
   final String storeSubCategory;
   final bool exact;
+  final String profileImage;
   final List<dynamic> exactSimilarImage;
 
   Data(
@@ -61,33 +62,34 @@ class Data {
       required this.v,
       required this.storeSubCategory,
       required this.exact,
-      required this.exactSimilarImage});
+      required this.exactSimilarImage,
+      required this.profileImage});
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
-      // storeSubSubCategory: json['storeSubSubCategory'] ?? "",
-      dealdone: json['dealdone'] ?? "",
-      id: json['_id'] ?? "",
-      requirementID: json['RequirementID'] ?? "",
-      storeID: json['StoreID'] ?? "",
-      date: json['Date'] ?? "", // Use the formatted date
-      yourName: json['your_name'] ?? "",
-      storeCategory: json['storeCategory'],
-      brands: json['Brands'] ?? "",
-      modelNo: json['ModelNo'] ?? "",
-      size: json['size'] ?? "",
-      quantity: json['Quantity'] ?? -1,
-      units: json['Units'] ?? "",
-      requirementInDetails: json['Requirement_in_details'] ?? "",
-      addImage: json['AddImage'] ?? "",
-      location: json['Location'] ?? "",
-      status: json['Status'] ?? "",
-      quote: json['Quote'] ?? "",
-      similar: json['Similar'] ?? "",
-      v: json['__v'] ?? "",
-      storeSubCategory: json['storeSubCategory'] ?? "",
-      exact: json['Exact'] ?? "",
-      exactSimilarImage: json["ExactSimilarImage"] ?? "",
-    );
+        // storeSubSubCategory: json['storeSubSubCategory'] ?? "",
+        dealdone: json['dealdone'] ?? "",
+        id: json['_id'] ?? "",
+        requirementID: json['RequirementID'] ?? "",
+        storeID: json['StoreID'] ?? "",
+        date: json['Date'] ?? "", // Use the formatted date
+        yourName: json['your_name'] ?? "",
+        storeCategory: json['storeCategory'],
+        brands: json['Brands'] ?? "",
+        modelNo: json['ModelNo'] ?? "",
+        size: json['size'] ?? "",
+        quantity: json['Quantity'] ?? -1,
+        units: json['Units'] ?? "",
+        requirementInDetails: json['Requirement_in_details'] ?? "",
+        addImage: json['AddImage'] ?? "",
+        location: json['Location'] ?? "",
+        status: json['Status'] ?? "",
+        quote: json['Quote'] ?? "",
+        similar: json['Similar'] ?? "",
+        v: json['__v'] ?? "",
+        storeSubCategory: json['storeSubCategory'] ?? "",
+        exact: json['Exact'] ?? "",
+        exactSimilarImage: json["ExactSimilarImage"] ?? "",
+        profileImage: json["profileImage"] ?? "");
   }
 }

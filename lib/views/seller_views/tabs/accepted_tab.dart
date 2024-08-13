@@ -81,6 +81,7 @@ class AcceptedTabSeller extends StatelessWidget {
                           addImage: data.addImage,
                           mobile: data.mobile,
                           requirementId: data.requirementId,
+                          profileImage: data.profileImage,
                         ),
                       );
                     },

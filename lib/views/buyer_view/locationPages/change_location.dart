@@ -5,7 +5,6 @@ import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:google_places_flutter/model/prediction.dart';
 import 'package:logger/web.dart';
@@ -140,27 +139,27 @@ class _ChangeLocationState extends State<ChangeLocation> {
                   ),
                 ),
               ),
-              InkWell(
-                onTap: () async {
-                  await dialogBoxController.getCurrentLocation();
-                  Get.to(const GoogleMapPage());
-                  productSetUpController.updateButtonState();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Text(
-                      "Use my current location",
-                      style: TextStyles.openSansUnderLine(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        color: const Color(0xffFC8019),
-                      ),
-                    ),
-                  ),
-                ),
-              )
+              // InkWell(
+              //   onTap: () async {
+              //     await dialogBoxController.getCurrentLocation();
+              //     Get.to(const GoogleMapPage());
+              //     productSetUpController.updateButtonState();
+              //   },
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(left: 20),
+              //     child: Align(
+              //       alignment: Alignment.bottomLeft,
+              //       child: Text(
+              //         "Use my current location",
+              //         style: TextStyles.openSansUnderLine(
+              //           fontWeight: FontWeight.w400,
+              //           fontSize: 14,
+              //           color: const Color(0xffFC8019),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // )
             ],
           ),
         ],

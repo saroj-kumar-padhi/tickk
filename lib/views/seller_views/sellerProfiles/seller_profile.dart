@@ -131,7 +131,12 @@ class _SellerProfileState extends State<SellerProfile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Image.asset("assest/profileImage.png"),
+                          CircleAvatar(
+                            radius: 30, // Adjust the size as needed
+                            backgroundImage: NetworkImage(
+                              sellerProfileController.user!.profileImage,
+                            ),
+                          ),
                           Padding(
                             padding: EdgeInsets.only(left: 20.w),
                             child: Column(

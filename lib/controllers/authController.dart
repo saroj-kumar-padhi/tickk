@@ -44,6 +44,26 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> signUpValidateOTP({required String otp}) async {
+    try {
+      await restClient.verifyPhoneNumber(
+          phoneAuthController.text, int.parse(otp));
+
+      final box = Hive.box('mybox');
+      box.put('phone', phoneAuthController.text);
+      try {
+        final response = await restClient
+            .checkBuyerOrSeller(int.parse(phoneAuthController.text));
+
+        Get.toNamed(RouteName.basicDetails);
+      } catch (e) {
+        Logger().d(e);
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Invalid otp");
+    }
+  }
+
   Future<void> validateOTP({required String otp, required bool islogin}) async {
     try {
       await restClient.verifyPhoneNumber(

@@ -94,7 +94,7 @@ class Store {
       storeName: json['StoreName'] ?? "",
       storeID: json['StoreID'] ?? "",
       addImage: json['stared'] ?? "",
-      quote: json['Quote'] ?? -1,
+      quote: json['Quote'] ?? "",
       similar: json['Similar'] ?? false,
       exact: json['Exact'] ?? false,
       totalDiatance: json['TotalDistance'] != null

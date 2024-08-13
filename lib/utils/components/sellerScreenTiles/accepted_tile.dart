@@ -31,26 +31,29 @@ class AcceptedSellerCard extends StatelessWidget {
   final List<dynamic> exactImage;
   final bool exact;
   final String requirementId;
+  final String profileImage;
 
-  const AcceptedSellerCard(
-      {super.key,
-      required this.yourName,
-      required this.category,
-      required this.subCategories,
-      required this.brands,
-      required this.date,
-      required this.modelNo,
-      required this.oty,
-      required this.size,
-      required this.units,
-      required this.des,
-      required this.quote,
-      required this.image,
-      required this.exactImage,
-      required this.exact,
-      required this.addImage,
-      required this.mobile,
-      required this.requirementId});
+  const AcceptedSellerCard({
+    super.key,
+    required this.yourName,
+    required this.category,
+    required this.subCategories,
+    required this.brands,
+    required this.date,
+    required this.modelNo,
+    required this.oty,
+    required this.size,
+    required this.units,
+    required this.des,
+    required this.quote,
+    required this.image,
+    required this.exactImage,
+    required this.exact,
+    required this.addImage,
+    required this.mobile,
+    required this.requirementId,
+    required this.profileImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -84,22 +87,26 @@ class AcceptedSellerCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: ClipOval(
-                      child: Container(
-                        width: 40, // Adjust size as needed
-                        height: 40, // Adjust size as needed
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(addImage),
-                            fit: BoxFit.cover,
+                  profileImage == "task/assets/men.png"
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: ClipOval(
+                            child: SizedBox(
+                                height: 40.h,
+                                width: 40.w,
+                                child: Image.network(
+                                    'https://www.citypng.com/public/uploads/preview/download-profile-user-round-orange-icon-symbol-png-11639594360ksf6tlhukf.png')), //
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: ClipOval(
+                            child: SizedBox(
+                                height: 40.h,
+                                width: 40.h,
+                                child: Image.network(profileImage)),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -127,16 +134,6 @@ class AcceptedSellerCard extends StatelessWidget {
                             Container(
                               child: Row(
                                 children: [
-                                  // Text(
-                                  //   category,
-                                  //   style: TextStyles.openSans(
-                                  //       fontSize: 12,
-                                  //       fontWeight: FontWeight.w400),
-                                  // ),
-                                  // Text(" | ",
-                                  //     style: TextStyles.openSans(
-                                  //         fontSize: 12,
-                                  //         fontWeight: FontWeight.w400)),
                                   Text(
                                     subCategories,
                                     style: TextStyles.openSans(

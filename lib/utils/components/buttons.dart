@@ -1,4 +1,5 @@
 import 'package:dekhlo/services/injection.dart';
+import 'package:dekhlo/utils/components/dialog_boxs/rate_now.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:dekhlo/views/seller_views/sellerProfiles/seller_profile.dart';
@@ -181,8 +182,14 @@ class Buttons {
               foregroundColor: const WidgetStatePropertyAll(Colors.white)),
           onPressed: () async {
             try {
+              await Get.dialog(
+                RateNowCustomDialog(requirementId: RequrementId),
+                barrierDismissible:
+                    false, // Prevent dismissing by tapping outside
+              );
               BuyerDealDonecontroller buyerDealDonecontroller = Get.put(
                   BuyerDealDonecontroller(mobileNo: formattedPhoneNumber));
+
               await restClient
                   .moveToDealDone(RequrementId, storeId, {"DealDone": true});
               buyerinprocesscontroller.fetchProcessBuyerRequirements(

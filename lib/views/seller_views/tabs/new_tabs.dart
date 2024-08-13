@@ -95,6 +95,7 @@ class NewTabSeller extends StatelessWidget {
                                   storeId: storeId,
                                   name: data.yourName,
                                   index: index,
+                                  profileImage: data.profileImage,
                                 ),
                               );
                             }),

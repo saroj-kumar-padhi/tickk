@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dekhlo/controllers/flavourController.dart';
 import 'package:dekhlo/controllers/productSetupController.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/coustoumTextField.dart';
@@ -15,7 +13,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:get/get_connect/connect.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart' as path;
+import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart';
+import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/multipart/form_data.dart';
 import 'package:hive/hive.dart';
 import 'package:logger/web.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
@@ -36,11 +40,14 @@ class StoreEditScreen extends StatefulWidget {
       MultiSelectController();
   static final MultiSelectController subSubCategorySelectController =
       MultiSelectController();
-
+  var formData = dio.FormData();
   final String storeID;
+  final List<dynamic> imageList;
+
   final String storeName;
   final List<String> storeCategory;
   final List<dynamic> storeSubcategory;
+  final String stared;
 
   final List<dynamic> brands;
   final String about;
@@ -70,7 +77,7 @@ class StoreEditScreen extends StatefulWidget {
   final String saturdayOpentime;
   final String saturdayClosetime;
 
-  const StoreEditScreen(
+  StoreEditScreen(
       {super.key,
       required this.storeName,
       required this.storeCategory,
@@ -99,7 +106,9 @@ class StoreEditScreen extends StatefulWidget {
       required this.fridayClosetime,
       required this.saturdayOpentime,
       required this.saturdayClosetime,
-      required this.storeID});
+      required this.stared,
+      required this.storeID,
+      required this.imageList});
 
   @override
   State<StoreEditScreen> createState() => _StoreEditScreenState();
@@ -144,6 +153,7 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
   final ExactController exactController = Get.put(ExactController());
 
   RxInt currentPage = 0.obs;
+  List removedImdexs = [];
 
   late RxBool sundayIsOpen;
   late RxBool mondayIsOpen;
@@ -184,10 +194,13 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
         .map((entry) =>
             ValueItem(label: entry.value, value: entry.key.toString()))
         .toList();
+
+    productSetUpController.imagePaths.clear();
   }
 
   @override
   Widget build(BuildContext context) {
+    RxList images = widget.imageList.obs;
     String brands = widget.brands.join(',');
     TextEditingController storeNameController =
         TextEditingController(text: widget.storeName);
@@ -246,6 +259,7 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
 
     final box = Hive.box('myBox');
     final String formattedPhoneNumber = box.get('phone') ?? "";
+    List<File> localImageFiles = [];
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -278,7 +292,7 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                 height: 20.h,
               ),
               Obx(() {
-                return productSetUpController.imagePaths.value.isEmpty
+                return images.isEmpty
                     ? addImages(context)
                     : Column(
                         children: [
@@ -291,11 +305,20 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                               viewportFraction: 0.4,
                               height: 160.0.h,
                             ),
-                            itemCount: productSetUpController.imagePaths.length,
+                            itemCount: images.length,
                             itemBuilder: (BuildContext context, int index,
                                 int realIndex) {
-                              final String imagePath =
-                                  productSetUpController.imagePaths[index];
+                              final String imagePath = images[index];
+                              final bool isNetworkImage =
+                                  imagePath.startsWith('http');
+
+                              if (!localImageFiles
+                                  .contains(File(images[index]))) {
+                                isNetworkImage == false
+                                    ? localImageFiles.add(File(images[index]))
+                                    : const SizedBox();
+                              }
+
                               return Column(
                                 children: [
                                   Stack(
@@ -318,8 +341,11 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                                                 horizontal: 5.0),
                                             decoration: const BoxDecoration(
                                                 color: Colors.amber),
-                                            child: Image.file(File(imagePath),
-                                                fit: BoxFit.cover),
+                                            child: isNetworkImage
+                                                ? Image.network(imagePath,
+                                                    fit: BoxFit.cover)
+                                                : Image.file(File(imagePath),
+                                                    fit: BoxFit.cover),
                                           ),
                                         ),
                                       ),
@@ -362,16 +388,11 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                                                 SizedBox(width: 80.w),
                                                 InkWell(
                                                   onTap: () {
-                                                    productSetUpController
-                                                        .imagePaths
+                                                    removedImdexs.add(index);
+
+                                                    images.remove(imagePath);
+                                                    widget.imageList
                                                         .remove(imagePath);
-                                                    if (productSetUpController
-                                                        .staredImage
-                                                        .contains(imagePath)) {
-                                                      productSetUpController
-                                                          .staredImage
-                                                          .clear();
-                                                    }
                                                   },
                                                   child: const Icon(
                                                     Icons.cancel,
@@ -388,14 +409,12 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                             },
                           ),
                           SizedBox(height: 10.h),
-                          // Separate indicator widget
-                          Obx(() => productSetUpController
-                                      .imagePaths.value.length >
-                                  1
+                          // Indicator widget (unchanged)
+                          Obx(() => images.length > 1
                               ? Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: List.generate(
-                                    productSetUpController.imagePaths.length,
+                                    images.length,
                                     (index) => Container(
                                       width: 8.0,
                                       height: 8.0,
@@ -423,10 +442,10 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                                 },
                               );
                               if (result != null) {
-                                productSetUpController.imagePaths.add(result);
+                                images.add(result);
                               }
                             },
-                            child: productSetUpController.imagePaths.length > 3
+                            child: images.length > 3
                                 ? const SizedBox()
                                 : Container(
                                     decoration: BoxDecoration(
@@ -1262,13 +1281,39 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                             };
 
                             try {
-                              await restClient.editStore(widget.storeID, data);
-                              Fluttertoast.showToast(
-                                  msg: "store updated successfully");
-                              Get.back();
-                              Get.back();
+                              restClient.deleteImageInEditStore({
+                                "StoreID": widget.storeID,
+                                "imageIndices": removedImdexs,
+                              });
                             } catch (e) {
-                              Logger().e(e);
+                              Logger().d(e);
+                            }
+
+                            try {
+                              await restClient.deleteImageInEditStore({
+                                "StoreID": widget.storeID,
+                                "imageIndices": removedImdexs,
+                              });
+                            } catch (e) {
+                              Logger().d(e);
+                              // Maybe show an error message to the user
+                              Fluttertoast.showToast(
+                                  msg:
+                                      "Failed to delete images: ${e.toString()}");
+                              return; // Exit the function if delete fails
+                            }
+
+// Only proceed with edit if delete was successful
+                            dio.FormData formDatatoPost =
+                                await convertToMultipart(localImageFiles);
+                            try {
+                              await postdio.editProfileImage(
+                                  widget.storeID, formDatatoPost);
+                            } catch (e) {
+                              Logger().f(e);
+                              Fluttertoast.showToast(
+                                  msg:
+                                      "Failed to edit images: ${e.toString()}");
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -1303,6 +1348,54 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
         ],
       ),
     );
+  }
+
+  String? getMimeType(String fileName) {
+    final ext = path.extension(fileName).toLowerCase();
+    switch (ext) {
+      case '.jpg':
+      case '.jpeg':
+        return 'image/jpeg';
+      case '.png':
+        return 'image/png';
+      case '.gif':
+        return 'image/gif';
+      case '.bmp':
+        return 'image/bmp';
+      case '.webp':
+        return 'image/webp';
+      default:
+        return null;
+    }
+  }
+
+  Future<dio.FormData> convertToMultipart(List<File> localImageFiles) async {
+    var formData = dio.FormData();
+
+    for (int i = 0; i < localImageFiles.length; i++) {
+      File file = localImageFiles[i];
+      String fileName = path.basename(file.path);
+      String? mimeTypeString = getMimeType(file.path);
+
+      MediaType? contentType;
+      if (mimeTypeString != null) {
+        List<String> mimeTypeParts = mimeTypeString.split('/');
+        if (mimeTypeParts.length == 2) {
+          contentType = MediaType(mimeTypeParts[0], mimeTypeParts[1]);
+        }
+      }
+
+      formData.files.add(MapEntry(
+        "images",
+        await dio.MultipartFile.fromFile(
+          file.path,
+          filename: fileName,
+          contentType: contentType,
+        ),
+      ));
+    }
+
+    return formData;
   }
 
   Padding timings(
@@ -1459,10 +1552,6 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                     if (pickedTime != null) {
                       String formattedTime = pickedTime.format(context);
                       controller.text = formattedTime;
-                      // Force refresh if using GetX
-                      // setState(() {});
-                      // Or use setState if in a StatefulWidget
-                      // setState(() {});
                     }
                   }
                 : null,
@@ -1599,9 +1688,8 @@ class _CustomMultiSelectDropdownState extends State<CustomMultiSelectDropdown> {
             }).toList(),
             onChanged: (String? newValue) {
               if (newValue != null && !_selectedItems.contains(newValue)) {
-                setState(() {
-                  _selectedItems.add(newValue);
-                });
+                _selectedItems.add(newValue);
+
                 widget.onSelectionChanged(_selectedItems);
               }
             },
@@ -1628,9 +1716,8 @@ class _CustomMultiSelectDropdownState extends State<CustomMultiSelectDropdown> {
           const SizedBox(width: 4),
           GestureDetector(
             onTap: () {
-              setState(() {
-                _selectedItems.remove(item);
-              });
+              _selectedItems.remove(item);
+
               widget.onSelectionChanged(_selectedItems);
             },
             child: const Icon(

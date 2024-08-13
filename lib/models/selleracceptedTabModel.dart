@@ -41,6 +41,7 @@ class DdItem {
   String location;
   String status;
   List<dynamic> exactSimilarImage;
+  String profileImage;
   int v;
 
   DdItem({
@@ -66,34 +67,35 @@ class DdItem {
     required this.location,
     required this.status,
     required this.mobile,
+    required this.profileImage,
     required this.v,
   });
 
   factory DdItem.fromJson(Map<String, dynamic> json) {
     return DdItem(
-      exactSimilarImage: json['ExactSimilarImage'] ?? [],
-      exact: json['Exact'] ?? false,
-      similar: json['Similar'] ?? false,
-      id: json['_id'] ?? '',
-      requirementId: json['RequirementID'] ?? '',
-      storeId: json['StoreID'] ?? '',
-      date: DateTime.tryParse(json['Date'] ?? '') ?? DateTime.now(),
-      yourName: json['your_name'] ?? '',
-      storeCategory: json['storeCategory'] ?? '',
-      storeSubCategory: json['storeSubCategory'] ?? '',
-      storeSubSubCategory: json['storeSubSubCategory'] ?? '',
-      brands: json['Brands'] ?? '',
-      modelNo: json['ModelNo'] ?? '',
-      quote: json['Quote']?.toString() ?? '0',
-      size: json['size'] ?? "",
-      quantity: json['Quantity'] ?? 0,
-      units: json['Units'] ?? '',
-      requirementInDetails: json['Requirement_in_details'] ?? '',
-      addImage: json['AddImage'] ?? '',
-      location: json['Location'] ?? '',
-      status: json['Status'] ?? '',
-      v: json['__v'] ?? 0,
-      mobile: json['mobile'] ?? 1234,
-    );
+        exactSimilarImage: json['ExactSimilarImage'] ?? [],
+        exact: json['Exact'] ?? false,
+        similar: json['Similar'] ?? false,
+        id: json['_id'] ?? '',
+        requirementId: json['RequirementID'] ?? '',
+        storeId: json['StoreID'] ?? '',
+        date: DateTime.tryParse(json['Date'] ?? '') ?? DateTime.now(),
+        yourName: json['your_name'] ?? '',
+        storeCategory: json['storeCategory'] ?? '',
+        storeSubCategory: json['storeSubCategory'] ?? '',
+        storeSubSubCategory: json['storeSubSubCategory'] ?? '',
+        brands: json['Brands'] ?? '',
+        modelNo: json['ModelNo'] ?? '',
+        quote: json['Quote']?.toString() ?? '0',
+        size: json['size'] ?? "",
+        quantity: json['Quantity'] ?? 0,
+        units: json['Units'] ?? '',
+        requirementInDetails: json['Requirement_in_details'] ?? '',
+        addImage: json['AddImage'] ?? '',
+        location: json['Location'] ?? '',
+        status: json['Status'] ?? '',
+        v: json['__v'] ?? 0,
+        mobile: json['mobile'] ?? 1234,
+        profileImage: json['profileImage'] ?? "");
   }
 }

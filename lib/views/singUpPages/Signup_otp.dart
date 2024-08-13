@@ -109,15 +109,15 @@ class OTP extends StatelessWidget {
                   color: authController.isOtpEmpty.value
                       ? const Color(0xffFC8019).withOpacity(0.2)
                       : const Color(0xffFC8019),
-                  buttonText: 'Login',
+                  buttonText: 'Sign Up',
                   textColor: Colors.white,
                   context: context,
                   onPressedCallback: () async {
                     authController.otpController.text.length == 6
                         ? {
-                            await authController.validateOTP(
-                                otp: authController.otpController.text,
-                                islogin: false),
+                            await authController.signUpValidateOTP(
+                              otp: authController.otpController.text,
+                            ),
                           }
                         : () {};
                   },

@@ -28,24 +28,27 @@ class DoneDoneSellerCard extends StatelessWidget {
   final List<dynamic> exactImages;
   final bool exact;
   final String requirementId;
-  const DoneDoneSellerCard(
-      {super.key,
-      required this.yourName,
-      required this.category,
-      required this.subCategories,
-      required this.brands,
-      required this.date,
-      required this.modelNo,
-      required this.oty,
-      required this.size,
-      required this.units,
-      required this.des,
-      required this.quote,
-      required this.addImages,
-      required this.exactImages,
-      required this.exact,
-      required this.addImage,
-      required this.requirementId});
+  final String profileImage;
+  const DoneDoneSellerCard({
+    super.key,
+    required this.yourName,
+    required this.category,
+    required this.subCategories,
+    required this.brands,
+    required this.date,
+    required this.modelNo,
+    required this.oty,
+    required this.size,
+    required this.units,
+    required this.des,
+    required this.quote,
+    required this.addImages,
+    required this.exactImages,
+    required this.exact,
+    required this.addImage,
+    required this.requirementId,
+    required this.profileImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -79,16 +82,33 @@ class DoneDoneSellerCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: ClipOval(
-                      child: SizedBox(
-                        height: 40.h,
-                        width: 40.h,
-                        child: Image.asset('assest/profileImage.png'),
-                      ),
-                    ),
-                  ),
+                  profileImage == "task/assets/men.png"
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: ClipOval(
+                            child: SizedBox(
+                              height: 40.h,
+                              width: 40.w,
+                              child: Image.network(
+                                      'https://www.citypng.com/public/uploads/preview/download-profile-user-round-orange-icon-symbol-png-11639594360ksf6tlhukf.png')
+                                  .blurred(
+                                blur: 2,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: ClipOval(
+                            child: SizedBox(
+                              height: 40.h,
+                              width: 40.h,
+                              child: Image.network(profileImage).blurred(
+                                blur: 2,
+                              ),
+                            ),
+                          ),
+                        ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

@@ -127,31 +127,26 @@ class _PostRequirementsState extends State<PostRequirements> {
                                     fontWeight: FontWeight.w600,
                                     color: const Color(0xff4A4A4A))),
                           )
-                        : Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("Sub Category",
-                                style: TextStyles.openSans(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xff959595))),
-                          ),
+                        : const SizedBox(),
                     SizedBox(
                       height: 5.h,
                     ),
-                    CustomDropdownFormField(
-                      items: categoriesController.subCategories,
-                      value: categoriesController
-                              .selectedSubCategory.value.isNotEmpty
-                          ? categoriesController.selectedSubCategory.value
-                          : null,
-                      onChanged: (value) {
-                        categoriesController.selectedSubCategory.value =
-                            value ?? "";
-                        categoriesController.fetchSubSubcategories(
-                            categoriesController.selectedCategory.value,
-                            value ?? "");
-                      },
-                    ),
+                    categoriesController.subCategories.isNotEmpty
+                        ? CustomDropdownFormField(
+                            items: categoriesController.subCategories,
+                            value: categoriesController
+                                    .selectedSubCategory.value.isNotEmpty
+                                ? categoriesController.selectedSubCategory.value
+                                : null,
+                            onChanged: (value) {
+                              categoriesController.selectedSubCategory.value =
+                                  value ?? "";
+                              categoriesController.fetchSubSubcategories(
+                                  categoriesController.selectedCategory.value,
+                                  value ?? "");
+                            },
+                          )
+                        : const SizedBox(),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -164,28 +159,23 @@ class _PostRequirementsState extends State<PostRequirements> {
                                     fontWeight: FontWeight.w600,
                                     color: const Color(0xff4A4A4A))),
                           )
-                        : Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("Sub Sub Category",
-                                style: TextStyles.openSans(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xff959595))),
-                          ),
+                        : const SizedBox(),
                     SizedBox(
                       height: 5.h,
                     ),
-                    CustomDropdownFormField(
-                      items: categoriesController.subSubCategories,
-                      onChanged: (value) {
-                        dropdownController
-                            .changeSelectedSubSubcategory(value ?? "");
+                    categoriesController.subSubCategories.isNotEmpty
+                        ? CustomDropdownFormField(
+                            items: categoriesController.subSubCategories,
+                            onChanged: (value) {
+                              dropdownController
+                                  .changeSelectedSubSubcategory(value ?? "");
 
-                        categoriesController.selectedSubSubCategory.value =
-                            value ?? "";
-                      },
-                      onSaved: (value) {},
-                    ),
+                              categoriesController
+                                  .selectedSubSubCategory.value = value ?? "";
+                            },
+                            onSaved: (value) {},
+                          )
+                        : const SizedBox(),
                     SizedBox(
                       height: 5.h,
                     ),

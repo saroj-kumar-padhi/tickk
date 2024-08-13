@@ -33,7 +33,7 @@ class _CarouselDialogState extends State<CarouselDialog> {
                     viewportFraction: 1.0,
                     enlargeCenterPage: false,
                     autoPlay: false,
-                    aspectRatio: 4 / 4,
+                    aspectRatio: 2 / 4,
                     enableInfiniteScroll: false,
                     scrollDirection: Axis.horizontal,
                     onPageChanged: (index, _) {

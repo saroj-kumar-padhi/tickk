@@ -519,6 +519,30 @@ class InprocessTile extends StatelessWidget {
                                                                   fontSize: 12,
                                                                 ),
                                                               ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 2.w),
+                                                          child: Text(
+                                                            "KM",
+                                                            style: GoogleFonts
+                                                                .openSans(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontSize: 12,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        // Text(
+                                                        //   "away",
+                                                        //   style: GoogleFonts
+                                                        //       .openSans(
+                                                        //     fontWeight:
+                                                        //         FontWeight.w400,
+                                                        //     fontSize: 12,
+                                                        //   ),
+                                                        // ),
                                                       ],
                                                     ),
                                                   ),
