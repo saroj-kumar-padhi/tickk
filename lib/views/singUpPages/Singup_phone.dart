@@ -9,6 +9,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 import '../../services/injection.dart';
 import '../../utils/components/Coustum_RichText.dart';
@@ -124,8 +125,15 @@ class Phone extends StatelessWidget {
                           context: context,
                           onPressedCallback: () async {
                             ErrorResponse errorResponse =
-                                await restClient.checkMobileNumberIfRegistered(
-                                    authController.phoneAuthController.text);
+                                ErrorResponse(message: "");
+                            try {
+                              errorResponse = await restClient
+                                  .checkMobileNumberIfRegistered(
+                                      authController.phoneAuthController.text);
+                              Logger().f(errorResponse);
+                            } catch (e) {
+                              Logger().e(e);
+                            }
 
                             if (errorResponse.message ==
                                 "Mobile already registered") {

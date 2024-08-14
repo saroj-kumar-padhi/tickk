@@ -34,8 +34,8 @@ import 'package:dio/dio.dart' as dio;
 
 part 'rest_client.g.dart';
 
-// @RestApi(baseUrl: 'http://13.201.210.192:3002')
-@RestApi(baseUrl: 'http://192.168.1.18:3002')
+@RestApi(baseUrl: 'http://13.201.210.192:3002')
+// @RestApi(baseUrl: 'http://192.168.1.14:3002')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
@@ -206,9 +206,10 @@ abstract class RestClient {
     @Body() Map<String, dynamic> data,
   );
 
-  @POST('/sellerNewTab/InprocesBuyerSeller/{RequirementID}')
+  @POST('/sellerNewTab/InprocesBuyerSeller/{RequirementID}/{StoreID}')
   Future<void> pushtoBuyerInProcessAndSellerInProcess(
     @Path('RequirementID') String RequirementID,
+    @Path('StoreID') String StoreID,
     @Body() Map<String, dynamic> data,
   );
 

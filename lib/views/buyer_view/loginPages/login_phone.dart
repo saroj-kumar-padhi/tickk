@@ -165,7 +165,7 @@ class LogInPhone extends StatelessWidget {
                                             .phoneAuthController.text);
 
                                 if (errorResponse.message ==
-                                    "Mobile not registered") {
+                                    "The number you entered is not Registered.") {
                                   authController.phoneAuthController.clear();
                                   await Future.delayed(
                                       const Duration(seconds: 1));

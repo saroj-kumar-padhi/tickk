@@ -1,9 +1,7 @@
 import 'package:dekhlo/controllers/authController.dart';
-import 'package:dekhlo/utils/Strings/strings.dart';
-import 'package:dekhlo/utils/components/Coustum_RichText.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
-import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
@@ -11,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:pinput/pinput.dart';
+
+import '../buyer_view/loginPages/otptimerController.dart';
 
 class OTP extends StatelessWidget {
   const OTP({super.key});
@@ -34,11 +34,10 @@ class OTP extends StatelessWidget {
       body: Animate(
         effects: [
           SlideEffect(
-              begin: const Offset(1, 0), // Start from bottom
-              end: const Offset(0, 0), // End at normal position
-              duration: 500.ms, // Animation duration
-              curve: Curves.easeOut // Animation curve
-              ),
+              begin: const Offset(1, 0),
+              end: const Offset(0, 0),
+              duration: 500.ms,
+              curve: Curves.easeOut),
         ],
         child: Scaffold(
           appBar: AppBar(
@@ -137,26 +136,36 @@ class OTPText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        RichText(
-          text: const TextSpan(
-            children: [
-              TextSpan(
-                text: 'Didn’t you get OTP? ',
-                style: TextStyle(
-                  color: Colors.black,
+    OTPTimmerController authController = Get.put(OTPTimmerController());
+    return Obx(() {
+      return Column(
+        children: [
+          RichText(
+            text: TextSpan(
+              children: [
+                const TextSpan(
+                  text: 'Didn’t you get OTP? ',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
                 ),
-              ),
-              TextSpan(text: ' & ', style: TextStyle(color: Colors.black)),
-              TextSpan(
-                text: ' Resend OTP',
-                style: TextStyle(color: Color(0xffFC8019)),
-              ),
-            ],
+                if (!authController.canResendOtp.value)
+                  TextSpan(
+                    text: 'Retry in ${authController.resendOtpTimer.value}s',
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                if (authController.canResendOtp.value)
+                  TextSpan(
+                    text: 'Resend OTP',
+                    style: const TextStyle(color: Color(0xffFC8019)),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = authController.resendOtp,
+                  ),
+              ],
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }

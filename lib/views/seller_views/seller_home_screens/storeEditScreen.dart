@@ -1220,10 +1220,6 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
-                            Map<String, double> convertedAddressToLatLong =
-                                await convertAddressToLatLong(
-                                    dialogBoxController
-                                        .locacationController.value.text);
                             Map<String, dynamic> data = {
                               "StoreName": storeNameController.text,
                               "storeCategory": categorySelected.isEmpty
@@ -1271,12 +1267,8 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                               },
                               "Postcode_ZIP": pinCodeController.text,
                               "sellerLocation": {
-                                "latitude":
-                                    convertedAddressToLatLong["latitude"]
-                                        .toString(),
-                                "longitude":
-                                    convertedAddressToLatLong["longitude"]
-                                        .toString()
+                                "latitude": dialogBoxController.latitude.value,
+                                "longitude": dialogBoxController.longitude.value
                               }
                             };
 
@@ -1727,25 +1719,25 @@ class _CustomMultiSelectDropdownState extends State<CustomMultiSelectDropdown> {
   }
 }
 
-Future<Map<String, double>> convertAddressToLatLong(String address) async {
-  try {
-    List<Location> locations = await locationFromAddress(address);
+// Future<Map<String, double>> convertAddressToLatLong(String address) async {
+//   try {
+//     List<Location> locations = await locationFromAddress(address);
 
-    if (locations.isNotEmpty) {
-      Location location = locations.first;
-      double latitude = location.latitude;
-      double longitude = location.longitude;
+//     if (locations.isNotEmpty) {
+//       Location location = locations.first;
+//       double latitude = location.latitude;
+//       double longitude = location.longitude;
 
-      print('Latitude: $latitude, Longitude: $longitude');
-      return {"latitude": latitude, "longitude": longitude};
-      // You can now use these latitude and longitude values as needed
-      // For example, you might want to store them in variables or send them to an API
-    } else {
-      print('No coordinates found for the given address.');
-      return {"latitude": 0, "longitude": 0};
-    }
-  } catch (e) {
-    print('Error occurred while converting address to coordinates: $e');
-    return {"latitude": 0, "longitude": 0};
-  }
-}
+//       print('Latitude: $latitude, Longitude: $longitude');
+//       return {"latitude": latitude, "longitude": longitude};
+//       // You can now use these latitude and longitude values as needed
+//       // For example, you might want to store them in variables or send them to an API
+//     } else {
+//       print('No coordinates found for the given address.');
+//       return {"latitude": 0, "longitude": 0};
+//     }
+//   } catch (e) {
+//     print('Error occurred while converting address to coordinates: $e');
+//     return {"latitude": 0, "longitude": 0};
+//   }
+// }

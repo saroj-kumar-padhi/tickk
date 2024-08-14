@@ -305,6 +305,7 @@ class MyStore extends StatelessWidget {
                                           Text(
                                               "${reviewscontrollers.ratingResponse.averageRating} (${reviewscontrollers.ratingResponse.ratingCount})"),
                                           RatingBar(
+                                            ignoreGestures: true,
                                             itemSize: 12,
                                             initialRating: reviewscontrollers
                                                 .ratingResponse.averageRating,

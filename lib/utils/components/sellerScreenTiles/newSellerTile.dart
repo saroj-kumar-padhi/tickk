@@ -502,7 +502,7 @@ class NewSellerCard extends StatelessWidget {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return const PickImageDialog(
-                                          heading: 'upload image',
+                                          heading: 'upload product images',
                                         );
                                       },
                                     );

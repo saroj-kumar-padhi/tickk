@@ -13,7 +13,7 @@ class _RestClient implements RestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.1.18:3002';
+    baseUrl ??= 'http://13.201.210.192:3002';
   }
 
   final Dio _dio;
@@ -980,6 +980,7 @@ class _RestClient implements RestClient {
   @override
   Future<void> pushtoBuyerInProcessAndSellerInProcess(
     String RequirementID,
+    String StoreID,
     Map<String, dynamic> data,
   ) async {
     final _extra = <String, dynamic>{};
@@ -994,7 +995,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/sellerNewTab/InprocesBuyerSeller/${RequirementID}',
+          '/sellerNewTab/InprocesBuyerSeller/${RequirementID}/${StoreID}',
           queryParameters: queryParameters,
           data: _data,
         )

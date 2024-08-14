@@ -22,6 +22,7 @@ import 'views/seller_views/seller_home_screens/seller_home.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'views/seller_views/welcome_screen.dart';
+import 'views/singUpPages/Signup_otp.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,11 +72,7 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        // home: const AuthWrapper(),
-        // home: const HomeSeller(
-        //   storeId: 'TS156235HP',
-        // ),
-        // home: const EnhancedWelcomeScreen(),
+        // home: const OTP(),
 
         home: const AuthWrapper(),
 

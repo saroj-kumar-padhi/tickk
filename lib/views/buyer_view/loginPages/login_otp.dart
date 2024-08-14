@@ -139,15 +139,6 @@ class LogINOTP extends StatelessWidget {
                           );
                         }),
                         const Spacer(),
-                        // Padding(
-                        //     padding: const EdgeInsets.only(bottom: 35),
-                        //     child: CoustumRichText(
-                        //       text1: 'Don’t have an account? ',
-                        //       text2: AppStrings.signUpButtonText,
-                        //       callBack: () {
-                        //         Get.toNamed(RouteName.signPhoneScreen);
-                        //       },
-                        //     ))
                       ],
                     );
             })),

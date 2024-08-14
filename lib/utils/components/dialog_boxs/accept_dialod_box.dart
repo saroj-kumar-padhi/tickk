@@ -136,6 +136,7 @@ class AcceptDialodBox extends StatelessWidget {
                         context: context,
                         onPressedCallback: () async {
                           final dio.FormData formData = dio.FormData.fromMap({
+                            "StoreID": storeId,
                             "RequirementID": requiremetId,
                             "Quote":
                                 exactController.quoteEditingController.text,
@@ -161,15 +162,21 @@ class AcceptDialodBox extends StatelessWidget {
                           }
 
                           try {
-                            await postdio.exactOrSimilar(formData);
+                            try {
+                              await postdio.exactOrSimilar(formData);
+                            } catch (e) {
+                              Logger().e(e);
+                            }
                             Get.back();
                             try {
                               try {
                                 await restClient
                                     .pushtoBuyerInProcessAndSellerInProcess(
-                                        requiremetId, {"Accept": true});
+                                        requiremetId,
+                                        storeId,
+                                        {"Accept": true});
                               } catch (e) {
-                                Logger().e(e);
+                                Logger().f(e);
                               }
                               try {
                                 final SellerInprocesscontroller

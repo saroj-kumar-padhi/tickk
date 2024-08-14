@@ -115,6 +115,7 @@ class _ChangeLocationState extends State<ChangeLocation> {
                         // Update the dialogBoxController with the selected prediction
                         dialogBoxController.locacationController.value.text =
                             prediction.description ?? "";
+                        print(prediction.lat);
 
                         await _fetchPlaceDetails(prediction.placeId ?? "");
 
@@ -139,27 +140,6 @@ class _ChangeLocationState extends State<ChangeLocation> {
                   ),
                 ),
               ),
-              // InkWell(
-              //   onTap: () async {
-              //     await dialogBoxController.getCurrentLocation();
-              //     Get.to(const GoogleMapPage());
-              //     productSetUpController.updateButtonState();
-              //   },
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(left: 20),
-              //     child: Align(
-              //       alignment: Alignment.bottomLeft,
-              //       child: Text(
-              //         "Use my current location",
-              //         style: TextStyles.openSansUnderLine(
-              //           fontWeight: FontWeight.w400,
-              //           fontSize: 14,
-              //           color: const Color(0xffFC8019),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // )
             ],
           ),
         ],
