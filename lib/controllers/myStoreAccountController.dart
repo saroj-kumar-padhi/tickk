@@ -16,7 +16,11 @@ class Mystoreaccountcontroller extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchStoreDetails(storeId).then((_) => updateSellerLocationAddress());
+    fetchStoreDetails(storeId).then((_) {
+      if (storeDetails.value != null) {
+        getAddressFromCoordinates(sellerLocation);
+      }
+    });
   }
 
   Future<void> fetchStoreDetails(String storeId) async {
@@ -34,28 +38,41 @@ class Mystoreaccountcontroller extends GetxController {
     }
   }
 
-  Future<void> updateSellerLocationAddress() async {
-    SellerLocation location = sellerLocation;
-    convertedAddress.value = await getAddressFromCoordinates(location);
-  }
-
-  Future<String> getAddressFromCoordinates(SellerLocation? location) async {
-    if (location == null) return "Address not found";
-
+  Future<void> getAddressFromCoordinates(SellerLocation location) async {
     try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-          double.parse(location.latitude), double.parse(location.longitude));
+      print(
+          "Attempting to get address for: ${location.latitude}, ${location.longitude}");
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(location.latitude, location.longitude);
 
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks[0];
-        String address =
-            "${place.street}, ${place.locality}, ${place.postalCode}, ${place.country}";
-        return address;
+        String detailedAddress = [
+          if (place.name != null && place.name!.isNotEmpty) place.name,
+          if (place.street != null && place.street!.isNotEmpty) place.street,
+          if (place.subLocality != null && place.subLocality!.isNotEmpty)
+            place.subLocality,
+          if (place.locality != null && place.locality!.isNotEmpty)
+            place.locality,
+          if (place.subAdministrativeArea != null &&
+              place.subAdministrativeArea!.isNotEmpty)
+            place.subAdministrativeArea,
+          if (place.administrativeArea != null &&
+              place.administrativeArea!.isNotEmpty)
+            place.administrativeArea,
+          if (place.postalCode != null && place.postalCode!.isNotEmpty)
+            place.postalCode,
+          if (place.country != null && place.country!.isNotEmpty) place.country,
+        ].where((element) => element != null).join(", ");
+
+        print("Detailed address found: $detailedAddress");
+        convertedAddress.value = detailedAddress;
+      } else {
+        print("No placemarks found");
       }
     } catch (e) {
-      print("Error: $e");
+      print("Error in getAddressFromCoordinates: $e");
     }
-    return "Address not found";
   }
 
   String getCurrentDayTiming() {
@@ -189,7 +206,7 @@ class Mystoreaccountcontroller extends GetxController {
 
   SellerLocation get sellerLocation =>
       storeDetails.value?.sellerLocation ??
-      SellerLocation(latitude: "90.676", longitude: "90.76586");
+      SellerLocation(latitude: 0.0, longitude: 0.0);
 
   String get storeAddress => convertedAddress.value;
 }

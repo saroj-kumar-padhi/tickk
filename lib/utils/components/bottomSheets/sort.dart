@@ -208,9 +208,12 @@ Widget _buildSortByDistanceTab(
           Buttons.shortButton(
               onPressedCallback: () async {
                 try {
-                  Map<String, double> data =
-                      await convertAddressToLatLong(dialogBoxController);
-                  await restClient.postLoacation(requirementID, data);
+                  // Map<String, double> data =
+                  //     await convertAddressToLatLong(dialogBoxController);
+                  await restClient.postLoacation(requirementID, {
+                    "latitude": dialogBoxController.longitude.value,
+                    "longitude": dialogBoxController.latitude.value
+                  });
                   await buyerinprocesscontroller.fetchStoredListByDistance(
                       requirementId: requirementID);
                 } catch (e) {
@@ -228,28 +231,28 @@ Widget _buildSortByDistanceTab(
   );
 }
 
-Future<Map<String, double>> convertAddressToLatLong(
-    DialogBoxController dialogBoxController) async {
-  String address = dialogBoxController.locacationController.value.text;
+// Future<Map<String, double>> convertAddressToLatLong(
+//     DialogBoxController dialogBoxController) async {
+//   String address = dialogBoxController.locacationController.value.text;
 
-  try {
-    List<Location> locations = await locationFromAddress(address);
+//   try {
+//     List<Location> locations = await locationFromAddress(address);
 
-    if (locations.isNotEmpty) {
-      Location location = locations.first;
-      double latitude = location.latitude;
-      double longitude = location.longitude;
+//     if (locations.isNotEmpty) {
+//       Location location = locations.first;
+//       double latitude = location.latitude;
+//       double longitude = location.longitude;
 
-      print('Latitude: $latitude, Longitude: $longitude');
-      return {"latitude": latitude, "longitude": longitude};
-      // You can now use these latitude and longitude values as needed
-      // For example, you might want to store them in variables or send them to an API
-    } else {
-      print('No coordinates found for the given address.');
-      return {"latitude": 0, "longitude": 0};
-    }
-  } catch (e) {
-    print('Error occurred while converting address to coordinates: $e');
-    return {"latitude": 0, "longitude": 0};
-  }
-}
+//       print('Latitude: $latitude, Longitude: $longitude');
+//       return {"latitude": latitude, "longitude": longitude};
+//       // You can now use these latitude and longitude values as needed
+//       // For example, you might want to store them in variables or send them to an API
+//     } else {
+//       print('No coordinates found for the given address.');
+//       return {"latitude": 0, "longitude": 0};
+//     }
+//   } catch (e) {
+//     print('Error occurred while converting address to coordinates: $e');
+//     return {"latitude": 0, "longitude": 0};
+//   }
+// }

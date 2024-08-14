@@ -117,8 +117,9 @@ class ProductSetUpController extends GetxController {
       final DialogBoxController dialogBoxController =
           Get.find<DialogBoxController>();
       String address = dialogBoxController.locacationController.value.text;
-      Map<String, double> convertedAddressToLatLong =
-          await convertAddressToLatLong(dialogBoxController);
+      // Map<String, double> convertedAddressToLatLong =
+      //     await convertAddressToLatLong(
+      //         dialogBoxController);
 
       var formData = dio.FormData();
       final box = Hive.box('myBox');
@@ -153,8 +154,8 @@ class ProductSetUpController extends GetxController {
         MapEntry(
             "sellerLocation",
             jsonEncode({
-              "latitude": convertedAddressToLatLong["latitude"].toString(),
-              "longitude": convertedAddressToLatLong["longitude"].toString(),
+              "latitude": dialogBoxController.latitude.value,
+              "longitude": dialogBoxController.longitude.value,
             })),
         const MapEntry("District_City", "Hyderabad"),
         MapEntry(
@@ -182,11 +183,13 @@ class ProductSetUpController extends GetxController {
 
       // Send the request
       try {
+        isLoading.value = true;
         await postdio.setupStrore(formattedPhoneNumber, formData);
 
         final storeData =
             await restClient.checkStoreId(int.parse(formattedPhoneNumber));
         final storeId = storeData.StoreID;
+        isLoading.value = false;
         Get.to(HomeSeller(storeId: storeId));
         Get.snackbar('Success', 'Store setup completed successfully');
       } catch (e) {

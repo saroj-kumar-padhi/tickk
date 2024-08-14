@@ -514,12 +514,18 @@ class MyStore extends StatelessWidget {
                                           SizedBox(
                                             width: 20.w,
                                           ),
-                                          Text(
+                                          Expanded(
+                                            child: Text(
                                               mystoreaccountcontroller
                                                   .storeAddress,
                                               style: TextStyles.openSans(
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400)),
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                              maxLines: null,
+                                              overflow: TextOverflow.visible,
+                                            ),
+                                          ),
                                           const Spacer(),
                                           Padding(
                                             padding:

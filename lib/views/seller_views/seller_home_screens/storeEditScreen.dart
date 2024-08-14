@@ -1280,30 +1280,19 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                               }
                             };
 
-                            try {
-                              restClient.deleteImageInEditStore({
-                                "StoreID": widget.storeID,
-                                "imageIndices": removedImdexs,
-                              });
-                            } catch (e) {
-                              Logger().d(e);
+                            if (removedImdexs.isNotEmpty) {
+                              try {
+                                await restClient.deleteImageInEditStore({
+                                  "StoreID": widget.storeID,
+                                  "imageIndices": removedImdexs,
+                                });
+                              } catch (e) {
+                                Logger().d(e);
+
+                                // Note: We're not returning here, so it will continue to edit
+                              }
                             }
 
-                            try {
-                              await restClient.deleteImageInEditStore({
-                                "StoreID": widget.storeID,
-                                "imageIndices": removedImdexs,
-                              });
-                            } catch (e) {
-                              Logger().d(e);
-                              // Maybe show an error message to the user
-                              Fluttertoast.showToast(
-                                  msg:
-                                      "Failed to delete images: ${e.toString()}");
-                              return; // Exit the function if delete fails
-                            }
-
-// Only proceed with edit if delete was successful
                             dio.FormData formDatatoPost =
                                 await convertToMultipart(localImageFiles);
                             try {
@@ -1311,10 +1300,16 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                                   widget.storeID, formDatatoPost);
                             } catch (e) {
                               Logger().f(e);
-                              Fluttertoast.showToast(
-                                  msg:
-                                      "Failed to edit images: ${e.toString()}");
                             }
+
+                            try {
+                              await restClient.editStore(widget.storeID, data);
+                              Fluttertoast.showToast(
+                                  msg: "Store updated successfully");
+                            } catch (e) {}
+
+                            Get.back();
+                            Get.back();
                           },
                           style: ElevatedButton.styleFrom(
                             side: const BorderSide(color: Color(0xffFC8019)),

@@ -46,7 +46,7 @@ class DialogBoxController extends GetxController {
         Placemark place = placemarks.first;
         locacationController.update((val) {
           val?.text =
-              "${place.name} ${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+              "${place.name} ${place.street},${place.subLocality} ${place.locality}, ${place.administrativeArea}, ${place.country}";
         });
       }
       await moveCameraToLocation(lat, lng);
