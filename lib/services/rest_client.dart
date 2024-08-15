@@ -34,8 +34,8 @@ import 'package:dio/dio.dart' as dio;
 
 part 'rest_client.g.dart';
 
-@RestApi(baseUrl: 'http://13.201.210.192:3002')
-// @RestApi(baseUrl: 'http://192.168.1.14:3002')
+// @RestApi(baseUrl: 'http://13.201.210.192:3002')
+@RestApi(baseUrl: 'http://192.168.1.15:3002')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
@@ -73,6 +73,9 @@ abstract class RestClient {
   @GET('/BuyerNewtabGet/{mobileNumber}')
   Future<RequirementList> getRequirements(
       @Path('mobileNumber') int mobileNumber);
+
+  @GET('/selling/storeNameBymobile/{mobile}')
+  Future<MessageOTP> isAlreadyStoreSetup(@Path('mobile') int mobile);
 
   @GET('/postrequirement/countofStores/{cate}')
   Future<CountModel> fetchCategoriesCount(@Path('cate') String cate);

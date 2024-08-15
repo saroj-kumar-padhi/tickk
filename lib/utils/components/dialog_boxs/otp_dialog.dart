@@ -54,6 +54,8 @@ class OtpDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final box = Hive.box('myBox');
+    final String formattedPhoneNumber = box.get('phone') ?? "";
     BasiccontrollerEdit basiccontrollerEdit = BasiccontrollerEdit();
     final defaultPinTheme = PinTheme(
       width: 60.w,
@@ -80,10 +82,7 @@ class OtpDialog extends StatelessWidget {
               right: 10.0,
               child: GestureDetector(
                 onTap: () => Get.back(),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(Icons.close, size: 24.0),
-                ),
+                child: const Icon(Icons.close, size: 24.0),
               ),
             ),
             Padding(
@@ -96,7 +95,7 @@ class OtpDialog extends StatelessWidget {
                     padding: EdgeInsets.only(
                         bottom: GlobalSizes.getDeviceHeight(context) * 0.01),
                     child: Text(
-                      "We sent a verification code to ${AuthController().phoneAuthController.text}",
+                      "We sent a verification code to $formattedPhoneNumber",
                       style: TextStyles.openSans(
                           fontSize: 18, fontWeight: FontWeight.w600),
                     ),
@@ -131,36 +130,36 @@ class OtpDialog extends StatelessWidget {
                         try {
                           await restClient.deleteAccountVerifyOTP(
                               formattedPhoneNumber, textEditingController.text);
-                        } catch (e) {
-                          Fluttertoast.showToast(msg: e.toString());
-                        }
 
-                        try {
-                          await restClient.deleteAccount(formattedPhoneNumber,
-                              {"DeleteAccountReason": reason});
-                          Future.delayed(Duration.zero, () {
-                            nametoNavigate == 'success'
-                                ? showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return const SuccessDialog(
-                                        tile:
-                                            'Profile Details have been updated Successfully!',
-                                      );
-                                    },
-                                  )
-                                : showSuccessDeleteDialog(context);
+                          try {
+                            await restClient.deleteAccount(formattedPhoneNumber,
+                                {"DeleteAccountReason": reason});
+                            Future.delayed(Duration.zero, () {
+                              nametoNavigate == 'success'
+                                  ? showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const SuccessDialog(
+                                          tile:
+                                              'Profile Details have been updated Successfully!',
+                                        );
+                                      },
+                                    )
+                                  : showSuccessDeleteDialog(context);
+                              Get.to(const Login());
+                            });
+
                             Get.to(const Login());
-                          });
-
-                          Get.to(const Login());
+                          } catch (e) {
+                            Logger().d(e);
+                          }
                         } catch (e) {
-                          Logger().d(e);
+                          Fluttertoast.showToast(msg: "Invalid otp");
                         }
                       } catch (e) {
                         Logger().d(e);
                       }
-                      Get.back();
+                      // Get.back();
                     },
                     buttonText: 'Delete',
                     textColor: Colors.white,

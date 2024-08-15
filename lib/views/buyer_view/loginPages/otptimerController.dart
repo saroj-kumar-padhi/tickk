@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../controllers/authController.dart';
 
 class OTPTimmerController extends GetxController {
   var isLoading = false.obs;
@@ -29,12 +32,9 @@ class OTPTimmerController extends GetxController {
     });
   }
 
-  void signInWithOtp() {
-    // Implement your sign-in logic here
-  }
-
-  void resendOtp() {
-    // Implement your resend OTP logic here
+  void resendOtp({required bool isLogin}) {
+    AuthController authController = Get.put(AuthController());
+    isLogin ? authController.LoginWithOtp() : authController.signUpWithOtp();
     startResendOtpTimer();
   }
 }

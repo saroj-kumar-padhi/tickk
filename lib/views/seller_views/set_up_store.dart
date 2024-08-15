@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:logger/web.dart';
@@ -1111,67 +1113,103 @@ class _SetUpProductState extends State<SetUpProduct> {
                       height: 30.h,
                     ),
 
-                    Obx(() {
-                      return Padding(
-                        padding: EdgeInsets.only(right: 20.w),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: productSetUpController
-                                    .isButtonEnabled.value
-                                ? () {
-                                    List<String> brandsList =
-                                        productSetUpController
-                                            .brandsController.text
-                                            .split(',')
-                                            .map((brand) => brand.trim())
-                                            .where((brand) => brand.isNotEmpty)
-                                            .toList();
-                                    productSetUpController.setupStrore(
-                                        productSetUpController.imagePaths,
-                                        SetUpProduct.categorySelectController
-                                            .selectedOptions
-                                            .map((item) => item.label)
-                                            .toList(),
-                                        // subCategorySelectController
-                                        //     .selectedOptions
-                                        //     .map((item) => item.label)
-                                        //     .toList(),
-                                        selectedSubCategoryItems,
-                                        selectedSubSubCategoryItems,
-                                        brandsList);
-                                    // Get.toNamed(RouteName.sellerHome);
+                    productSetUpController.count.value > 0
+                        ? const SizedBox()
+                        : Obx(() {
+                            return Padding(
+                              padding: EdgeInsets.only(right: 20.w),
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: productSetUpController
+                                              .isButtonEnabled.value &&
+                                          !productSetUpController
+                                              .isProcessing.value
+                                      ? () {
+                                          productSetUpController.count.value =
+                                              2;
+                                          productSetUpController
+                                              .isProcessing.value = true;
+                                          List<String> brandsList =
+                                              productSetUpController
+                                                  .brandsController.text
+                                                  .split(',')
+                                                  .map((brand) => brand.trim())
+                                                  .where((brand) =>
+                                                      brand.isNotEmpty)
+                                                  .toList();
+                                          productSetUpController.setupStrore(
+                                            productSetUpController.imagePaths,
+                                            SetUpProduct
+                                                .categorySelectController
+                                                .selectedOptions
+                                                .map((item) => item.label)
+                                                .toList(),
+                                            selectedSubCategoryItems,
+                                            selectedSubSubCategoryItems,
+                                            brandsList,
+                                          );
+                                          exactController.isSeller.value =
+                                              false;
 
-                                    exactController.isSeller.value = false;
-                                  }
-                                : null, // Disable the button if fields are not filled
-                            style: ElevatedButton.styleFrom(
-                              side: BorderSide(
-                                color: const Color(0xffFC8019).withOpacity(
-                                    productSetUpController.isButtonEnabled.value
-                                        ? 1.0
-                                        : 0.9),
-                                width: 0,
+                                          // Start the countdown timer
+                                          int remainingSeconds = 5;
+                                          Timer.periodic(
+                                              const Duration(seconds: 1),
+                                              (timer) {
+                                            if (remainingSeconds > 0) {
+                                              remainingSeconds--;
+                                              productSetUpController
+                                                      .buttonText.value =
+                                                  "Store setup in $remainingSeconds s";
+                                            } else {
+                                              timer.cancel();
+                                              productSetUpController
+                                                  .isProcessing.value = false;
+                                              productSetUpController.buttonText
+                                                  .value = "Setup Store";
+                                              productSetUpController
+                                                          .count.value >
+                                                      0
+                                                  ? Fluttertoast.showToast(
+                                                      msg:
+                                                          "Re-click on the Setup Store")
+                                                  : const SizedBox();
+                                            }
+                                          });
+                                        }
+                                      : null,
+                                  style: ElevatedButton.styleFrom(
+                                    side: BorderSide(
+                                      color: const Color(0xffFC8019)
+                                          .withOpacity(productSetUpController
+                                                      .isButtonEnabled.value &&
+                                                  !productSetUpController
+                                                      .isProcessing.value
+                                              ? 1.0
+                                              : 0.9),
+                                      width: 0,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    backgroundColor: const Color(0xffFC8019),
+                                    padding: EdgeInsets.all(
+                                      GlobalSizes.getDeviceWidth(context) *
+                                          0.04,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    productSetUpController.buttonText.value,
+                                    style: const TextStyle(
+                                      fontSize: 18.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              backgroundColor: const Color(0xffFC8019),
-                              padding: EdgeInsets.all(
-                                GlobalSizes.getDeviceWidth(context) * 0.04,
-                              ),
-                            ),
-                            child: const Text(
-                              "Next",
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                color: Colors.white, // Text color
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
+                            );
+                          }),
 
                     SizedBox(
                       height: 30.h,

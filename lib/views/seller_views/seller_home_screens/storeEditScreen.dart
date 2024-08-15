@@ -28,6 +28,7 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import '../../../controllers/categoriesController.dart';
 import '../../../controllers/dropDownController.dart';
 import '../../../controllers/exactController.dart';
+import '../../../controllers/myStoreAccountController.dart';
 import '../../../controllers/sortDialogBoxController.dart';
 import '../../../utils/components/dialog_boxs/pick_diallo.dart';
 import '../../../utils/size/global_size/global_size.dart';
@@ -76,6 +77,8 @@ class StoreEditScreen extends StatefulWidget {
   final String fridayClosetime;
   final String saturdayOpentime;
   final String saturdayClosetime;
+  final double lat;
+  final double long;
 
   StoreEditScreen(
       {super.key,
@@ -108,7 +111,9 @@ class StoreEditScreen extends StatefulWidget {
       required this.saturdayClosetime,
       required this.stared,
       required this.storeID,
-      required this.imageList});
+      required this.imageList,
+      required this.lat,
+      required this.long});
 
   @override
   State<StoreEditScreen> createState() => _StoreEditScreenState();
@@ -201,6 +206,67 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
   @override
   Widget build(BuildContext context) {
     RxList images = widget.imageList.obs;
+    InkWell addImages(BuildContext context) {
+      return InkWell(
+        onTap: () async {
+          final result = await showDialog<String>(
+            context: context,
+            builder: (BuildContext context) {
+              return const PickImageDialog(
+                heading: 'upload your store image',
+              );
+            },
+          );
+          if (result != null) {
+            images.add(result);
+            if (images.length == 1) {
+              productSetUpController.staredImage.add(result); // started
+            }
+          }
+        },
+        child: Center(
+          child: Container(
+            height: 100.h,
+            width: 150.w,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: const Color(0xffC4C4C4), // Border color
+                width: 1.0.w, // Border width
+              ),
+              borderRadius: BorderRadius.circular(10.0.r), // Border radius
+            ),
+            child: Padding(
+              padding:
+                  EdgeInsets.all(MediaQuery.of(context).size.height * 0.01),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  SvgPicture.asset(
+                    "assest/camera_orange.svg",
+                    height: 30.h,
+                    width: 50.w, // Corrected spelling of "assets"
+                    // Adjust height as needed
+                  ),
+                  SizedBox(
+                    height: 5.h,
+                  ),
+                  Text(
+                    "Add your store images *",
+                    style: TextStyles.openSans(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 10.sp,
+                        color: const Color(0xffFC8019)),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     String brands = widget.brands.join(',');
     TextEditingController storeNameController =
         TextEditingController(text: widget.storeName);
@@ -260,6 +326,7 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
     final box = Hive.box('myBox');
     final String formattedPhoneNumber = box.get('phone') ?? "";
     List<File> localImageFiles = [];
+    productSetUpController.staredImage.add(widget.stared);
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -1214,114 +1281,177 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                       height: 30.h,
                     ),
 
-                    Padding(
-                      padding: EdgeInsets.only(right: 20.w),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            Map<String, dynamic> data = {
-                              "StoreName": storeNameController.text,
-                              "storeCategory": categorySelected.isEmpty
-                                  ? widget.storeCategory
-                                  : categorySelected,
-                              "storeSubCategory": subCategorySelected.isEmpty
-                                  ? widget.storeSubcategory
-                                  : subCategorySelected,
-                              "About_the_store": aboutYourStoreController.text,
-                              "youtubelink": ytController.text,
-                              "instagarmlink": iGController.text,
-                              "Websitelink": wLController.text,
-                              "StreetNo_BuildingName": houseNoController.text,
-                              "StreetName_Area": streetController.text,
-                              "Brands": brandsController.text,
-                              "timings": {
-                                "Sunday": {
-                                  "open": sundayOpenController.text,
-                                  "close": sundayCloseController.text
-                                },
-                                "Monday": {
-                                  "open": mondayOpenController.text,
-                                  "close": mondayCloseController.text
-                                },
-                                "Tuesday": {
-                                  "open": tuesdayOpenController.text,
-                                  "close": tuesdayCloseController.text
-                                },
-                                "Wednesday": {
-                                  "open": wednesdayOpenController.text,
-                                  "close": wednesdayCloseController.text
-                                },
-                                "Thursday": {
-                                  "open": thursdayOpenController.text,
-                                  "close": thursdayCloseController.text
-                                },
-                                "Friday": {
-                                  "open": fridayOpenController.text,
-                                  "close": fridayCloseController.text
-                                },
-                                "Saturday": {
-                                  "open": saturdayOpenController.text,
-                                  "close": saturdayCloseController.text
-                                }
-                              },
-                              "Postcode_ZIP": pinCodeController.text,
-                              "sellerLocation": {
-                                "latitude": dialogBoxController.latitude.value,
-                                "longitude": dialogBoxController.longitude.value
-                              }
-                            };
+                    Obx(
+                      () => images.isNotEmpty
+                          ? Padding(
+                              padding: EdgeInsets.only(right: 20.w),
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    Map<String, dynamic> data = {
+                                      "StoreName": storeNameController.text,
+                                      "storeCategory": categorySelected.isEmpty
+                                          ? widget.storeCategory
+                                          : categorySelected,
+                                      "storeSubCategory":
+                                          subCategorySelected.isEmpty
+                                              ? widget.storeSubcategory
+                                              : subCategorySelected,
+                                      "About_the_store":
+                                          aboutYourStoreController.text,
+                                      "youtubelink": ytController.text,
+                                      "instagarmlink": iGController.text,
+                                      "Websitelink": wLController.text,
+                                      "StreetNo_BuildingName":
+                                          houseNoController.text,
+                                      "StreetName_Area": streetController.text,
+                                      "Brands": brandsController.text,
+                                      "timings": {
+                                        "Sunday": {
+                                          "open": sundayOpenController.text,
+                                          "close": sundayCloseController.text
+                                        },
+                                        "Monday": {
+                                          "open": mondayOpenController.text,
+                                          "close": mondayCloseController.text
+                                        },
+                                        "Tuesday": {
+                                          "open": tuesdayOpenController.text,
+                                          "close": tuesdayCloseController.text
+                                        },
+                                        "Wednesday": {
+                                          "open": wednesdayOpenController.text,
+                                          "close": wednesdayCloseController.text
+                                        },
+                                        "Thursday": {
+                                          "open": thursdayOpenController.text,
+                                          "close": thursdayCloseController.text
+                                        },
+                                        "Friday": {
+                                          "open": fridayOpenController.text,
+                                          "close": fridayCloseController.text
+                                        },
+                                        "Saturday": {
+                                          "open": saturdayOpenController.text,
+                                          "close": saturdayCloseController.text
+                                        }
+                                      },
+                                      "Postcode_ZIP": pinCodeController.text,
+                                      "sellerLocation": {
+                                        "latitude": widget.lat,
+                                        "longitude": widget.long
+                                      }
+                                    };
 
-                            if (removedImdexs.isNotEmpty) {
-                              try {
-                                await restClient.deleteImageInEditStore({
-                                  "StoreID": widget.storeID,
-                                  "imageIndices": removedImdexs,
-                                });
-                              } catch (e) {
-                                Logger().d(e);
+                                    if (removedImdexs.isNotEmpty) {
+                                      try {
+                                        await restClient
+                                            .deleteImageInEditStore({
+                                          "StoreID": widget.storeID,
+                                          "imageIndices": removedImdexs,
+                                        });
+                                      } catch (e) {
+                                        Logger().d(e);
 
-                                // Note: We're not returning here, so it will continue to edit
-                              }
-                            }
+                                        // Note: We're not returning here, so it will continue to edit
+                                      }
+                                    }
 
-                            dio.FormData formDatatoPost =
-                                await convertToMultipart(localImageFiles);
-                            try {
-                              await postdio.editProfileImage(
-                                  widget.storeID, formDatatoPost);
-                            } catch (e) {
-                              Logger().f(e);
-                            }
+                                    int st = 0;
 
-                            try {
-                              await restClient.editStore(widget.storeID, data);
-                              Fluttertoast.showToast(
-                                  msg: "Store updated successfully");
-                            } catch (e) {}
+                                    dio.FormData formDatatoPost =
+                                        await convertToMultipart(
+                                            localImageFiles);
+                                    if (images.isNotEmpty &&
+                                        productSetUpController
+                                            .staredImage.isNotEmpty) {
+                                      for (int i = 0; i < images.length; i++) {
+                                        if (productSetUpController
+                                                .staredImage.first ==
+                                            images[i]) {
+                                          st = i;
+                                        }
+                                      }
+                                    } else {
+                                      // Handle the case where one or both lists are empty
+                                      print('One or both lists are empty');
+                                    }
 
-                            Get.back();
-                            Get.back();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            side: const BorderSide(color: Color(0xffFC8019)),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
+                                    formDatatoPost.fields.add(
+                                        MapEntry('staredIndex', st.toString()));
+                                    try {
+                                      await postdio.editProfileImage(
+                                          widget.storeID, formDatatoPost);
+                                    } catch (e) {
+                                      Logger().f(e);
+                                    }
+
+                                    try {
+                                      Mystoreaccountcontroller
+                                          mystoreaccountcontroller = Get.put(
+                                              Mystoreaccountcontroller(
+                                                  storeId: widget.storeID));
+                                      await restClient.editStore(
+                                          widget.storeID, data);
+                                      await mystoreaccountcontroller
+                                          .fetchStoreDetails(widget.storeID);
+
+                                      Fluttertoast.showToast(
+                                          msg: "Store updated successfully");
+                                    } catch (e) {}
+
+                                    Get.back();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    side: const BorderSide(
+                                        color: Color(0xffFC8019)),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    backgroundColor: const Color(0xffFC8019),
+                                    padding: EdgeInsets.all(
+                                      GlobalSizes.getDeviceWidth(context) *
+                                          0.04,
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    "Update",
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Colors.white, // Text color
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Padding(
+                              padding: EdgeInsets.only(right: 20.w),
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    backgroundColor: const Color(0xffFC8019)
+                                        .withOpacity(0.5),
+                                    padding: EdgeInsets.all(
+                                      GlobalSizes.getDeviceWidth(context) *
+                                          0.04,
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  child: const Text(
+                                    "Update",
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Colors.white, // Text color
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                            backgroundColor: const Color(0xffFC8019),
-                            padding: EdgeInsets.all(
-                              GlobalSizes.getDeviceWidth(context) * 0.04,
-                            ),
-                          ),
-                          child: const Text(
-                            "Update",
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.white, // Text color
-                            ),
-                          ),
-                        ),
-                      ),
                     ),
 
                     SizedBox(
@@ -1446,66 +1576,6 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
               ),
             ],
           )),
-    );
-  }
-
-  InkWell addImages(BuildContext context) {
-    return InkWell(
-      onTap: () async {
-        final result = await showDialog<String>(
-          context: context,
-          builder: (BuildContext context) {
-            return const PickImageDialog(
-              heading: 'upload your stote image',
-            );
-          },
-        );
-        if (result != null) {
-          productSetUpController.imagePaths.add(result);
-          if (productSetUpController.imagePaths.length == 1) {
-            productSetUpController.staredImage.add(result);
-          }
-        }
-      },
-      child: Center(
-        child: Container(
-          height: 100.h,
-          width: 150.w,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: const Color(0xffC4C4C4), // Border color
-              width: 1.0.w, // Border width
-            ),
-            borderRadius: BorderRadius.circular(10.0.r), // Border radius
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.01),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 20.h,
-                ),
-                SvgPicture.asset(
-                  "assest/camera_orange.svg",
-                  height: 30.h,
-                  width: 50.w, // Corrected spelling of "assets"
-                  // Adjust height as needed
-                ),
-                SizedBox(
-                  height: 5.h,
-                ),
-                Text(
-                  "Add your store images *",
-                  style: TextStyles.openSans(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 10.sp,
-                      color: const Color(0xffFC8019)),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 

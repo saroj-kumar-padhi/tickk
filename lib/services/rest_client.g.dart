@@ -13,7 +13,7 @@ class _RestClient implements RestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://13.201.210.192:3002';
+    baseUrl ??= 'http://192.168.1.15:3002';
   }
 
   final Dio _dio;
@@ -200,6 +200,33 @@ class _RestClient implements RestClient {
               baseUrl,
             ))));
     final value = RequirementList.fromJson(_result.data!['data']);
+    return value;
+  }
+
+  @override
+  Future<MessageOTP> isAlreadyStoreSetup(int mobile) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<MessageOTP>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/selling/storeNameBymobile/${mobile}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = MessageOTP.fromJson(_result.data!);
     return value;
   }
 

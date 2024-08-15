@@ -264,6 +264,12 @@ class MyStore extends StatelessWidget {
                                                               imageList:
                                                                   mystoreaccountcontroller
                                                                       .storeImages,
+                                                              lat: mystoreaccountcontroller
+                                                                  .sellerLocation
+                                                                  .latitude,
+                                                              long: mystoreaccountcontroller
+                                                                  .sellerLocation
+                                                                  .longitude,
                                                             ));
                                                   },
                                                   style:

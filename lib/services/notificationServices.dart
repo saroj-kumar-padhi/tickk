@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:logger/logger.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../models/stores_fcm.dart';
 
@@ -26,6 +27,11 @@ class PushNotificationServices {
       onDidReceiveNotificationResponse: (payload) {},
     );
   }
+
+  // Future<void> clearAllNotifications() async {
+  //   // Cancel all local notifications
+  //   await flutterLocalNotificationsPlugin.cancelAll();
+  // }
 
   void showNotification(RemoteMessage message) async {
     AndroidNotificationChannel channel = AndroidNotificationChannel(

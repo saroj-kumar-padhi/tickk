@@ -4,6 +4,7 @@ import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/services/notificationServices.dart';
 import 'package:dekhlo/utils/no_internet.dart';
 import 'package:dekhlo/utils/pagenotfound.dart';
+import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/views/buyer_view/home_screen_buyer.dart/home_screenBuyer.dart';
 import 'package:dekhlo/views/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +18,7 @@ import 'package:dekhlo/utils/routes/routes_controller.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
+import 'views/buyer_view/loginPages/login_otp.dart';
 import 'views/seller_views/seller_home_screens/seller_home.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
@@ -44,6 +46,7 @@ void main() async {
       Logger().d(e);
     }
   }
+  // notificationServices.clearAllNotifications();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingHandler);
   runApp(const MyApp());
 }
@@ -76,6 +79,7 @@ class MyApp extends StatelessWidget {
 
         home: const AuthWrapper(),
 
+        // home: const LogINOTP(),
         getPages: AppPages.pages,
       ),
     );

@@ -10,9 +10,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../controllers/basicControllerEdit.dart';
+import '../../../controllers/sellerProfileController.dart';
 import '../../../utils/components/coustoumTextField.dart';
 import '../../../utils/components/dialog_boxs/otp_dialog.dart';
 import '../../../utils/components/dialog_boxs/pick_diallo.dart';
@@ -244,11 +246,11 @@ class EditProfile extends StatelessWidget {
                   child: Buttons.longButton(
                       color: const Color(0xffFC8019),
                       context: context,
-                      onPressedCallback: () {
+                      onPressedCallback: () async {
                         final box = Hive.box('myBox');
                         final String formattedPhoneNumber = box.get('phone');
 
-                        basiccontrollerEdit
+                        await basiccontrollerEdit
                             .updateProfileData(formattedPhoneNumber, {
                           if (basiccontrollerEdit
                                   .nameController.text.isNotEmpty ??
@@ -262,10 +264,17 @@ class EditProfile extends StatelessWidget {
                           if (imagePath.isNotEmpty)
                             "profileImage": imagePath.value
                         });
-                        basiccontrollerEdit.fetchBasicDetailsEdit(
-                            mobile: formattedPhoneNumber);
-                        Get.back();
-                        Get.back();
+                        try {
+                          SellerProfileController sellerProfileController =
+                              Get.put(SellerProfileController(
+                                  formattedPhoneNumber));
+                          sellerProfileController.fetchProfile();
+                          basiccontrollerEdit.fetchBasicDetailsEdit(
+                              mobile: formattedPhoneNumber);
+                          Get.back();
+                        } catch (e) {
+                          Logger().d(e);
+                        }
                       },
                       buttonText: 'Update',
                       textColor: Colors.white),

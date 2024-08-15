@@ -175,7 +175,9 @@ class OTPText extends StatelessWidget {
                     text: 'Resend OTP',
                     style: const TextStyle(color: Color(0xffFC8019)),
                     recognizer: TapGestureRecognizer()
-                      ..onTap = authController.resendOtp,
+                      ..onTap = () {
+                        authController.resendOtp(isLogin: true);
+                      },
                   ),
               ],
             ),

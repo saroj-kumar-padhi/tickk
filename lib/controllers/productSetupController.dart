@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:dekhlo/controllers/authController.dart';
 import 'package:dekhlo/controllers/sortDialogBoxController.dart';
+import 'package:dekhlo/models/sellerInprocess.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:logger/web.dart';
@@ -16,7 +19,10 @@ import '../views/seller_views/seller_home_screens/seller_home.dart';
 class ProductSetUpController extends GetxController {
   RxBool isLoading = false.obs;
   final RxList<String> staredImage = <String>[].obs;
-
+  final isSetupCompleted = false.obs;
+  final isProcessing = false.obs;
+  RxInt count = 0.obs;
+  final buttonText = "Next".obs;
   final TextEditingController nameEditingController = TextEditingController();
   final TextEditingController contactEditingController =
       TextEditingController();
@@ -184,13 +190,25 @@ class ProductSetUpController extends GetxController {
       // Send the request
       try {
         isLoading.value = true;
-        await postdio.setupStrore(formattedPhoneNumber, formData);
+        try {
+          isLoading.value = true;
+          MessageOTP sellerInprocessResponseModel = await restClient
+              .isAlreadyStoreSetup(int.parse(formattedPhoneNumber));
 
-        final storeData =
-            await restClient.checkStoreId(int.parse(formattedPhoneNumber));
-        final storeId = storeData.StoreID;
-        isLoading.value = false;
-        Get.to(HomeSeller(storeId: storeId));
+          if (sellerInprocessResponseModel.message ==
+              "Mobile number is not registered with any store.") {
+            await postdio.setupStrore(formattedPhoneNumber, formData);
+            final storeData =
+                await restClient.checkStoreId(int.parse(formattedPhoneNumber));
+            final storeId = storeData.StoreID;
+            isLoading.value = false;
+            Get.to(HomeSeller(storeId: storeId));
+          } else {
+            // Fluttertoast.showToast(
+            //     msg: "Sit Tight! We are setting up your store on Tickk.");
+          }
+        } catch (e) {}
+
         Get.snackbar('Success', 'Store setup completed successfully');
       } catch (e) {
         Logger().d(e);
@@ -200,6 +218,7 @@ class ProductSetUpController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+    isLoading.value = false;
   }
 
   String? getMimeType(String fileName) {

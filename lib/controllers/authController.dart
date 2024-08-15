@@ -89,9 +89,23 @@ class AuthController extends GetxController {
                 "Oop's something wrong with server try to login later");
           }
         } else {
-          islogin
-              ? Get.toNamed(RouteName.homeBuyerScreen)
-              : Get.toNamed(RouteName.basicDetails);
+          final box = Hive.box('myBox');
+          final String formattedPhoneNumber = box.get('phone') ?? "";
+          final response = await restClient
+              .checkBuyerOrSeller(int.parse(formattedPhoneNumber));
+          if (response.message == 'Mobile registered for buyer') {
+            Get.toNamed(RouteName.homeBuyerScreen);
+          } else if (response.message ==
+              'Mobile registered for buyer and seller') {
+            final storeData =
+                await restClient.checkStoreId(int.parse(formattedPhoneNumber));
+            final storeId = storeData.StoreID;
+            Get.to(HomeSeller(storeId: storeId.toString()));
+          }
+
+          // islogin
+          //     ? Get.toNamed(RouteName.homeBuyerScreen)
+          //     : Get.toNamed(RouteName.basicDetails);
         }
       } catch (e) {
         Logger().d(e);
