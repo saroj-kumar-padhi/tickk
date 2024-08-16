@@ -646,6 +646,7 @@ class NewSellerCard extends StatelessWidget {
                                     requiremetId: requirementId,
                                     fcm: FCM,
                                     storeId: storeId,
+                                    requirementID: requirementId,
                                   );
                                 },
                               );
@@ -685,6 +686,7 @@ class EnlargedImageView extends StatefulWidget {
 
 class _EnlargedImageViewState extends State<EnlargedImageView> {
   final TransformationController _controller = TransformationController();
+  final String _uniqueHeroTag = UniqueKey().toString();
 
   @override
   void dispose() {
@@ -710,7 +712,7 @@ class _EnlargedImageViewState extends State<EnlargedImageView> {
                 minScale: 0.5,
                 maxScale: 4.0,
                 child: Hero(
-                  tag: widget.heroTag,
+                  tag: '${widget.heroTag}_$_uniqueHeroTag',
                   child: Image.network(
                     widget.image,
                     fit: BoxFit.contain,

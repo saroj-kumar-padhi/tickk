@@ -6,9 +6,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:logger/logger.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-import '../models/stores_fcm.dart';
 
 class PushNotificationServices {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -165,6 +162,41 @@ class PushNotificationServices {
         Logger().d('Status code: ${response.statusCode}');
         Logger().d('Response body: ${response.body}');
       }
+    }
+  }
+
+  static Future<void> sendNotificationToOne(String deviceTokens,
+      BuildContext context, String title, String body) async {
+    Logger().f(deviceTokens);
+    final String serverKey = await getAccessToken();
+    String endpointFirebaseCloudMessaging =
+        'https://fcm.googleapis.com/v1/projects/tickk-90b57/messages:send';
+
+    final Map<String, dynamic> message = {
+      'message': {
+        'token': deviceTokens,
+        'notification': {'title': title, 'body': body},
+        'data': {
+          'tripID': '123',
+        }
+      }
+    };
+
+    final http.Response response = await http.post(
+      Uri.parse(endpointFirebaseCloudMessaging),
+      headers: <String, String>{
+        "Content-Type": 'application/json',
+        "Authorization": 'Bearer $serverKey'
+      },
+      body: jsonEncode(message),
+    );
+
+    if (response.statusCode == 200) {
+      Logger().d('Notification sent successfully to token: $deviceTokens');
+    } else {
+      Logger().d('Failed to send notification to token: $deviceTokens');
+      Logger().d('Status code: ${response.statusCode}');
+      Logger().d('Response body: ${response.body}');
     }
   }
 

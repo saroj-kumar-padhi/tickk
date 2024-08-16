@@ -1,12 +1,14 @@
 import 'package:dekhlo/controllers/sellerProfileController.dart';
 import 'package:dekhlo/utils/components/dialog_boxs/log_out_dialog.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
+import 'package:dekhlo/views/buyer_view/profileScreen/editProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../utils/components/buttons.dart';
@@ -25,12 +27,25 @@ final box = Hive.box('myBox');
 final String formattedPhoneNumber = box.get('phone') ?? "";
 SellerProfileController sellerProfileController =
     Get.put(SellerProfileController(formattedPhoneNumber));
+RxString male = "".obs;
 
 class _SellerProfileState extends State<SellerProfile> {
   @override
   void initState() {
     super.initState();
     sellerProfileController.fetchProfile();
+    _initializeProfile();
+  }
+
+  Future<void> _initializeProfile() async {
+    try {
+      await Hive.openBox('myBox');
+      final box = await Hive.openBox('myBox');
+      male.value = box.get('Gender');
+      Logger().f(male);
+    } catch (e) {
+      Logger().d(e);
+    }
   }
 
   @override
@@ -131,12 +146,31 @@ class _SellerProfileState extends State<SellerProfile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          CircleAvatar(
-                            radius: 30, // Adjust the size as needed
-                            backgroundImage: NetworkImage(
-                              sellerProfileController.user!.profileImage,
-                            ),
-                          ),
+                          sellerProfileController.user!.profileImage ==
+                                  "task/assets/men.png"
+                              ? male.value == "Male"
+                                  ? Image.asset(
+                                      "assest/man.png",
+                                      height: 100.h,
+                                      width: 100.h,
+                                    )
+                                  : male.value == "Female"
+                                      ? Image.asset(
+                                          "assest/woman.png",
+                                          height: 100.h,
+                                          width: 100.h,
+                                        )
+                                      : Image.asset(
+                                          "assest/transgender (2).png",
+                                          height: 100.h,
+                                          width: 100.h,
+                                        )
+                              : CircleAvatar(
+                                  radius: 30, // Adjust the size as needed
+                                  backgroundImage: NetworkImage(
+                                    sellerProfileController.user!.profileImage,
+                                  ),
+                                ),
                           Padding(
                             padding: EdgeInsets.only(left: 20.w),
                             child: Column(
@@ -176,7 +210,7 @@ class _SellerProfileState extends State<SellerProfile> {
                                     borderColor: const Color(0xffDADADA),
                                     foregroundColor: const Color(0xff4a4a4a),
                                     onPressed: () {
-                                      Get.toNamed(RouteName.editProfile);
+                                      Get.to(EditProfile(gender: male.value));
                                     }),
                               ],
                             ),

@@ -34,11 +34,11 @@ class AppPages {
     GetPage(name: RouteName.logInphoneScreen, page: () => const LogInPhone()),
     GetPage(name: RouteName.logInotpScreen, page: () => const LogINOTP()),
     GetPage(name: RouteName.homeBuyerScreen, page: () => const HomeBuyer()),
-    GetPage(name: RouteName.changeLocation, page: () => ChangeLocation()),
+    GetPage(name: RouteName.changeLocation, page: () => const ChangeLocation()),
     GetPage(
         name: RouteName.postRequirements, page: () => const PostRequirements()),
-    GetPage(name: RouteName.buyerProfile, page: () => BuyerProfile()),
-    GetPage(name: RouteName.editProfile, page: () => const EditProfile()),
+    GetPage(name: RouteName.buyerProfile, page: () => const BuyerProfile()),
+    // GetPage(name: RouteName.editProfile, page: () => const EditProfile()),
     GetPage(
         name: RouteName.faqScreens, page: () => const ExpansionTileExample()),
     GetPage(

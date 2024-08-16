@@ -6,6 +6,7 @@ import 'package:dekhlo/utils/no_internet.dart';
 import 'package:dekhlo/utils/pagenotfound.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/views/buyer_view/home_screen_buyer.dart/home_screenBuyer.dart';
+import 'package:dekhlo/views/buyer_view/profileScreen/buyerProfile.dart';
 import 'package:dekhlo/views/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -74,12 +75,12 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Colors.white,
         ),
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Tickk',
         // home: const OTP(),
 
         home: const AuthWrapper(),
 
-        // home: const LogINOTP(),
+        // home: BuyerProfile(),
         getPages: AppPages.pages,
       ),
     );

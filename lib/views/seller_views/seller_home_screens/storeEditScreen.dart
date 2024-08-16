@@ -459,18 +459,10 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                                                       .clear();
                                                 }
                                               }, child: Obx(() {
-                                                // First, ensure staredImageIndex is not null and is a valid index
                                                 bool isStarred = controller
-                                                            .staredImageIndex
-                                                            .value >=
-                                                        0 &&
-                                                    controller.staredImageIndex
-                                                            .value <
-                                                        widget
-                                                            .imageList.length &&
-                                                    controller.staredImageIndex
-                                                            .value ==
-                                                        index;
+                                                        .staredImageIndex
+                                                        .value ==
+                                                    index;
 
                                                 return Icon(
                                                   isStarred
@@ -684,10 +676,6 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                         height: 5.h,
                       ),
                       Obx(() {
-                        print("Rebuilding subcategory dropdown");
-                        print(
-                            "Current subcategories: ${categoriesController.setupsubCategories}");
-
                         return widget.storeSubcategory.isEmpty
                             ? const SizedBox()
                             : Column(
@@ -714,15 +702,14 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                                               categoriesController
                                                   .fetchSubSubsetUpCategories(
                                                       selectedItems);
+                                              setState(() {});
                                             },
                                           ),
                                         ),
-
-                                  // Sub-subcategories (you can apply similar changes here)
-                                  // ...
                                 ],
                               );
                       }),
+
                       SizedBox(
                         height: 10.h,
                       ),
@@ -961,45 +948,6 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                       SizedBox(
                         height: 10.h,
                       ),
-                      // heading(title: "Languages you know *"),
-                      // SizedBox(
-                      //   height: 10.h,
-                      // ),
-                      // Padding(
-                      //   padding: EdgeInsets.only(right: 20.w),
-                      //   child: MultiSelectDropDown(
-                      //     borderColor: Colors.grey,
-                      //     borderWidth: 1,
-                      //     borderRadius: 4.r,
-                      //     selectedOptionTextColor:
-                      //         const Color(0xffFC8019).withOpacity(0.1),
-                      //     clearIcon: const Icon(Icons.close_outlined),
-                      //     controller: languageSelectController,
-                      //     onOptionSelected: (options) {
-                      //       debugPrint(options.toString());
-                      //     },
-                      //     options: const <ValueItem>[
-                      //       ValueItem(label: 'Bangla', value: '1'),
-                      //       ValueItem(label: 'English', value: '2'),
-                      //       ValueItem(label: 'Gujarati', value: '3'),
-                      //       ValueItem(label: 'Hindi', value: '4'),
-                      //       ValueItem(label: 'Kannada', value: '5'),
-                      //       ValueItem(label: 'Marathi', value: '6'),
-                      //       ValueItem(label: 'Malayalam', value: '7'),
-                      //       ValueItem(label: 'Punjabi', value: '8'),
-                      //       ValueItem(label: 'Tamil', value: '9'),
-                      //       ValueItem(label: 'Telugu', value: '10')
-                      //     ],
-                      //     maxItems: 3,
-                      //     selectionType: SelectionType.multi,
-                      //     chipConfig: const ChipConfig(
-                      //         wrapType: WrapType.wrap,
-                      //         backgroundColor: Color(0xffFC8019)),
-                      //     dropdownHeight: 200.h,
-                      //     optionTextStyle: TextStyle(fontSize: 16.sp),
-                      //     selectedOptionIcon: const Icon(Icons.check_circle),
-                      //   ),
-                      // ),
 
                       SizedBox(
                         height: 10.h,
@@ -1468,16 +1416,16 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
                                             widget.storeID, data);
 
                                         try {
+                                          int sent = productSetUpController
+                                                      .staredImageIndex.value ==
+                                                  -1
+                                              ? widget.staredImageIndex.value
+                                              : productSetUpController
+                                                  .staredImageIndex.value;
+                                          Logger().f("Sent $sent");
                                           await restClient.makeStarEdit({
                                             "StoreID": widget.storeID,
-                                            "newStaredIndex":
-                                                productSetUpController
-                                                            .staredImageIndex
-                                                            .value ==
-                                                        -1
-                                                    ? widget.staredImageIndex
-                                                    : productSetUpController
-                                                        .staredImageIndex.value
+                                            "newStaredIndex": sent
                                           });
                                         } catch (e) {
                                           Logger().d(e);

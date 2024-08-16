@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dekhlo/models/userFcmModel.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/services/notificationServices.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
@@ -20,6 +21,7 @@ import '../buttons.dart';
 import '../coustoumTextField.dart';
 
 class AcceptDialodBox extends StatelessWidget {
+  final String requirementID;
   final String fcm;
   final bool isExact;
   final List<dynamic> imageList;
@@ -33,6 +35,7 @@ class AcceptDialodBox extends StatelessWidget {
     required this.imageList,
     required this.requiremetId,
     required this.storeId,
+    required this.requirementID,
   });
 
   @override
@@ -170,11 +173,31 @@ class AcceptDialodBox extends StatelessWidget {
                             Get.back();
                             try {
                               try {
+                                UserFcmToken userFcmToken =
+                                    UserFcmToken(fcm: "");
                                 await restClient
                                     .pushtoBuyerInProcessAndSellerInProcess(
                                         requiremetId,
                                         storeId,
                                         {"Accept": true});
+
+                                try {
+                                  try {
+                                    userFcmToken =
+                                        await restClient.fetchUserFcmbyreqId(
+                                      requirementID,
+                                    );
+                                  } catch (e) {
+                                    Logger().e(e);
+                                  }
+                                  PushNotificationServices.sendNotificationToOne(
+                                      userFcmToken.fcm,
+                                      context,
+                                      "Response from Seller",
+                                      "We are happy that you got response from seller. Please check it and respond.");
+                                } catch (e) {
+                                  Logger().d(e);
+                                }
                               } catch (e) {
                                 Logger().f(e);
                               }

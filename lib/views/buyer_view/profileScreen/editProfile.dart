@@ -1,27 +1,23 @@
 import 'dart:io';
 
-import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/utils/components/heading.dart';
-import 'package:dekhlo/utils/routes/routes_names.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../controllers/basicControllerEdit.dart';
 import '../../../controllers/sellerProfileController.dart';
 import '../../../utils/components/coustoumTextField.dart';
-import '../../../utils/components/dialog_boxs/otp_dialog.dart';
 import '../../../utils/components/dialog_boxs/pick_diallo.dart';
 import '../../../utils/components/textstyle.dart';
 
 class EditProfile extends StatelessWidget {
-  const EditProfile({super.key});
+  final String gender;
+  const EditProfile({super.key, required this.gender});
 
   @override
   Widget build(BuildContext context) {
@@ -70,8 +66,24 @@ class EditProfile extends StatelessWidget {
                           alignment: Alignment.center,
                           child: basiccontrollerEdit
                                       .response.value.profileImage ==
-                                  ""
-                              ? Image.asset("assest/profileImage.png")
+                                  "task/assets/men.png"
+                              ? gender == "Male"
+                                  ? Image.asset(
+                                      "assest/man.png",
+                                      height: 100.h,
+                                      width: 100.h,
+                                    )
+                                  : gender == "Female"
+                                      ? Image.asset(
+                                          "assest/woman.png",
+                                          height: 100.h,
+                                          width: 100.h,
+                                        )
+                                      : Image.asset(
+                                          "assest/transgender (2).png",
+                                          height: 100.h,
+                                          width: 100.h,
+                                        )
                               : CircleAvatar(
                                   radius: 40.r,
                                   child: ClipOval(

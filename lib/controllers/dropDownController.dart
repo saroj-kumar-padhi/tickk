@@ -31,7 +31,7 @@ class DropdownController extends GetxController {
 
   RxString selectedGender = ''.obs;
   RxBool isNewImage = false.obs;
-  final GenderList = ['Male', 'Female', 'Others'];
+  final GenderList = ['Male', 'Female', 'others'];
 
   void changeSelectedItem(String newValue) {
     selectedItem.value = newValue;
@@ -125,7 +125,7 @@ class DropdownController extends GetxController {
               fcmTokens,
               context,
               "New Requirement from Tickk",
-              "Hurray! you have received a new requirement  .Respond to it as soon as possible.");
+              "Hurray! you have received a new requirement.Respond to it as soon as possible.");
         } catch (e) {
           Logger().f(e);
         }

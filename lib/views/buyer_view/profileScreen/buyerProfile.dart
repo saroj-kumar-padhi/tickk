@@ -1,6 +1,7 @@
 import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/views/buyer_view/profileScreen/FAQ_webview.dart';
+import 'package:dekhlo/views/buyer_view/profileScreen/editProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,9 +19,33 @@ import '../../../utils/components/dialog_boxs/support_dialogbox.dart';
 import '../../../utils/components/textstyle.dart';
 import '../../login.dart';
 
-class BuyerProfile extends StatelessWidget {
-  BuyerProfile({super.key});
+class BuyerProfile extends StatefulWidget {
+  const BuyerProfile({super.key});
+
+  @override
+  State<BuyerProfile> createState() => _BuyerProfileState();
+}
+
+class _BuyerProfileState extends State<BuyerProfile> {
   BasiccontrollerEdit basiccontrollerEdit = Get.put(BasiccontrollerEdit());
+  RxString male = "".obs;
+  @override
+  void initState() {
+    super.initState();
+    _initializeProfile();
+  }
+
+  Future<void> _initializeProfile() async {
+    try {
+      await Hive.openBox('myBox');
+      final box = await Hive.openBox('myBox');
+      male.value = box.get('Gender');
+      Logger().f(male);
+    } catch (e) {
+      Logger().d(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() => basiccontrollerEdit.isLoading.value
@@ -124,11 +149,24 @@ class BuyerProfile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           basiccontrollerEdit.response.value.profileImage ==
-                                      "" &&
-                                  basiccontrollerEdit
-                                          .response.value.profileImage ==
-                                      null
-                              ? Image.asset("assest/profileImage.png")
+                                  "task/assets/men.png"
+                              ? male.value == "Male"
+                                  ? Image.asset(
+                                      "assest/man.png",
+                                      height: 100.h,
+                                      width: 100.h,
+                                    )
+                                  : male.value == "Female"
+                                      ? Image.asset(
+                                          "assest/woman.png",
+                                          height: 100.h,
+                                          width: 100.h,
+                                        )
+                                      : Image.asset(
+                                          "assest/transgender (2).png",
+                                          height: 100.h,
+                                          width: 100.h,
+                                        )
                               : CircleAvatar(
                                   radius: 40.r,
                                   child: ClipOval(
@@ -144,8 +182,9 @@ class BuyerProfile extends StatelessWidget {
                                       },
                                       loadingBuilder:
                                           (context, child, loadingProgress) {
-                                        if (loadingProgress == null)
+                                        if (loadingProgress == null) {
                                           return child;
+                                        }
                                         return const CircularProgressIndicator();
                                       },
                                     ),
@@ -190,7 +229,9 @@ class BuyerProfile extends StatelessWidget {
                                     borderColor: const Color(0xffDADADA),
                                     foregroundColor: const Color(0xff4a4a4a),
                                     onPressed: () {
-                                      Get.toNamed(RouteName.editProfile);
+                                      Get.to(EditProfile(
+                                        gender: male.value,
+                                      ));
                                     }),
                               ],
                             ),

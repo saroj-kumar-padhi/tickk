@@ -1,4 +1,5 @@
 import 'package:dekhlo/controllers/inprocessController.dart';
+import 'package:dekhlo/models/userFcmModel.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
 import 'package:dekhlo/views/seller_views/store_screens/mystore.dart';
@@ -14,6 +15,7 @@ import '../../../controllers/buyerInprocessController.dart';
 import '../../../controllers/expandController.dart';
 import '../../../controllers/myStoreAccountController.dart';
 import '../../../controllers/sortDialogBoxController.dart';
+import '../../../services/notificationServices.dart';
 import '../../../views/buyer_view/home_screen_buyer.dart/tabs/rejected_tab.dart';
 import '../../size/global_size/global_size.dart';
 import '../bottomSheets/sort.dart';
@@ -750,20 +752,43 @@ class InprocessTile extends StatelessWidget {
                                                                   onTap:
                                                                       () async {
                                                                     try {
-                                                                      await restClient.moveToAccepet(
-                                                                          requirementId,
-                                                                          stores[index].storeID,
-                                                                          {
-                                                                            "Accept":
-                                                                                true
-                                                                          });
-                                                                      // Update the local state after successful API call
-                                                                      inProcessController
-                                                                              .documentResponses[
-                                                                          stores[index]
-                                                                              .storeID] = DocumentResponse(
-                                                                          message:
-                                                                              "Document found");
+                                                                      // await restClient.moveToAccepet(
+                                                                      //     requirementId,
+                                                                      //     stores[index].storeID,
+                                                                      //     {
+                                                                      //       "Accept":
+                                                                      //           true
+                                                                      //     });
+                                                                      // // Update the local state after successful API call
+                                                                      // inProcessController
+                                                                      //         .documentResponses[
+                                                                      //     stores[index]
+                                                                      //         .storeID] = DocumentResponse(
+                                                                      //     message:
+                                                                      //         "Document found");
+
+                                                                      try {
+                                                                        UserFcmToken
+                                                                            userFcmToken =
+                                                                            UserFcmToken(fcm: "");
+                                                                        try {
+                                                                          userFcmToken =
+                                                                              await restClient.fetchUserFcmbyreqId(
+                                                                            requirementId,
+                                                                          );
+                                                                        } catch (e) {
+                                                                          Logger()
+                                                                              .e(e);
+                                                                        }
+                                                                        PushNotificationServices.sendNotificationToOne(
+                                                                            userFcmToken.fcm,
+                                                                            context,
+                                                                            "Accepted",
+                                                                            "Your quote is accepted. We wish this order will be successful");
+                                                                      } catch (e) {
+                                                                        Logger()
+                                                                            .d(e);
+                                                                      }
                                                                     } catch (e) {
                                                                       Fluttertoast
                                                                           .showToast(
