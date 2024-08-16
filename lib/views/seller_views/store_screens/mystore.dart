@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../controllers/myStoreAccountController.dart';
 import '../../../controllers/myStoreController.dart';
+import '../../../controllers/productSetupController.dart';
 import '../../../controllers/reviewsControllers.dart';
 import '../../../utils/components/textstyle.dart';
 
@@ -178,6 +179,25 @@ class MyStore extends StatelessWidget {
                                           isFromSeller
                                               ? OutlinedButton(
                                                   onPressed: () {
+                                                    Logger().f("jlknjlk");
+                                                    Logger().f(
+                                                        mystoreaccountcontroller
+                                                            .staredImage);
+
+                                                    int staredImageIndex =
+                                                        mystoreaccountcontroller
+                                                            .storeImages
+                                                            .indexOf(
+                                                                mystoreaccountcontroller
+                                                                    .staredImage);
+
+                                                    ProductSetUpController
+                                                        productSetUpController =
+                                                        Get.put(
+                                                            ProductSetUpController());
+                                                    productSetUpController
+                                                            .staredImageIndex =
+                                                        staredImageIndex.obs;
                                                     Get.to(
                                                         () => StoreEditScreen(
                                                               storeName:
@@ -270,6 +290,9 @@ class MyStore extends StatelessWidget {
                                                               long: mystoreaccountcontroller
                                                                   .sellerLocation
                                                                   .longitude,
+                                                              staredImageIndex:
+                                                                  staredImageIndex
+                                                                      .obs,
                                                             ));
                                                   },
                                                   style:

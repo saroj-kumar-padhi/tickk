@@ -35,13 +35,18 @@ import 'package:dio/dio.dart' as dio;
 part 'rest_client.g.dart';
 
 // @RestApi(baseUrl: 'http://13.201.210.192:3002')
-@RestApi(baseUrl: 'http://192.168.1.15:3002')
+@RestApi(baseUrl: 'http://192.168.1.12:3002')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
   @PUT('/buyer/signupAllDetails')
   Future<void> postBuyer(
     @Body() Map<String, dynamic> createBuyerRequest,
+  );
+
+  @PUT('/StaredIndexValueChange')
+  Future<void> makeStarEdit(
+    @Body() Map<String, dynamic> data,
   );
 
   @PUT('/selling/EditstoreDetails/{StoreID}')

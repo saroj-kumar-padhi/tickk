@@ -44,6 +44,7 @@ class StoreEditScreen extends StatefulWidget {
   var formData = dio.FormData();
   final String storeID;
   final List<dynamic> imageList;
+  final RxInt staredImageIndex;
 
   final String storeName;
   final List<String> storeCategory;
@@ -113,13 +114,15 @@ class StoreEditScreen extends StatefulWidget {
       required this.storeID,
       required this.imageList,
       required this.lat,
-      required this.long});
+      required this.long,
+      required this.staredImageIndex});
 
   @override
   State<StoreEditScreen> createState() => _StoreEditScreenState();
 }
 
 class _StoreEditScreenState extends State<StoreEditScreen> {
+  RxList images = [].obs;
   List<ValueItem> selectedCategoryOptions = [];
   List<ValueItem> selectedSubCategoryOptions = [];
 
@@ -200,12 +203,15 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
             ValueItem(label: entry.value, value: entry.key.toString()))
         .toList();
 
-    productSetUpController.imagePaths.clear();
+    images = widget.imageList.obs;
+    if (widget.stared.isNotEmpty) {
+      productSetUpController.staredImage.add(widget.stared);
+      Logger().d(productSetUpController.staredImage.first);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    RxList images = widget.imageList.obs;
     InkWell addImages(BuildContext context) {
       return InkWell(
         onTap: () async {
@@ -326,1145 +332,1230 @@ class _StoreEditScreenState extends State<StoreEditScreen> {
     final box = Hive.box('myBox');
     final String formattedPhoneNumber = box.get('phone') ?? "";
     List<File> localImageFiles = [];
-    productSetUpController.staredImage.add(widget.stared);
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        shadowColor: Colors.black,
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Color(0xff4A4A4A),
+
+    return GetBuilder<ProductSetUpController>(builder: (controller) {
+      return Scaffold(
+        appBar: AppBar(
+          elevation: 1,
+          shadowColor: Colors.black,
+          centerTitle: true,
+          leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Color(0xff4A4A4A),
+            ),
+          ),
+          title: Text(
+            "Edit profile",
+            style: TextStyles.openSans(
+              fontWeight: FontWeight.w600,
+              fontSize: 17.sp,
+              color: const Color(0xff4A4A4A),
+            ),
           ),
         ),
-        title: Text(
-          "Edit profile",
-          style: TextStyles.openSans(
-            fontWeight: FontWeight.w600,
-            fontSize: 17.sp,
-            color: const Color(0xff4A4A4A),
-          ),
-        ),
-      ),
-      body: ListView(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 20.h,
-              ),
-              Obx(() {
-                return images.isEmpty
-                    ? addImages(context)
-                    : Column(
-                        children: [
-                          CarouselSlider.builder(
-                            options: CarouselOptions(
-                              enableInfiniteScroll: false,
-                              onPageChanged: (index, reason) {
-                                currentPage.value = index;
-                              },
-                              viewportFraction: 0.4,
-                              height: 160.0.h,
-                            ),
-                            itemCount: images.length,
-                            itemBuilder: (BuildContext context, int index,
-                                int realIndex) {
-                              final String imagePath = images[index];
-                              final bool isNetworkImage =
-                                  imagePath.startsWith('http');
+        body: ListView(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 20.h,
+                ),
+                Obx(() {
+                  return images.isEmpty
+                      ? addImages(context)
+                      : Column(
+                          children: [
+                            CarouselSlider.builder(
+                              options: CarouselOptions(
+                                enableInfiniteScroll: false,
+                                onPageChanged: (index, reason) {
+                                  currentPage.value = index;
+                                },
+                                viewportFraction: 0.4,
+                                height: 160.0.h,
+                              ),
+                              itemCount: images.length,
+                              itemBuilder: (BuildContext context, int index,
+                                  int realIndex) {
+                                final String imagePath = images[index];
+                                final bool isNetworkImage =
+                                    imagePath.startsWith('http');
 
-                              if (!localImageFiles
-                                  .contains(File(images[index]))) {
-                                isNetworkImage == false
-                                    ? localImageFiles.add(File(images[index]))
-                                    : const SizedBox();
-                              }
+                                if (!localImageFiles
+                                    .contains(File(images[index]))) {
+                                  isNetworkImage == false
+                                      ? localImageFiles.add(File(images[index]))
+                                      : const SizedBox();
+                                }
 
-                              return Column(
-                                children: [
-                                  Stack(
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(4.r),
-                                            border: Border.all(
-                                                width: 1,
-                                                color:
-                                                    const Color(0xff828282))),
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              8.0.w, 12.h, 8.w, 12.h),
-                                          child: Container(
-                                            height: 100,
-                                            width: 100,
-                                            margin: const EdgeInsets.symmetric(
-                                                horizontal: 5.0),
-                                            decoration: const BoxDecoration(
-                                                color: Colors.amber),
-                                            child: isNetworkImage
-                                                ? Image.network(imagePath,
-                                                    fit: BoxFit.cover)
-                                                : Image.file(File(imagePath),
-                                                    fit: BoxFit.cover),
+                                return Column(
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(4.r),
+                                              border: Border.all(
+                                                  width: 1,
+                                                  color:
+                                                      const Color(0xff828282))),
+                                          child: Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                8.0.w, 12.h, 8.w, 12.h),
+                                            child: Container(
+                                              height: 100,
+                                              width: 100,
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5.0),
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.amber),
+                                              child: isNetworkImage
+                                                  ? Image.network(imagePath,
+                                                      fit: BoxFit.cover)
+                                                  : Image.file(File(imagePath),
+                                                      fit: BoxFit.cover),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Obx(() => Positioned(
-                                            child: Row(
-                                              children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    if (productSetUpController
-                                                        .staredImage
-                                                        .contains(imagePath)) {
-                                                      productSetUpController
-                                                          .staredImage
-                                                          .clear();
-                                                    } else {
-                                                      productSetUpController
-                                                          .staredImage
-                                                          .clear();
-                                                      productSetUpController
-                                                          .staredImage
-                                                          .add(imagePath);
-                                                    }
-                                                  },
-                                                  child: Icon(
-                                                    productSetUpController
-                                                            .staredImage
-                                                            .contains(imagePath)
-                                                        ? Icons.star
-                                                        : Icons.star_border,
-                                                    color:
-                                                        productSetUpController
-                                                                .staredImage
-                                                                .contains(
-                                                                    imagePath)
-                                                            ? const Color(
-                                                                0xffFFD361)
-                                                            : Colors.grey,
-                                                  ),
-                                                ),
-                                                SizedBox(width: 80.w),
-                                                InkWell(
-                                                  onTap: () {
-                                                    removedImdexs.add(index);
+                                        Positioned(
+                                          child: Row(
+                                            children: [
+                                              InkWell(onTap: () {
+                                                if (productSetUpController
+                                                        .staredImageIndex
+                                                        .value ==
+                                                    index) {
+                                                  // Unstar the image
+                                                  productSetUpController
+                                                      .staredImageIndex
+                                                      .value = -1;
+                                                } else {
+                                                  // Star this image
+                                                  productSetUpController
+                                                      .staredImageIndex
+                                                      .value = index;
+                                                }
+                                                // Update the staredImage in the controller
+                                                if (productSetUpController
+                                                        .staredImageIndex
+                                                        .value !=
+                                                    -1) {
+                                                  productSetUpController
+                                                      .staredImage
+                                                      .clear();
+                                                  productSetUpController
+                                                      .staredImage
+                                                      .add(imagePath);
+                                                } else {
+                                                  productSetUpController
+                                                      .staredImage
+                                                      .clear();
+                                                }
+                                              }, child: Obx(() {
+                                                // First, ensure staredImageIndex is not null and is a valid index
+                                                bool isStarred = controller
+                                                            .staredImageIndex
+                                                            .value >=
+                                                        0 &&
+                                                    controller.staredImageIndex
+                                                            .value <
+                                                        widget
+                                                            .imageList.length &&
+                                                    controller.staredImageIndex
+                                                            .value ==
+                                                        index;
 
-                                                    images.remove(imagePath);
-                                                    widget.imageList
-                                                        .remove(imagePath);
-                                                  },
-                                                  child: const Icon(
-                                                    Icons.cancel,
-                                                    color: Color(0xff4A4A4A),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                          SizedBox(height: 10.h),
-                          // Indicator widget (unchanged)
-                          Obx(() => images.length > 1
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: List.generate(
-                                    images.length,
-                                    (index) => Container(
-                                      width: 8.0,
-                                      height: 8.0,
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 4.0),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: currentPage.value == index
-                                            ? const Color(0xffFC8019)
-                                            : const Color(0xffD9D9D9),
+                                                return Icon(
+                                                  isStarred
+                                                      ? Icons.star
+                                                      : Icons.star_border,
+                                                  color: isStarred
+                                                      ? const Color(0xffFFD361)
+                                                      : Colors.grey,
+                                                );
+                                              })),
+                                              SizedBox(width: 80.w),
+                                              InkWell(
+                                                onTap: () {
+                                                  removedImdexs.add(index);
+                                                  images.remove(imagePath);
+                                                  widget.imageList
+                                                      .remove(imagePath);
+                                                  // If we're removing the starred image, update the staredImageIndex
+                                                  if (productSetUpController
+                                                          .staredImageIndex
+                                                          .value ==
+                                                      index) {
+                                                    productSetUpController
+                                                        .staredImageIndex
+                                                        .value = -1;
+                                                    productSetUpController
+                                                        .staredImage
+                                                        .clear();
+                                                  }
+                                                  // Adjust staredImageIndex if we're removing an image before it
+                                                  else if (productSetUpController
+                                                          .staredImageIndex
+                                                          .value >
+                                                      index) {
+                                                    productSetUpController
+                                                        .staredImageIndex
+                                                        .value--;
+                                                  }
+                                                  productSetUpController
+                                                      .update();
+                                                },
+                                                child: const Icon(
+                                                  Icons.cancel,
+                                                  color: Color(0xff4A4A4A),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                            SizedBox(height: 10.h),
+                            // Indicator widget (unchanged)
+                            Obx(() => images.length > 1
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: List.generate(
+                                      images.length,
+                                      (index) => Container(
+                                        width: 8.0,
+                                        height: 8.0,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 4.0),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: currentPage.value == index
+                                              ? const Color(0xffFC8019)
+                                              : const Color(0xffD9D9D9),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                )
-                              : const SizedBox()),
-                          SizedBox(height: 10.h),
-                          GestureDetector(
-                            onTap: () async {
-                              final result = await showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const PickImageDialog(
-                                    heading: 'Upload your store image',
-                                  );
-                                },
-                              );
-                              if (result != null) {
-                                images.add(result);
-                              }
+                                  )
+                                : const SizedBox()),
+                            SizedBox(height: 10.h),
+                            GestureDetector(
+                              onTap: () async {
+                                final result = await showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return const PickImageDialog(
+                                      heading: 'Upload your store image',
+                                    );
+                                  },
+                                );
+                                if (result != null) {
+                                  images.add(result);
+                                }
+                              },
+                              child: images.length > 3
+                                  ? const SizedBox()
+                                  : Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(4.r),
+                                          border: Border.all(
+                                              width: 1,
+                                              color: const Color(0xffFC8019))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Center(
+                                              child: Icon(
+                                                Icons.add,
+                                                color: Color(0xffFC8019),
+                                              ),
+                                            ),
+                                            Text("Add images",
+                                                style: TextStyles.openSans(
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: const Color(
+                                                        0xffFC8019)))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                            ),
+                          ],
+                        );
+                }),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      heading(title: 'Store Name *'),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      CustomTextField(
+                          isenable: true,
+                          controller: storeNameController,
+                          hintText: "Enter your shop name",
+                          height: 48.h,
+                          width: 330.w),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      heading(title: 'Contact Number'),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      CustomTextField(
+                          isenable: false,
+                          controller:
+                              productSetUpController.contactEditingController,
+                          hintText: formattedPhoneNumber,
+                          height: 48.h,
+                          width: 330.w),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      heading(title: 'Store category *'),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      Obx(
+                        () => Padding(
+                          padding: EdgeInsets.only(right: 20.w),
+                          child: MultiSelectDropDown(
+                            suffixIcon: const Icon(Icons.arrow_downward),
+                            borderColor: Colors.grey,
+                            borderWidth: 1,
+                            borderRadius: 4.r,
+                            selectedOptionTextColor: const Color(0xffFC8019),
+                            clearIcon: const Icon(Icons.close_outlined),
+                            controller: SetUpProduct.categorySelectController,
+                            selectedOptions: selectedCategoryOptions,
+                            onOptionSelected: (options) {
+                              debugPrint(options.toString());
+                              List<String> selectedCategories = options
+                                  .map((option) => option.label)
+                                  .toList();
+
+                              categorySelected = selectedCategories;
+                              categoriesController
+                                  .fetchSetupSubcategories(selectedCategories);
                             },
-                            child: images.length > 3
+                            options: convertToValueItems(
+                                categoriesController.setupCategories),
+                            maxItems: 10,
+                            selectionType: SelectionType.multi,
+                            chipConfig: const ChipConfig(
+                              deleteIcon: Icon(Icons.close_outlined),
+                              wrapType: WrapType.wrap,
+                              backgroundColor: Color(0xffFC8019),
+                            ),
+                            dropdownHeight: 160.h,
+                            optionTextStyle: TextStyle(fontSize: 16.sp),
+                            selectedOptionIcon: const Icon(Icons.check_circle),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      widget.storeSubcategory.isEmpty
+                          ? const SizedBox()
+                          : heading(title: 'Sub categories'),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      Obx(() {
+                        print("Rebuilding subcategory dropdown");
+                        print(
+                            "Current subcategories: ${categoriesController.setupsubCategories}");
+
+                        return widget.storeSubcategory.isEmpty
+                            ? const SizedBox()
+                            : Column(
+                                children: [
+                                  categoriesController.isLoading.value
+                                      ? const Center(
+                                          child: CircularProgressIndicator())
+                                      : Padding(
+                                          padding: EdgeInsets.only(right: 20.w),
+                                          child: CustomMultiSelectDropdown(
+                                            items: categoriesController
+                                                .setupsubCategories,
+                                            preSelectedItems: widget
+                                                .storeSubcategory, // Use your pre-selected list here
+                                            onSelectionChanged:
+                                                (selectedItems) {
+                                              print(
+                                                  "Selected subcategories: $selectedItems");
+
+                                              subCategorySelected =
+                                                  selectedItems;
+
+                                              // Fetch sub-subcategories
+                                              categoriesController
+                                                  .fetchSubSubsetUpCategories(
+                                                      selectedItems);
+                                            },
+                                          ),
+                                        ),
+
+                                  // Sub-subcategories (you can apply similar changes here)
+                                  // ...
+                                ],
+                              );
+                      }),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      SubSubCategoryItems.isEmpty
+                          ? const SizedBox()
+                          : heading(title: 'Sub Sub categories'),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+
+                      Obx(() {
+                        SubSubCategoryItems =
+                            categoriesController.subSubCategoriessetup;
+
+                        return categoriesController.isLoadingSubSub.value
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : SubSubCategoryItems.isEmpty
                                 ? const SizedBox()
-                                : Container(
-                                    decoration: BoxDecoration(
+                                : Padding(
+                                    padding: EdgeInsets.only(right: 20.w),
+                                    child: Container(
+                                      decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(4.r),
                                         border: Border.all(
-                                            width: 1,
-                                            color: const Color(0xffFC8019))),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Center(
-                                            child: Icon(
-                                              Icons.add,
-                                              color: Color(0xffFC8019),
+                                            color: SubSubCategoryItems.isEmpty
+                                                ? Colors.grey.shade300
+                                                : Colors.grey,
+                                            width: 1),
+                                      ),
+                                      child: AbsorbPointer(
+                                        absorbing: SubSubCategoryItems.isEmpty,
+                                        child: Opacity(
+                                          opacity: SubSubCategoryItems.isEmpty
+                                              ? 0.5
+                                              : 1.0,
+                                          child: MultiSelectDialogField<String>(
+                                            items: SubSubCategoryItems.map(
+                                                    (subSubCategory) =>
+                                                        MultiSelectItem<String>(
+                                                            subSubCategory,
+                                                            subSubCategory))
+                                                .toList(),
+                                            title: const Text(
+                                                "Select Sub Sub Categories"),
+                                            selectedColor:
+                                                const Color(0xffFC8019),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(4.r),
+                                              color: Colors.white,
                                             ),
-                                          ),
-                                          Text("Add images",
-                                              style: TextStyles.openSans(
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                  color:
-                                                      const Color(0xffFC8019)))
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                          ),
-                        ],
-                      );
-              }),
-              SizedBox(
-                height: 10.h,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    heading(title: 'Store Name *'),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    CustomTextField(
-                        isenable: true,
-                        controller: storeNameController,
-                        hintText: "Enter your shop name",
-                        height: 48.h,
-                        width: 330.w),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    heading(title: 'Contact Number'),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    CustomTextField(
-                        isenable: false,
-                        controller:
-                            productSetUpController.contactEditingController,
-                        hintText: formattedPhoneNumber,
-                        height: 48.h,
-                        width: 330.w),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    heading(title: 'Store category *'),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    Obx(
-                      () => Padding(
-                        padding: EdgeInsets.only(right: 20.w),
-                        child: MultiSelectDropDown(
-                          suffixIcon: const Icon(Icons.arrow_downward),
-                          borderColor: Colors.grey,
-                          borderWidth: 1,
-                          borderRadius: 4.r,
-                          selectedOptionTextColor: const Color(0xffFC8019),
-                          clearIcon: const Icon(Icons.close_outlined),
-                          controller: SetUpProduct.categorySelectController,
-                          selectedOptions: selectedCategoryOptions,
-                          onOptionSelected: (options) {
-                            debugPrint(options.toString());
-                            List<String> selectedCategories =
-                                options.map((option) => option.label).toList();
-
-                            categorySelected = selectedCategories;
-                            categoriesController
-                                .fetchSetupSubcategories(selectedCategories);
-                          },
-                          options: convertToValueItems(
-                              categoriesController.setupCategories),
-                          maxItems: 10,
-                          selectionType: SelectionType.multi,
-                          chipConfig: const ChipConfig(
-                            deleteIcon: Icon(Icons.close_outlined),
-                            wrapType: WrapType.wrap,
-                            backgroundColor: Color(0xffFC8019),
-                          ),
-                          dropdownHeight: 160.h,
-                          optionTextStyle: TextStyle(fontSize: 16.sp),
-                          selectedOptionIcon: const Icon(Icons.check_circle),
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    widget.storeSubcategory.isEmpty
-                        ? const SizedBox()
-                        : heading(title: 'Sub categories'),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    Obx(() {
-                      print("Rebuilding subcategory dropdown");
-                      print(
-                          "Current subcategories: ${categoriesController.setupsubCategories}");
-
-                      return widget.storeSubcategory.isEmpty
-                          ? const SizedBox()
-                          : Column(
-                              children: [
-                                categoriesController.isLoading.value
-                                    ? const Center(
-                                        child: CircularProgressIndicator())
-                                    : Padding(
-                                        padding: EdgeInsets.only(right: 20.w),
-                                        child: CustomMultiSelectDropdown(
-                                          items: categoriesController
-                                              .setupsubCategories,
-                                          preSelectedItems: widget
-                                              .storeSubcategory, // Use your pre-selected list here
-                                          onSelectionChanged: (selectedItems) {
-                                            print(
-                                                "Selected subcategories: $selectedItems");
-
-                                            subCategorySelected = selectedItems;
-
-                                            // Fetch sub-subcategories
-                                            categoriesController
-                                                .fetchSubSubsetUpCategories(
-                                                    selectedItems);
-                                          },
-                                        ),
-                                      ),
-
-                                // Sub-subcategories (you can apply similar changes here)
-                                // ...
-                              ],
-                            );
-                    }),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    SubSubCategoryItems.isEmpty
-                        ? const SizedBox()
-                        : heading(title: 'Sub Sub categories'),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-
-                    Obx(() {
-                      SubSubCategoryItems =
-                          categoriesController.subSubCategoriessetup;
-
-                      return categoriesController.isLoadingSubSub.value
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : SubSubCategoryItems.isEmpty
-                              ? const SizedBox()
-                              : Padding(
-                                  padding: EdgeInsets.only(right: 20.w),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4.r),
-                                      border: Border.all(
-                                          color: SubSubCategoryItems.isEmpty
-                                              ? Colors.grey.shade300
-                                              : Colors.grey,
-                                          width: 1),
-                                    ),
-                                    child: AbsorbPointer(
-                                      absorbing: SubSubCategoryItems.isEmpty,
-                                      child: Opacity(
-                                        opacity: SubSubCategoryItems.isEmpty
-                                            ? 0.5
-                                            : 1.0,
-                                        child: MultiSelectDialogField<String>(
-                                          items: SubSubCategoryItems.map(
-                                              (subSubCategory) =>
-                                                  MultiSelectItem<String>(
-                                                      subSubCategory,
-                                                      subSubCategory)).toList(),
-                                          title: const Text(
-                                              "Select Sub Sub Categories"),
-                                          selectedColor:
-                                              const Color(0xffFC8019),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(4.r),
-                                            color: Colors.white,
-                                          ),
-                                          buttonText: const Text(
-                                              "Select Sub Sub Categories"),
-                                          onConfirm: (values) {
-                                            selectedSubSubCategoryItems.clear();
-                                            selectedSubSubCategoryItems = values
-                                                .map((value) => ValueItem(
-                                                      label: value.toString(),
-                                                      value: value,
-                                                    ))
-                                                .toList();
-                                            if (SubSubCategoryItems
-                                                .isNotEmpty) {
-                                              debugPrint(values.toString());
-                                              SetUpProduct
-                                                  .subSubCategorySelectController
-                                                  .setSelectedOptions(
-                                                values
-                                                    .map((value) => ValueItem(
-                                                          label: value,
-                                                          value: value,
-                                                        ))
-                                                    .toList(),
-                                              );
-
-                                              categoriesController
-                                                  .fetchSubSubsetUpCategories(
-                                                      values);
-
-                                              subSubCategorySelected = values;
-                                            }
-                                          },
-                                          chipDisplay: MultiSelectChipDisplay(
-                                            onTap: (value) {
-                                              // Store the selected values in a separate list if needed
-
+                                            buttonText: const Text(
+                                                "Select Sub Sub Categories"),
+                                            onConfirm: (values) {
+                                              selectedSubSubCategoryItems
+                                                  .clear();
+                                              selectedSubSubCategoryItems =
+                                                  values
+                                                      .map((value) => ValueItem(
+                                                            label: value
+                                                                .toString(),
+                                                            value: value,
+                                                          ))
+                                                      .toList();
                                               if (SubSubCategoryItems
                                                   .isNotEmpty) {
-                                                List<ValueItem> currentOptions =
-                                                    SetUpProduct
-                                                        .subSubCategorySelectController
-                                                        .selectedOptions;
-                                                currentOptions.removeWhere(
-                                                    (option) =>
-                                                        option.value == value);
+                                                debugPrint(values.toString());
                                                 SetUpProduct
                                                     .subSubCategorySelectController
                                                     .setSelectedOptions(
-                                                        currentOptions);
+                                                  values
+                                                      .map((value) => ValueItem(
+                                                            label: value,
+                                                            value: value,
+                                                          ))
+                                                      .toList(),
+                                                );
+
                                                 categoriesController
                                                     .fetchSubSubsetUpCategories(
-                                                        currentOptions
-                                                            .map((option) =>
-                                                                option.value
-                                                                    .toString())
-                                                            .toList());
+                                                        values);
+
+                                                subSubCategorySelected = values;
                                               }
                                             },
-                                            chipColor: const Color(0xffFC8019),
-                                            textStyle: const TextStyle(
-                                                color: Colors.white),
+                                            chipDisplay: MultiSelectChipDisplay(
+                                              onTap: (value) {
+                                                // Store the selected values in a separate list if needed
+
+                                                if (SubSubCategoryItems
+                                                    .isNotEmpty) {
+                                                  List<ValueItem>
+                                                      currentOptions =
+                                                      SetUpProduct
+                                                          .subSubCategorySelectController
+                                                          .selectedOptions;
+                                                  currentOptions.removeWhere(
+                                                      (option) =>
+                                                          option.value ==
+                                                          value);
+                                                  SetUpProduct
+                                                      .subSubCategorySelectController
+                                                      .setSelectedOptions(
+                                                          currentOptions);
+                                                  categoriesController
+                                                      .fetchSubSubsetUpCategories(
+                                                          currentOptions
+                                                              .map((option) =>
+                                                                  option.value
+                                                                      .toString())
+                                                              .toList());
+                                                }
+                                              },
+                                              chipColor:
+                                                  const Color(0xffFC8019),
+                                              textStyle: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                );
-                    }),
+                                  );
+                      }),
 
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Row(
-                      children: [
-                        heading(title: 'Brands'),
-                        Text(
-                          " (optional)",
-                          style: TextStyles.openSans(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    CustomTextField(
-                        isenable: true,
-                        controller: brandsController,
-                        hintText: "Enter Brands name as list",
-                        height: 48.h,
-                        width: 330.w),
-
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Row(
-                      children: [
-                        heading(title: "About your store"),
-                        Text(
-                          " (optional)",
-                          style: TextStyles.openSans(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    Container(
-                      height: 100.h,
-                      width: 330.w,
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        border: Border.all(width: 1, color: Colors.grey),
+                      SizedBox(
+                        height: 10.h,
                       ),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: TextField(
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          controller: aboutYourStoreController,
-                          decoration: const InputDecoration(
-                            // contentPadding: EdgeInsets.only(bottom: 60.h),
-                            hintText:
-                                "e.g This store has all the types of books.",
-                            border: InputBorder.none,
-                            hintStyle: TextStyle(color: Colors.grey),
+                      Row(
+                        children: [
+                          heading(title: 'Brands'),
+                          Text(
+                            " (optional)",
+                            style: TextStyles.openSans(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey),
                           ),
-                          style: const TextStyle(fontSize: 16.0),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      CustomTextField(
+                          isenable: true,
+                          controller: brandsController,
+                          hintText: "Enter Brands name as list",
+                          height: 48.h,
+                          width: 330.w),
+
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        children: [
+                          heading(title: "About your store"),
+                          Text(
+                            " (optional)",
+                            style: TextStyles.openSans(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      Container(
+                        height: 100.h,
+                        width: 330.w,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(width: 1, color: Colors.grey),
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextField(
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            controller: aboutYourStoreController,
+                            decoration: const InputDecoration(
+                              // contentPadding: EdgeInsets.only(bottom: 60.h),
+                              hintText:
+                                  "e.g This store has all the types of books.",
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(color: Colors.grey),
+                            ),
+                            style: const TextStyle(fontSize: 16.0),
+                          ),
                         ),
                       ),
-                    ),
 
-                    // social links
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Row(
-                      children: [
-                        heading(title: "Link your social media accounts"),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        Text(
-                          " (optional)",
-                          style: TextStyles.openSans(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    socialLinkBox(
-                        controller: ytController,
-                        imagePath: 'assest/you_tube.png',
-                        platform: 'youtube'),
+                      // social links
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Row(
+                        children: [
+                          heading(title: "Link your social media accounts"),
+                          SizedBox(
+                            height: 5.h,
+                          ),
+                          Text(
+                            " (optional)",
+                            style: TextStyles.openSans(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                      socialLinkBox(
+                          controller: ytController,
+                          imagePath: 'assest/you_tube.png',
+                          platform: 'youtube'),
 
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    socialLinkBox(
-                        controller: iGController,
-                        imagePath: 'assest/instagram.png',
-                        platform: 'instagram'),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    socialLinkBox(
-                        controller: wLController,
-                        imagePath: 'assest/internet.png',
-                        platform: 'Website'),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    // heading(title: "Languages you know *"),
-                    // SizedBox(
-                    //   height: 10.h,
-                    // ),
-                    // Padding(
-                    //   padding: EdgeInsets.only(right: 20.w),
-                    //   child: MultiSelectDropDown(
-                    //     borderColor: Colors.grey,
-                    //     borderWidth: 1,
-                    //     borderRadius: 4.r,
-                    //     selectedOptionTextColor:
-                    //         const Color(0xffFC8019).withOpacity(0.1),
-                    //     clearIcon: const Icon(Icons.close_outlined),
-                    //     controller: languageSelectController,
-                    //     onOptionSelected: (options) {
-                    //       debugPrint(options.toString());
-                    //     },
-                    //     options: const <ValueItem>[
-                    //       ValueItem(label: 'Bangla', value: '1'),
-                    //       ValueItem(label: 'English', value: '2'),
-                    //       ValueItem(label: 'Gujarati', value: '3'),
-                    //       ValueItem(label: 'Hindi', value: '4'),
-                    //       ValueItem(label: 'Kannada', value: '5'),
-                    //       ValueItem(label: 'Marathi', value: '6'),
-                    //       ValueItem(label: 'Malayalam', value: '7'),
-                    //       ValueItem(label: 'Punjabi', value: '8'),
-                    //       ValueItem(label: 'Tamil', value: '9'),
-                    //       ValueItem(label: 'Telugu', value: '10')
-                    //     ],
-                    //     maxItems: 3,
-                    //     selectionType: SelectionType.multi,
-                    //     chipConfig: const ChipConfig(
-                    //         wrapType: WrapType.wrap,
-                    //         backgroundColor: Color(0xffFC8019)),
-                    //     dropdownHeight: 200.h,
-                    //     optionTextStyle: TextStyle(fontSize: 16.sp),
-                    //     selectedOptionIcon: const Icon(Icons.check_circle),
-                    //   ),
-                    // ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      socialLinkBox(
+                          controller: iGController,
+                          imagePath: 'assest/instagram.png',
+                          platform: 'instagram'),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      socialLinkBox(
+                          controller: wLController,
+                          imagePath: 'assest/internet.png',
+                          platform: 'Website'),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      // heading(title: "Languages you know *"),
+                      // SizedBox(
+                      //   height: 10.h,
+                      // ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(right: 20.w),
+                      //   child: MultiSelectDropDown(
+                      //     borderColor: Colors.grey,
+                      //     borderWidth: 1,
+                      //     borderRadius: 4.r,
+                      //     selectedOptionTextColor:
+                      //         const Color(0xffFC8019).withOpacity(0.1),
+                      //     clearIcon: const Icon(Icons.close_outlined),
+                      //     controller: languageSelectController,
+                      //     onOptionSelected: (options) {
+                      //       debugPrint(options.toString());
+                      //     },
+                      //     options: const <ValueItem>[
+                      //       ValueItem(label: 'Bangla', value: '1'),
+                      //       ValueItem(label: 'English', value: '2'),
+                      //       ValueItem(label: 'Gujarati', value: '3'),
+                      //       ValueItem(label: 'Hindi', value: '4'),
+                      //       ValueItem(label: 'Kannada', value: '5'),
+                      //       ValueItem(label: 'Marathi', value: '6'),
+                      //       ValueItem(label: 'Malayalam', value: '7'),
+                      //       ValueItem(label: 'Punjabi', value: '8'),
+                      //       ValueItem(label: 'Tamil', value: '9'),
+                      //       ValueItem(label: 'Telugu', value: '10')
+                      //     ],
+                      //     maxItems: 3,
+                      //     selectionType: SelectionType.multi,
+                      //     chipConfig: const ChipConfig(
+                      //         wrapType: WrapType.wrap,
+                      //         backgroundColor: Color(0xffFC8019)),
+                      //     dropdownHeight: 200.h,
+                      //     optionTextStyle: TextStyle(fontSize: 16.sp),
+                      //     selectedOptionIcon: const Icon(Icons.check_circle),
+                      //   ),
+                      // ),
 
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    heading(title: "Timings *"),
-                    SizedBox(
-                      height: 10.h,
-                    ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      heading(title: "Timings *"),
+                      SizedBox(
+                        height: 10.h,
+                      ),
 
-                    timings(
-                      context,
-                      "S",
-                      sundayOpenController,
-                      sundayCloseController,
-                      sundayIsOpen,
-                    ),
-                    timings(
-                      context,
-                      "M",
-                      mondayOpenController,
-                      mondayCloseController,
-                      mondayIsOpen,
-                    ),
-                    timings(
-                      context,
-                      "T",
-                      tuesdayOpenController,
-                      tuesdayCloseController,
-                      tuesdayIsOpen,
-                    ),
-                    timings(
-                      context,
-                      "W",
-                      wednesdayOpenController,
-                      wednesdayCloseController,
-                      wednesdayIsOpen,
-                    ),
-                    timings(
-                      context,
-                      "T",
-                      thursdayOpenController,
-                      thursdayCloseController,
-                      thursdayIsOpen,
-                    ),
-                    timings(
-                      context,
-                      "F",
-                      fridayOpenController,
-                      fridayCloseController,
-                      fridayIsOpen,
-                    ),
-                    timings(
-                      context,
-                      "S",
-                      saturdayOpenController,
-                      saturdayCloseController,
-                      saturdayIsOpen,
-                    ),
+                      timings(
+                        context,
+                        "S",
+                        sundayOpenController,
+                        sundayCloseController,
+                        sundayIsOpen,
+                      ),
+                      timings(
+                        context,
+                        "M",
+                        mondayOpenController,
+                        mondayCloseController,
+                        mondayIsOpen,
+                      ),
+                      timings(
+                        context,
+                        "T",
+                        tuesdayOpenController,
+                        tuesdayCloseController,
+                        tuesdayIsOpen,
+                      ),
+                      timings(
+                        context,
+                        "W",
+                        wednesdayOpenController,
+                        wednesdayCloseController,
+                        wednesdayIsOpen,
+                      ),
+                      timings(
+                        context,
+                        "T",
+                        thursdayOpenController,
+                        thursdayCloseController,
+                        thursdayIsOpen,
+                      ),
+                      timings(
+                        context,
+                        "F",
+                        fridayOpenController,
+                        fridayCloseController,
+                        fridayIsOpen,
+                      ),
+                      timings(
+                        context,
+                        "S",
+                        saturdayOpenController,
+                        saturdayCloseController,
+                        saturdayIsOpen,
+                      ),
 
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        heading(title: 'House No, Building Name *'),
-                        CustomTextField(
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          heading(title: 'House No, Building Name *'),
+                          CustomTextField(
+                            isenable: true,
+                            onChanged: (Value) {
+                              productSetUpController.updateButtonState();
+                            },
+                            hintText: '',
+                            height: 55.h,
+                            width: 330.w,
+                            controller: houseNoController,
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      heading(title: 'Street Name, Area*'),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      CustomTextField(
                           isenable: true,
                           onChanged: (Value) {
                             productSetUpController.updateButtonState();
                           },
-                          hintText: '',
-                          height: 55.h,
-                          width: 330.w,
-                          controller: houseNoController,
-                        ),
-                      ],
-                    ),
+                          controller: streetController,
+                          hintText: "",
+                          height: 48.h,
+                          width: 330.w),
 
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    heading(title: 'Street Name, Area*'),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    CustomTextField(
-                        isenable: true,
-                        onChanged: (Value) {
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      // heading(title: 'Landmark'),
+                      // SizedBox(
+                      //   height: 5.h,
+                      // ),
+                      // CustomTextField(
+                      //     isenable: true,
+                      //     onChanged: (Value) {
+                      //       productSetUpController.updateButtonState();
+                      //     },
+                      //     controller:
+                      //         productSetUpController.landMarkController.value,
+                      //     hintText: "",
+                      //     height: 48.h,
+                      //     width: 330.w),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              heading(title: 'Country *'),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Container(
+                                height: 48.h,
+                                width: 160.w,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  border:
+                                      Border.all(width: 1, color: Colors.grey),
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    value: 'India',
+                                    icon: const Icon(Icons.arrow_drop_down),
+                                    iconSize: 24,
+                                    elevation: 16,
+                                    style: const TextStyle(
+                                        color: Colors.black, fontSize: 16.0),
+                                    onChanged: (String? newValue) {
+                                      // Since there's only one option, this won't actually change anything
+                                      // But you can add logic here if needed in the future
+                                    },
+                                    items: <String>['India']
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 10.h),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                heading(title: 'Pincode *'),
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                                Container(
+                                  height: 48.h,
+                                  width: 160.w,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    border: Border.all(
+                                        width: 1, color: Colors.grey),
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: TextField(
+                                      onTap: () {
+                                        // Get.toNamed(RouteName.changeLocation);
+                                      },
+                                      keyboardType: TextInputType.number,
+                                      controller: pinCodeController,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey),
+                                      ),
+                                      style: const TextStyle(fontSize: 16.0),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              heading(title: 'State *'),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Container(
+                                height: 48.h,
+                                width: 160.w,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  border:
+                                      Border.all(width: 1, color: Colors.grey),
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    value: 'Telangana',
+                                    icon: const Icon(Icons.arrow_drop_down),
+                                    iconSize: 24,
+                                    elevation: 16,
+                                    style: const TextStyle(
+                                        color: Colors.black, fontSize: 16.0),
+                                    onChanged: (String? newValue) {
+                                      // Since there's only one option, this won't actually change anything
+                                      // But you can add logic here if needed in the future
+                                    },
+                                    items: <String>['Telangana']
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 10.h),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                heading(title: 'City / District *'),
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                                Container(
+                                  height: 48.h,
+                                  width: 160.w,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    border: Border.all(
+                                        width: 1, color: Colors.grey),
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: TextField(
+                                      onTap: () {
+                                        // Get.toNamed(RouteName.changeLocation);
+                                      },
+                                      controller: cityController,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey),
+                                      ),
+                                      style: const TextStyle(fontSize: 16.0),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+
+                      SizedBox(
+                        height: 10.h,
+                      ),
+
+                      heading(title: 'Your Store Location *'),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+
+                      Container(
+                        height: 48.h,
+                        width: 330.w,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(width: 1, color: Colors.grey),
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextField(
+                            onTap: () {
+                              Get.toNamed(RouteName.changeLocation);
+                            },
+                            controller:
+                                dialogBoxController.locacationController.value,
+                            decoration: const InputDecoration(
+                              hintText: 'Point Your location',
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(color: Colors.grey),
+                            ),
+                            style: const TextStyle(fontSize: 16.0),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 10.h,
+                      ),
+
+                      InkWell(
+                        onTap: () async {
+                          await dialogBoxController.getCurrentLocation();
+                          Get.to(const GoogleMapPage());
                           productSetUpController.updateButtonState();
                         },
-                        controller: streetController,
-                        hintText: "",
-                        height: 48.h,
-                        width: 330.w),
-
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    // heading(title: 'Landmark'),
-                    // SizedBox(
-                    //   height: 5.h,
-                    // ),
-                    // CustomTextField(
-                    //     isenable: true,
-                    //     onChanged: (Value) {
-                    //       productSetUpController.updateButtonState();
-                    //     },
-                    //     controller:
-                    //         productSetUpController.landMarkController.value,
-                    //     hintText: "",
-                    //     height: 48.h,
-                    //     width: 330.w),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            heading(title: 'Country *'),
-                            SizedBox(
-                              height: 5.h,
-                            ),
-                            Container(
-                              height: 48.h,
-                              width: 160.w,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.0),
-                                border:
-                                    Border.all(width: 1, color: Colors.grey),
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: 'India',
-                                  icon: const Icon(Icons.arrow_drop_down),
-                                  iconSize: 24,
-                                  elevation: 16,
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 16.0),
-                                  onChanged: (String? newValue) {
-                                    // Since there's only one option, this won't actually change anything
-                                    // But you can add logic here if needed in the future
-                                  },
-                                  items: <String>['India']
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10.h),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              heading(title: 'Pincode *'),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              Container(
-                                height: 48.h,
-                                width: 160.w,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  border:
-                                      Border.all(width: 1, color: Colors.grey),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: TextField(
-                                    onTap: () {
-                                      // Get.toNamed(RouteName.changeLocation);
-                                    },
-                                    keyboardType: TextInputType.number,
-                                    controller: pinCodeController,
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                    ),
-                                    style: const TextStyle(fontSize: 16.0),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            heading(title: 'State *'),
-                            SizedBox(
-                              height: 5.h,
-                            ),
-                            Container(
-                              height: 48.h,
-                              width: 160.w,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.0),
-                                border:
-                                    Border.all(width: 1, color: Colors.grey),
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: 'Telangana',
-                                  icon: const Icon(Icons.arrow_drop_down),
-                                  iconSize: 24,
-                                  elevation: 16,
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 16.0),
-                                  onChanged: (String? newValue) {
-                                    // Since there's only one option, this won't actually change anything
-                                    // But you can add logic here if needed in the future
-                                  },
-                                  items: <String>['Telangana']
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10.h),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              heading(title: 'City / District *'),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              Container(
-                                height: 48.h,
-                                width: 160.w,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  border:
-                                      Border.all(width: 1, color: Colors.grey),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: TextField(
-                                    onTap: () {
-                                      // Get.toNamed(RouteName.changeLocation);
-                                    },
-                                    controller: cityController,
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                    ),
-                                    style: const TextStyle(fontSize: 16.0),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-
-                    SizedBox(
-                      height: 10.h,
-                    ),
-
-                    heading(title: 'Your Store Location *'),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-
-                    Container(
-                      height: 48.h,
-                      width: 330.w,
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        border: Border.all(width: 1, color: Colors.grey),
-                      ),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: TextField(
-                          onTap: () {
-                            Get.toNamed(RouteName.changeLocation);
-                          },
-                          controller:
-                              dialogBoxController.locacationController.value,
-                          decoration: const InputDecoration(
-                            hintText: 'Point Your location',
-                            border: InputBorder.none,
-                            hintStyle: TextStyle(color: Colors.grey),
-                          ),
-                          style: const TextStyle(fontSize: 16.0),
+                        child: Text(
+                          "Use my current location",
+                          style: TextStyles.openSansUnderLine(
+                              color: const Color(0xffFC8019),
+                              fontWeight: FontWeight.normal),
                         ),
                       ),
-                    ),
-
-                    SizedBox(
-                      height: 10.h,
-                    ),
-
-                    InkWell(
-                      onTap: () async {
-                        await dialogBoxController.getCurrentLocation();
-                        Get.to(const GoogleMapPage());
-                        productSetUpController.updateButtonState();
-                      },
-                      child: Text(
-                        "Use my current location",
-                        style: TextStyles.openSansUnderLine(
-                            color: const Color(0xffFC8019),
-                            fontWeight: FontWeight.normal),
+                      SizedBox(
+                        height: 30.h,
                       ),
-                    ),
-                    SizedBox(
-                      height: 30.h,
-                    ),
 
-                    Obx(
-                      () => images.isNotEmpty
-                          ? Padding(
-                              padding: EdgeInsets.only(right: 20.w),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    Map<String, dynamic> data = {
-                                      "StoreName": storeNameController.text,
-                                      "storeCategory": categorySelected.isEmpty
-                                          ? widget.storeCategory
-                                          : categorySelected,
-                                      "storeSubCategory":
-                                          subCategorySelected.isEmpty
-                                              ? widget.storeSubcategory
-                                              : subCategorySelected,
-                                      "About_the_store":
-                                          aboutYourStoreController.text,
-                                      "youtubelink": ytController.text,
-                                      "instagarmlink": iGController.text,
-                                      "Websitelink": wLController.text,
-                                      "StreetNo_BuildingName":
-                                          houseNoController.text,
-                                      "StreetName_Area": streetController.text,
-                                      "Brands": brandsController.text,
-                                      "timings": {
-                                        "Sunday": {
-                                          "open": sundayOpenController.text,
-                                          "close": sundayCloseController.text
+                      Obx(
+                        () => images.isNotEmpty
+                            ? Padding(
+                                padding: EdgeInsets.only(right: 20.w),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      Map<String, dynamic> data = {
+                                        "StoreName": storeNameController.text,
+                                        "storeCategory":
+                                            categorySelected.isEmpty
+                                                ? widget.storeCategory
+                                                : categorySelected,
+                                        "storeSubCategory":
+                                            subCategorySelected.isEmpty
+                                                ? widget.storeSubcategory
+                                                : subCategorySelected,
+                                        "About_the_store":
+                                            aboutYourStoreController.text,
+                                        "youtubelink": ytController.text,
+                                        "instagarmlink": iGController.text,
+                                        "Websitelink": wLController.text,
+                                        "StreetNo_BuildingName":
+                                            houseNoController.text,
+                                        "StreetName_Area":
+                                            streetController.text,
+                                        "Brands": brandsController.text,
+                                        "timings": {
+                                          "Sunday": {
+                                            "open": sundayOpenController.text,
+                                            "close": sundayCloseController.text
+                                          },
+                                          "Monday": {
+                                            "open": mondayOpenController.text,
+                                            "close": mondayCloseController.text
+                                          },
+                                          "Tuesday": {
+                                            "open": tuesdayOpenController.text,
+                                            "close": tuesdayCloseController.text
+                                          },
+                                          "Wednesday": {
+                                            "open":
+                                                wednesdayOpenController.text,
+                                            "close":
+                                                wednesdayCloseController.text
+                                          },
+                                          "Thursday": {
+                                            "open": thursdayOpenController.text,
+                                            "close":
+                                                thursdayCloseController.text
+                                          },
+                                          "Friday": {
+                                            "open": fridayOpenController.text,
+                                            "close": fridayCloseController.text
+                                          },
+                                          "Saturday": {
+                                            "open": saturdayOpenController.text,
+                                            "close":
+                                                saturdayCloseController.text
+                                          }
                                         },
-                                        "Monday": {
-                                          "open": mondayOpenController.text,
-                                          "close": mondayCloseController.text
-                                        },
-                                        "Tuesday": {
-                                          "open": tuesdayOpenController.text,
-                                          "close": tuesdayCloseController.text
-                                        },
-                                        "Wednesday": {
-                                          "open": wednesdayOpenController.text,
-                                          "close": wednesdayCloseController.text
-                                        },
-                                        "Thursday": {
-                                          "open": thursdayOpenController.text,
-                                          "close": thursdayCloseController.text
-                                        },
-                                        "Friday": {
-                                          "open": fridayOpenController.text,
-                                          "close": fridayCloseController.text
-                                        },
-                                        "Saturday": {
-                                          "open": saturdayOpenController.text,
-                                          "close": saturdayCloseController.text
+                                        "Postcode_ZIP": pinCodeController.text,
+                                        "sellerLocation": {
+                                          "latitude": widget.lat,
+                                          "longitude": widget.long
                                         }
-                                      },
-                                      "Postcode_ZIP": pinCodeController.text,
-                                      "sellerLocation": {
-                                        "latitude": widget.lat,
-                                        "longitude": widget.long
-                                      }
-                                    };
+                                      };
 
-                                    if (removedImdexs.isNotEmpty) {
+                                      if (removedImdexs.isNotEmpty) {
+                                        try {
+                                          await restClient
+                                              .deleteImageInEditStore({
+                                            "StoreID": widget.storeID,
+                                            "imageIndices": removedImdexs,
+                                          });
+                                        } catch (e) {
+                                          Logger().d(e);
+
+                                          // Note: We're not returning here, so it will continue to edit
+                                        }
+                                      }
+
+                                      int st = 0;
+
+                                      dio.FormData formDatatoPost =
+                                          await convertToMultipart(
+                                              localImageFiles);
+                                      if (images.isNotEmpty &&
+                                          productSetUpController
+                                              .staredImage.isNotEmpty) {
+                                        for (int i = 0;
+                                            i < images.length;
+                                            i++) {
+                                          if (productSetUpController
+                                                  .staredImage.first ==
+                                              images[i]) {
+                                            st = i;
+                                          }
+                                        }
+                                      } else {
+                                        // Handle the case where one or both lists are empty
+                                        print('One or both lists are empty');
+                                      }
+
+                                      formDatatoPost.fields.add(MapEntry(
+                                          'staredIndex', st.toString()));
                                       try {
-                                        await restClient
-                                            .deleteImageInEditStore({
-                                          "StoreID": widget.storeID,
-                                          "imageIndices": removedImdexs,
-                                        });
+                                        await postdio.editProfileImage(
+                                            widget.storeID, formDatatoPost);
                                       } catch (e) {
-                                        Logger().d(e);
-
-                                        // Note: We're not returning here, so it will continue to edit
+                                        Logger().f(e);
                                       }
-                                    }
 
-                                    int st = 0;
+                                      try {
+                                        Mystoreaccountcontroller
+                                            mystoreaccountcontroller = Get.put(
+                                                Mystoreaccountcontroller(
+                                                    storeId: widget.storeID));
+                                        await restClient.editStore(
+                                            widget.storeID, data);
 
-                                    dio.FormData formDatatoPost =
-                                        await convertToMultipart(
-                                            localImageFiles);
-                                    if (images.isNotEmpty &&
-                                        productSetUpController
-                                            .staredImage.isNotEmpty) {
-                                      for (int i = 0; i < images.length; i++) {
-                                        if (productSetUpController
-                                                .staredImage.first ==
-                                            images[i]) {
-                                          st = i;
+                                        try {
+                                          await restClient.makeStarEdit({
+                                            "StoreID": widget.storeID,
+                                            "newStaredIndex":
+                                                productSetUpController
+                                                            .staredImageIndex
+                                                            .value ==
+                                                        -1
+                                                    ? widget.staredImageIndex
+                                                    : productSetUpController
+                                                        .staredImageIndex.value
+                                          });
+                                        } catch (e) {
+                                          Logger().d(e);
                                         }
-                                      }
-                                    } else {
-                                      // Handle the case where one or both lists are empty
-                                      print('One or both lists are empty');
-                                    }
+                                        await mystoreaccountcontroller
+                                            .fetchStoreDetails(widget.storeID);
 
-                                    formDatatoPost.fields.add(
-                                        MapEntry('staredIndex', st.toString()));
-                                    try {
-                                      await postdio.editProfileImage(
-                                          widget.storeID, formDatatoPost);
-                                    } catch (e) {
-                                      Logger().f(e);
-                                    }
+                                        Fluttertoast.showToast(
+                                            msg: "Store updated successfully");
+                                      } catch (e) {}
 
-                                    try {
-                                      Mystoreaccountcontroller
-                                          mystoreaccountcontroller = Get.put(
-                                              Mystoreaccountcontroller(
-                                                  storeId: widget.storeID));
-                                      await restClient.editStore(
-                                          widget.storeID, data);
-                                      await mystoreaccountcontroller
-                                          .fetchStoreDetails(widget.storeID);
-
-                                      Fluttertoast.showToast(
-                                          msg: "Store updated successfully");
-                                    } catch (e) {}
-
-                                    Get.back();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    side: const BorderSide(
-                                        color: Color(0xffFC8019)),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
+                                      Get.back();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      side: const BorderSide(
+                                          color: Color(0xffFC8019)),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      backgroundColor: const Color(0xffFC8019),
+                                      padding: EdgeInsets.all(
+                                        GlobalSizes.getDeviceWidth(context) *
+                                            0.04,
+                                      ),
                                     ),
-                                    backgroundColor: const Color(0xffFC8019),
-                                    padding: EdgeInsets.all(
-                                      GlobalSizes.getDeviceWidth(context) *
-                                          0.04,
+                                    child: const Text(
+                                      "Update",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.white, // Text color
+                                      ),
                                     ),
                                   ),
-                                  child: const Text(
-                                    "Update",
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.white, // Text color
+                                ),
+                              )
+                            : Padding(
+                                padding: EdgeInsets.only(right: 20.w),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      backgroundColor: const Color(0xffFC8019)
+                                          .withOpacity(0.5),
+                                      padding: EdgeInsets.all(
+                                        GlobalSizes.getDeviceWidth(context) *
+                                            0.04,
+                                      ),
+                                    ),
+                                    onPressed: () {},
+                                    child: const Text(
+                                      "Update",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.white, // Text color
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            )
-                          : Padding(
-                              padding: EdgeInsets.only(right: 20.w),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    backgroundColor: const Color(0xffFC8019)
-                                        .withOpacity(0.5),
-                                    padding: EdgeInsets.all(
-                                      GlobalSizes.getDeviceWidth(context) *
-                                          0.04,
-                                    ),
-                                  ),
-                                  onPressed: () {},
-                                  child: const Text(
-                                    "Update",
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.white, // Text color
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                    ),
+                      ),
 
-                    SizedBox(
-                      height: 30.h,
-                    ),
-                  ],
+                      SizedBox(
+                        height: 30.h,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+              ],
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   String? getMimeType(String fileName) {

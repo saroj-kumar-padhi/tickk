@@ -18,6 +18,7 @@ import '../views/seller_views/seller_home_screens/seller_home.dart';
 
 class ProductSetUpController extends GetxController {
   RxBool isLoading = false.obs;
+  RxInt staredImageIndex = (-1).obs;
   final RxList<String> staredImage = <String>[].obs;
   final isSetupCompleted = false.obs;
   final isProcessing = false.obs;
