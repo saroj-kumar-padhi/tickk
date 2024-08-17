@@ -3,6 +3,7 @@ import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:logger/web.dart';
@@ -264,9 +265,9 @@ class NewSquareCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Image.asset(
-                        "assest/info.png",
-                        height: 10,
+                      SvgPicture.asset(
+                        "assest/info.svg",
+                        height: 15.h,
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(
@@ -307,8 +308,8 @@ class NewSquareCard extends StatelessWidget {
                         },
                         child: SizedBox(
                             width: GlobalSizes.getDeviceWidth(context) * 0.09,
-                            child: Image.asset(
-                              "assest/delete-filled.png",
+                            child: SvgPicture.asset(
+                              "assest/delete-filled.svg",
                               fit: BoxFit.fitWidth,
                             )),
                       )

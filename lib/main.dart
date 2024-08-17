@@ -19,6 +19,7 @@ import 'package:dekhlo/utils/routes/routes_controller.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
+import 'utils/components/dialog_boxs/rate.dart';
 import 'views/buyer_view/loginPages/login_otp.dart';
 import 'views/seller_views/seller_home_screens/seller_home.dart';
 
@@ -80,7 +81,7 @@ class MyApp extends StatelessWidget {
 
         home: const AuthWrapper(),
 
-        // home: BuyerProfile(),
+        // home: RateUs(),
         getPages: AppPages.pages,
       ),
     );

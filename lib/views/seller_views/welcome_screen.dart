@@ -48,71 +48,90 @@ class _EnhancedWelcomeScreenState extends State<EnhancedWelcomeScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: FadeTransition(
-                  opacity: _fadeInAnimation,
-                  child: Image.asset(
-                    'assest/Ecommerce campaign.gif', // Replace with your GIF file path
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-              SlideTransition(
-                position: _slideAnimation,
-                child: Center(
-                  child: TypeWriter.text(
-                    'Welcome to \n Setup Store',
-                    style: GoogleFonts.poppins(
-                        fontSize: 30, fontWeight: FontWeight.w600),
-                    duration: const Duration(milliseconds: 50),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              FadeTransition(
-                opacity: _fadeInAnimation,
-                child: Text(
-                  'Embark on a journey of knowledge and growth with our innovative learning platform.',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[600],
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(height: 48),
-              ScaleTransition(
-                scale: _fadeInAnimation,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xffFC8019),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 16.h, horizontal: 36.w),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    elevation: 5,
-                  ),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
                   onPressed: () {
-                    // Handle button press
-                    Get.toNamed(RouteName.setUpProduct);
+                    Get.back();
                   },
-                  child: const Text(
-                    'Setup My Store',
-                    style: TextStyle(fontSize: 18),
-                  ),
+                  icon: const Icon(Icons.arrow_back)),
+            ),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: FadeTransition(
+                        opacity: _fadeInAnimation,
+                        child: Image.asset(
+                          'assest/Ecommerce campaign.gif', // Replace with your GIF file path
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      height: 80.h,
+                      child: Flexible(
+                        child: SlideTransition(
+                          position: _slideAnimation,
+                          child: Center(
+                            child: TypeWriter.text(
+                              'Welcome to \n Setup Store',
+                              style: GoogleFonts.poppins(
+                                  fontSize: 30, fontWeight: FontWeight.w600),
+                              duration: const Duration(milliseconds: 50),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // FadeTransition(
+                    //   opacity: _fadeInAnimation,
+                    //   child: Text(
+                    //     'Embark on a journey of knowledge and growth with our innovative learning platform.',
+                    //     style: TextStyle(
+                    //       fontSize: 16,
+                    //       color: Colors.grey[600],
+                    //     ),
+                    //     textAlign: TextAlign.center,
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 48),
+                    ScaleTransition(
+                      scale: _fadeInAnimation,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xffFC8019),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16.h, horizontal: 36.w),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          elevation: 5,
+                        ),
+                        onPressed: () {
+                          // Handle button press
+                          Get.toNamed(RouteName.setUpProduct);
+                        },
+                        child: const Text(
+                          'Setup My Store',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 48),
+                  ],
                 ),
               ),
-              const SizedBox(height: 48),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

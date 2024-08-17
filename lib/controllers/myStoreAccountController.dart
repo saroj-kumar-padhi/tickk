@@ -114,7 +114,7 @@ class Mystoreaccountcontroller extends GetxController {
     }
 
     if (openTime.isEmpty || closeTime.isEmpty) {
-      return "Timing not available";
+      return "Closed";
     }
 
     return "$openTime - $closeTime";

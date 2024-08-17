@@ -67,7 +67,7 @@ class NewSellerCard extends StatelessWidget {
           width: double.infinity, // Adjust the width as needed
           height: exactController.items[index] != ""
               ? 415.h
-              : 270.h, // Adjust the height as needed
+              : 300.h, // Adjust the height as needed
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(
@@ -127,12 +127,25 @@ class NewSellerCard extends StatelessWidget {
                               fontSize: 14, fontWeight: FontWeight.w600),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 17.w),
-                        child: Text(
-                          name.isNotEmpty ? '${name[0]}${'.....'}' : '',
-                          style: const TextStyle(
-                              fontSize: 16), // Adjust font size as needed
+                      SizedBox(
+                        width: 270.w,
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 17.w),
+                              child: Text(
+                                name.isNotEmpty ? '${name[0]}${'.....'}' : '',
+                                style: const TextStyle(
+                                    fontSize: 16), // Adjust font size as needed
+                              ),
+                            ),
+                            const Spacer(),
+                            Text(
+                              date,
+                              style: TextStyles.openSans(
+                                  fontSize: 12, fontWeight: FontWeight.w600),
+                            )
+                          ],
                         ),
                       ),
                       SizedBox(
@@ -164,14 +177,6 @@ class NewSellerCard extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                            Text(
-                              date,
-                              style: TextStyles.openSans(
-                                  fontSize: 12, fontWeight: FontWeight.w600),
-                            )
                           ],
                         ),
                       ),
@@ -375,6 +380,82 @@ class NewSellerCard extends StatelessWidget {
                   ),
                 ],
               ),
+              exactController.items[index] != ""
+                  ? const SizedBox()
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            elevation: WidgetStateProperty.all(
+                                0.0), // Remove elevation
+                            side: WidgetStateProperty.all(const BorderSide(
+                              width: 1.0,
+                              color: Color(0xffC4C4C4),
+                            )),
+                            backgroundColor: WidgetStateProperty.all(
+                                Colors.transparent), // Transparent background
+                            shape: WidgetStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    1.0), // Adjust radius as needed
+                              ),
+                            ),
+                          ),
+                          onPressed: () async {
+                            try {
+                              await restClient.rejectBySeller(storeId, {
+                                "Reject": 'true',
+                                "RequirementID": requirementId
+                              });
+                              await homeSellerController
+                                  .fetchSellerData(storeId);
+                            } catch (e) {
+                              Fluttertoast.showToast(msg: "$e");
+                            }
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
+                            child: Text(
+                              "Reject",
+                              style: TextStyles.openSans(
+                                  color: const Color(0xff4A4A4A),
+                                  fontSize: 14.sp),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            elevation: WidgetStateProperty.all(
+                                0.0), // Remove elevation
+                            shape: WidgetStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    3.0), // Adjust radius as needed
+                              ),
+                            ),
+
+                            backgroundColor: WidgetStateProperty.all<Color>(
+                                const Color(0xffFC8019).withOpacity(0.5)),
+                          ),
+                          onPressed: () {},
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
+                            child: Text(
+                              "Accept",
+                              style: TextStyles.openSans(
+                                  color: Colors.white, fontSize: 14.sp),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        )
+                      ],
+                    ),
               Obx(() {
                 return exactController.items[index] != ""
                     ? pickedImage.isEmpty

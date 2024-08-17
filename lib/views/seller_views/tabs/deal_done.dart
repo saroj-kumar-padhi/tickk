@@ -32,7 +32,7 @@ class DealDoneTabSeller extends StatelessWidget {
               return ListView(
                 // Wrap with ListView to make it scrollable
                 children: [
-                  SizedBox(height: MediaQuery.of(context).size.height / 2),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.2),
                   emptyStateBuild(),
                 ],
               );

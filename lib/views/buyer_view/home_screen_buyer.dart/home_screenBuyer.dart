@@ -42,68 +42,62 @@ class HomeBuyer extends StatelessWidget {
                   SizedBox(
                     height: GlobalSizes.getDeviceHeight(context) * 0.012,
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: GlobalSizes.getDeviceHeight(context) * 0.019,
-                    ),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: GlobalSizes.getDeviceWidth(context) * 0.3,
-                          child: SvgPicture.asset("assest/small_tick.svg"),
-                        ),
-                        SizedBox(
-                          width: 140.w,
-                        ),
-                        SizedBox(
-                          width: GlobalSizes.getDeviceHeight(context) * 0.015,
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            BasiccontrollerEdit basiccontrollerEdit =
-                                Get.put(BasiccontrollerEdit());
-                            final box = Hive.box('myBox');
-                            final String formattedPhoneNumber =
-                                box.get('phone') ?? "";
-                            await basiccontrollerEdit.fetchBasicDetailsEdit(
-                                mobile: formattedPhoneNumber);
-                            Get.toNamed(RouteName.buyerProfile);
-                          },
-                          child: SizedBox(
-                            height: GlobalSizes.getDeviceHeight(context) * 0.03,
-                            child: SvgPicture.asset(
-                              "assest/user (1).svg",
-                              fit: BoxFit.fitHeight,
-                            ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: GlobalSizes.getDeviceWidth(context) * 0.25,
+                        child: SvgPicture.asset("assest/small_tick.svg"),
+                      ),
+                      SizedBox(
+                        width: 140.w,
+                      ),
+                      SizedBox(
+                        width: GlobalSizes.getDeviceHeight(context) * 0.06,
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          BasiccontrollerEdit basiccontrollerEdit =
+                              Get.put(BasiccontrollerEdit());
+                          final box = Hive.box('myBox');
+                          final String formattedPhoneNumber =
+                              box.get('phone') ?? "";
+                          await basiccontrollerEdit.fetchBasicDetailsEdit(
+                              mobile: formattedPhoneNumber);
+                          Get.toNamed(RouteName.buyerProfile);
+                        },
+                        child: SizedBox(
+                          height: GlobalSizes.getDeviceHeight(context) * 0.03,
+                          child: SvgPicture.asset(
+                            "assest/user (1).svg",
+                            fit: BoxFit.fitHeight,
                           ),
+                        ),
 
-                          // child: const Icon(
-                          //   Icons.person_2_outlined,
-                          //   color: Color(0xff4A4A4A),
-                          // ),
-                        ),
-                        SizedBox(
-                          width: 20.w,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Get.to(const EnhancedWelcomeScreen());
-                          },
-                          child: SizedBox(
-                            height:
-                                GlobalSizes.getDeviceHeight(context) * 0.036,
-                            width: 30.w,
-                            child: SvgPicture.asset(
-                              "assest/storeIcon.svg",
-                              fit: BoxFit.fitHeight,
-                            ),
+                        // child: const Icon(
+                        //   Icons.person_2_outlined,
+                        //   color: Color(0xff4A4A4A),
+                        // ),
+                      ),
+                      SizedBox(
+                        width: 20.w,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Get.to(const EnhancedWelcomeScreen());
+                        },
+                        child: SizedBox(
+                          height: GlobalSizes.getDeviceHeight(context) * 0.036,
+                          width: 30.w,
+                          child: SvgPicture.asset(
+                            "assest/storeIcon.svg",
+                            fit: BoxFit.fitHeight,
                           ),
                         ),
-                        SizedBox(
-                          width: GlobalSizes.getDeviceHeight(context) * 0.001,
-                        ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        width: GlobalSizes.getDeviceHeight(context) * 0.001,
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 10.h,

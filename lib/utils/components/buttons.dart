@@ -1,4 +1,5 @@
 import 'package:dekhlo/services/injection.dart';
+import 'package:dekhlo/utils/components/dialog_boxs/rate.dart';
 import 'package:dekhlo/utils/components/dialog_boxs/rate_now.dart';
 import 'package:dekhlo/utils/components/textstyle.dart';
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
@@ -183,7 +184,9 @@ class Buttons {
           onPressed: () async {
             try {
               await Get.dialog(
-                RateNowCustomDialog(requirementId: RequrementId),
+                RateUs(
+                  requirementId: RequrementId,
+                ),
                 barrierDismissible:
                     false, // Prevent dismissing by tapping outside
               );

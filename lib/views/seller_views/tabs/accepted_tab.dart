@@ -32,28 +32,31 @@ class AcceptedTabSeller extends StatelessWidget {
                 ? ListView(
                     // Wrap with ListView to make it scrollable for RefreshIndicator
                     children: [
+                      // Center the content
                       SizedBox(
-                          height: MediaQuery.of(context).size.height *
-                              0.2), // Center the content
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset('assest/empty.png'),
-                          SizedBox(height: 10.sp),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Text(
-                              "No Requirement Yet. Tickk is working for $storeName to get Request",
-                              style: TextStyles.openSans(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14.sp,
-                                color: const Color(0xff4A4A4A),
+                          height: MediaQuery.of(context).size.height * 0.2),
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset('assest/empty.png'),
+                            SizedBox(height: 10.sp),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                "No Requirement Yet. Tickk is working for $storeName to get Request",
+                                style: TextStyles.openSans(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14.sp,
+                                  color: const Color(0xff4A4A4A),
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   )

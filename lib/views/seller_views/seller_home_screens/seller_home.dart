@@ -72,7 +72,7 @@ class HomeSeller extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.symmetric(
                               horizontal:
-                                  GlobalSizes.getDeviceHeight(context) * 0.019,
+                                  GlobalSizes.getDeviceHeight(context) * 0.010,
                             ),
                             child: Row(
                               children: [
@@ -82,12 +82,13 @@ class HomeSeller extends StatelessWidget {
                                 // ),
 
                                 SizedBox(
-                                  width:
-                                      GlobalSizes.getDeviceWidth(context) * 0.3,
-                                  child: Image.asset("assest/tickk.png"),
+                                  width: GlobalSizes.getDeviceWidth(context) *
+                                      0.25,
+                                  child:
+                                      SvgPicture.asset("assest/small_tick.svg"),
                                 ),
                                 SizedBox(
-                                  width: 120.w,
+                                  width: 150.w,
                                 ),
 
                                 // InkWell(
@@ -394,7 +395,7 @@ class HomeSeller extends StatelessWidget {
                     child: Column(
                       children: [
                         SizedBox(
-                          height: GlobalSizes.getDeviceHeight(context) * 0.012,
+                          height: GlobalSizes.getDeviceHeight(context) * 0.01,
                         ),
                         Row(
                           children: [
@@ -406,14 +407,11 @@ class HomeSeller extends StatelessWidget {
                             //   width: 10.w,
                             // ),
                             SizedBox(
-                              width: GlobalSizes.getDeviceWidth(context) * 0.3,
-                              child: Image.asset(
-                                "assest/tickk.png",
-                                fit: BoxFit.cover,
-                              ),
+                              width: GlobalSizes.getDeviceWidth(context) * 0.25,
+                              child: SvgPicture.asset("assest/small_tick.svg"),
                             ),
                             SizedBox(
-                              width: 150.w,
+                              width: 160.w,
                             ),
                             InkWell(
                               onTap: () {

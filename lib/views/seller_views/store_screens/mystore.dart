@@ -431,39 +431,8 @@ class MyStore extends StatelessWidget {
                                                   ],
                                                 ),
                                                 children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 65.w),
-                                                    child: Row(
-                                                      children: [
-                                                        Text(
-                                                          "Mon",
-                                                          style: TextStyles.openSans(
-                                                              color: const Color(
-                                                                  0xff4A4A4A),
-                                                              fontSize: 14.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 30.w,
-                                                        ),
-                                                        Text(
-                                                          "${mystoreaccountcontroller.mondayOpen} - ${mystoreaccountcontroller.mondayClose}",
-                                                          style: TextStyles.openSans(
-                                                              color: const Color(
-                                                                  0xff4A4A4A),
-                                                              fontSize: 14.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
                                                   dayTile(
-                                                      title: 'Tue',
+                                                      title: 'Mon',
                                                       openTime:
                                                           mystoreaccountcontroller
                                                               .tuesdayOpen,
@@ -471,13 +440,13 @@ class MyStore extends StatelessWidget {
                                                           mystoreaccountcontroller
                                                               .tuesdayClose),
                                                   dayTile(
-                                                      title: 'Thu',
+                                                      title: 'Tue ',
                                                       openTime:
                                                           mystoreaccountcontroller
-                                                              .thursdayOpen,
+                                                              .tuesdayOpen,
                                                       closeTime:
                                                           mystoreaccountcontroller
-                                                              .thursdayClose),
+                                                              .tuesdayClose),
                                                   Row(
                                                     children: [
                                                       dayTile(
@@ -496,11 +465,19 @@ class MyStore extends StatelessWidget {
                                                       ),
                                                     ],
                                                   ),
+                                                  dayTile(
+                                                      title: 'Thu ',
+                                                      openTime:
+                                                          mystoreaccountcontroller
+                                                              .thursdayOpen,
+                                                      closeTime:
+                                                          mystoreaccountcontroller
+                                                              .thursdayClose),
                                                   Padding(
                                                       padding: EdgeInsets.only(
                                                           left: 2.w),
                                                       child: dayTile(
-                                                          title: 'Fri',
+                                                          title: 'Fri   ',
                                                           openTime:
                                                               mystoreaccountcontroller
                                                                   .fridayOpen,
@@ -511,7 +488,7 @@ class MyStore extends StatelessWidget {
                                                       padding: EdgeInsets.only(
                                                           left: 2.w),
                                                       child: dayTile(
-                                                          title: 'sat',
+                                                          title: 'Sat  ',
                                                           openTime:
                                                               mystoreaccountcontroller
                                                                   .saturdayOpen,
@@ -522,7 +499,7 @@ class MyStore extends StatelessWidget {
                                                       padding: EdgeInsets.only(
                                                           left: 2.w),
                                                       child: dayTile(
-                                                          title: 'Sun',
+                                                          title: 'Sun ',
                                                           openTime:
                                                               mystoreaccountcontroller
                                                                   .sundayOpen,
@@ -540,14 +517,18 @@ class MyStore extends StatelessWidget {
                                       ),
                                       Row(
                                         children: [
-                                          Image.asset("assest/loaction.png"),
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 10.w),
+                                            child: Image.asset(
+                                                "assest/loaction.png"),
+                                          ),
                                           SizedBox(
                                             width: 20.w,
                                           ),
                                           Expanded(
                                             child: Text(
-                                              mystoreaccountcontroller
-                                                  .storeAddress,
+                                              "${mystoreaccountcontroller.houseNoBuildingName},${mystoreaccountcontroller.pinCode},${mystoreaccountcontroller.streetController}",
                                               style: TextStyles.openSans(
                                                 fontSize: 14.sp,
                                                 fontWeight: FontWeight.w400,
@@ -590,8 +571,12 @@ class MyStore extends StatelessWidget {
                                       ),
                                       Row(
                                         children: [
-                                          Image.asset(
-                                            "assest/phone-call_grey.png",
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 15.w),
+                                            child: Image.asset(
+                                              "assest/phone-call_grey.png",
+                                            ),
                                           ),
                                           SizedBox(
                                             width: 20.w,
@@ -649,10 +634,12 @@ class MyStore extends StatelessWidget {
                                   height: 10.h,
                                 ),
                                 Obx(() => reviewscontrollers.reviews.isEmpty
-                                    ? const Center(
-                                        child: Text(
-                                            "No reviews available, be first to post review"),
-                                      )
+                                    ? Center(
+                                        child: isFromSeller
+                                            ? const Text(
+                                                "No reviews for your store yet.")
+                                            : const Text(
+                                                "This is only come in seller side store details page."))
                                     : SizedBox(
                                         height: 300,
                                         child: ListView.builder(
@@ -815,13 +802,21 @@ class MyStore extends StatelessWidget {
       padding: EdgeInsets.only(left: 65.w),
       child: Row(
         children: [
-          Text(
-            title,
-            style: TextStyles.openSans(
-                color: const Color(0xff4A4A4A),
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w400),
-          ),
+          title == "Wed"
+              ? Text(
+                  title,
+                  style: TextStyles.openSans(
+                      color: const Color(0xff4A4A4A),
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w400),
+                )
+              : Text(
+                  title,
+                  style: TextStyles.openSans(
+                      color: const Color(0xff4A4A4A),
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w400),
+                ),
           SizedBox(
             width: 35.w,
           ),

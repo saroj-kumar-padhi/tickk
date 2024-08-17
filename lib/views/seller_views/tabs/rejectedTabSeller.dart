@@ -31,9 +31,8 @@ class RejectedTabSeller extends StatelessWidget {
             return ListView(
               // Wrap with ListView to make it scrollable for RefreshIndicator
               children: [
-                SizedBox(
-                    height: MediaQuery.of(context).size.height *
-                        0.2), // Center the content
+                // Center the content
+                SizedBox(height: MediaQuery.of(context).size.height * 0.2),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,7 +42,7 @@ class RejectedTabSeller extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
-                        "No Requirement Yet. Tickk is working for $storeName to get Request",
+                        "No Rejection Yet.",
                         style: TextStyles.openSans(
                           fontWeight: FontWeight.w600,
                           fontSize: 14.sp,

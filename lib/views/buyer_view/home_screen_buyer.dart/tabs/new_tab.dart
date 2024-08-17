@@ -48,7 +48,7 @@ class NewTab extends StatelessWidget {
                 Image.asset('assest/empty.png'),
                 SizedBox(height: 10.sp),
                 Text(
-                  "Post your first requirement now",
+                  "Post your requirement now",
                   style: TextStyles.openSans(
                       fontWeight: FontWeight.w600,
                       fontSize: 14.sp,
