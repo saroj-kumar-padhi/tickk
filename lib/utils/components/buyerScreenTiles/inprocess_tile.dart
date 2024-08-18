@@ -7,6 +7,7 @@ import 'package:dekhlo/views/seller_views/store_screens/mystore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -116,17 +117,17 @@ class InprocessTile extends StatelessWidget {
                   children: [
                     Row(
                       children: [
+                        Text(catagory,
+                            style: TextStyles.openSans(
+                                fontSize: 12.sp, fontWeight: FontWeight.w400)),
+                        Text(" | ",
+                            style: TextStyles.openSans(
+                                fontSize: 12.sp, fontWeight: FontWeight.w400)),
                         Text(
                           subCategory,
                           style: TextStyles.openSans(
                               fontSize: 12.sp, fontWeight: FontWeight.w400),
                         ),
-                        Text(" | ",
-                            style: TextStyles.openSans(
-                                fontSize: 12.sp, fontWeight: FontWeight.w400)),
-                        Text(brands,
-                            style: TextStyles.openSans(
-                                fontSize: 12.sp, fontWeight: FontWeight.w400))
                       ],
                     ),
                     Padding(
@@ -525,16 +526,21 @@ class InprocessTile extends StatelessWidget {
                                                           padding:
                                                               EdgeInsets.only(
                                                                   left: 2.w),
-                                                          child: Text(
-                                                            "KM",
-                                                            style: GoogleFonts
-                                                                .openSans(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              fontSize: 12,
-                                                            ),
-                                                          ),
+                                                          child: stores[index]
+                                                                      .totalDiatance ==
+                                                                  '0'
+                                                              ? const SizedBox()
+                                                              : Text(
+                                                                  "KM",
+                                                                  style: GoogleFonts
+                                                                      .openSans(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontSize:
+                                                                        12,
+                                                                  ),
+                                                                ),
                                                         ),
                                                         // Text(
                                                         //   "away",
@@ -613,73 +619,75 @@ class InprocessTile extends StatelessWidget {
                                                                         0xfff4a4a4a))),
                                                           ],
                                                         ),
-                                                        Image.asset(
-                                                          "assest/bigLine.png",
-                                                          height: GlobalSizes
-                                                                  .getDeviceHeight(
-                                                                      context) *
-                                                              0.02,
-                                                          width: GlobalSizes
-                                                                  .getDeviceWidth(
-                                                                      context) *
-                                                              0.03,
-                                                        ),
-                                                        Column(
-                                                          children: [
-                                                            Row(
-                                                              children: [
-                                                                Padding(
-                                                                  padding: EdgeInsets.only(
-                                                                      right: GlobalSizes.getDeviceWidth(
-                                                                              context) *
-                                                                          0.01),
-                                                                  child: SizedBox(
-                                                                      height: 10.h,
-                                                                      child: Image.asset(
-                                                                        "assest/image_view.png",
-                                                                        fit: BoxFit
-                                                                            .fitHeight,
-                                                                      )),
-                                                                ),
-                                                                InkWell(
-                                                                  onTap: () {
-                                                                    showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (BuildContext
-                                                                              context) {
-                                                                        return CarouselDialog(
-                                                                          images:
-                                                                              stores[index].ExactSimilarImage,
-                                                                        );
-                                                                      },
-                                                                    );
-                                                                  },
-                                                                  child: Text(
-                                                                      "View",
+                                                        stores[index]
+                                                                    .ExactSimilarImage
+                                                                    .length ==
+                                                                0
+                                                            ? const SizedBox()
+                                                            : Image.asset(
+                                                                "assest/bigLine.png",
+                                                                height: GlobalSizes
+                                                                        .getDeviceHeight(
+                                                                            context) *
+                                                                    0.02,
+                                                                width: GlobalSizes
+                                                                        .getDeviceWidth(
+                                                                            context) *
+                                                                    0.03,
+                                                              ),
+                                                        stores[index]
+                                                                    .ExactSimilarImage
+                                                                    .length ==
+                                                                0
+                                                            ? const SizedBox()
+                                                            : Column(
+                                                                children: [
+                                                                  Row(
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding:
+                                                                            EdgeInsets.only(right: GlobalSizes.getDeviceWidth(context) * 0.01),
+                                                                        child: SizedBox(
+                                                                            height: 13.h,
+                                                                            child: SvgPicture.asset(
+                                                                              "assest/image.svg",
+                                                                              fit: BoxFit.fitHeight,
+                                                                            )),
+                                                                      ),
+                                                                      InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          showDialog(
+                                                                            context:
+                                                                                context,
+                                                                            builder:
+                                                                                (BuildContext context) {
+                                                                              return CarouselDialog(
+                                                                                images: stores[index].ExactSimilarImage,
+                                                                              );
+                                                                            },
+                                                                          );
+                                                                        },
+                                                                        child: Text(
+                                                                            "View",
+                                                                            style: TextStyles.openSans(
+                                                                                fontSize: 12,
+                                                                                fontWeight: FontWeight.w600,
+                                                                                color: const Color(0xffFC8019))),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  Text(
+                                                                      "Product Image",
                                                                       style: TextStyles.openSans(
-                                                                          fontSize:
-                                                                              12,
+                                                                          fontSize: 10
+                                                                              .sp,
                                                                           fontWeight: FontWeight
-                                                                              .w600,
+                                                                              .w400,
                                                                           color:
-                                                                              const Color(0xffFC8019))),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            Text(
-                                                                "Product Image",
-                                                                style: TextStyles.openSans(
-                                                                    fontSize:
-                                                                        10.sp,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400,
-                                                                    color: const Color(
-                                                                        0xfff4a4a4a))),
-                                                          ],
-                                                        ),
+                                                                              const Color(0xfff4a4a4a))),
+                                                                ],
+                                                              ),
                                                         SizedBox(
                                                           width: 6.w,
                                                         ),
@@ -713,18 +721,21 @@ class InprocessTile extends StatelessWidget {
                                                             // Show "Deal Done" and "Call" buttons
                                                             return Row(
                                                               children: [
-                                                                Buttons
-                                                                    .smallDealDoneButton(
-                                                                  RequrementId:
-                                                                      requirementId,
-                                                                  storeId: stores[
-                                                                          index]
-                                                                      .storeID,
-                                                                  buyerinprocesscontroller:
-                                                                      buyerinprocesscontroller,
-                                                                  mobile:
-                                                                      mobile,
-                                                                ),
+                                                                Buttons.smallDealDoneButton(
+                                                                    RequrementId:
+                                                                        requirementId,
+                                                                    storeId: stores[
+                                                                            index]
+                                                                        .storeID,
+                                                                    buyerinprocesscontroller:
+                                                                        buyerinprocesscontroller,
+                                                                    mobile:
+                                                                        mobile,
+                                                                    storeMobileNo:
+                                                                        stores[index]
+                                                                            .mobile,
+                                                                    context:
+                                                                        context),
                                                                 const SizedBox(
                                                                     width: 10),
                                                                 Buttons
@@ -752,20 +763,20 @@ class InprocessTile extends StatelessWidget {
                                                                   onTap:
                                                                       () async {
                                                                     try {
-                                                                      // await restClient.moveToAccepet(
-                                                                      //     requirementId,
-                                                                      //     stores[index].storeID,
-                                                                      //     {
-                                                                      //       "Accept":
-                                                                      //           true
-                                                                      //     });
-                                                                      // // Update the local state after successful API call
-                                                                      // inProcessController
-                                                                      //         .documentResponses[
-                                                                      //     stores[index]
-                                                                      //         .storeID] = DocumentResponse(
-                                                                      //     message:
-                                                                      //         "Document found");
+                                                                      await restClient.moveToAccepet(
+                                                                          requirementId,
+                                                                          stores[index].storeID,
+                                                                          {
+                                                                            "Accept":
+                                                                                true
+                                                                          });
+                                                                      // Update the local state after successful API call
+                                                                      inProcessController
+                                                                              .documentResponses[
+                                                                          stores[index]
+                                                                              .storeID] = DocumentResponse(
+                                                                          message:
+                                                                              "Document found");
 
                                                                       try {
                                                                         UserFcmToken
@@ -773,8 +784,8 @@ class InprocessTile extends StatelessWidget {
                                                                             UserFcmToken(fcm: "");
                                                                         try {
                                                                           userFcmToken =
-                                                                              await restClient.fetchUserFcmbyreqId(
-                                                                            requirementId,
+                                                                              await restClient.fetchUserFcmbymobile(
+                                                                            stores[index].mobile,
                                                                           );
                                                                         } catch (e) {
                                                                           Logger()
@@ -796,17 +807,28 @@ class InprocessTile extends StatelessWidget {
                                                                     }
                                                                   },
                                                                   child:
-                                                                      Container(
-                                                                    decoration: const BoxDecoration(
-                                                                        shape: BoxShape
-                                                                            .circle,
-                                                                        color: Color(
-                                                                            0xffCEEDE3)),
-                                                                    child: Icon(
-                                                                      Icons
-                                                                          .check,
-                                                                      size:
-                                                                          15.sp,
+                                                                      Padding(
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            10.w),
+                                                                    child:
+                                                                        Container(
+                                                                      width:
+                                                                          20.w,
+                                                                      height:
+                                                                          20.h,
+                                                                      decoration: const BoxDecoration(
+                                                                          shape: BoxShape
+                                                                              .circle,
+                                                                          color:
+                                                                              Color(0xffCEEDE3)),
+                                                                      child:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .check,
+                                                                        size: 15
+                                                                            .sp,
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
@@ -833,6 +855,9 @@ class InprocessTile extends StatelessWidget {
                                                                   },
                                                                   child:
                                                                       Container(
+                                                                    width: 20.w,
+                                                                    height:
+                                                                        20.h,
                                                                     decoration: const BoxDecoration(
                                                                         shape: BoxShape
                                                                             .circle,

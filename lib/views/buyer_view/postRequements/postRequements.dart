@@ -39,6 +39,14 @@ class _PostRequirementsState extends State<PostRequirements> {
   String selectedCity = '';
 
   @override
+  initState() {
+    super.initState();
+    categoriesController.selectedCategory.value = "";
+    categoriesController.selectedSubCategory.value = "";
+    categoriesController.selectedSubSubCategory.value = "";
+  }
+
+  @override
   Widget build(BuildContext context) {
     String removeExtraSpaces(String input) {
       // Remove leading and trailing spaces, then replace multiple spaces with a single space

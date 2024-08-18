@@ -257,6 +257,11 @@ abstract class RestClient {
     @Path('reqId') String reqId,
   );
 
+  @GET('/buyer/FCMByMObile/{mobile}')
+  Future<UserFcmToken> fetchUserFcmbymobile(
+    @Path('mobile') String mobile,
+  );
+
   @GET('/postrequirement/FCMtoken/{category}/{subcategory}')
   Future<MatchingStoresResponse> fechingMachingStores(
     @Path('category') String category,

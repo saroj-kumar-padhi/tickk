@@ -1245,6 +1245,33 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<UserFcmToken> fetchUserFcmbymobile(String mobile) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<UserFcmToken>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/buyer/FCMByMObile/${mobile}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = UserFcmToken.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<MatchingStoresResponse> fechingMachingStores(
     String category,
     String subcategory,

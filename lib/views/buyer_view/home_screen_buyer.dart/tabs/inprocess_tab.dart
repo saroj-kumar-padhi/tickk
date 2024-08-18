@@ -50,8 +50,8 @@ class InProcessTab extends StatelessWidget {
                                 child: InprocessTile(
                                   requirementId: data.requirementID,
                                   catagory: data.storeCategory,
-                                  subCategory: data.storeSubSubCategory,
-                                  brands: data.storeSubCategory,
+                                  subCategory: data.storeSubCategory,
+                                  brands: "",
                                   modelNo: data.modelNo,
                                   oty: data.quantity.toString(),
                                   size: data.size.toString(),

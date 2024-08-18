@@ -3,6 +3,7 @@ import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -483,10 +484,10 @@ class DealDoneCard extends StatelessWidget {
                                                                         0.01),
                                                                 child: SizedBox(
                                                                     height:
-                                                                        10.h,
-                                                                    child: Image
+                                                                        13.h,
+                                                                    child: SvgPicture
                                                                         .asset(
-                                                                      "assest/image_view.png",
+                                                                      "assest/image.svg",
                                                                       fit: BoxFit
                                                                           .fitHeight,
                                                                     )),
@@ -605,7 +606,7 @@ class DealDoneCard extends StatelessWidget {
                                               padding:
                                                   EdgeInsets.only(left: 11.w),
                                               child: Text(
-                                                "Requests (03)",
+                                                "Requests (${stores.length})",
                                                 style: TextStyles.openSans(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 12.sp,

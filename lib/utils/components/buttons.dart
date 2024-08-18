@@ -1,3 +1,4 @@
+import 'package:dekhlo/models/userFcmModel.dart';
 import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/utils/components/dialog_boxs/rate.dart';
 import 'package:dekhlo/utils/components/dialog_boxs/rate_now.dart';
@@ -11,6 +12,7 @@ import 'package:logger/logger.dart';
 
 import '../../controllers/buyerDealDoneController.dart';
 import '../../controllers/buyerInprocessController.dart';
+import '../../services/notificationServices.dart';
 
 class Buttons {
   static Padding longButton(
@@ -162,7 +164,9 @@ class Buttons {
   }
 
   static SizedBox smallDealDoneButton(
-      {required String RequrementId,
+      {required context,
+      required String storeMobileNo,
+      required String RequrementId,
       required String storeId,
       required Buyerinprocesscontroller buyerinprocesscontroller,
       required String mobile}) {
@@ -183,12 +187,13 @@ class Buttons {
               foregroundColor: const WidgetStatePropertyAll(Colors.white)),
           onPressed: () async {
             try {
-              await Get.dialog(
-                RateUs(
-                  requirementId: RequrementId,
-                ),
-                barrierDismissible:
-                    false, // Prevent dismissing by tapping outside
+              RateUsController rateUsController =
+                  Get.put(RateUsController(requirementId: RequrementId));
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return RateUsDialog(controller: rateUsController);
+                },
               );
               BuyerDealDonecontroller buyerDealDonecontroller = Get.put(
                   BuyerDealDonecontroller(mobileNo: formattedPhoneNumber));
@@ -200,6 +205,23 @@ class Buttons {
 
               buyerDealDonecontroller.fetchProcessBuyerRequirements(
                   mobileNo: formattedPhoneNumber);
+              try {
+                UserFcmToken userFcmToken = UserFcmToken(fcm: ""); // suraj
+                try {
+                  userFcmToken = await restClient.fetchUserFcmbymobile(
+                    storeMobileNo,
+                  );
+                } catch (e) {
+                  Logger().e(e);
+                }
+                PushNotificationServices.sendNotificationToOne(
+                    userFcmToken.fcm,
+                    context,
+                    "Deal Done",
+                    "Deal is done. Continue growing your business with Tickk");
+              } catch (e) {
+                Logger().d(e);
+              }
             } catch (e) {
               Logger().d(e);
             }

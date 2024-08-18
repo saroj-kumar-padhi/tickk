@@ -376,9 +376,9 @@ class ProcessSellerCard extends StatelessWidget {
                               right:
                                   GlobalSizes.getDeviceWidth(context) * 0.01),
                           child: SizedBox(
-                              height: 10.h,
-                              child: Image.asset(
-                                "assest/image_view.png",
+                              height: 13.h,
+                              child: SvgPicture.asset(
+                                "assest/image.svg",
                                 fit: BoxFit.fitHeight,
                               )),
                         ),
