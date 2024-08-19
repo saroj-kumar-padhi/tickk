@@ -4,19 +4,16 @@ import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:dekhlo/views/seller_views/store_screens/mystore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+
 import 'package:lottie/lottie.dart';
 
 import '../../../controllers/categoriesController.dart';
-import '../../../controllers/myStoreAccountController.dart';
 import '../../../services/injection.dart';
-import '../../../utils/components/coustoum_serch_bar.dart';
 import '../../../utils/components/textstyle.dart';
 import '../../buyer_view/home_screen_buyer.dart/tabs/deal_done.dart';
 import '../../buyer_view/home_screen_buyer.dart/tabs/inprocess_tab.dart';
@@ -26,7 +23,6 @@ import '../sellerProfiles/seller_profile.dart';
 import '../tabs/accepted_tab.dart';
 import '../tabs/deal_done.dart';
 import '../tabs/new_tabs.dart';
-import '../tabs/panding.dart';
 import '../tabs/process_panding.dart';
 import '../tabs/rejectedTabSeller.dart';
 
@@ -76,11 +72,6 @@ class HomeSeller extends StatelessWidget {
                             ),
                             child: Row(
                               children: [
-                                // SizedBox(
-                                //   width: GlobalSizes.getDeviceWidth(context) * 0.6,
-                                //   child: SlimSearchBar(),
-                                // ),
-
                                 SizedBox(
                                   width: GlobalSizes.getDeviceWidth(context) *
                                       0.25,
@@ -90,20 +81,6 @@ class HomeSeller extends StatelessWidget {
                                 SizedBox(
                                   width: 150.w,
                                 ),
-
-                                // InkWell(
-                                //   onTap: () {
-                                //     Get.toNamed(RouteName.buyerNotification);
-                                //   },
-                                //   child: SizedBox(
-                                //       height:
-                                //           GlobalSizes.getDeviceHeight(context) *
-                                //               0.03,
-                                //       child: Image.asset(
-                                //         "assest/bell.png",
-                                //         fit: BoxFit.fitHeight,
-                                //       )),
-                                // ),
                                 SizedBox(
                                   width: 40.w,
                                 ),
@@ -133,12 +110,7 @@ class HomeSeller extends StatelessWidget {
                                         await restClient.checkStoreId(
                                             int.parse(formattedPhoneNumber));
                                     final storeId = storeData.StoreID;
-                                    // final Mystoreaccountcontroller
-                                    //     mystoreaccountcontroller = Get.put(
-                                    //         Mystoreaccountcontroller(
-                                    //             storeId: storeId));
-                                    // mystoreaccountcontroller
-                                    //     .fetchStoreDetails(storeId);
+
                                     Get.to(() => MyStore(
                                         StoreId: storeId, isFromSeller: true));
                                   },
@@ -384,6 +356,8 @@ class HomeSeller extends StatelessWidget {
                         child: FloatingActionButton(
                           backgroundColor: const Color(0xffFC8019),
                           onPressed: () {
+                            CategoriesController categoriesController =
+                                Get.put(CategoriesController());
                             Get.toNamed(RouteName.postRequirements);
                           },
                           child: const Icon(Icons.add),
@@ -399,13 +373,6 @@ class HomeSeller extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            // SizedBox(
-                            //   width: GlobalSizes.getDeviceWidth(context) * 0.7,
-                            //   child: SlimSearchBar(),
-                            // ),
-                            // SizedBox(
-                            //   width: 10.w,
-                            // ),
                             SizedBox(
                               width: GlobalSizes.getDeviceWidth(context) * 0.25,
                               child: SvgPicture.asset("assest/small_tick.svg"),
@@ -430,7 +397,6 @@ class HomeSeller extends StatelessWidget {
                             SizedBox(
                               width: 15.w,
                             ),
-
                             InkWell(
                               onTap: () {
                                 Get.to(() => const SellerProfile());

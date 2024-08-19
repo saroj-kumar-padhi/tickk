@@ -284,6 +284,7 @@ class EditProfile extends StatelessWidget {
                           basiccontrollerEdit.fetchBasicDetailsEdit(
                               mobile: formattedPhoneNumber);
                           Get.back();
+                          Get.back();
                         } catch (e) {
                           Logger().d(e);
                         }

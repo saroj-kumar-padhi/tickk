@@ -73,9 +73,14 @@ class LogInPhone extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 60),
                           child: Center(
                               child: Text(
-                            "Welcome back!",
+                            "Login",
                             style: TextStyles.openSans(),
                           ))),
+                      Center(
+                          child: Text(
+                        "Welcome back!",
+                        style: TextStyles.openSans(),
+                      )),
                       SizedBox(
                           height: GlobalSizes.getDeviceHeight(context) * 0.01),
                       msg == null

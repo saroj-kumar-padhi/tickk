@@ -27,6 +27,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'views/seller_views/welcome_screen.dart';
 import 'views/singUpPages/Signup_otp.dart';
+import 'views/singUpPages/Singup_phone.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -81,7 +82,7 @@ class MyApp extends StatelessWidget {
 
         home: const AuthWrapper(),
 
-        // home: RateUs(),
+        // home: const Phone(),
         getPages: AppPages.pages,
       ),
     );

@@ -283,6 +283,7 @@ class HomeBuyer extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
+                            categoriesController.selectedCategory.value = "";
                             Get.toNamed(RouteName.postRequirements);
                           },
                           child: SizedBox(

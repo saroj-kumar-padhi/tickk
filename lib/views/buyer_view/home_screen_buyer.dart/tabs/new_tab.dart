@@ -5,11 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../../controllers/categoriesController.dart';
 import '../../../../controllers/newTabController.dart';
 import '../../../../utils/components/buyerScreenTiles/new_tiles.dart';
 
 class NewTab extends StatelessWidget {
   final NewTabController newTabController = Get.put(NewTabController());
+  CategoriesController categoriesController = Get.put(CategoriesController());
 
   NewTab({super.key});
 
@@ -56,6 +58,7 @@ class NewTab extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
+                    categoriesController.selectedCategory.value = "";
                     Get.toNamed(RouteName.postRequirements);
                   },
                   style: ElevatedButton.styleFrom(

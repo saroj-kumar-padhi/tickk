@@ -45,9 +45,14 @@ class Phone extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 60),
                         child: Center(
                             child: Text(
-                          "Signup to get started !",
+                          "SignUp",
                           style: TextStyles.openSans(),
                         ))),
+                    Center(
+                        child: Text(
+                      "Get Started!",
+                      style: TextStyles.openSans(),
+                    )),
                     SizedBox(
                         height: GlobalSizes.getDeviceHeight(context) * 0.01),
                     msg == null

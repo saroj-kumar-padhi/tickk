@@ -58,7 +58,7 @@ class _EnhancedWelcomeScreenState extends State<EnhancedWelcomeScreen>
                   },
                   icon: const Icon(Icons.arrow_back)),
             ),
-            Flexible(
+            Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Column(
@@ -77,20 +77,23 @@ class _EnhancedWelcomeScreenState extends State<EnhancedWelcomeScreen>
                     const SizedBox(height: 24),
                     SizedBox(
                       height: 80.h,
-                      child: Flexible(
-                        child: SlideTransition(
-                          position: _slideAnimation,
-                          child: Center(
-                            child: TypeWriter.text(
-                              'Welcome to \n Setup Store',
-                              style: GoogleFonts.poppins(
-                                  fontSize: 30, fontWeight: FontWeight.w600),
-                              duration: const Duration(milliseconds: 50),
+                      width: double
+                          .infinity, // Ensures the container takes full width available
+                      child: SlideTransition(
+                        position: _slideAnimation,
+                        child: Center(
+                          child: TypeWriter.text(
+                            'Welcome to Setup Store', // Remove the newline character
+                            style: GoogleFonts.poppins(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w600,
                             ),
+                            duration: const Duration(milliseconds: 50),
                           ),
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 16),
                     // FadeTransition(
                     //   opacity: _fadeInAnimation,

@@ -41,7 +41,7 @@ class _PostRequirementsState extends State<PostRequirements> {
   @override
   initState() {
     super.initState();
-    categoriesController.selectedCategory.value = "";
+    // categoriesController.selectedCategory.value = "";
     categoriesController.selectedSubCategory.value = "";
     categoriesController.selectedSubSubCategory.value = "";
   }
