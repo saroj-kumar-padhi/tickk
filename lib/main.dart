@@ -4,36 +4,32 @@ import 'package:dekhlo/services/injection.dart';
 import 'package:dekhlo/services/notificationServices.dart';
 import 'package:dekhlo/utils/no_internet.dart';
 import 'package:dekhlo/utils/pagenotfound.dart';
-import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/views/buyer_view/home_screen_buyer.dart/home_screenBuyer.dart';
-import 'package:dekhlo/views/buyer_view/profileScreen/buyerProfile.dart';
+
 import 'package:dekhlo/views/login.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:dekhlo/utils/routes/routes_controller.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
-import 'utils/components/dialog_boxs/rate.dart';
-import 'views/buyer_view/loginPages/login_otp.dart';
 import 'views/seller_views/seller_home_screens/seller_home.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'views/seller_views/welcome_screen.dart';
-import 'views/singUpPages/Signup_otp.dart';
-import 'views/singUpPages/Singup_phone.dart';
-
+/// The main function initializes various services and retrieves a Firebase Cloud Messaging token to
+/// send push notifications.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await Hive.openBox('myBox');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  /// This block of code in the `main` function is responsible for initializing Firebase Cloud Messaging
+  /// (FCM) services and handling push notifications in the Flutter application. Here's a breakdown of
+  /// what each step does:
   String? fcmToken = await FirebaseMessaging.instance.getToken();
   PushNotificationServices notificationServices = PushNotificationServices();
   notificationServices.requestNotificationPermission();
@@ -54,6 +50,13 @@ void main() async {
   runApp(const MyApp());
 }
 
+/// The function `firebaseMessagingHandler` initializes Firebase and handles incoming remote messages
+/// asynchronously.
+///
+/// Args:
+///   message (RemoteMessage): The `message` parameter in the `firebaseMessagingHandler` function is of
+/// type `RemoteMessage`. This parameter represents the message received from Firebase Cloud Messaging
+/// (FCM) and contains information such as the data payload, notification payload, and message metadata.
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -89,6 +92,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// The `AuthWrapper` class in Dart is responsible for checking the user's status and displaying the
+/// appropriate widget based on the response, handling cases such as internet connectivity, user roles,
+/// and error scenarios.
 class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
 
@@ -122,6 +128,9 @@ class _AuthWrapperState extends State<AuthWrapper> {
       return;
     }
 
+    /// This block of code is responsible for checking the user's status based on their phone number and
+    /// determining the appropriate destination widget to display in the application. Here's a breakdown of
+    /// what it does:
     try {
       final response =
           await restClient.checkBuyerOrSeller(int.parse(formattedPhoneNumber));

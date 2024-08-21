@@ -21,64 +21,44 @@ class CustomDropdownFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        height: 50.h,
+        height: 40.h,
         width: 300.w,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(4.r),
-          boxShadow: [
-            BoxShadow(
-              color: const Color.fromARGB(255, 202, 201, 201).withOpacity(0.09),
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: const Offset(0, 3), // bottom shadow
-            ),
-            BoxShadow(
-              color: const Color.fromARGB(255, 202, 201, 201).withOpacity(0.09),
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: const Offset(3, 0), //left shadow
-            ),
-            BoxShadow(
-              color: const Color.fromARGB(255, 202, 201, 201).withOpacity(0.09),
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: const Offset(3, 0), //up shadow
-            ),
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.09),
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: const Offset(3, 0), //right shadow
-            ),
-          ],
+          borderRadius: BorderRadius.circular(8.r),
+          border: Border.all(color: const Color(0xffC4CDD5)),
         ),
         child: DropdownButtonFormField<String>(
           value: value,
           isExpanded: true,
           decoration: InputDecoration(
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+            contentPadding: EdgeInsets.fromLTRB(14.w, 0.h, 14.w, 5.h),
             border: InputBorder.none,
             filled: true,
             fillColor: Colors.transparent,
             hintText: hintText,
           ),
           hint: Text(
-            hintText ?? 'Select',
+            '',
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
               color: const Color(0xffD8D8D8),
             ),
           ),
-          icon: const Icon(Icons.arrow_drop_down),
+          icon: Center(
+            child: Icon(Icons.arrow_drop_down, size: 24.h),
+          ),
+          iconSize: 20.h,
           items: items
               .map((item) => DropdownMenuItem<String>(
                     value: item,
-                    child: Text(
-                      item,
-                      style: TextStyle(fontSize: 14.sp),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        item,
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
                     ),
                   ))
               .toList(),

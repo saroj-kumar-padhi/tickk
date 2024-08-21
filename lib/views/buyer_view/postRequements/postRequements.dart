@@ -1,16 +1,12 @@
 import 'dart:io';
-import 'package:dekhlo/services/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:logger/web.dart';
 import 'package:lottie/lottie.dart';
 import '../../../controllers/categoriesController.dart';
 import '../../../controllers/dropDownController.dart';
-import '../../../models/stores_fcm.dart';
 import '../../../utils/components/coustoumTextField.dart';
 import '../../../utils/components/dialog_boxs/pick_diallo.dart';
 import '../../../utils/components/dialog_boxs/postRequirement.dart';
@@ -123,9 +119,9 @@ class _PostRequirementsState extends State<PostRequirements> {
                         );
                       },
                     ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
+                    // SizedBox(
+                    //   height: 5.h,
+                    // ),
                     categoriesController.subCategories.isNotEmpty
                         ? Align(
                             alignment: Alignment.centerLeft,
@@ -136,9 +132,11 @@ class _PostRequirementsState extends State<PostRequirements> {
                                     color: const Color(0xff4A4A4A))),
                           )
                         : const SizedBox(),
-                    SizedBox(
-                      height: 5.h,
-                    ),
+                    categoriesController.subCategories.isNotEmpty
+                        ? SizedBox(
+                            height: 5.h,
+                          )
+                        : const SizedBox(),
                     categoriesController.subCategories.isNotEmpty
                         ? CustomDropdownFormField(
                             items: categoriesController.subCategories,
@@ -155,9 +153,11 @@ class _PostRequirementsState extends State<PostRequirements> {
                             },
                           )
                         : const SizedBox(),
-                    SizedBox(
-                      height: 5.h,
-                    ),
+                    categoriesController.subCategories.isNotEmpty
+                        ? SizedBox(
+                            height: 5.h,
+                          )
+                        : const SizedBox(),
                     categoriesController.subSubCategories.isNotEmpty
                         ? Align(
                             alignment: Alignment.centerLeft,
@@ -316,7 +316,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                               headingText: 'Units *',
                             ),
                             SizedBox(
-                              height: 55.h,
+                              height: 40.h,
                               width: 90.w,
                               child: CustomDropdownFormField(
                                 items: const [
@@ -362,27 +362,8 @@ class _PostRequirementsState extends State<PostRequirements> {
                       width: 300.w,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(4.r),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 1,
-                            blurRadius: 6,
-                            offset: const Offset(0, 3),
-                          ),
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 6,
-                            offset: const Offset(-3, 0),
-                          ),
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 6,
-                            offset: const Offset(3, 0),
-                          ),
-                        ],
+                        borderRadius: BorderRadius.circular(8.r),
+                        border: Border.all(color: const Color(0xffC4CDD5)),
                       ),
                       child: Align(
                         alignment: Alignment.topLeft,

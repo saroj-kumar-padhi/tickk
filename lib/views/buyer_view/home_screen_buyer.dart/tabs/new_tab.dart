@@ -9,6 +9,9 @@ import '../../../../controllers/categoriesController.dart';
 import '../../../../controllers/newTabController.dart';
 import '../../../../utils/components/buyerScreenTiles/new_tiles.dart';
 
+// these are the tabs which s responsible for the all tabs
+// and from these new tile is called and you in list view builder
+
 class NewTab extends StatelessWidget {
   final NewTabController newTabController = Get.put(NewTabController());
   CategoriesController categoriesController = Get.put(CategoriesController());

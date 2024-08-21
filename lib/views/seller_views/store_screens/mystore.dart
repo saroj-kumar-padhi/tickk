@@ -1,5 +1,4 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/views/seller_views/seller_home_screens/storeEditScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -526,9 +525,10 @@ class MyStore extends StatelessWidget {
                                           SizedBox(
                                             width: 20.w,
                                           ),
-                                          Expanded(
+                                          SizedBox(
+                                            width: 180.w,
                                             child: Text(
-                                              "${mystoreaccountcontroller.houseNoBuildingName},${mystoreaccountcontroller.pinCode},${mystoreaccountcontroller.streetController}",
+                                              "${mystoreaccountcontroller.houseNoBuildingName}, ${mystoreaccountcontroller.streetController}, Hyderabad, Telangana, India, ${mystoreaccountcontroller.pinCode}",
                                               style: TextStyles.openSans(
                                                 fontSize: 14.sp,
                                                 fontWeight: FontWeight.w400,

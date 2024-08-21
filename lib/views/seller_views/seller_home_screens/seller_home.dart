@@ -128,6 +128,10 @@ class HomeSeller extends StatelessWidget {
                               ],
                             ),
                           ),
+
+                          /// The above Dart code is a part of a Flutter application. It is using the
+                          /// `Obx` widget from the GetX package to observe changes in the `isLoading`
+                          /// value of `categoriesController`.
                           Obx(() {
                             if (categoriesController.isLoading.value) {
                               return const Center(
@@ -253,6 +257,7 @@ class HomeSeller extends StatelessWidget {
                             height:
                                 14, // Adjust spacing between search bar and tab bar
                           ),
+
                           SizedBox(
                             height: GlobalSizes.getDeviceHeight(context) * 0.05,
                             child: TabBar(
@@ -301,6 +306,12 @@ class HomeSeller extends StatelessWidget {
                             ),
                           ),
                           const Divider(),
+
+                          /// The above code is creating a TabBarView widget with four tabs: NewTab,
+                          /// InProcessTab, DealDoneTab, and RejectedTab. Each tab corresponds to a
+                          /// different state of a process, such as in process, deal done, or rejected.
+                          /// The TabBarView widget allows the user to switch between these tabs to view
+                          /// different content associated with each state.
                           Expanded(
                             child: TabBarView(
                               children: [
@@ -365,6 +376,9 @@ class HomeSeller extends StatelessWidget {
                       ),
                     );
                   }),
+
+                  // this is selling part and above are the buying part
+
                   body: SafeArea(
                     child: Column(
                       children: [
