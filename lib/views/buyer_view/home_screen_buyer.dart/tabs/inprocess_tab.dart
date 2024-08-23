@@ -60,6 +60,7 @@ class InProcessTab extends StatelessWidget {
                                   mobile: formattedPhoneNumber,
                                   requirementImge: data.addImage,
                                   image: data.addImage,
+                                  index: index,
                                 ),
                               );
                             },

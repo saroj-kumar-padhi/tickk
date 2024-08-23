@@ -24,10 +24,10 @@ class InProcessController extends GetxController {
   Future<void> fetchIsAccepted(
       {required String reqId, required String storeId}) async {
     // Only fetch if we haven't already for this store
-    if (!documentResponses.containsKey(storeId)) {
+    if (!documentResponses.containsKey(reqId)) {
       try {
         final response = await restClient.knowIsAccepeted(reqId, storeId);
-        documentResponses[storeId] = response;
+        documentResponses[reqId] = response;
       } catch (e) {
         Fluttertoast.showToast(msg: "$e");
       }

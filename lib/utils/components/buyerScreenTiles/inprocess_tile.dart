@@ -26,6 +26,7 @@ import '../textstyle.dart';
 import 'package:intl/intl.dart';
 
 class InprocessTile extends StatelessWidget {
+  final int index;
   final String mobile;
   final String requirementId;
   final String requirementImge;
@@ -55,7 +56,8 @@ class InprocessTile extends StatelessWidget {
       required this.stores,
       required this.mobile,
       required this.requirementImge,
-      required this.image});
+      required this.image,
+      required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +75,7 @@ class InprocessTile extends StatelessWidget {
     return SizedBox(child: Obx(() {
       return Container(
           width: double.infinity, // Adjust the width as needed
-          height: expandController.isExpanded.value
+          height: expandController.expandedList[index]
               ? stores.length == 1
                   ? 250
                   : stores.length == 2
@@ -278,7 +280,7 @@ class InprocessTile extends StatelessWidget {
                 return Padding(
                   padding: EdgeInsets.fromLTRB(20.w, 6.h, 14.w, 6.h),
                   child: Container(
-                    height: expandController.isExpanded.value
+                    height: expandController.expandedList[index]
                         ? stores.length == 1
                             ? 100
                             : stores.length == 2
@@ -290,7 +292,7 @@ class InprocessTile extends StatelessWidget {
                         border: Border.all(color: const Color(0xffFFC18E)),
                         borderRadius: BorderRadius.all(Radius.circular(8.r)),
                         color: const Color(0xffFFF5ED)),
-                    child: expandController.isExpanded.value
+                    child: expandController.expandedList[index]
                         ? Column(
                             children: [
                               Padding(
@@ -349,13 +351,19 @@ class InprocessTile extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                        expandController.isExpanded.value
+                                        expandController.expandedList[index] !=
+                                                false
                                             ? InkWell(
                                                 onTap: () {
                                                   expandController
-                                                          .isExpanded.value =
+                                                          .expandedList[index] =
                                                       !expandController
-                                                          .isExpanded.value;
+                                                          .expandedList[index];
+                                                  inProcessController
+                                                      .fetchIsAccepted(
+                                                          reqId: requirementId,
+                                                          storeId: stores[index]
+                                                              .storeID);
                                                 },
                                                 child: Padding(
                                                   padding: EdgeInsets.only(
@@ -712,8 +720,7 @@ class InprocessTile extends StatelessWidget {
                                                           final documentResponse =
                                                               inProcessController
                                                                       .documentResponses[
-                                                                  stores[index]
-                                                                      .storeID];
+                                                                  requirementId];
 
                                                           if (documentResponse
                                                                   ?.message ==
@@ -772,11 +779,9 @@ class InprocessTile extends StatelessWidget {
                                                                           });
                                                                       // Update the local state after successful API call
                                                                       inProcessController
-                                                                              .documentResponses[
-                                                                          stores[index]
-                                                                              .storeID] = DocumentResponse(
-                                                                          message:
-                                                                              "Document found");
+                                                                              .documentResponses[requirementId] =
+                                                                          DocumentResponse(
+                                                                              message: "Document found");
 
                                                                       try {
                                                                         UserFcmToken
@@ -839,16 +844,21 @@ class InprocessTile extends StatelessWidget {
                                                                       () async {
                                                                     try {
                                                                       await restClient.rejectQuote(
-                                                                          stores[index]
-                                                                              .storeID,
                                                                           requirementId,
+                                                                          stores[index].storeID,
                                                                           {
                                                                             "Reject":
                                                                                 true
                                                                           });
-                                                                      Get.to(
-                                                                          const RejectedTab());
+                                                                      Fluttertoast
+                                                                          .showToast(
+                                                                              msg: "The seller will work harder next time.");
+                                                                      buyerinprocesscontroller
+                                                                          .refreshData();
                                                                     } catch (e) {
+                                                                      Logger().d(
+                                                                          "Storeid" +
+                                                                              stores[index].storeID);
                                                                       Logger()
                                                                           .d(e);
                                                                     }
@@ -894,17 +904,17 @@ class InprocessTile extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  expandController.isExpanded.value
+                                  expandController.expandedList[index]
                                       ? Row(
                                           children: [
                                             InkWell(
                                               onTap: () {
                                                 expandController
-                                                        .isExpanded.value =
+                                                        .expandedList[index] =
                                                     !expandController
-                                                        .isExpanded.value;
-                                                inProcessController.index
-                                                    .clear();
+                                                        .expandedList[index];
+                                                // inProcessController.index
+                                                //     .clear();
                                               },
                                               child: Padding(
                                                 padding:
@@ -931,10 +941,11 @@ class InprocessTile extends StatelessWidget {
                                         )
                                       : InkWell(
                                           onTap: () {
-                                            expandController.isExpanded.value =
+                                            expandController
+                                                    .expandedList[index] =
                                                 !expandController
-                                                    .isExpanded.value;
-                                            inProcessController.index.clear();
+                                                    .expandedList[index];
+                                            // inProcessController.index.clear();
                                           },
                                           child: Row(
                                             mainAxisAlignment:

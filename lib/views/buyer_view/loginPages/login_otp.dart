@@ -2,7 +2,7 @@ import 'package:dekhlo/controllers/authController.dart';
 import 'package:dekhlo/utils/Strings/strings.dart';
 import 'package:dekhlo/utils/components/Coustum_RichText.dart';
 import 'package:dekhlo/utils/components/buttons.dart';
-import 'package:dekhlo/utils/routes/routes_names.dart';
+
 import 'package:dekhlo/utils/size/global_size/global_size.dart';
 import 'package:dekhlo/views/buyer_view/loginPages/otptimerController.dart';
 import 'package:flutter/gestures.dart';
@@ -11,7 +11,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:pinput/pinput.dart';

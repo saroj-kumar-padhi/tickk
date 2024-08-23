@@ -88,6 +88,7 @@ class RejectedTab extends StatelessWidget {
                                     units: data.units,
                                     des: data.requirementInDetails,
                                     date: data.date,
+                                    addImage: data.addImage,
                                   ),
                                 )),
                       ],

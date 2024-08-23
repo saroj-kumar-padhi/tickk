@@ -4,22 +4,23 @@ class Review {
   final String yourName;
   final String rating;
   final String description;
+  final String profileImage;
 
-  Review({
-    required this.id,
-    required this.date,
-    required this.yourName,
-    required this.rating,
-    required this.description,
-  });
+  Review(
+      {required this.id,
+      required this.date,
+      required this.yourName,
+      required this.rating,
+      required this.description,
+      required this.profileImage});
 
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
-      id: json['_id'],
-      date: DateTime.parse(json['Date']),
-      yourName: json['your_name'],
-      rating: json['Rating'],
-      description: json['description'] ?? "",
-    );
+        id: json['_id'],
+        date: DateTime.parse(json['Date']),
+        yourName: json['your_name'],
+        rating: json['Rating'],
+        description: json['description'] ?? "",
+        profileImage: json['profileImage'] ?? "");
   }
 }

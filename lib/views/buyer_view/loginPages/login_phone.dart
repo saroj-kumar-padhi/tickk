@@ -9,10 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:logger/web.dart';
 import 'package:lottie/lottie.dart';
 import '../../../utils/components/Coustum_RichText.dart';
@@ -181,6 +179,19 @@ class LogInPhone extends StatelessWidget {
                                   if (!authController
                                       .isPhoneNumberEmpty.value) {
                                     if (authController
+                                            .phoneAuthController.text ==
+                                        "9999999999") {
+                                      try {
+                                        restClient.ifAllNine({
+                                          "mobile": authController
+                                              .phoneAuthController.text
+                                        });
+
+                                        Get.toNamed(RouteName.logInotpScreen);
+                                      } catch (e) {
+                                        Logger().d(e);
+                                      }
+                                    } else if (authController
                                             .phoneAuthController.text.length !=
                                         10) {
                                       authController

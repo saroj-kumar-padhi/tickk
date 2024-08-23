@@ -72,6 +72,7 @@ class Store {
   final String addImage;
   final String location;
   final bool productType;
+  final String stared;
   final String quot;
 
   Store(
@@ -81,6 +82,7 @@ class Store {
       required this.addImage,
       required this.location,
       required this.productType,
+      required this.stared,
       required this.quot});
 
   factory Store.fromJson(Map<String, dynamic> json) {
@@ -91,6 +93,7 @@ class Store {
         addImage: json['stared'] ?? "",
         location: json['Location'] ?? "",
         quot: json['Quote'] ?? "",
+        stared: json['stared'] ?? "",
         productType: json['Similar']);
   }
 }

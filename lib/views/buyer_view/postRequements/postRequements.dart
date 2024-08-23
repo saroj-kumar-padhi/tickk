@@ -66,11 +66,11 @@ class _PostRequirementsState extends State<PostRequirements> {
                 ),
               ),
               title: Text(
-                "Posting requirement",
+                "Post Requirement",
                 style: TextStyles.openSans(
                   fontWeight: FontWeight.w600,
                   fontSize: 17.sp,
-                  color: const Color(0xff4A4A4A),
+                  color: const Color(0xffFC8019),
                 ),
               ),
             ),
@@ -86,11 +86,29 @@ class _PostRequirementsState extends State<PostRequirements> {
                     categoriesController.categories.isNotEmpty
                         ? Align(
                             alignment: Alignment.centerLeft,
-                            child: Text("Category *",
-                                style: TextStyles.openSans(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xff4A4A4A))),
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "Category",
+                                    style: TextStyles.openSans(
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "*",
+                                    style: TextStyles.openSans(
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(
+                                          0xffFC8019), // Orange color for the star
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           )
                         : Align(
                             alignment: Alignment.centerLeft,
@@ -119,17 +137,34 @@ class _PostRequirementsState extends State<PostRequirements> {
                         );
                       },
                     ),
-                    // SizedBox(
-                    //   height: 5.h,
-                    // ),
+                    SizedBox(
+                      height: 5.h,
+                    ),
                     categoriesController.subCategories.isNotEmpty
                         ? Align(
                             alignment: Alignment.centerLeft,
-                            child: Text("Sub Category",
-                                style: TextStyles.openSans(
+                            child: RichText(
+                                text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Sub Category",
+                                  style: TextStyles.openSans(
                                     fontSize: 15.sp,
                                     fontWeight: FontWeight.w600,
-                                    color: const Color(0xff4A4A4A))),
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: "*",
+                                  style: TextStyles.openSans(
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(
+                                        0xffFC8019), // Orange color for the star
+                                  ),
+                                ),
+                              ],
+                            )),
                           )
                         : const SizedBox(),
                     categoriesController.subCategories.isNotEmpty
@@ -161,12 +196,29 @@ class _PostRequirementsState extends State<PostRequirements> {
                     categoriesController.subSubCategories.isNotEmpty
                         ? Align(
                             alignment: Alignment.centerLeft,
-                            child: Text("Sub Sub Category",
-                                style: TextStyles.openSans(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xff4A4A4A))),
-                          )
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "Sub Sub Category",
+                                    style: TextStyles.openSans(
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "*",
+                                    style: TextStyles.openSans(
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(
+                                          0xffFC8019), // Orange color for the star
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ))
                         : const SizedBox(),
                     SizedBox(
                       height: 5.h,
@@ -199,14 +251,14 @@ class _PostRequirementsState extends State<PostRequirements> {
                               color: const Color(0xff4A4A4A),
                             ),
                           ),
-                          Text(
-                            "(optional)",
-                            style: TextStyles.openSans(
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xffA9A7A7),
-                            ),
-                          ),
+                          // Text(
+                          //   "(optional)",
+                          //   style: TextStyles.openSans(
+                          //     fontSize: 15.sp,
+                          //     fontWeight: FontWeight.w600,
+                          //     color: const Color(0xffA9A7A7),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -235,14 +287,14 @@ class _PostRequirementsState extends State<PostRequirements> {
                               color: const Color(0xff4A4A4A),
                             ),
                           ),
-                          Text(
-                            "(optional)",
-                            style: TextStyles.openSans(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xffA9A7A7),
-                            ),
-                          ),
+                          // Text(
+                          //   "(optional)",
+                          //   style: TextStyles.openSans(
+                          //     fontSize: 18.sp,
+                          //     fontWeight: FontWeight.w600,
+                          //     color: const Color(0xffA9A7A7),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -265,19 +317,19 @@ class _PostRequirementsState extends State<PostRequirements> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
+                            const Row(
                               children: [
-                                const SmallHeading(
+                                SmallHeading(
                                   headingText: 'Size',
                                 ),
-                                Text(
-                                  "(optional)",
-                                  style: TextStyles.openSans(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xffA9A7A7),
-                                  ),
-                                ),
+                                // Text(
+                                //   "(optional)",
+                                //   style: TextStyles.openSans(
+                                //     fontSize: 15.sp,
+                                //     fontWeight: FontWeight.w600,
+                                //     color: const Color(0xffA9A7A7),
+                                //   ),
+                                // ),
                               ],
                             ),
                             CustomTextField(
@@ -293,8 +345,8 @@ class _PostRequirementsState extends State<PostRequirements> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SmallHeading(
-                              headingText: 'Qty *',
+                            const SmallHeadingOrange(
+                              headingText: 'Qty',
                             ),
                             CustomTextField(
                               onChanged: (value) {
@@ -313,7 +365,7 @@ class _PostRequirementsState extends State<PostRequirements> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SmallHeading(
-                              headingText: 'Units *',
+                              headingText: 'Units ',
                             ),
                             SizedBox(
                               height: 40.h,
@@ -352,8 +404,8 @@ class _PostRequirementsState extends State<PostRequirements> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    const SmallHeading(
-                        headingText: "Enter your requirement in details *"),
+                    const SmallHeadingOrange(
+                        headingText: "Enter your requirement in details"),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -389,15 +441,10 @@ class _PostRequirementsState extends State<PostRequirements> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    Align(
+                    const Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Add your image *",
-                        style: TextStyles.openSans(
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xff4A4A4A),
-                        ),
+                      child: SmallHeadingOrange(
+                        headingText: "Add your image",
                       ),
                     ),
                     SizedBox(
@@ -465,8 +512,8 @@ class _PostRequirementsState extends State<PostRequirements> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    const SmallHeading(
-                        headingText: "Select your target City *"),
+                    const SmallHeadingOrange(
+                        headingText: "Select your target City"),
                     SizedBox(
                       height: 5.h,
                     ),

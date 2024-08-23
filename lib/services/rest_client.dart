@@ -34,8 +34,12 @@ import 'package:dio/dio.dart' as dio;
 
 part 'rest_client.g.dart';
 
-@RestApi(baseUrl: 'http://13.201.210.192:3002')
-// @RestApi(baseUrl: 'http://192.168.1.8:3002')
+@RestApi(baseUrl: 'http://192.168.1.31:3002')
+
+/// The `// @RestApi(baseUrl: 'http://192.168.1.8:3002')` is a commented out annotation in the Dart code
+/// snippet you provided. This annotation is typically used in Retrofit for Dart to specify the base URL
+/// for the REST API endpoints defined in the `RestClient` interface.
+// @RestApi(baseUrl: 'http://192.168.1.29:3002')
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
@@ -156,6 +160,11 @@ abstract class RestClient {
     @Body() FormData data,
   );
 
+  @PUT('/updateOtp')
+  Future<void> ifAllNine(
+    @Body() Map<String, dynamic> data,
+  );
+
   @GET('/Inprocess/InprocessTabData/{storeID}')
   Future<SellerInprocessResponseModel> sellerInProcess(
     @Path('storeID') String storeID,
@@ -207,10 +216,10 @@ abstract class RestClient {
     @Body() Map<String, dynamic> data,
   );
 
-  @POST('/buyerInProcess/buyerRejectingSeller/{storeID}/{requestId}')
+  @POST('/buyerInProcess/buyerRejectingSeller/{requestId}/{storeID}')
   Future<void> rejectQuote(
-    @Path('storeId') String storeId,
     @Path('requestId') String requestId,
+    @Path('storeID') String storeID,
     @Body() Map<String, dynamic> data,
   );
 

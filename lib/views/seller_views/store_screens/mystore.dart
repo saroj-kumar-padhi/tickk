@@ -14,6 +14,7 @@ import '../../../controllers/myStoreController.dart';
 import '../../../controllers/productSetupController.dart';
 import '../../../controllers/reviewsControllers.dart';
 import '../../../utils/components/textstyle.dart';
+import 'package:intl/intl.dart';
 
 class MyStore extends StatelessWidget {
   final String StoreId;
@@ -71,7 +72,7 @@ class MyStore extends StatelessWidget {
                 body: SafeArea(
                   child: Column(
                     children: [
-                      Flexible(
+                      Expanded(
                         child: ListView(
                           children: [
                             Column(
@@ -166,14 +167,26 @@ class MyStore extends StatelessWidget {
                                                 fontSize: 16.sp,
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          Text(
-                                            mystoreaccountcontroller
-                                                .storeCategories
-                                                .toString(),
-                                            style: TextStyles.openSans(
-                                                color: const Color(0xff4A4A4A),
-                                                fontSize: 12.sp,
-                                                fontWeight: FontWeight.w600),
+                                          SizedBox(
+                                            height: 60.h,
+                                            width: 150.w,
+                                            child: Column(
+                                              children: [
+                                                Flexible(
+                                                  child: Text(
+                                                    mystoreaccountcontroller
+                                                        .storeCategories
+                                                        .toString(),
+                                                    style: TextStyles.openSans(
+                                                        color: const Color(
+                                                            0xff4A4A4A),
+                                                        fontSize: 12.sp,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                           isFromSeller
                                               ? OutlinedButton(
@@ -399,7 +412,7 @@ class MyStore extends StatelessWidget {
                                     children: [
                                       Row(
                                         children: [
-                                          Flexible(
+                                          Expanded(
                                             child: Theme(
                                               data: Theme.of(context).copyWith(
                                                 dividerColor:
@@ -653,11 +666,27 @@ class MyStore extends StatelessWidget {
                                                       Expanded(
                                                         child: ListTile(
                                                           leading: CircleAvatar(
-                                                            child: Image.asset(
-                                                                "assest/camilo_profile.png"),
+                                                            child: reviewscontrollers
+                                                                        .reviews[
+                                                                            index]
+                                                                        .profileImage ==
+                                                                    "task/assets/men.png"
+                                                                ? Image.asset(
+                                                                    "assest/man.png")
+                                                                : Image.network(
+                                                                    reviewscontrollers
+                                                                        .reviews[
+                                                                            index]
+                                                                        .profileImage),
                                                           ),
                                                           subtitle: Text(
-                                                            "05 Sep 2021",
+                                                            DateFormat(
+                                                                    'dd-MM-yyyy')
+                                                                .format(
+                                                                    reviewscontrollers
+                                                                        .reviews[
+                                                                            index]
+                                                                        .date),
                                                             style: TextStyles.openSans(
                                                                 fontWeight:
                                                                     FontWeight
@@ -666,12 +695,6 @@ class MyStore extends StatelessWidget {
                                                                 color: const Color(
                                                                     0xff4A4A4A)),
                                                           ),
-                                                          trailing: Flexible(
-                                                              child: Text(
-                                                                  reviewscontrollers
-                                                                      .reviews[
-                                                                          index]
-                                                                      .rating)),
                                                           title: Text(
                                                             reviewscontrollers
                                                                 .reviews[index]

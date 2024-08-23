@@ -160,7 +160,7 @@ class DealDoneCard extends StatelessWidget {
                     Text(
                       qty,
                       style: TextStyles.openSans(
-                          fontWeight: FontWeight.w600, fontSize: 10),
+                          fontWeight: FontWeight.w600, fontSize: 12),
                     ),
                     Text(
                       "Qty",
@@ -178,7 +178,7 @@ class DealDoneCard extends StatelessWidget {
                     Text(
                       size,
                       style: TextStyles.openSans(
-                          fontWeight: FontWeight.w600, fontSize: 10),
+                          fontWeight: FontWeight.w600, fontSize: 12),
                     ),
                     Text(
                       "Size",
@@ -196,7 +196,7 @@ class DealDoneCard extends StatelessWidget {
                     Text(
                       units,
                       style: TextStyles.openSans(
-                          fontWeight: FontWeight.w600, fontSize: 10),
+                          fontWeight: FontWeight.w600, fontSize: 12),
                     ),
                     Text(
                       "Units",
@@ -337,8 +337,24 @@ class DealDoneCard extends StatelessWidget {
                                                       vertical: 2.h),
                                                   child: Row(
                                                     children: [
-                                                      Image.asset(
-                                                          "assest/bookImage.png"),
+                                                      Container(
+                                                        width:
+                                                            40, // Adjust size as needed
+                                                        height:
+                                                            40, // Adjust size as needed
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          image:
+                                                              DecorationImage(
+                                                            fit: BoxFit.fill,
+                                                            image: NetworkImage(
+                                                                stores[index]
+                                                                    .stared),
+                                                          ),
+                                                        ),
+                                                      ),
                                                       Text(
                                                         stores[index].storeName,
                                                         style:

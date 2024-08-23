@@ -1,4 +1,5 @@
 import 'package:dekhlo/controllers/sellerProfileController.dart';
+import 'package:dekhlo/models/sellerProfieModel.dart';
 import 'package:dekhlo/utils/components/dialog_boxs/log_out_dialog.dart';
 import 'package:dekhlo/utils/routes/routes_names.dart';
 import 'package:dekhlo/views/buyer_view/profileScreen/editProfile.dart';
@@ -34,22 +35,11 @@ class _SellerProfileState extends State<SellerProfile> {
   void initState() {
     super.initState();
     sellerProfileController.fetchProfile();
-    _initializeProfile();
-  }
-
-  Future<void> _initializeProfile() async {
-    try {
-      await Hive.openBox('myBox');
-      final box = await Hive.openBox('myBox');
-      male.value = box.get('Gender');
-      Logger().f(male);
-    } catch (e) {
-      Logger().d(e);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    male.value = sellerProfileController.user?.gender ?? "Male";
     return Obx(() => sellerProfileController.isLoading.value
         ? Scaffold(
             body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),

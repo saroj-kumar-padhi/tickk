@@ -23,6 +23,7 @@ import '../../controllers/dropDownController.dart';
 import '../../controllers/exactController.dart';
 import '../../controllers/sortDialogBoxController.dart';
 import '../../utils/components/dialog_boxs/pick_diallo.dart';
+import '../../utils/components/heading.dart';
 import '../../utils/size/global_size/global_size.dart';
 
 class SetUpProduct extends StatefulWidget {
@@ -312,7 +313,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    heading(title: 'Store Name *'),
+                    const SmallHeadingOrange(headingText: 'Store Name'),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -340,50 +341,54 @@ class _SetUpProductState extends State<SetUpProduct> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: 'Store category *'),
+                    const SmallHeadingOrange(
+                      headingText: 'Store category',
+                    ),
                     SizedBox(
                       height: 5.h,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(right: 20.w),
-                      child: MultiSelectDropDown(
-                        suffixIcon: const Icon(Icons.arrow_downward),
-                        borderColor: Colors.grey,
-                        borderWidth: 1,
-                        borderRadius: 4.r,
-                        selectedOptionTextColor: const Color(0xffFC8019),
-                        clearIcon: const Icon(Icons.close_outlined),
-                        controller: SetUpProduct.categorySelectController,
-                        onOptionSelected: (options) {
-                          debugPrint(options.toString());
-                          List<String> selectedCategories =
-                              options.map((option) => option.label).toList();
+                      padding: EdgeInsets.only(right: 12.w),
+                      child: SizedBox(
+                        height: 40.h, // Explicitly set the height
+                        child: MultiSelectDropDown(
+                          suffixIcon: Icon(Icons.arrow_downward, size: 16.sp),
+                          borderColor: const Color(0xffC4CDD5),
+                          borderWidth: 0.5,
+                          borderRadius: 6.r,
+                          selectedOptionTextColor: const Color(0xffFC8019),
+                          clearIcon: Icon(Icons.close_outlined, size: 14.sp),
+                          controller: SetUpProduct.categorySelectController,
+                          onOptionSelected: (options) {
+                            debugPrint(options.toString());
+                            List<String> selectedCategories =
+                                options.map((option) => option.label).toList();
+                            categoriesController
+                                .fetchSetupSubcategories(selectedCategories);
+                          },
+                          options: convertToValueItems(
+                              categoriesController.setupCategories),
+                          maxItems: 5,
+                          selectionType: SelectionType.multi,
+                          chipConfig: ChipConfig(
+                            deleteIcon: Icon(Icons.close_outlined, size: 12.sp),
+                            wrapType: WrapType
+                                .scroll, // Change to scroll for compact layout
+                            backgroundColor: const Color(0xffFC8019),
+                            labelStyle: TextStyle(fontSize: 10.sp),
 
-                          // Call fetchSetupSubcategories with the selected categories
-                          categoriesController
-                              .fetchSetupSubcategories(selectedCategories);
-
-                          // if (options.contains(
-                          //   const ValueItem(
-                          //     label: 'Custom Category',
-                          //     value: 8,
-                          //   ),
-                          // )) {
-                          //   Get.toNamed(RouteName.custoumCategory);
-                          // }
-                        },
-                        options: convertToValueItems(
-                            categoriesController.setupCategories),
-                        maxItems: 10,
-                        selectionType: SelectionType.multi,
-                        chipConfig: const ChipConfig(
-                          deleteIcon: Icon(Icons.close_outlined),
-                          wrapType: WrapType.wrap,
-                          backgroundColor: Color(0xffFC8019),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 4.w, vertical: 2.h),
+                          ),
+                          dropdownHeight: 150.h,
+                          optionTextStyle: TextStyle(fontSize: 12.sp),
+                          selectedOptionIcon:
+                              Icon(Icons.check_circle, size: 14.sp),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 6.w, vertical: 0),
+                          optionsBackgroundColor: Colors.white,
+                          dropdownBackgroundColor: Colors.white,
                         ),
-                        dropdownHeight: 160.h,
-                        optionTextStyle: TextStyle(fontSize: 16.sp),
-                        selectedOptionIcon: const Icon(Icons.check_circle),
                       ),
                     ),
 
@@ -393,7 +398,8 @@ class _SetUpProductState extends State<SetUpProduct> {
                     Obx(() {
                       return categoriesController.setupsubCategories.isEmpty
                           ? const SizedBox()
-                          : heading(title: "Store Sub Category *");
+                          : const SmallHeadingOrange(
+                              headingText: "Store Sub Category");
                     }),
                     SizedBox(
                       height: 5.h,
@@ -413,8 +419,8 @@ class _SetUpProductState extends State<SetUpProduct> {
                                       borderRadius: BorderRadius.circular(4),
                                       border: Border.all(
                                           color: SubCategoryItems.isEmpty
-                                              ? Colors.grey.shade300
-                                              : Colors.grey),
+                                              ? const Color(0xffC4CDD5)
+                                              : const Color(0xffC4CDD5)),
                                     ),
                                     child: AbsorbPointer(
                                       absorbing: SubCategoryItems.isEmpty,
@@ -626,13 +632,13 @@ class _SetUpProductState extends State<SetUpProduct> {
                     Row(
                       children: [
                         heading(title: 'Brands'),
-                        Text(
-                          " (optional)",
-                          style: TextStyles.openSans(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey),
-                        ),
+                        // Text(
+                        //   " (optional)",
+                        //   style: TextStyles.openSans(
+                        //       fontSize: 14.sp,
+                        //       fontWeight: FontWeight.w400,
+                        //       color: Colors.grey),
+                        // ),
                       ],
                     ),
                     SizedBox(
@@ -651,25 +657,26 @@ class _SetUpProductState extends State<SetUpProduct> {
                     Row(
                       children: [
                         heading(title: "About your store"),
-                        Text(
-                          " (optional)",
-                          style: TextStyles.openSans(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey),
-                        ),
+                        // Text(
+                        //   " (optional)",
+                        //   style: TextStyles.openSans(
+                        //       fontSize: 14.sp,
+                        //       fontWeight: FontWeight.w400,
+                        //       color: Colors.grey),
+                        // ),
                       ],
                     ),
                     SizedBox(
                       height: 5.h,
                     ),
                     Container(
-                      height: 100.h,
+                      height: 80.h,
                       width: 330.w,
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
-                        border: Border.all(width: 1, color: Colors.grey),
+                        border: Border.all(
+                            width: 1, color: const Color(0xffC4CDD5)),
                       ),
                       child: Align(
                         alignment: Alignment.centerLeft,
@@ -700,14 +707,17 @@ class _SetUpProductState extends State<SetUpProduct> {
                         SizedBox(
                           height: 5.h,
                         ),
-                        Text(
-                          " (optional)",
-                          style: TextStyles.openSans(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey),
-                        ),
+                        // Text(
+                        //   " (optional)",
+                        //   style: TextStyles.openSans(
+                        //       fontSize: 14.sp,
+                        //       fontWeight: FontWeight.w400,
+                        //       color: Colors.grey),
+                        // ),
                       ],
+                    ),
+                    SizedBox(
+                      height: 10.h,
                     ),
                     socialLinkBox(
                         controller:
@@ -769,13 +779,13 @@ class _SetUpProductState extends State<SetUpProduct> {
                     //     dropdownHeight: 200.h,
                     //     optionTextStyle: TextStyle(fontSize: 16.sp),
                     //     selectedOptionIcon: const Icon(Icons.check_circle),
-                    //   ),
+                    //   )
                     // ),
 
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: "Timings *"),
+                    const SmallHeadingOrange(headingText: "Timings"),
                     SizedBox(
                       height: 10.h,
                     ),
@@ -832,7 +842,8 @@ class _SetUpProductState extends State<SetUpProduct> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        heading(title: 'House No, Building Name *'),
+                        const SmallHeadingOrange(
+                            headingText: 'House No, Building Name'),
                         CustomTextField(
                           isenable: true,
                           onChanged: (Value) {
@@ -849,7 +860,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    heading(title: 'Street Name, Area*'),
+                    const SmallHeadingOrange(headingText: 'Street Name, Area'),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -888,19 +899,19 @@ class _SetUpProductState extends State<SetUpProduct> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            heading(title: 'Country *'),
+                            const SmallHeadingOrange(headingText: 'Country'),
                             SizedBox(
                               height: 5.h,
                             ),
                             Container(
-                              height: 48.h,
+                              height: 40.h,
                               width: 160.w,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16.0),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5.0),
-                                border:
-                                    Border.all(width: 1, color: Colors.grey),
+                                border: Border.all(
+                                    width: 1, color: const Color(0xffC4CDD5)),
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
@@ -932,19 +943,19 @@ class _SetUpProductState extends State<SetUpProduct> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              heading(title: 'Pincode *'),
+                              const SmallHeadingOrange(headingText: 'Pincode'),
                               SizedBox(
                                 height: 5.h,
                               ),
                               Container(
-                                height: 48.h,
+                                height: 40.h,
                                 width: 160.w,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5.0),
-                                  border:
-                                      Border.all(width: 1, color: Colors.grey),
+                                  border: Border.all(
+                                      width: 1, color: const Color(0xffC4CDD5)),
                                 ),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
@@ -977,19 +988,19 @@ class _SetUpProductState extends State<SetUpProduct> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            heading(title: 'State *'),
+                            const SmallHeadingOrange(headingText: 'State'),
                             SizedBox(
                               height: 5.h,
                             ),
                             Container(
-                              height: 48.h,
+                              height: 40.h,
                               width: 160.w,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16.0),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5.0),
-                                border:
-                                    Border.all(width: 1, color: Colors.grey),
+                                border: Border.all(
+                                    width: 1, color: const Color(0xffC4CDD5)),
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
@@ -1021,19 +1032,20 @@ class _SetUpProductState extends State<SetUpProduct> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              heading(title: 'City / District *'),
+                              const SmallHeadingOrange(
+                                  headingText: 'City / District'),
                               SizedBox(
                                 height: 5.h,
                               ),
                               Container(
-                                height: 48.h,
+                                height: 40.h,
                                 width: 160.w,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5.0),
-                                  border:
-                                      Border.all(width: 1, color: Colors.grey),
+                                  border: Border.all(
+                                      width: 1, color: const Color(0xffC4CDD5)),
                                 ),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
@@ -1061,18 +1073,20 @@ class _SetUpProductState extends State<SetUpProduct> {
                       height: 10.h,
                     ),
 
-                    heading(title: 'Your Store Location *'),
+                    const SmallHeadingOrange(
+                        headingText: 'Your Store Location'),
                     SizedBox(
                       height: 10.h,
                     ),
 
                     Container(
-                      height: 48.h,
+                      height: 40.h,
                       width: 330.w,
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
-                        border: Border.all(width: 1, color: Colors.grey),
+                        border: Border.all(
+                            width: 1, color: const Color(0xffC4CDD5)),
                       ),
                       child: Align(
                         alignment: Alignment.centerLeft,
@@ -1358,16 +1372,25 @@ class _SetUpProductState extends State<SetUpProduct> {
       valueListenable: controller,
       builder: (context, value, child) {
         return SizedBox(
+          height: 40.h,
           width: 120.w,
           child: TextFormField(
             controller: controller,
             enabled: enabled,
             readOnly: true,
+            textAlign: TextAlign.center, // Center the text
             decoration: InputDecoration(
               hintText: hintText,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
+              hintStyle: TextStyle(
+                color: Colors.grey,
+                fontSize: 14.sp,
               ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: 10.h), // Adjust vertical padding
+              alignLabelWithHint: true, // Align hint with the input
             ),
             onTap: enabled
                 ? () async {
@@ -1396,12 +1419,12 @@ class _SetUpProductState extends State<SetUpProduct> {
       required String imagePath,
       required String platform}) {
     return Container(
-      height: 50.h,
+      height: 40.h,
       width: 330.w,
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
-        border: Border.all(width: 1, color: Colors.grey),
+        border: Border.all(width: 1, color: const Color(0xffC4CDD5)),
       ),
       child: Align(
         alignment: Alignment.centerLeft,

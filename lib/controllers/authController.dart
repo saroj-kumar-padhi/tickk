@@ -45,6 +45,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> signUpValidateOTP({required String otp}) async {
+    Logger().d(phoneAuthController.text);
     try {
       await restClient.verifyPhoneNumber(
           phoneAuthController.text, int.parse(otp));
@@ -101,6 +102,8 @@ class AuthController extends GetxController {
                 await restClient.checkStoreId(int.parse(formattedPhoneNumber));
             final storeId = storeData.StoreID;
             Get.to(HomeSeller(storeId: storeId.toString()));
+          } else {
+            Get.toNamed(RouteName.homeBuyerScreen);
           }
 
           // islogin
@@ -111,7 +114,7 @@ class AuthController extends GetxController {
         Logger().d(e);
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: "Invalid otp");
+      Fluttertoast.showToast(msg: "Invalid otp $e");
     }
   }
 }

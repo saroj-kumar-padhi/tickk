@@ -32,22 +32,11 @@ class _BuyerProfileState extends State<BuyerProfile> {
   @override
   void initState() {
     super.initState();
-    _initializeProfile();
-  }
-
-  Future<void> _initializeProfile() async {
-    try {
-      await Hive.openBox('myBox');
-      final box = await Hive.openBox('myBox');
-      male.value = box.get('Gender');
-      Logger().f(male);
-    } catch (e) {
-      Logger().d(e);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    male.value = basiccontrollerEdit.response.value.gender;
     return Obx(() => basiccontrollerEdit.isLoading.value
         ? Scaffold(
             body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),

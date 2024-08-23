@@ -126,8 +126,12 @@ class HomeBuyer extends StatelessWidget {
                                   bool isBEnabled = categoriesController
                                       .categories
                                       .contains(b.key);
-                                  if (isAEnabled && !isBEnabled) return -1;
-                                  if (!isAEnabled && isBEnabled) return 1;
+                                  if (isAEnabled && !isBEnabled) {
+                                    return -1;
+                                  }
+                                  if (!isAEnabled && isBEnabled) {
+                                    return 1;
+                                  }
                                   return 0;
                                 });
 

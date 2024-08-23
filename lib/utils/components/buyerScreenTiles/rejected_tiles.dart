@@ -9,6 +9,7 @@ class RejectedSquareCard extends StatelessWidget {
       {super.key,
       required this.reqId,
       required this.subCategories,
+      required this.addImage,
       required this.brands,
       required this.modelNo,
       required this.qty,
@@ -25,6 +26,7 @@ class RejectedSquareCard extends StatelessWidget {
   final String units;
   final String des;
   final DateTime date;
+  final String addImage;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +112,13 @@ class RejectedSquareCard extends StatelessWidget {
                   child: SizedBox(
                       width: GlobalSizes.getDeviceWidth(context) * 0.15,
                       height: GlobalSizes.getDeviceHeight(context) * 0.09,
-                      child: Image.asset("assest/sellitems.png")),
+                      child: SizedBox(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                              8.0), // Adjust the value to make the image rectangular with rounded corners
+                          child: Image.network(addImage, fit: BoxFit.cover),
+                        ),
+                      )),
                 ),
                 Column(
                   children: [

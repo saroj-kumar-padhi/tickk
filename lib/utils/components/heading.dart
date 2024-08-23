@@ -21,3 +21,39 @@ class SmallHeading extends StatelessWidget {
     );
   }
 }
+
+class SmallHeadingOrange extends StatelessWidget {
+  final String headingText;
+  const SmallHeadingOrange({
+    super.key,
+    required this.headingText,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+        alignment: Alignment.centerLeft,
+        child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: headingText,
+                style: TextStyles.openSans(
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ),
+              TextSpan(
+                text: "*",
+                style: TextStyles.openSans(
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xffFC8019), // Orange color for the star
+                ),
+              ),
+            ],
+          ),
+        ));
+  }
+}

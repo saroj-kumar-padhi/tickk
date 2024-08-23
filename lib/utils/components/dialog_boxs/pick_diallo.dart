@@ -53,7 +53,7 @@ class PickImageDialog extends StatelessWidget {
                     padding: EdgeInsets.only(
                         bottom: GlobalSizes.getDeviceHeight(context) * 0.01),
                     child: Text(
-                      "Upload your store images",
+                      heading,
                       style: TextStyles.openSans(
                           fontSize: 18, fontWeight: FontWeight.w600),
                     ),

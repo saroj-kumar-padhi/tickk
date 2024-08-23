@@ -13,7 +13,7 @@ class _RestClient implements RestClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://13.201.210.192:3002';
+    baseUrl ??= 'http://192.168.1.31:3002';
   }
 
   final Dio _dio;
@@ -718,6 +718,31 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<void> ifAllNine(Map<String, dynamic> data) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/updateOtp',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
   Future<SellerInprocessResponseModel> sellerInProcess(String storeID) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -1002,8 +1027,8 @@ class _RestClient implements RestClient {
 
   @override
   Future<void> rejectQuote(
-    String storeId,
     String requestId,
+    String storeId,
     Map<String, dynamic> data,
   ) async {
     final _extra = <String, dynamic>{};
@@ -1018,7 +1043,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/buyerInProcess/buyerRejectingSeller/{storeID}/${requestId}',
+          '/buyerInProcess/buyerRejectingSeller/${requestId}/${storeId}',
           queryParameters: queryParameters,
           data: _data,
         )
