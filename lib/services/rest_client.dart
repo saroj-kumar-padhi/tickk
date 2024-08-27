@@ -34,7 +34,7 @@ import 'package:dio/dio.dart' as dio;
 
 part 'rest_client.g.dart';
 
-@RestApi(baseUrl: 'http://192.168.1.31:3002')
+@RestApi(baseUrl: 'http://13.201.210.192:3002')
 
 /// The `// @RestApi(baseUrl: 'http://192.168.1.8:3002')` is a commented out annotation in the Dart code
 /// snippet you provided. This annotation is typically used in Retrofit for Dart to specify the base URL

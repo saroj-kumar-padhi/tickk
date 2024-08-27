@@ -77,18 +77,22 @@ class _EnhancedWelcomeScreenState extends State<EnhancedWelcomeScreen>
                     const SizedBox(height: 24),
                     SizedBox(
                       height: 80.h,
-                      width: double
-                          .infinity, // Ensures the container takes full width available
+                      width: double.infinity,
                       child: SlideTransition(
                         position: _slideAnimation,
-                        child: Center(
-                          child: TypeWriter.text(
-                            'Welcome to Setup Store', // Remove the newline character
-                            style: GoogleFonts.poppins(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w600,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: Center(
+                            child: TypeWriter.text(
+                              'Welcome To Setup Store',
+                              style: GoogleFonts.poppins(
+                                fontSize: 25.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              duration: const Duration(milliseconds: 50),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            duration: const Duration(milliseconds: 50),
                           ),
                         ),
                       ),
