@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:typewritertext/typewritertext.dart';
 
 class EnhancedWelcomeScreen extends StatefulWidget {
   const EnhancedWelcomeScreen({super.key});
@@ -75,25 +74,17 @@ class _EnhancedWelcomeScreenState extends State<EnhancedWelcomeScreen>
                       ),
                     ),
                     const SizedBox(height: 24),
-                    SizedBox(
-                      height: 80.h,
-                      width: double.infinity,
-                      child: SlideTransition(
-                        position: _slideAnimation,
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 5.w),
-                          child: Center(
-                            child: TypeWriter.text(
-                              'Welcome To Setup Store',
-                              style: GoogleFonts.poppins(
-                                fontSize: 25.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              duration: const Duration(milliseconds: 50),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.w),
+                      child: Center(
+                        child: Text(
+                          'Welcome To Setup Store',
+                          style: GoogleFonts.poppins(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w600,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),
