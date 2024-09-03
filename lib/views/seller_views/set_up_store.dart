@@ -216,6 +216,8 @@ class _SetUpProductState extends State<SetUpProduct> {
                                                       productSetUpController
                                                           .staredImage
                                                           .clear();
+
+                                                          productSetUpController.updateButtonState();
                                                     }
                                                   },
                                                   child: const Icon(
@@ -318,6 +320,9 @@ class _SetUpProductState extends State<SetUpProduct> {
                       height: 5.h,
                     ),
                     CustomTextField(
+                      onChanged: (value){
+                        productSetUpController.updateButtonState();
+                      },
                         isenable: true,
                         controller:
                             productSetUpController.nameEditingController,
@@ -357,14 +362,20 @@ class _SetUpProductState extends State<SetUpProduct> {
                           borderWidth: 0.5,
                           borderRadius: 6.r,
                           selectedOptionTextColor: const Color(0xffFC8019),
+                          onOptionRemoved: (index, option) {
+                            productSetUpController.updateButtonState();
+                          },
                           clearIcon: Icon(Icons.close_outlined, size: 14.sp),
                           controller: SetUpProduct.categorySelectController,
-                          onOptionSelected: (options) {
+                          onOptionSelected: (options) async {
+                            
                             debugPrint(options.toString());
-                            List<String> selectedCategories =
+                            productSetUpController.selectedCategories.value =
                                 options.map((option) => option.label).toList();
-                            categoriesController
-                                .fetchSetupSubcategories(selectedCategories);
+                           await  categoriesController
+                                .fetchSetupSubcategories( productSetUpController.selectedCategories.value);
+                                productSetUpController.updateButtonState();
+                                
                           },
                           options: convertToValueItems(
                               categoriesController.setupCategories),
@@ -1302,9 +1313,11 @@ class _SetUpProductState extends State<SetUpProduct> {
     );
   }
 
-  InkWell addImages(BuildContext context) {
+  InkWell addImages(BuildContext context,) {
     return InkWell(
       onTap: () async {
+
+        
         final result = await showDialog<String>(
           context: context,
           builder: (BuildContext context) {
@@ -1314,7 +1327,9 @@ class _SetUpProductState extends State<SetUpProduct> {
           },
         );
         if (result != null) {
+          
           productSetUpController.imagePaths.add(result);
+          productSetUpController.updateButtonState();
           if (productSetUpController.imagePaths.length == 1) {
             productSetUpController.staredImage.add(result);
           }

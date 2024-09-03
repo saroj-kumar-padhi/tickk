@@ -355,240 +355,245 @@ class HomeSeller extends StatelessWidget {
                   ),
                 ),
               )
-            : DefaultTabController(
-                // selling TabController
-                length: 5, // Number of tabs
-                child: Scaffold(
-                  floatingActionButton: Obx(() {
-                    return Visibility(
-                      visible: flavourContoler.isBuying.value,
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 30.h),
-                        child: FloatingActionButton(
-                          backgroundColor: const Color(0xffFC8019),
-                          onPressed: () {
-                            CategoriesController categoriesController =
-                                Get.put(CategoriesController());
-                            Get.toNamed(RouteName.postRequirements);
-                          },
-                          child: const Icon(Icons.add),
+            : PopScope(
+               onPopInvoked: (onPoped) async {
+                  await SystemNavigator.pop();
+                },
+              child: DefaultTabController(
+                  // selling TabController
+                  length: 5, // Number of tabs
+                  child: Scaffold(
+                    floatingActionButton: Obx(() {
+                      return Visibility(
+                        visible: flavourContoler.isBuying.value,
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 30.h),
+                          child: FloatingActionButton(
+                            backgroundColor: const Color(0xffFC8019),
+                            onPressed: () {
+                              CategoriesController categoriesController =
+                                  Get.put(CategoriesController());
+                              Get.toNamed(RouteName.postRequirements);
+                            },
+                            child: const Icon(Icons.add),
+                          ),
                         ),
+                      );
+                    }),
+              
+                    // this is selling part and above are the buying part
+              
+                    body: SafeArea(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: GlobalSizes.getDeviceHeight(context) * 0.01,
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: GlobalSizes.getDeviceWidth(context) * 0.25,
+                                child: SvgPicture.asset("assest/small_tick.svg"),
+                              ),
+                              SizedBox(
+                                width: 160.w,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Get.toNamed(RouteName.sellerNotification);
+                                },
+                                child: SizedBox(
+                                    height: GlobalSizes.getDeviceHeight(context) *
+                                        0.03,
+                                    child: SvgPicture.asset(
+                                      height: 20.h,
+                                      width: 20.w,
+                                      "assest/bell_seller.svg",
+                                      fit: BoxFit.fill,
+                                    )),
+                              ),
+                              SizedBox(
+                                width: 15.w,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => const SellerProfile());
+                                },
+                                child: SvgPicture.asset(
+                                  height: 20.h,
+                                  width: 20.w,
+                                  "assest/user (1).svg",
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 15.w,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => MyStore(
+                                      StoreId: storeId, isFromSeller: true));
+                                },
+                                child: SvgPicture.asset(
+                                  height: 20.h,
+                                  width: 20.w,
+                                  "assest/seller_hut.svg",
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10
+                                .h, // Adjust spacing between search bar and tab bar
+                          ),
+                          SizedBox(
+                            height: GlobalSizes.getDeviceHeight(context) * 0.05,
+                            child: TabBar(
+                              labelColor: const Color(0xffFC8019),
+                              unselectedLabelColor: const Color(0xff4A4A4A),
+                              tabs: [
+                                Tab(
+                                  child: Text(
+                                    'New',
+                                    style: TextStyles.openSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    'In process',
+                                    style: TextStyles.openSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    'Accepted',
+                                    style: TextStyles.openSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    'Deal Done',
+                                    style: TextStyles.openSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Tab(
+                                  child: Text(
+                                    'Rejected',
+                                    style: TextStyles.openSans(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              isScrollable: true,
+                              indicatorColor: const Color(0xffFC8019),
+                            ),
+                          ),
+                          const Divider(),
+                          Expanded(
+                            child: TabBarView(
+                              children: [
+                                NewTabSeller(
+                                  storeId: storeId,
+                                  storeName:
+                                      flavourContoler.comapamyName.storeName,
+                                ),
+                                ProcessTabSeller(
+                                  storeId: storeId,
+                                  storeName:
+                                      flavourContoler.comapamyName.storeName,
+                                ),
+                                AcceptedTabSeller(
+                                  storeName:
+                                      flavourContoler.comapamyName.storeName,
+                                  storeId: storeId,
+                                ),
+                                DealDoneTabSeller(
+                                  storeName:
+                                      flavourContoler.comapamyName.storeName,
+                                  storeId: storeId,
+                                ),
+                                RejectedTabSeller(
+                                  storeId: storeId,
+                                  storeName:
+                                      flavourContoler.comapamyName.storeName,
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 50.h,
+                            child: Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    flavourContoler.isBuying.value =
+                                        flavourContoler.isBuying.value;
+                                  },
+                                  child: Obx(() {
+                                    return flavourContoler.isBuying.value
+                                        ? SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.5,
+                                            child: SvgPicture.asset(
+                                                "assest/selling_white.svg"))
+                                        : SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.5,
+                                            child: SvgPicture.asset(
+                                                "assest/selling_orange.svg"));
+                                  }),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    // Get.toNamed(RouteName.homeBuyerScreen);
+                                    flavourContoler.isBuying.value =
+                                        !flavourContoler.isBuying.value;
+                                  },
+                                  child: Obx(() {
+                                    return flavourContoler.isBuying.value
+                                        ? SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.5,
+                                            child: SvgPicture.asset(
+                                                "assest/buying_orange.svg"))
+                                        : SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.5,
+                                            child: SvgPicture.asset(
+                                                "assest/buying_white.svg"));
+                                  }),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                    );
-                  }),
-
-                  // this is selling part and above are the buying part
-
-                  body: SafeArea(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: GlobalSizes.getDeviceHeight(context) * 0.01,
-                        ),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: GlobalSizes.getDeviceWidth(context) * 0.25,
-                              child: SvgPicture.asset("assest/small_tick.svg"),
-                            ),
-                            SizedBox(
-                              width: 160.w,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Get.toNamed(RouteName.sellerNotification);
-                              },
-                              child: SizedBox(
-                                  height: GlobalSizes.getDeviceHeight(context) *
-                                      0.03,
-                                  child: SvgPicture.asset(
-                                    height: 20.h,
-                                    width: 20.w,
-                                    "assest/bell_seller.svg",
-                                    fit: BoxFit.fill,
-                                  )),
-                            ),
-                            SizedBox(
-                              width: 15.w,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Get.to(() => const SellerProfile());
-                              },
-                              child: SvgPicture.asset(
-                                height: 20.h,
-                                width: 20.w,
-                                "assest/user (1).svg",
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 15.w,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Get.to(() => MyStore(
-                                    StoreId: storeId, isFromSeller: true));
-                              },
-                              child: SvgPicture.asset(
-                                height: 20.h,
-                                width: 20.w,
-                                "assest/seller_hut.svg",
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10
-                              .h, // Adjust spacing between search bar and tab bar
-                        ),
-                        SizedBox(
-                          height: GlobalSizes.getDeviceHeight(context) * 0.05,
-                          child: TabBar(
-                            labelColor: const Color(0xffFC8019),
-                            unselectedLabelColor: const Color(0xff4A4A4A),
-                            tabs: [
-                              Tab(
-                                child: Text(
-                                  'New',
-                                  style: TextStyles.openSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Tab(
-                                child: Text(
-                                  'In process',
-                                  style: TextStyles.openSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Tab(
-                                child: Text(
-                                  'Accepted',
-                                  style: TextStyles.openSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Tab(
-                                child: Text(
-                                  'Deal Done',
-                                  style: TextStyles.openSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Tab(
-                                child: Text(
-                                  'Rejected',
-                                  style: TextStyles.openSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ],
-                            isScrollable: true,
-                            indicatorColor: const Color(0xffFC8019),
-                          ),
-                        ),
-                        const Divider(),
-                        Expanded(
-                          child: TabBarView(
-                            children: [
-                              NewTabSeller(
-                                storeId: storeId,
-                                storeName:
-                                    flavourContoler.comapamyName.storeName,
-                              ),
-                              ProcessTabSeller(
-                                storeId: storeId,
-                                storeName:
-                                    flavourContoler.comapamyName.storeName,
-                              ),
-                              AcceptedTabSeller(
-                                storeName:
-                                    flavourContoler.comapamyName.storeName,
-                                storeId: storeId,
-                              ),
-                              DealDoneTabSeller(
-                                storeName:
-                                    flavourContoler.comapamyName.storeName,
-                                storeId: storeId,
-                              ),
-                              RejectedTabSeller(
-                                storeId: storeId,
-                                storeName:
-                                    flavourContoler.comapamyName.storeName,
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 50.h,
-                          child: Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  flavourContoler.isBuying.value =
-                                      flavourContoler.isBuying.value;
-                                },
-                                child: Obx(() {
-                                  return flavourContoler.isBuying.value
-                                      ? SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.5,
-                                          child: SvgPicture.asset(
-                                              "assest/selling_white.svg"))
-                                      : SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.5,
-                                          child: SvgPicture.asset(
-                                              "assest/selling_orange.svg"));
-                                }),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  // Get.toNamed(RouteName.homeBuyerScreen);
-                                  flavourContoler.isBuying.value =
-                                      !flavourContoler.isBuying.value;
-                                },
-                                child: Obx(() {
-                                  return flavourContoler.isBuying.value
-                                      ? SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.5,
-                                          child: SvgPicture.asset(
-                                              "assest/buying_orange.svg"))
-                                      : SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.5,
-                                          child: SvgPicture.asset(
-                                              "assest/buying_white.svg"));
-                                }),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
                     ),
                   ),
                 ),
-              ));
+            ));
   }
 }

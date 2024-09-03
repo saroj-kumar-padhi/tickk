@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dekhlo/controllers/authController.dart';
+import 'package:dekhlo/controllers/categoriesController.dart';
 import 'package:dekhlo/controllers/sortDialogBoxController.dart';
 import 'package:dekhlo/models/sellerInprocess.dart';
 import 'package:dekhlo/services/injection.dart';
@@ -65,6 +66,8 @@ class ProductSetUpController extends GetxController {
       TextEditingController();
   final TextEditingController saturdayCloseEditingController =
       TextEditingController();
+    CategoriesController categoriesController = Get.put(CategoriesController());
+
 
   //location controller
   final TextEditingController buildingController = TextEditingController();
@@ -74,6 +77,7 @@ class ProductSetUpController extends GetxController {
   var cityController = TextEditingController().obs;
   final TextEditingController locationController = TextEditingController();
   final RxList<String> imagePaths = <String>[].obs;
+  final RxList<String> selectedCategories  = <String>[].obs;
 
   List<String> dayList = ["S", "M", "T", "W", "T", "F", "S"];
   RxList<int> selectedIndices = <int>[].obs;
@@ -91,8 +95,14 @@ class ProductSetUpController extends GetxController {
 
   void updateButtonState() {
     bool fieldsFilled = buildingController.text.isNotEmpty &&
+       selectedCategories.isNotEmpty &&
+       nameEditingController.text.isNotEmpty &&
         pinCodeController.value.text.isNotEmpty &&
+        imagePaths.value.isNotEmpty &&
+        //here
         colonyController.value.text.isNotEmpty;
+
+
     // landMarkController.value.text.isNotEmpty;
 
     isButtonEnabled.value = fieldsFilled;
@@ -204,13 +214,16 @@ class ProductSetUpController extends GetxController {
             final storeId = storeData.StoreID;
             isLoading.value = false;
             Get.to(HomeSeller(storeId: storeId));
+                Get.snackbar('Success', 'Store setup completed successfully');
           } else {
             // Fluttertoast.showToast(
             //     msg: "Sit Tight! We are setting up your store on Tickk.");
           }
-        } catch (e) {}
+        } catch (e) {
+              Get.snackbar('Fill Details', 'Please fill atleast one sub and sub sub category of the given category');
+        }
 
-        Get.snackbar('Success', 'Store setup completed successfully');
+    
       } catch (e) {
         Logger().d(e);
       }
