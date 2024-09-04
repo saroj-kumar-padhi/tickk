@@ -871,7 +871,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    const SmallHeadingOrange(headingText: 'Street Name, Area'),
+                    const SmallHeadingOrange(headingText: 'Landmark'),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -1104,6 +1104,9 @@ class _SetUpProductState extends State<SetUpProduct> {
                         child: TextField(
                           onTap: () {
                             Get.toNamed(RouteName.changeLocation);
+                           
+                          },
+                          onChanged: (value){
                             productSetUpController.updateButtonState();
                           },
                           controller:

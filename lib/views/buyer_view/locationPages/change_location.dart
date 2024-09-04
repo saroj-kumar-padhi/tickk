@@ -118,6 +118,7 @@ class _ChangeLocationState extends State<ChangeLocation> {
                         print(prediction.lat);
 
                         await _fetchPlaceDetails(prediction.placeId ?? "");
+                        productSetUpController.updateButtonState();
 
                         Get.back();
                       }

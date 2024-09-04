@@ -94,6 +94,7 @@ class ProductSetUpController extends GetxController {
   }.obs;
 
   void updateButtonState() {
+    DialogBoxController dialogBoxController = Get.put(DialogBoxController());
     bool fieldsFilled = buildingController.text.isNotEmpty &&
        selectedCategories.isNotEmpty &&
        nameEditingController.text.isNotEmpty &&
@@ -101,6 +102,7 @@ class ProductSetUpController extends GetxController {
         imagePaths.value.isNotEmpty &&
         //here
         colonyController.value.text.isNotEmpty;
+        dialogBoxController.locacationController.value.text.isNotEmpty;
 
 
     // landMarkController.value.text.isNotEmpty;
