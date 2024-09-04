@@ -854,7 +854,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SmallHeadingOrange(
-                            headingText: 'House No, Building Name'),
+                            headingText: 'Store Address'),
                         CustomTextField(
                           isenable: true,
                           onChanged: (Value) {
