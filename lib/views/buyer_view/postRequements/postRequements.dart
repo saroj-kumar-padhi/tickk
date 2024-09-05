@@ -404,8 +404,8 @@ class _PostRequirementsState extends State<PostRequirements> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    const SmallHeadingOrange(
-                        headingText: "Enter your requirement in details"),
+                    const SmallHeading(
+                        headingText: "Enter your requirement in detail"),
                     SizedBox(
                       height: 5.h,
                     ),

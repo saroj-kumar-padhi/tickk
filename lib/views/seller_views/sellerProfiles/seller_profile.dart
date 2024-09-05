@@ -32,14 +32,20 @@ RxString male = "".obs;
 
 class _SellerProfileState extends State<SellerProfile> {
   @override
+  @override
   void initState() {
     super.initState();
-    sellerProfileController.fetchProfile();
+    final box = Hive.box('myBox');
+    final String formattedPhoneNumber = box.get('phone') ?? "";
+    sellerProfileController = Get.put(SellerProfileController(formattedPhoneNumber));
+    
+   male.value = sellerProfileController.user?.gender??"Male";
   }
 
   @override
   Widget build(BuildContext context) {
-    male.value = sellerProfileController.user?.gender ?? "Male";
+
+    
     return Obx(() => sellerProfileController.isLoading.value
         ? Scaffold(
             body: Center(child: LottieBuilder.asset("assest/mX2qe5gUvP.json")),
@@ -136,15 +142,15 @@ class _SellerProfileState extends State<SellerProfile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          sellerProfileController.user!.profileImage ==
+                          sellerProfileController.user?.profileImage ==
                                   "task/assets/men.png"
-                              ? male.value == "Male"
+                              ? sellerProfileController.user?.gender == "Male"
                                   ? Image.asset(
                                       "assest/man.png",
                                       height: 100.h,
                                       width: 100.h,
                                     )
-                                  : male.value == "Female"
+                                  : sellerProfileController.user?.gender == "Female"
                                       ? Image.asset(
                                           "assest/woman.png",
                                           height: 100.h,

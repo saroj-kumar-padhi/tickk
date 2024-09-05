@@ -455,6 +455,8 @@ class _SetUpProductState extends State<SetUpProduct> {
                                           buttonText: const Text(
                                               "Select Sub Categories"),
                                           onConfirm: (values) {
+                                             productSetUpController.updateButtonState();
+                                             productSetUpController.isProcessing.value = false;
                                             if (SubCategoryItems.isNotEmpty) {
                                               categoriesController
                                                   .fetchSubSubsetUpCategories(
@@ -482,6 +484,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                                                         ))
                                                     .toList(),
                                               );
+                                             
                                             }
                                           },
                                           chipDisplay: MultiSelectChipDisplay(
@@ -972,7 +975,10 @@ class _SetUpProductState extends State<SetUpProduct> {
                                   alignment: Alignment.centerLeft,
                                   child: TextField(
                                     onTap: () {
-                                      // Get.toNamed(RouteName.changeLocation);
+                                    },
+                                    onChanged: (value){
+productSetUpController.updateButtonState();
+productSetUpController.isProcessing.value = false;
                                     },
                                     keyboardType: TextInputType.number,
                                     controller: productSetUpController
@@ -1064,6 +1070,10 @@ class _SetUpProductState extends State<SetUpProduct> {
                                     onTap: () {
                                       // Get.toNamed(RouteName.changeLocation);
                                     },
+                                    onChanged: (value){
+                                      productSetUpController.updateButtonState();
+
+                                    },
                                     controller: productSetUpController
                                         .cityController.value,
                                     decoration: const InputDecoration(
@@ -1141,9 +1151,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                       height: 30.h,
                     ),
 
-                    productSetUpController.count.value > 0
-                        ? const SizedBox()
-                        : Obx(() {
+                     Obx(() {
                             return Padding(
                               padding: EdgeInsets.only(right: 20.w),
                               child: SizedBox(
@@ -1196,13 +1204,10 @@ class _SetUpProductState extends State<SetUpProduct> {
                                                   .isProcessing.value = false;
                                               productSetUpController.buttonText
                                                   .value = "Setup Store";
-                                              productSetUpController
-                                                          .count.value >
-                                                      0
-                                                  ? Fluttertoast.showToast(
-                                                      msg:
-                                                          "Re-click on the Setup Store")
-                                                  : const SizedBox();
+                                                  remainingSeconds = 5;
+                                                    productSetUpController
+                                              .isProcessing.value = true;
+                                             
                                             }
                                           });
                                         }
@@ -1370,7 +1375,7 @@ class _SetUpProductState extends State<SetUpProduct> {
                   style: TextStyles.openSans(
                       fontWeight: FontWeight.w400,
                       fontSize: 10.sp,
-                      color: const Color(0xffFC8019)),
+                      color:  Colors.black),
                 )
               ],
             ),

@@ -5,6 +5,7 @@ import 'package:dekhlo/controllers/categoriesController.dart';
 import 'package:dekhlo/controllers/sortDialogBoxController.dart';
 import 'package:dekhlo/models/sellerInprocess.dart';
 import 'package:dekhlo/services/injection.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -101,7 +102,8 @@ class ProductSetUpController extends GetxController {
         pinCodeController.value.text.isNotEmpty &&
         imagePaths.value.isNotEmpty &&
         //here
-        colonyController.value.text.isNotEmpty;
+        colonyController.value.text.isNotEmpty &&
+        cityController.value.text.isNotEmpty &&
         dialogBoxController.locacationController.value.text.isNotEmpty;
 
 
@@ -222,8 +224,25 @@ class ProductSetUpController extends GetxController {
             //     msg: "Sit Tight! We are setting up your store on Tickk.");
           }
         } catch (e) {
-              Get.snackbar('Fill Details', 'Please fill atleast one sub and sub sub category of the given category');
-        }
+  Logger().e(e);
+  if (e is DioException) {
+    final response = e.response;
+    if (response != null && response.data is Map<String, dynamic>) {
+      final errorMessage = response.data['message'] as String?;
+      if (errorMessage != null) {
+        Get.snackbar('Error', errorMessage);
+      } else {
+        Get.snackbar('Error', 'An unexpected error occurred try after restarting the app');
+      }
+    } else {
+      Get.snackbar('Error', 'An unexpected error occurred restarting the app');
+    }
+  } else {
+    Get.snackbar('Error', 'An unexpected error occurred restarting the app');
+  }
+  ProductSetUpController productSetUpController = Get.put(ProductSetUpController());
+  productSetUpController.updateButtonState();
+}
 
     
       } catch (e) {

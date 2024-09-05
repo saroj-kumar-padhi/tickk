@@ -86,6 +86,7 @@ class HomeSeller extends StatelessWidget {
                                 ),
                                 InkWell(
                                   onTap: () {
+                                   
                                     Get.to(() => const SellerProfile());
                                   },
                                   child: SizedBox(
